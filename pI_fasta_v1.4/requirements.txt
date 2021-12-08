@@ -1,0 +1,5 @@
+
+    python3 or later 
+    matplotlib/3.0.3 (tested with) 
+    Biopython/1.73 (tested with)
+

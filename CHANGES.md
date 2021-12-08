@@ -1,0 +1,1 @@
+Check individual script folders
