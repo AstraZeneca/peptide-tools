@@ -1,1 +1,1 @@
-Check individual script folders
+Free to contribute. Make sure to make it backwards compatible.

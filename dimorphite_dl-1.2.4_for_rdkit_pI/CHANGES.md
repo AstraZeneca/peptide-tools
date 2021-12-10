@@ -1,7 +1,7 @@
 Changes
 =======
 
-dimorphite_dl-1.2.4_for_rdkit_pI
+1.2.4_for_rdkit_pI
 -----
 * Code modified for the use with rdkit_pI.py code that allows isoelectric point calcvulation
   of nonatural peptides. Modified functions from Dimorphite_DL are used to find the
