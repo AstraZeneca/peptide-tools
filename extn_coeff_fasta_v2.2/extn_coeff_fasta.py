@@ -158,8 +158,7 @@ def calc_extn_coeff_single_sequence(sequence):
     2780*nPepBond )
 
 
-    e214 =( 20400*nW + 
-    29050*nW +
+    e214 =( 29050*nW +
     5200*nF +
     5375*nY +
     5125*nH +
@@ -201,7 +200,7 @@ def print_stdout(dict_in):
         print("")
         print( "Pace, Vajdos, Fee, Grimsley \"How to measure and predict the molar absorption coefficient of a protein\", Protein Science 1995, 4, 2411-2423")
         print( "Kuipers, Gruppen, \"Prediction of molar extinction coefficients of proteins and peptides ...\", J. Agric. Food Chem. 2007, 55, 5445")
-        print( "Anthis, Clore, \"Sequence-specific determination of protein and peptide concentrations by absorbance at 2015 nm\", Protein Science 2013, 22, 851")
+        print( "Anthis, Clore, \"Sequence-specific determination of protein and peptide concentrations by absorbance at 215 nm\", Protein Science 2013, 22, 851")
         return
 
 
