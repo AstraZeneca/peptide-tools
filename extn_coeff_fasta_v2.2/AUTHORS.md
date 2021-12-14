@@ -1,1 +1,0 @@
-Andrey I. Frolov

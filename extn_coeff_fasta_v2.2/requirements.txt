@@ -1,4 +1,0 @@
-
-    python3 or later 
-    Biopython/1.73 (tested with)
-

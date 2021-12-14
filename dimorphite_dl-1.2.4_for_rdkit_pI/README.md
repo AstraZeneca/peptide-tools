@@ -29,7 +29,7 @@ details.
 Usage
 -----
 
-It can be used from a Python codei. Example: 
+It can be used from a Python code. Example: 
 
 def calc_pkas_dimorphite_dl(smi_list):
 
