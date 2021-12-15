@@ -20,6 +20,7 @@ OVERVIEW
 
     5) dimorphite_dl-1.2.4_for_rdkit_pI  
     slightly modified version of the Dimorphite_DL-1.2.4 code, avaialble on GitHub, to enable pKa predition of unknown nonatural amino-acids side-chains.  
+    https://github.com/UnixJunkie/dimorphite_dl
 
 
 HOW TO RUN & DEPENDENCIES 

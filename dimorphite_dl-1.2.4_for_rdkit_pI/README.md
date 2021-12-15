@@ -11,7 +11,7 @@ of pKa values for all defined ionizable centres.
 Citation
 --------
 
-If you use Dimorphite-DL in your research, please cite:
+If you use Dimorphite-DL_for_rdkit_pI in your research, please cite:
 
 Ropp PJ, Kaminsky JC, Yablonski S, Durrant JD (2019) Dimorphite-DL: An
 open-source program for enumerating the ionization states of drug-like small
@@ -23,7 +23,7 @@ https://github.com/UnixJunkie/dimorphite_dl
 Licensing
 ---------
 
-Dimorphite-DL is released under the Apache 2.0 license. See LICENCE.txt for
+Dimorphite-DL 1.2.4 for_rdkit_pI is released under the Apache 2.0 license. See LICENCE.txt for
 details.
 
 Usage
@@ -70,7 +70,7 @@ def calc_pkas_dimorphite_dl(smi_list):
 Caveats
 -------
 
-Dimorphite-DL deprotonates indoles and pyrroles around pH 14.5. But these
+Tje code deprotonates indoles and pyrroles around pH 14.5. But these
 substructures can also be protonated around pH -3.5. Dimorphite does not
 perform the protonation.
 
