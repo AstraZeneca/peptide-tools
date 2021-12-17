@@ -22,6 +22,9 @@ OVERVIEW
     slightly modified version of the Dimorphite_DL-1.2.4 code, avaialble on GitHub, to enable pKa predition of unknown nonatural amino-acids side-chains.  
     https://github.com/UnixJunkie/dimorphite_dl
 
+    6) peptide_tools_master_v1.0  (depends on 1,2,3,4,5)
+    wrapper script for all the programs above. Can run for one compound and for batch submissions.
+
 
 HOW TO RUN & DEPENDENCIES 
 

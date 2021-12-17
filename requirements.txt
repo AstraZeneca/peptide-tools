@@ -1,3 +1,11 @@
+peptide_tools_master_v1.0/
+
+    python3 or later 
+    rdkit/2021.03.1 (tested with)
+    matplotlib/3.0.3 (tested with) 
+    Biopython/1.73 (tested with)
+    and all tools below
+
 
 dimorphite_dl-1.2.4_for_rdkit_pI/
     
