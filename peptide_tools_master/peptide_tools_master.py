@@ -69,7 +69,7 @@ if __name__ == "__main__":
         smi = INPUT
         molid = 'none'
         fasta = get_fasta_from_smiles(smi)
-        print(smi,fasta)
+        #print(smi,fasta)
         #dict_out_extn_coeff = calc_extn_coeff(fasta)
         l_calc_extn_coeff=True
         l_calc_pI_fasta=False
