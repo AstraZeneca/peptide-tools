@@ -1,4 +1,4 @@
-dimorphite_dl-1.2.4_for_rdkit_pI
+dimorphite_dl_pka
 ===================
 
 What is it?

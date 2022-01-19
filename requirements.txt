@@ -7,7 +7,7 @@ peptide_tools_master_v1.0/
     and all tools below
 
 
-dimorphite_dl-1.2.4_for_rdkit_pI/
+dimorphite_dl_pka/
     
     Python3
     check this for the original repo:
@@ -38,7 +38,7 @@ rdkit_pI_v3.2/
         acdperceptabatch     # "perceptabat" executable should be callable
 
     if --use_dimorphite enabled:
-        dimorphite_dl-1.2.4_for_rdkit_pI
+        dimorphite_dl_pka
 
 smi2scrambledfasta_v1.0/
 

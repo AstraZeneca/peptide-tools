@@ -34,7 +34,7 @@ DEPENDENCIES
         acdperceptabatch     # "perceptabat" executable should be callable
 
     if --use_dimorphite enabled:
-        dimorphite_dl-1.2.4_for_rdkit_pI
+        dimorphite_dl_pka
 
 
 PLATFORM

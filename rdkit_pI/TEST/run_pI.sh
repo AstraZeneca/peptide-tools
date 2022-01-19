@@ -1,11 +1,11 @@
 # example usage. currently set to run from teh "rdkit_pI" folder.
 # Make sure to have RDkit avaialble. 
-# Make sure to set teh proper path to dimorphite_dl-1.2.4_for_rdkit_pI (see below) - if intent to use it.
+# Make sure to set teh proper path to dimorphite_dl_pka (see below) - if intent to use it.
 # Or make sure to have ACD Perceptabat avaialble - if intent to use it. 
 
 module load rdkit
 #module load acdperceptabatch
-export PYTHONPATH=$PYTHONPATH:${pwd}/../dimorphite_dl-1.2.4_for_rdkit_pI
+export PYTHONPATH=$PYTHONPATH:${pwd}/../dimorphite_dl_pka
 
 i=$1
 o=$2

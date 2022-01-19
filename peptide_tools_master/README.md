@@ -18,7 +18,7 @@ HOW TO RUN
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../smi2scrambledfasta_v1.0
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../extn_coeff_fasta_v2.2
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../pI_fasta_v1.4
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../dimorphite_dl-1.2.4_for_rdkit_pI
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../dimorphite_dl_pka
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../rdkit_pI_v3.2
 
     ### Example peptide structure
@@ -42,7 +42,7 @@ DEPENDENCIES
         acdperceptabatch     # "perceptabat" executable should be callable
 
     if --use_dimorphite enabled:
-        dimorphite_dl-1.2.4_for_rdkit_pI
+        dimorphite_dl_pka
 
 
 PLATFORM
