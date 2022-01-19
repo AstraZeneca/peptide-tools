@@ -511,8 +511,9 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
             if set not in all_known_pKa_sets: raise Exception("---Error! pKa set "+set+" is not known. Check your -m option. Exit.")
 
     # Get options
-    seq=options['seq']
-    sequence=options['seq']
+    orig_seq = options['seq']
+    seq=orig_seq.upper()
+    sequence=seq
     IonizableTerminiOfNTermRes=options['IonizableTerminiOfNTermRes']
     IonizableTerminiOfCTermRes=options['IonizableTerminiOfCTermRes']
     NTermRes=options['NTermRes']
@@ -577,7 +578,7 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
 
 
 
-    tit="sequence: "+sequence+titAdd
+    tit="sequence: "+orig_seq+titAdd
     ### Calculate pI
     if lCalc:
 
@@ -633,7 +634,7 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
         plot_titration_curve(fig_file_name=plot_filename)
             
 
-    dict_pI_fasta = {'sequence':seq,'pI':pI_dict,'QpH7':Q_dict,'plot_filename':plot_filename}
+    dict_pI_fasta = {'sequence':orig_seq,'pI':pI_dict,'QpH7':Q_dict,'plot_filename':plot_filename}
 
     return dict_pI_fasta
 

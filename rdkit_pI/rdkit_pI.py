@@ -5,6 +5,8 @@ import os.path
 import math
 from rdkit import Chem
 from rdkit.Chem import AllChem, Recap, Descriptors, Draw
+from rdkit.Chem.MolStandardize import rdMolStandardize
+
 from numpy import *
 from matplotlib.pyplot import *
 
@@ -53,6 +55,7 @@ def run_exe(exe):
 def calc_pkas_dimorphite_dl(unknown_fragments):
     from rdkit import Chem
     from dimorphite_dl import Protonate
+    from smarts_matcher_nonnaturals_dimorphite import D_dimorphite_dl_type_pka
 
     skip_site_names = ['TATA','*Amide']
 
@@ -170,7 +173,54 @@ def calc_pkas_acdlabs(smi_list):
        
 
 
+# https://www.rdkit.org/docs/Cookbook.html
+def neutralize_atoms(mol):
+    pattern = Chem.MolFromSmarts("[+1!h0!$([*]~[-1,-2,-3,-4]),-1!$([*]~[+1,+2,+3,+4])]")
+    at_matches = mol.GetSubstructMatches(pattern)
+    at_matches_list = [y[0] for y in at_matches]
+    if len(at_matches_list) > 0:
+        for at_idx in at_matches_list:
+            atom = mol.GetAtomWithIdx(at_idx)
+            chg = atom.GetFormalCharge()
+            hcount = atom.GetTotalNumHs()
+            atom.SetFormalCharge(0)
+            atom.SetNumExplicitHs(hcount - chg)
+            atom.UpdatePropertyCache()
+    return mol
 
+
+def calc_molecule_constant_charge(net_Qs):
+    
+    q = [ v[0] for v in net_Qs]
+
+    if len(q)>0:
+        constant_q = float(sum(q))/float(len(q))
+    else:
+        constant_q = 0.0
+
+    return constant_q
+    
+
+
+def calc_net_Qs(smi_list):
+    
+    net_Qs = []
+    for smi in smi_list:
+
+        mol = Chem.MolFromSmiles(smi)
+        clean_mol = rdMolStandardize.Cleanup(mol)
+        m = neutralize_atoms(clean_mol)
+        
+        pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4]")
+        at_matches = m.GetSubstructMatches(pattern)
+       
+        at_matches_list = [y[0] for y in at_matches]
+        for v in at_matches_list:
+            net_Qs.append( (1,smi) )
+    
+    return net_Qs
+        
+        
 
 
 def calc_pkas(smi_list, use_acdlabs=False, use_dimorphite=True):
@@ -186,8 +236,12 @@ def calc_pkas(smi_list, use_acdlabs=False, use_dimorphite=True):
 
     #if use_opera:
     #    base_pkas,acid_pkas,diacid_pkas = calc_pkas_opera(smi_list)
+
+
+    net_Qs = calc_net_Qs(smi_list) 
+
     
-    return (base_pkas,acid_pkas,diacid_pkas)
+    return (base_pkas,acid_pkas,diacid_pkas,net_Qs)
 
 
         
@@ -206,8 +260,8 @@ def calculateDiacidCharge(pH, pKa1, pKa2):
         return -2*f2 + (-1)*f1     # average charge of phosphate group
 
 
-def calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH):
-    charge = 0
+def calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH, constant_q=0):
+    charge = constant_q
     for pka in base_pkas:
         charge += calculateBasicCharge(pH, pka)
 
@@ -224,7 +278,7 @@ pH_llim=-1
 pH_hlim=15
 
 
-def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas):   
+def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):   
     tolerance=0.01
     charge_tol=0.05
     na=len(acid_pkas)+len(diacid_pkas)
@@ -233,7 +287,7 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas):
 
     while True:
         mid_pH = 0.5 * (max_pH + min_pH)
-        charge = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, mid_pH)
+        charge = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, mid_pH, constant_q=constant_q)
         
         if na == 0 and nb != 0:
             #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
@@ -260,12 +314,12 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas):
             return pH_hlim
             
 
-def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas):
+def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     #pH_a=arange(0,14,0.1)
     pH_a=arange(pH_llim,pH_hlim,0.1)
     Q_a=pH_a*0.0    
     for i in range(len(pH_a)):
-        Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i])
+        Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i],constant_q=constant_q)
         Q_a[i]=Q
     pH_Q = np.vstack((pH_a,Q_a))
     return pH_Q
@@ -451,11 +505,11 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
 
         # match known amino-acids with defined pKas
         unknown_frags,base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fasta = get_pkas_for_known_AAs(frags_smi_list)
-        #print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
+        print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
 
         # caclulate pKas for unknown fragmets
-        if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
-        else: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc = [],[],[]
+        if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
+        else: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = [],[],[],[]
 
         # loop over all pKa sets
         seq_dict={}
@@ -480,13 +534,13 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
             else: all_diacid_pkas,all_diacid_pkas_smi = [],[]
 
             # calculate isoelectric point
-            pI = calculateIsoelectricPoint(all_base_pkas, all_acid_pkas, all_diacid_pkas)
-            pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas)
+            pI = calculateIsoelectricPoint(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = calc_molecule_constant_charge(net_Qs))
+            pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = calc_molecule_constant_charge(net_Qs))
             pH_Q = pH_Q.T
             #print( "pI ACDlabs %6.3f" % (pI) )
 
             # calculate isoelectric point
-            Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4)
+            Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = calc_molecule_constant_charge(net_Qs))
             #print( "Q at pH7.4 ACDlabs %4.1f" % (Q) )
 
             pI_dict[pKaset] = pI
@@ -542,6 +596,7 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
                                     'base_pkas_calc':base_pkas_calc,
                                     'acid_pkas_calc':acid_pkas_calc,
                                     'diacid_pkas_calc':diacid_pkas_calc,
+                                    'constant_Qs_calc':net_Qs,
                                     'pI_interval_threshold':int_tr,
                                     'pKa_set':pKaset
                                     }
@@ -572,6 +627,7 @@ def print_output(dict_output_rdkit_pI,args):
         base_pkas_calc = dict_output_rdkit_pI[molid_ind]['base_pkas_calc']
         acid_pkas_calc = dict_output_rdkit_pI[molid_ind]['acid_pkas_calc']
         diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
+        constant_Qs_calc = dict_output_rdkit_pI[molid_ind]['constant_Qs_calc']
         pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
 
         print(" ")
@@ -606,11 +662,19 @@ def print_output(dict_output_rdkit_pI,args):
                 s_pkas = ["%4.1f"%(pkas)]
                 print("smiles or AA, acid pka : %-15s %s" % (smi,' '.join(s_pkas)))
 
+#            print(" ")
+#            print("List of calculated DIACID pKa's with the corresponding fragments")
+#            for pkas,smi in zip(all_diacid_pkas,all_diacid_pkas_smi):
+#                s_pkas = ["%4.1f  %4.1f"%(pkas[0],pkas[1])]
+#                print("smiles or AA, diacid pka : %-15s %s" % (smi,' '.join(s_pkas)))
+
             print(" ")
-            print("List of calculated DIACID pKa's with the corresponding fragments")
-            for pkas,smi in zip(all_diacid_pkas,all_diacid_pkas_smi):
-                s_pkas = ["%4.1f  %4.1f"%(pkas[0],pkas[1])]
-                print("smiles or AA, diacid pka : %-15s %s" % (smi,' '.join(s_pkas)))
+            print("List of constantly ionized fragments with the corresponding fragments")
+            for v in constant_Qs_calc:
+                pkas = v[0]
+                smi = v[1]
+                s_pkas = ["%4.1f"%(pkas)]
+                print("smiles, charge : %-15s %s" % (smi,' '.join(s_pkas)))
 
     return
 
