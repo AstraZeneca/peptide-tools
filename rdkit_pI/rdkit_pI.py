@@ -505,7 +505,7 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
 
         # match known amino-acids with defined pKas
         unknown_frags,base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fasta = get_pkas_for_known_AAs(frags_smi_list)
-        print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
+        #print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
 
         # caclulate pKas for unknown fragmets
         if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
