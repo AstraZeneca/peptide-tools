@@ -450,50 +450,73 @@ def plot_titration_curve(fig_file_name='OUT_titration_curve.png'):
 
 
 
-def calc_pI_fasta(options={"inputFile":"","outputFile":"","sequenceList":"","seq":"", "tol": 0.001, "CTermRes": "_", "NTermRes": "_", "IonizableTerminiOfCTermRes": "_", "IonizableTerminiOfNTermRes": "_", "lCyclic": False, "NPhosphateGroups": 0, "NAlkylLysGroups": 0, "NDiAlkylLysGroups": 0, "lPrintpKa": False, "lPlot": False, "lIgnoreC": False,"plot_filename":"OUT_titration_curve.png","l_json":False}):
+def read_fasta_file(inputFile):
+
+    filename, ext = os.path.splitext(inputFile)
+
+    # Initialize file reader
+    if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
+
+    from Bio import SeqIO
+    biosuppl = SeqIO.parse(open(args.inputFile),'fasta')
+
+    mol_supply_json={}
+    mol_unique_ID = 0
+    for biofasta in biosuppl:
+        mol_unique_ID += 1
+        # unique index, mol title, RDkit mol object, mol fasta
+        mol_supply_json[mol_unique_ID] = {'mol_name':biofasta.id, 'mol_obj':None, 'fasta':str(biofasta.seq)}
+        
+    return mol_supply_json
+
+
+
+def calc_pI_fasta(options={"inputFile":"","inputDict":{},"inputJSON":"","outputFile":"","sequenceList":"","seq":"", "tol": 0.001, "CTermRes": "_", "NTermRes": "_", "IonizableTerminiOfCTermRes": "_", "IonizableTerminiOfNTermRes": "_", "lCyclic": False, "NPhosphateGroups": 0, "NAlkylLysGroups": 0, "NDiAlkylLysGroups": 0, "lPrintpKa": False, "lPlot": False, "lIgnoreC": False,"plot_filename":"OUT_titration_curve.png","l_json":False}):
 
     args = Dict2Class(options)
 
     # Get options
     if len(args.seq)!=0:
         # assume single fasta input
-        molid='unknown'
-        molfasta = args.seq
-        suppl = [ (molid, molfasta) ]
+        mol_unique_ind=1
+        mol_name='unknown'
+        fasta = args.seq
+        mol_supply_json={}
+        mol_supply_json[mol_unique_ind] = {'mol_name': mol_name, 'mol_obj':None, 'fasta':fasta}
+
     elif len(args.inputFile)!=0:
         # Assume filename as input
         inputFile = args.inputFile
-        filename, ext = os.path.splitext(inputFile)
+        mol_supply_json = read_fasta_file(inputFile)
 
-        # Initialize file reader
-        if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
-
-        from Bio import SeqIO
-        biosuppl = SeqIO.parse(open(args.inputFile),'fasta')
-
-        suppl=[]
-        for biofasta in biosuppl:
-            suppl.append(  (biofasta.id, str(biofasta.seq)) )
-        
+    elif len(args.inputJSON)!=0:
+        # Assume molecule JSON supply as input
+        mol_supply_json = json.loads(args.inputJSON)
+    elif args.inputDict: # if not an empty dictionary
+        # Assume Dict molecule supply as input
+        mol_supply_json = args.inputDict
     else:
-        raise Exception('Error: either fasta or input file *.fasta should be given for pI_fasta.py. Exit. ')
+        raise Exception('Error: either fasta, input file *.fasta or JSON should be given for pI_fasta.py. Exit. ')
         sys.exit(1)
 
 
-    dict_out_pI_fasta = {}
-    molid_list = []
-    molid_ind_list = []
-    molid_ind = 0
-    for molid,molfasta in suppl:
-        molid_ind += 1
-        options_single = copy(options)
-        options_single["seq"] = molfasta
-        dict_pI_fasta_single = calc_pI_fasta_single_sequence(options_single)
-        dict_pI_fasta_single["molid"] = molid
-        dict_out_pI_fasta[molid_ind] = dict_pI_fasta_single
-        molid_ind_list.append(molid_ind)
 
-    dict_out_pI_fasta['molid_ind_list'] = molid_ind_list
+    dict_out_pI_fasta = {}
+    #molid_list = []
+    #molid_ind_list = []
+    #molid_ind = 0
+    #for molid,molfasta in suppl:
+
+    #for molid,molfasta in suppl:
+    for mol_unique_ind in mol_supply_json.keys():
+        #molid_ind += 1
+        options_single = copy(options)
+        options_single["seq"] = mol_supply_json[mol_unique_ind]['fasta']
+        dict_pI_fasta_single = calc_pI_fasta_single_sequence(options_single)
+        dict_pI_fasta_single["mol_name"] = mol_supply_json[mol_unique_ind]['mol_name']
+        dict_out_pI_fasta[mol_unique_ind] = dict_pI_fasta_single
+        #molid_ind_list.append(molid_ind)
+    #dict_out_pI_fasta['molid_ind_list'] = molid_ind_list
 
     return dict_out_pI_fasta
 

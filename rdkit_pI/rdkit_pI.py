@@ -27,6 +27,8 @@ class Dict2Class(object):
 
 
 
+
+
 def clean_up_output(text):
     txt=text.split('\n')
     text_new=''
@@ -460,19 +462,10 @@ def plot_titration_curve(pH_Q_dict,figFileName):
 
 
 
-def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_dimorphite':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 
-    args = Dict2Class(options)
 
-    # Get options
-    if len(args.smiles)!=0:
-        # assume smiles input
-        suppl = [ Chem.MolFromSmiles(args.smiles) ]    
-    elif len(args.inputFile)!=0:
-        # Assume filename as input
-        inputFile = args.inputFile
+def read_structure_file(inputFile):
         filename, ext = os.path.splitext(inputFile)
-
         # Initialize file reader
         if   ext == '.sdf':
             suppl = Chem.SDMolSupplier(inputFile) 
@@ -481,22 +474,61 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
         else:
             raise Exception('!Warning: extension of file is not smi or sdf. Assume it is smi. Continue. ')
             suppl = Chem.SmilesMolSupplier(inputFile,titleLine=False) 
+        mol_supply_json={}
+        mol_unique_ID = 0
+        for mol in suppl:
+            mol_unique_ID += 1
+            # unique index, mol title, fasta
+            mol_supply_json[mol_unique_ID] = {'mol_name':mol.GetProp('_Name'), 'mol_obj':mol, 'fasta':''}
 
+        return mol_supply_json
+
+
+
+
+
+
+
+
+def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_dimorphite':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
+
+    args = Dict2Class(options)
+
+    # Get options
+    if len(args.smiles)!=0:
+        # assume smiles input
+        mol_unique_ID = 1
+        mol = Chem.molFromSmiles(smi)
+        mol_supply_json={}
+        mol_supply_json[mol_unique_ID] = {'mol_name': 'none', 'mol_obj':mol, 'fasta':'none'}
+    elif len(args.inputFile)!=0:
+        # Assume filename as input
+        inputFile = args.inputFile
+        mol_supply_json = read_structure_file(inputFile)
+    elif len(args.inputJSON)!=0:
+        # Assume molecule JSON supply as input
+        mol_supply_json = json.loads(args.inputJSON)
+    elif args.inputDict: # if not an empty dictionary
+        # Assume Dict olecule supply as input
+        mol_supply_json = args.inputDict
     else:
-        raise Exception('Error: either smiles or input file should be given for rdkit_pI.py. Exit. ')
+        raise Exception('Error: either smiles or input file *.smi, sdf, or Json string should be given. Exit. ')
         sys.exit(1)
 
+            
 
 
     # run calculations
     dict_output_rdkit_pI={}
-    molid_ind = 0
-    molid_ind_list = []
-    molid_list = []
-    for mol in suppl:
-        molid_ind+=1
-        molid='tmpmolid'+str(molid_ind)
-        molid_list += [molid]
+    #molid_ind = 0
+    #molid_ind_list = []
+    #molid_list = []
+
+    for molid_ind in mol_supply_json.keys():
+        #molid_ind+=1
+        mol_name = mol_supply_json[molid_ind]['mol_name']    
+        mol = mol_supply_json[molid_ind]['mol_obj']    
+        #molid_list += [molid]
 
         # break amide bonds
         frags_smi_list = break_amide_bonds_and_cap(mol)
@@ -584,24 +616,31 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
         else:
             figFileName = ""
         
-        molid_ind_list.append(molid_ind)
-        dict_output_rdkit_pI[molid_ind]={'molid':molid,
+        #molid_ind_list.append(molid_ind)
+        
+        dict_output_rdkit_pI[molid_ind]={'mol_name':mol_name,
                                     'pI':pI_dict,
                                     'QpH7':Q_dict,
                                     'pI_interval':interval,
                                     'plot_filename':figFileName,
+                                    'pI_interval_threshold':int_tr
+                                    }
+        if args.l_print_pka_set:
+            dict_output_rdkit_pI[molid_ind]={'pKa_set':pKaset }
+        if args.l_print_fragments:
+            dict_output_rdkit_pI[molid_ind]={
                                     'base_pkas_fasta':base_pkas_fasta,
                                     'acid_pkas_fasta':acid_pkas_fasta,
-                                    'diacid_pkas_fasta':diacid_pkas_fasta,
                                     'base_pkas_calc':base_pkas_calc,
                                     'acid_pkas_calc':acid_pkas_calc,
-                                    'diacid_pkas_calc':diacid_pkas_calc,
-                                    'constant_Qs_calc':net_Qs,
-                                    'pI_interval_threshold':int_tr,
-                                    'pKa_set':pKaset
+                                    'constant_Qs_calc':net_Qs
                                     }
 
-    dict_output_rdkit_pI['molid_ind_list'] = molid_ind_list
+
+                                    #'diacid_pkas_calc':diacid_pkas_calc,
+                                    #'diacid_pkas_fasta':diacid_pkas_fasta,
+
+    #dict_output_rdkit_pI['molid_ind_list'] = molid_ind_list
 
     return dict_output_rdkit_pI
 
@@ -609,8 +648,8 @@ def calc_rdkit_pI(options={'smiles':'','inputFile':'','outputFile':'','use_acdla
 
 def print_output(dict_output_rdkit_pI,args):
 
-    #for molid in dict_output_rdkit_pI['molid_list']:
-    for molid_ind in dict_output_rdkit_pI['molid_ind_list']:
+    #for molid_ind in dict_output_rdkit_pI['molid_ind_list']:
+    for molid_ind in dict_output_rdkit_pI.keys():
     
         molid = dict_output_rdkit_pI[molid_ind]
 
@@ -623,10 +662,10 @@ def print_output(dict_output_rdkit_pI,args):
         int_tr = dict_output_rdkit_pI[molid_ind]['pI_interval_threshold']
         base_pkas_fasta = dict_output_rdkit_pI[molid_ind]['base_pkas_fasta']
         acid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['acid_pkas_fasta']
-        diacid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['diacid_pkas_fasta']
+        #diacid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['diacid_pkas_fasta']
         base_pkas_calc = dict_output_rdkit_pI[molid_ind]['base_pkas_calc']
         acid_pkas_calc = dict_output_rdkit_pI[molid_ind]['acid_pkas_calc']
-        diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
+        #diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
         constant_Qs_calc = dict_output_rdkit_pI[molid_ind]['constant_Qs_calc']
         pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
 
@@ -639,7 +678,7 @@ def print_output(dict_output_rdkit_pI,args):
             # merge fasta and calcualted pkas
             base_pkas = base_pkas_fasta[pKaset] + base_pkas_calc
             acid_pkas = acid_pkas_fasta[pKaset] + acid_pkas_calc
-            diacid_pkas = diacid_pkas_fasta[pKaset] + diacid_pkas_calc
+            #diacid_pkas = diacid_pkas_fasta[pKaset] + diacid_pkas_calc
             all_base_pkas=[]
             all_acid_pkas=[]
             all_diacid_pkas=[]
@@ -647,8 +686,8 @@ def print_output(dict_output_rdkit_pI,args):
             else: all_base_pkas,all_base_pkas_smi = [],[]
             if len(acid_pkas) != 0: all_acid_pkas,all_acid_pkas_smi = zip(*acid_pkas) 
             else: all_acid_pkas,all_acid_pkas_smi = [],[]
-            if len(diacid_pkas) != 0: all_diacid_pkas,all_diacid_pkas_smi = zip(*diacid_pkas) 
-            else: all_diacid_pkas,all_diacid_pkas_smi = [],[]
+            #if len(diacid_pkas) != 0: all_diacid_pkas,all_diacid_pkas_smi = zip(*diacid_pkas) 
+            #else: all_diacid_pkas,all_diacid_pkas_smi = [],[]
         
             print(" ")
             print("List of calculated BASE pKa's with the corresponding fragments")
@@ -687,6 +726,7 @@ def print_output(dict_output_rdkit_pI,args):
 def args_parser():
     #usage = "rdkit_pI.py  -i input_file  --print_fragment_pkas"
     parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using modified Dimorphite-DL or ACDlabs, and calculating Henderson-Hasselbalch equation.")
+    parser.add_argument("-j", dest="inputJSON", help="input molecule supply in JSON format",default='')
     parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
     parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. filenames are ignored",default='')
     parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. fasta",default='')

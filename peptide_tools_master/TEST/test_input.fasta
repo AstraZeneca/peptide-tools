@@ -1,0 +1,16 @@
+# Sequences are presented in FASTA format
+# the header line starts from '>' folowed by a list of identifiers and measurements (separated by '|') according:
+# a) Gauci et al. doi: 10.1002/pmic.200800295
+# b) Heller et al. doi: 10.1021/pr050193v (data coming from this study contain also information about UNIPROT identifiers from which peptides come from)
+# Each header line ends with "mean exp pI:" which denote mean experimental isoelectric point from the rest of the header
+# 
+# The line below header line contains protein/peptide sequence in single letter IUPAC code
+# 
+# This file is cleaned (no sequences with MSA>3 and no duplicates)
+
+>319 4.37 mean exp pI: 4.37
+AIDWLAFAER
+>3009 AB026845 Zo3o 4.5 mean exp pI: 4.5
+IPEQQRYIEKVEELEDYRK
+>242 Q8MSV4 hHFM 9.85|363 Q86NR6 FD1T 9.85|366 AE003545 n6kD 9.85|367 AE003545 37BF 9.85 mean exp pI: 9.85
+NAGIFMYASNLR

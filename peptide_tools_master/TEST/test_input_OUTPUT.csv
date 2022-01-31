@@ -1,0 +1,3 @@
+SMILES,pI mean,pI std,pI interval,pI interval threshold,mol_name,Sequence(FASTA),e205(nm),e214(nm),e280(nm)
+C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O,8.22,1.45,8.60 - 9.10,0.2,peptide1,KXXAF,19720,8965,0
+C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(N)=O,9.6,1.33,9.90 - 10.20,0.2,peptide2,KXXAF,19720,8965,0
