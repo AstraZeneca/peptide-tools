@@ -479,6 +479,7 @@ def read_structure_file(inputFile):
         for mol in suppl:
             mol_unique_ID += 1
             # unique index, mol title, fasta
+            if not mol.HasProp('_Name'): mol.SetProp('_Name','tmpname'+str(mol_unique_ID))
             mol_supply_json[mol_unique_ID] = {'mol_name':mol.GetProp('_Name'), 'mol_obj':mol, 'fasta':''}
 
         return mol_supply_json
