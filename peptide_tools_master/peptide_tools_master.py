@@ -115,6 +115,9 @@ def read_structure_file(inputFile):
         mol_unique_ID += 1
         # unique index, mol title, fasta
         fasta = get_fasta_from_smiles(smi)
+
+        if not mol.HasProp('_Name'): mol.SetProp('_Name','tmpname'+str(mol_unique_ID))
+
         mol_supply_json[mol_unique_ID] = {'mol_name':mol.GetProp('_Name'), 'mol_obj':mol, 'fasta':get_fasta_from_mol(mol)}
 
     return mol_supply_json
@@ -174,7 +177,7 @@ if __name__ == "__main__":
         l_calc_extn_coeff=True
         l_calc_pI_fasta=False
         l_calc_rdkit_pI=True
-        mol = Chem.molFromSmiles(smi)
+        mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {'mol_name': mol_name, 'mol_obj':mol, 'fasta':get_fasta_from_mol(mol)}
 
     elif INPUT.isalpha():
@@ -206,7 +209,7 @@ if __name__ == "__main__":
         l_calc_extn_coeff=True
         l_calc_pI_fasta=False
         l_calc_rdkit_pI=True
-        mol = Chem.molFromSmiles(smi)
+        mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {'mol_name': mol_name, 'mol_obj':mol, 'fasta':fasta}
 
     else:
