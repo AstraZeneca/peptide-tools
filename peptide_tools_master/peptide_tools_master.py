@@ -51,8 +51,8 @@ def arg_parser():
     ### rdkit_pI.py keys
     #parser.add_argument("--print_fragment_pkas", dest="l_print_fragment_pkas", help="Print out fragments with corresponding pKas used in pI calcution", default='')
     #parser.add_argument("--print_pka_set", dest="l_print_pka_set", help="Print out stored pka sets explicitly.", default='')
-    parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragment_pkas", help="Print out fragments with corresponding pKas used in pI calcution")
-    parser.add_argument("--print_pka_set",default=False, action='store_true',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
+    parser.add_argument("--print_fragment_pkas",default="no", action='store',dest="l_print_fragment_pkas", help="Print out fragments with corresponding pKas used in pI calcution")
+    parser.add_argument("--print_pka_set",default="no", action='store',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
 
     ### pI_fasta.py keys
     parser.add_argument("--ionized_Cterm", dest="ionized_Cterm", help="is C-terminus ionized [COO-]?", default=True)
@@ -62,6 +62,13 @@ def arg_parser():
     parser.add_argument("-d", action="store", dest="NDiAlkylLysGroups", help="Number of dinoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0", default=0,type=int)
 
     args = parser.parse_args()
+
+    if args.l_print_pka_set == "yes": args.l_print_pka_set = True
+    else: args.l_print_pka_set = False
+    
+    if args.l_print_fragment_pkas == "yes": args.l_print_fragment_pkas = True
+    else: args.l_print_fragment_pkas = False
+
 
     return args
 
