@@ -626,16 +626,17 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     'plot_filename':figFileName,
                                     'pI_interval_threshold':int_tr
                                     }
-        if args.l_print_pka_set:
-            dict_output_rdkit_pI[molid_ind]={'pKa_set':pKaset }
+        #if args.l_print_pka_set:
+        dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
+
         if args.l_print_fragments:
-            dict_output_rdkit_pI[molid_ind]={
+            dict_output_rdkit_pI[molid_ind].update({
                                     'base_pkas_fasta':base_pkas_fasta,
                                     'acid_pkas_fasta':acid_pkas_fasta,
                                     'base_pkas_calc':base_pkas_calc,
                                     'acid_pkas_calc':acid_pkas_calc,
                                     'constant_Qs_calc':net_Qs
-                                    }
+                                    })
 
 
                                     #'diacid_pkas_calc':diacid_pkas_calc,
@@ -661,13 +662,6 @@ def print_output(dict_output_rdkit_pI,args):
         elif args.use_dimorphite: predition_tool = 'modified Dimorphite-DL'
 
         int_tr = dict_output_rdkit_pI[molid_ind]['pI_interval_threshold']
-        base_pkas_fasta = dict_output_rdkit_pI[molid_ind]['base_pkas_fasta']
-        acid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['acid_pkas_fasta']
-        #diacid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['diacid_pkas_fasta']
-        base_pkas_calc = dict_output_rdkit_pI[molid_ind]['base_pkas_calc']
-        acid_pkas_calc = dict_output_rdkit_pI[molid_ind]['acid_pkas_calc']
-        #diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
-        constant_Qs_calc = dict_output_rdkit_pI[molid_ind]['constant_Qs_calc']
         pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
 
         print(" ")
@@ -675,6 +669,13 @@ def print_output(dict_output_rdkit_pI,args):
         print("%4.1f - %4.1f" % (dict_output_rdkit_pI[molid_ind]['pI_interval'][0],dict_output_rdkit_pI[molid_ind]['pI_interval'][1]))
 
         if args.l_print_fragments:
+            base_pkas_fasta = dict_output_rdkit_pI[molid_ind]['base_pkas_fasta']
+            acid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['acid_pkas_fasta']
+            #diacid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['diacid_pkas_fasta']
+            base_pkas_calc = dict_output_rdkit_pI[molid_ind]['base_pkas_calc']
+            acid_pkas_calc = dict_output_rdkit_pI[molid_ind]['acid_pkas_calc']
+            #diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
+            constant_Qs_calc = dict_output_rdkit_pI[molid_ind]['constant_Qs_calc']
 
             # merge fasta and calcualted pkas
             base_pkas = base_pkas_fasta[pKaset] + base_pkas_calc

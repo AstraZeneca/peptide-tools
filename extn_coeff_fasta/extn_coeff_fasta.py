@@ -195,9 +195,11 @@ def calc_extn_coeff_single_sequence(sequence):
 
 
 def print_stdout(dict_in):
-    for molid_ind in dict_in['molid_ind_list']:
+    #for molid_ind in dict_in['molid_ind_list']:
+    for molid_ind in dict_in.keys():
         dict_extn_coeff = dict_in[molid_ind]
-        molid = dict_extn_coeff['molid']
+        print(dict_extn_coeff.keys())
+        molid = dict_extn_coeff['mol_name']
         print("======================================================================================================================================================")
         print("--- Molar absorption coefficient at different wavelength")
         print("mol ID: "+molid)

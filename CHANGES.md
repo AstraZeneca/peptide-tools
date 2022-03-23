@@ -1,5 +1,7 @@
 
-extn_coeff_fasta_v2.2/
+extn_coeff_fasta
+
+* 2022-03-23 bug fixed: fixed std ouput results display. "molid" changed to "mol_name" in the code and some code polishing. 
 
 2.2
 ---
@@ -19,10 +21,13 @@ pI_fasta_v1.4/
 
 
 
-rdkit_pI_v3.2/
+rdkit_pI/
 
 Changes
 =======
+
+2022-03-23 bug fix: the output was incomplete if the extra keys (print_fragmet_pkas, etc.) were switched on.
+
 
 3.2
 -----

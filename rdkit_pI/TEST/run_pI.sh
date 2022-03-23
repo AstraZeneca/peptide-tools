@@ -15,6 +15,8 @@ if [ -z "$i" ]; then echo "no input.  $usage" ; fi
 if [ -z "$o" ]; then echo "no output.  $usage" ; fi
 
 #python ../rdkit_pI.py -i ${i} --plot_titration_curve --print_fragment_pkas --use_acdlabs &> $o
-python ../rdkit_pI.py -i ${i} --plot_titration_curve --print_fragment_pkas --use_dimorphite --json  &> $o
+#python ../rdkit_pI.py -i ${i} --plot_titration_curve --print_fragment_pkas --use_dimorphite --json  &> $o
+#python ../rdkit_pI.py -i ${i} --plot_titration_curve --print_fragment_pkas --use_dimorphite  &> $o
+python ../rdkit_pI.py -i ${i} --plot_titration_curve --print_fragment_pkas --use_dimorphite 
 
 
