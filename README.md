@@ -6,23 +6,19 @@ OVERVIEW
     Set of programs to calcaulte phys-chem properties of synthetic peptides and proteins: isoelectic point and extinction coefficients.
     In total there are 5 scripts/programs there, each can serve as stand alone:
 
-    1) rdkit_pI_v3.2  (depends on 5)
+    1) rdkit_pI  
     program to calcualte isoelectric point of natural and modified peptides. 
 
-    2) smi2scrambledfasta_v1.0  (depends on 1)
+    2) smi2scrambledfasta  (depends on 1)
     program to generate the scrambled FASTA sequence from Smiles.
 
-    3) pI_fasta_v1.4  (depends on 2)
+    3) pI_fasta  (depends on 2)
     program to calcualte isoelecric point using FASTA sequence as an input.
 
-    4) extn_coeff_fasta_v2.1  (depends on 2)
+    4) extn_coeff_fasta  (depends on 2)
     program to calculate extinction coefficients.
 
-    5) dimorphite_dl_pka  
-    slightly modified version of the Dimorphite_DL-1.2.4 code, avaialble on GitHub, to enable pKa predition of unknown nonatural amino-acids side-chains.  
-    https://github.com/UnixJunkie/dimorphite_dl
-
-    6) peptide_tools_master_v1.0  (depends on 1,2,3,4,5)
+    5) peptide_tools_master  (depends on 1,2,3,4)
     wrapper script for all the programs above. Can run for one compound and for batch submissions.
 
 

@@ -16,7 +16,4 @@ smi2scrambledfasta_v1.0/
     Andrey I. Frolov
     Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into scrambled FASTA
 
-dimorphite_dl_pka/
-    Andrey I. Frolov - changes for dimorphite_dl_pka
-    Contributors to the original dimorphite_dl-1.2.4 repo: Jacob Durrant, Jesse Kaminsky, Patrick Ropp, Jacob Spiegel, Sara Yablonski
 

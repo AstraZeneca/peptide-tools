@@ -7,13 +7,6 @@ peptide_tools_master_v1.0/
     and all tools below
 
 
-dimorphite_dl_pka/
-    
-    Python3
-    check this for the original repo:
-    https://github.com/UnixJunkie/dimorphite_dl
-
-
 extn_coeff_fasta_v2.2/
 
     python3 or later 

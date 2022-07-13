@@ -10,7 +10,6 @@ PEPTIDE_TOOLS_PATH=`echo $PWD`
 export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/smi2scrambledfasta
 export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/extn_coeff_fasta
 export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pI_fasta
-export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/dimorphite_dl_pka
 export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/rdkit_pI
 
 ### Example peptide structure

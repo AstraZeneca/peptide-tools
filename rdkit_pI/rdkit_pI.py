@@ -54,38 +54,95 @@ def run_exe(exe):
     output = clean_up_output(output)
     return output
 
-def calc_pkas_dimorphite_dl(unknown_fragments):
-    from rdkit import Chem
-    from dimorphite_dl import Protonate
-    from smarts_matcher_nonnaturals_dimorphite import D_dimorphite_dl_type_pka
+#def calc_pkas_dimorphite_dl(unknown_fragments):
+#   from rdkit import Chem
+#   from dimorphite_dl import Protonate
+#   from smarts_matcher_nonnaturals_dimorphite import D_dimorphite_dl_type_pka
 
-    skip_site_names = ['TATA','*Amide']
+#   skip_site_names = ['TATA','*Amide']
+
+#   base_pkas=[]
+#   acid_pkas=[]
+#   diacid_pkas=[]
+
+#   for smiles in unknown_fragments:
+#       protonation_sites = Protonate({'smiles':smiles}).get_protonation_sites()
+
+#       for sites in protonation_sites:
+#           #(3, 'BOTH', '*Amide') 
+#           site_name = sites[2]
+
+#           if site_name in skip_site_names: continue
+
+#           if site_name in D_dimorphite_dl_type_pka.keys():
+#               site_data = D_dimorphite_dl_type_pka[site_name]
+#               if site_data['type']=='base':
+#                       base_pkas.append((site_data['pka'],smiles))
+#               if site_data['type']=='acid':
+#                       acid_pkas.append((site_data['pka'],smiles))
+#               if site_data['type']=='diacid':
+#                       diacid_pkas.append(((site_data['pka1'],site_data['pka2']),smiles))
+#               
+#           else:
+#               print('Error:  not known dimorphite site type ' + site_type)
+#               sys.exit(1)
+#   return (base_pkas,acid_pkas,diacid_pkas)
+
+
+def calc_pkas_pkamatcher(unknown_fragments):
+    from rdkit import Chem
+    from smarts_pKaMatcher import list_smarts_pka
+
+    pka_lim_base_1=2
+    pka_lim_base_2=15
+    pka_lim_acid_1=-5
+    pka_lim_acid_2=12
+
+    #skip_smarts_names = ['TATA','*Amide']
+    skip_smarts_names = []
 
     base_pkas=[]
     acid_pkas=[]
     diacid_pkas=[]
 
     for smiles in unknown_fragments:
-        protonation_sites = Protonate({'smiles':smiles}).get_protonation_sites()
+        mol = Chem.MolFromSmiles(smiles)
+        matched_indices = set()
+        for pka_dict_list in list_smarts_pka:
+          for smarts_pka in pka_dict_list:
+            pat = Chem.MolFromSmarts(smarts_pka['smarts'])
+ 
+            if smarts_pka['name'] in skip_smarts_names: continue
 
-        for sites in protonation_sites:
-            #(3, 'BOTH', '*Amide') 
-            site_name = sites[2]
-
-            if site_name in skip_site_names: continue
-
-            if site_name in D_dimorphite_dl_type_pka.keys():
-                site_data = D_dimorphite_dl_type_pka[site_name]
-                if site_data['type']=='base':
-                        base_pkas.append((site_data['pka'],smiles))
-                if site_data['type']=='acid':
-                        acid_pkas.append((site_data['pka'],smiles))
-                if site_data['type']=='diacid':
-                        diacid_pkas.append(((site_data['pka1'],site_data['pka2']),smiles))
+            #print(mol.GetSubstructMatches(pat))
+            used_ind_l = []
+            used_ind_local = [] 
+            for match in mol.GetSubstructMatches(pat):
+                used_ind_l += match
+                mat_ind = set(match)
                 
-            else:
-                print('Error:  not known dimorphite site type ' + site_type)
-                sys.exit(1)
+                available_ind = mat_ind.difference(matched_indices)
+               
+                if smarts_pka['type']=='base':
+                    if match[smarts_pka['ind']-1] in available_ind and match[smarts_pka['ind']-1] not in used_ind_local:
+                        pka = smarts_pka['pka']
+                        if pka > pka_lim_base_1 and pka < pka_lim_base_2: 
+                            base_pkas.append((pka,smiles))
+
+                elif smarts_pka['type']=='acid':
+                    if match[smarts_pka['ind']-1] in available_ind and match[smarts_pka['ind']-1] not in used_ind_local:
+                        pka = smarts_pka['pka']
+                        if pka > pka_lim_acid_1 and pka < pka_lim_acid_2: 
+                            acid_pkas.append((pka,smiles))
+                else:
+                    raise Exception('Error:  not known site type ' + smarts_pka['type'])
+                    sys.exit(1)
+
+                # indices of the ionizable centres in the match. used to exclude same ionizable centre be couned multiple times if the same SMARTS matches multiple times. 
+                used_ind_local.append(match[smarts_pka['ind']-1])
+
+          matched_indices = matched_indices.union(set(used_ind_l))
+
     return (base_pkas,acid_pkas,diacid_pkas)
     
 
@@ -93,11 +150,10 @@ def calc_pkas_acdlabs(smi_list):
     # use ACDlabs.
     # perceptabat executable should be in the path.
 
-    pka_lim_1=0
-    pka_lim_2=15
-
-    pka_lim_ac_1=0
-    pka_lim_ac_2=12
+    pka_lim_base_1=2
+    pka_lim_base_2=15
+    pka_lim_acid_1=-5
+    pka_lim_acid_2=12
 
     tmpfile='TMP_SMI_FOR_PKA.smi'
     #tmpfile4='TMP_SMI_FOR_PKA.json'
@@ -110,7 +166,8 @@ def calc_pkas_acdlabs(smi_list):
 
     tmpfile2='TMP_CLAB_OUTPUT.txt'
     if os.path.isfile(tmpfile2): os.remove(tmpfile2)
-    exe = 'perceptabat -TFNAME'+tmpfile2+' -MPKAAPP -TPKA ' + tmpfile
+    #exe = 'perceptabat -TFNAME'+tmpfile2+' -MPKAAPP -TPKA ' + tmpfile
+    exe = 'perceptabat -TFNAME'+tmpfile2+' -MPKAAPPGALAS -TPKA ' + tmpfile
     tmpoutput = run_exe(exe)
     if not os.path.isfile(tmpfile2): 
         print("ERROR: no tmpfile generated by acdlabs "+tmpfile2)
@@ -131,10 +188,10 @@ def calc_pkas_acdlabs(smi_list):
             if 'ACD_pKa_Apparent' in ln[1]: pka = float(ln[2])
             if 'ACD_pKa_DissType_Apparent' in ln[1]: 
                 if ln[2] in ['MB','B']:
-                    if pka > pka_lim_1 and pka < pka_lim_2: 
+                    if pka > pka_lim_base_1 and pka < pka_lim_base_2: 
                         base_pkas.append((pka,smi_list[mol_idx-1]))
                 if ln[2] in ['MA','A']:
-                    if pka > pka_lim_ac_1 and pka < pka_lim_ac_2: 
+                    if pka > pka_lim_acid_1 and pka < pka_lim_acid_2: 
                         acid_pkas.append((pka,smi_list[mol_idx-1]))
             
 #PKA: Calculate apparent values using classic algorithm
@@ -203,6 +260,12 @@ def calc_molecule_constant_charge(net_Qs):
     return constant_q
     
 
+def standardize_molecule(mol):
+    clean_mol = rdMolStandardize.Cleanup(mol)
+    m = neutralize_atoms(clean_mol)
+    return m
+    
+
 
 def calc_net_Qs(smi_list):
     
@@ -210,8 +273,9 @@ def calc_net_Qs(smi_list):
     for smi in smi_list:
 
         mol = Chem.MolFromSmiles(smi)
-        clean_mol = rdMolStandardize.Cleanup(mol)
-        m = neutralize_atoms(clean_mol)
+        #clean_mol = rdMolStandardize.Cleanup(mol)
+        #m = neutralize_atoms(clean_mol)
+        m = standardize_molecule(mol)
         
         pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4]")
         at_matches = m.GetSubstructMatches(pattern)
@@ -225,23 +289,24 @@ def calc_net_Qs(smi_list):
         
 
 
-def calc_pkas(smi_list, use_acdlabs=False, use_dimorphite=True):
+def calc_pkas(smi_list, use_acdlabs=False, use_pkamatcher=True):
 
-    if use_acdlabs and use_dimorphite: raise Exception('Error: requested to use both ACDlabs and Dimorphite for pka calculation. Should be only one. ')
-    if not use_acdlabs and not use_dimorphite: raise Exception('Error: requested to use none of ACDlabs or Dimorphite for pka calculation. Should be at least one. ')
+    if use_acdlabs and use_pkamatcher: raise Exception('Error: requested to use both ACDlabs and pKaMatcher for pka calculation. Should be only one. ')
+    if not use_acdlabs and not use_pkamatcher: raise Exception('Error: requested to use none of ACDlabs or pKaMatcher for pka calculation. Should be at least one. ')
 
     if use_acdlabs:
         base_pkas,acid_pkas,diacid_pkas = calc_pkas_acdlabs(smi_list)
 
-    if use_dimorphite:
-        base_pkas,acid_pkas,diacid_pkas = calc_pkas_dimorphite_dl(smi_list)
+    if use_pkamatcher:
+        base_pkas,acid_pkas,diacid_pkas = calc_pkas_pkamatcher(smi_list)
 
     #if use_opera:
     #    base_pkas,acid_pkas,diacid_pkas = calc_pkas_opera(smi_list)
 
+    #if use_dimorphite:
+    #    base_pkas,acid_pkas,diacid_pkas = calc_pkas_dimorphite_dl(smi_list)
 
     net_Qs = calc_net_Qs(smi_list) 
-
     
     return (base_pkas,acid_pkas,diacid_pkas,net_Qs)
 
@@ -491,7 +556,8 @@ def read_structure_file(inputFile):
 
 
 
-def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_dimorphite':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
+#def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_dimorphite':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
+def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_pkamatcher':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 
     args = Dict2Class(options)
 
@@ -499,7 +565,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
     if len(args.smiles)!=0:
         # assume smiles input
         mol_unique_ID = 1
-        mol = Chem.molFromSmiles(smi)
+        mol = Chem.MolFromSmiles(args.smiles)
         mol_supply_json={}
         mol_supply_json[mol_unique_ID] = {'mol_name': 'none', 'mol_obj':mol, 'fasta':'none'}
     elif len(args.inputFile)!=0:
@@ -530,6 +596,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         mol_name = mol_supply_json[molid_ind]['mol_name']    
         mol = mol_supply_json[molid_ind]['mol_obj']    
         #molid_list += [molid]
+        mol = standardize_molecule(mol)
 
         # break amide bonds
         frags_smi_list = break_amide_bonds_and_cap(mol)
@@ -541,7 +608,8 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         #print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
 
         # caclulate pKas for unknown fragmets
-        if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
+        #if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
+        if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_pkamatcher=args.use_pkamatcher)
         else: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = [],[],[],[]
 
         # loop over all pKa sets
@@ -567,13 +635,14 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
             else: all_diacid_pkas,all_diacid_pkas_smi = [],[]
 
             # calculate isoelectric point
-            pI = calculateIsoelectricPoint(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = calc_molecule_constant_charge(net_Qs))
-            pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = calc_molecule_constant_charge(net_Qs))
+            molecule_constant_charge = calc_molecule_constant_charge(net_Qs)
+            pI = calculateIsoelectricPoint(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = molecule_constant_charge)
+            pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = molecule_constant_charge)
             pH_Q = pH_Q.T
             #print( "pI ACDlabs %6.3f" % (pI) )
 
             # calculate isoelectric point
-            Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = calc_molecule_constant_charge(net_Qs))
+            Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = molecule_constant_charge)
             #print( "Q at pH7.4 ACDlabs %4.1f" % (Q) )
 
             pI_dict[pKaset] = pI
@@ -608,7 +677,13 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         Q=pH_Q[:,1]
         pH=pH_Q[:,0]
         pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
-        interval = (pH_int[0], pH_int[-1])
+       
+        # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
+        if len(pH_int) > 1:
+            interval = (pH_int[0], pH_int[-1])
+        else:
+            interval = (float('NaN'), float('NaN'))
+            
 
         # plot titration curve
         if args.l_plot_titration_curve:
@@ -659,7 +734,8 @@ def print_output(dict_output_rdkit_pI,args):
         print_output_prop_dict(dict_output_rdkit_pI[molid_ind]['QpH7'],'Q at pH7.4',l_print_pka_set=False)
 
         if args.use_acdlabs: predition_tool = 'ACDlabs'
-        elif args.use_dimorphite: predition_tool = 'modified Dimorphite-DL'
+        #elif args.use_dimorphite: predition_tool = 'modified Dimorphite-DL'
+        elif args.use_pkamatcher: predition_tool = 'pKaMatcher'
 
         int_tr = dict_output_rdkit_pI[molid_ind]['pI_interval_threshold']
         pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
@@ -727,7 +803,8 @@ def print_output(dict_output_rdkit_pI,args):
 
 def args_parser():
     #usage = "rdkit_pI.py  -i input_file  --print_fragment_pkas"
-    parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using modified Dimorphite-DL or ACDlabs, and calculating Henderson-Hasselbalch equation.")
+    #parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using modified Dimorphite-DL or ACDlabs, and calculating Henderson-Hasselbalch equation.")
+    parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using pKaMatcher or ACDlabs, and calculating Henderson-Hasselbalch equation.")
     parser.add_argument("-j", dest="inputJSON", help="input molecule supply in JSON format",default='')
     parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
     parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. filenames are ignored",default='')
@@ -737,7 +814,8 @@ def args_parser():
     parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragments", help="Print out fragments with corresponding pKas used in pI calcution.")
     parser.add_argument("--print_pka_set",default=False, action='store_true',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
     parser.add_argument("--use_acdlabs",default=False, action='store_true',dest="use_acdlabs", help="Use acdlabs for pka prediction of unknown fragments.")
-    parser.add_argument("--use_dimorphite",default=False, action='store_true',dest="use_dimorphite", help="Use modified Dimorphite-DL for pka prediction of unknown fragments.")
+    #parser.add_argument("--use_dimorphite",default=False, action='store_true',dest="use_dimorphite", help="Use modified Dimorphite-DL for pka prediction of unknown fragments.")
+    parser.add_argument("--use_pkamatcher",default=False, action='store_true',dest="use_pkamatcher", help="Use pKaMatcher for pka prediction of unknown fragments.")
     parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Output in JSON format.")
 
     args = parser.parse_args()

@@ -1,0 +1,59 @@
+[16:43:09] WARNING: no name column found on line 0
+ 
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  8.0         
+         err  0.0         
+         std  0.0         
+ IPC_peptide  8.0         
+     ProMoST  8.0         
+ Gauci_calib  8.0         
+  Bjellqvist  8.0         
+     Rodwell  8.0         
+    Grimsley  8.0         
+   Thurlkill  8.0         
+     Solomon  8.0         
+   Lehninger  8.0         
+      EMBOSS  8.0         
+ 
+ 
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.01       
+         err  0.0         
+         std  0.0         
+ IPC_peptide  -0.01       
+     ProMoST  -0.01       
+ Gauci_calib  -0.01       
+  Bjellqvist  -0.01       
+     Rodwell  -0.01       
+    Grimsley  -0.01       
+   Thurlkill  -0.01       
+     Solomon  -0.01       
+   Lehninger  -0.01       
+      EMBOSS  -0.01       
+ 
+ 
+pH interval with charge between -0.2 and  0.2 for pKa set: IPC_peptide and prediction tool: pKaMatcher
+-1.0 -  8.6
+ 
+List of calculated BASE pKa's with the corresponding fragments
+ 
+List of calculated ACID pKa's with the corresponding fragments
+smiles or AA, acid pka : CC(=O)N(C)O      9.3
+ 
+List of constantly ionized fragments with the corresponding fragments
+[16:43:09] Initializing MetalDisconnector
+[16:43:09] Running MetalDisconnector
+[16:43:09] Initializing Normalizer
+[16:43:09] Running Normalizer
+[16:43:09] Initializing MetalDisconnector
+[16:43:09] Running MetalDisconnector
+[16:43:09] Initializing Normalizer
+[16:43:09] Running Normalizer
+[16:43:09] Initializing MetalDisconnector
+[16:43:09] Running MetalDisconnector
+[16:43:09] Initializing Normalizer
+[16:43:09] Running Normalizer
