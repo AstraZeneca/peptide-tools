@@ -115,7 +115,7 @@ def read_structure_file(inputFile):
     for mol in suppl:
         mol_unique_ID += 1
         # unique index, mol title, fasta
-        fasta = get_fasta_from_smiles(smi)
+        #fasta = get_fasta_from_smiles(smi)
 
         if not mol.HasProp('_Name'): mol.SetProp('_Name','tmpname'+str(mol_unique_ID))
 

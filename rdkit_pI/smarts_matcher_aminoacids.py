@@ -206,6 +206,7 @@ D_CtermfreeAA_smarts = {
 }
 
 
+# not used at teh moment
 def patmatch_OE(smiles,smarts):
     from openeye.oechem import OEmol, OEParseSmiles, OEAddExplicitHydrogens, OESubSearch
     mol = OEMol()
@@ -219,6 +220,7 @@ def patmatch_OE(smiles,smarts):
         n += 1
     return n
 
+# used at the moment
 def patmatch_RDKit(smiles,smarts):
     from rdkit import Chem
     mol = Chem.MolFromSmiles(smiles)
@@ -230,6 +232,7 @@ def patmatch_RDKit(smiles,smarts):
         n += 1
     return n
 
+# smarts matcher 
 def patmatch(smiles,smarts):
     # smarts pattern matching
     # manual switch between RDkit or OpenEye. Just for historical reason.
