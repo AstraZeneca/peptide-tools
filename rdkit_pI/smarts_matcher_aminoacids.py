@@ -2,6 +2,7 @@
 import sys
 from pka_sets_fasta import *
 
+# module with hardcoded smarts of capped aminoacids 
 D_cappedAA_smarts = {
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)C([H])([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)C([H])([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',

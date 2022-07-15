@@ -1,15 +1,16 @@
-###
-### NOTICE: this file did not exit in the original Dimorphite_DL release. 
-### The is newly created based on "sites_substructures.smarts" file
-### - made a readable Python module from it. Andrey Frolov, 2020-09-15
-### - added last column with acid-base classification. Andrey Frolov, 2020-09-11 
-### - added TATA substructure. Andrey Frolov, 2020-09-15
-### Should be consistent with the current "sites_substructures.smarts" file
-### 
-
-# special case of  8OH3Qal. ACDlabs classic faultly asignes teh hydroxyl ionization as basic. GALAS method fixes it. 
-#8OH3Qal [c:1]12[nX2:2][c:3][c:4][c:5][c:6]1[c:7][c:8][c:9][c:10]([OH1:11])2  2  
-
+### NOTICE: this file is based on "sites_substructures.smarts" file
+### * 2022-07-15 - compressed imidazole smarts 
+###              - split amines into primary, secondary, tertiary
+###              - change carboxylic acid value to ACDlab prediction
+###              - added mono- and di-halogenated phenols
+### * 2022-07-11 - added smarts patters to match tetrazole, substituted phenol, 
+###                substituted imidazoles, pyridines. Use pKa values predicted by 
+###                ACDlabs GALAS method.
+###              - fixed most of smarts patters such that they explicit hydrogens 
+###                compressed to heavy atom definition. Otherwise match did not work.
+###              - removed very generic definitions, like, aromatic N deprotonated
+###                as they hit too many unwanted structures.
+### * 2020-09-11 added last column with acid-base classification.
 
 # 1,2-diOH-benzene
 12-diOH-Phenol [OH1][c]1[c](-[O])[c][c][c][c]1  1  9.3  0.4 acid 4 13.0 0.4 acid 
@@ -19,23 +20,23 @@
 # 2-NO2-Phe
 2-NO2-Phenol [OH1][c]1[c](-[N](=[O])[O])[c][c][c][c]1  1  7.2  0.4 acid
 
+# monohalogentaed phenols in 2 position
+2-Hal-Phenol [OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][cH1,!$(c-[F,Cl,Br,I]):7]1 1 8.3 0.4 acid
+
+# di-halogented phenols in 2,5 positions
+2-Hal-Phenol [OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][$(c-[F,Cl,Br,I]):7]1 1 6.6 0.4 acid
+
 # Tyrosine-like phenol
 Phenol [OH1:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1  1  9.7  0.4 acid
-###Phenol	[c,n,o:1]-[OH1:2]	1	7.065359866910526	3.277356122295936  acid
+#Phenol	[c,n,o:1]-[OH1:2]	1	7.065359866910526	3.277356122295936  acid
 
-# 2F-his
-2F-imidazole [nH1]1[c](-[F])[nH0][c][c]1-[*,H] 5 3.6 0.4 base 1 10.9 0.4 acid
-2F-imidazole [nH1]1[c](-[F])[nH0][c](-[*,H])[c]1 5 3.6 0.4 base 1 10.9 0.4 acid
-2F-imidazole [nH1]1(-[*])[c](-[F])[nH0][c][c]1-[*,H] 5 3.6 0.4 base 1 10.9 0.4 acid
-2F-imidazole [nH1]1(-[*])[c](-[F])[nH0][c](-[*,H])[c]1 5 3.6 0.4 base 1 10.9 0.4 acid
+# 2F-imidazole
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][c][cH1,$(c-[#6])]1      5 10.9 0.6 base 
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][cH1,$(c-[#6])][c]1      5 10.9 0.6 base 
 
-
-# Ionizable imidazole including substitutions at one position
-Imidazole [nH1]1[c][nH0][c][c]1-[*,H] 4 6.8 0.6 base 
-Imidazole [nH1]1[c][nH0][c](-[*,H])[c]1 4 6.8 0.6 base 
-Imidazole [n]1(-[*])[c][nH0][c][c]1-[*,H] 4 6.8 0.6 base 
-Imidazole [n]1(-[*])[c][nH0][c](-[*,H])[c]1 4 6.8 0.6 base 
-
+# Ionizable imidazole including substitutions. Not allowing fsed rings like benzimidazole. 
+Imidazole [nH1,$(n-[#6])]1[c][nH0][c][cH1,$(c-[#6])]1      4 6.8 0.6 base 
+Imidazole [nH1,$(n-[#6])]1[c][nH0][cH1,$(c-[#6])][c]1      4 6.8 0.6 base 
 
 # Ionizable pyridine including substitutions
 Pyridine  [nX2:1]1[c:2][c:3][c:4][c:5][c:6]1 1 4.9 0.1 base
@@ -43,13 +44,6 @@ Pyridine  [nX2:1]1[c:2][c:3][c:4][c:5][c:6]1 1 4.9 0.1 base
 # multiple entries for tetrazole tautomers and ionization states
 Tetrazole  [nH1r5:1][nH0r5:2][nH0r5:3][nH0r5:4][cH0r5:5]  1   5.3 0.4 acid
 Tetrazole  [nH1r5:1][nH0r5:2][cH0r5:3][nH0r5:4][nH0r5:5]  1   5.3 0.4 acid
-
-# Hydroxyl close to carbonyl
-#OH-C-C=O [OH1]-[C](-C-C=O)-[C](=O) 1 11.8 1.1 acid
-
-# Dihydroxyl
-#OH-C-OH [OH1]-[CX4](-[OH1]) 1 11.7 0.5 acid
-
 
 Azide	[N+0:1]=[N+:2]=[N+0H1:3]	2	4.65	0.07071067811865513    acid
 Nitro	[C,c,N,n,O,o:1]-[NX3:2](=[O:3])-[OH1:4]	3	-1000.0	0   acid
@@ -70,7 +64,11 @@ Sulfate	[SX4:1](=[O:2])(=[O:3])([O:4]-[C,c,N,n:5])-[OX2H1:6]	5	-2.36	1.304804309
 Sulfonate	[SX4:1](=[O:2])(=[O:3])(-[C,c,N,n:4])-[OX2H1:5]	4	-1.8184615384615386	1.4086213481855594  acid
 Sulfinic_acid	[SX3:1](=[O:2])-[OH1:3]	2	1.7933333333333332	0.4372070447739835  acid
 Phenyl_carboxylic_acid	[c,n,o:1]-[C:2](=[O:3])-[OH1:4]	3	3.463441968255319	1.2518054407928614  acid
-Carboxylic_acid [CX3](=O)[OX2H1]	2	3.456652971502591	1.2871420886834017   acid
+
+# too high uncertainty. Change to aliphatic caboxylic acid value from ACDlabs
+Carboxylic_acid [CX3](=O)[OX2H1]	2 4.8 1.3 acid
+#Carboxylic_acid [CX3](=O)[OX2H1]	2	3.456652971502591	1.2871420886834017   acid
+
 Thioic_acid	[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]	2	0.678267	1.497048763660801  acid
 Phenyl_Thiol	[c,n:1]-[SX2H1:2]	1	4.978235294117647	2.6137000480499806 acid
 Thiol	[C,N:1]-[SX2H1:2]	1	9.12448275862069	1.3317968158171463  acid
@@ -103,6 +101,8 @@ Peroxide1	[O:1]([$(C=O),$(C[Cl]),$(CF),$(C[Br]),$(CC#N):2])-[OH1:3]	2	8.73888888
 Peroxide2	[C:1]-[O:2]-[OH1:3]	2	11.978235294117647	0.8697645895163075  acid
 O=C-C=C-OH	[O:1]=[C;R:2]-[C;R:3]=[C;R:4]-[OH1:5]	4	3.554	0.803339458581667  acid
 Vinyl_alcohol	[C:1]=[C:2]-[OH1:3]	2	8.871850714285713	1.660200255394124 acid
+
+# Too high value to consider 
 #Alcohol	[C:1]-[OH1:2]	1	14.780384615384616	2.546464970533435 acid
 N-hydroxyamide	[C:1](=[O:2])-[N:3]-[OH1:4]	3	9.301904761904762	1.2181897185891002  acid
 Ringed_imide1	[O,S:1]=[C;R:2]([$([#8]),$([#7]),$([#16]),$([#6][Cl]),$([#6]F),$([#6][Br]):3])-[NH1;RH1:4]([C;R:5]=[O,S:6])	3	6.4525	0.5555627777308341  acid
@@ -124,8 +124,10 @@ Anilines_tertiary	[c:1]-[NX3+0H0:2]	2	4.16690685045614	2.005865735782679  base
 # Hydroxylamines
 Hydroxylamine [NX3+0;H2,H1,H0;!$(NC=[!#6]);!$(NC#[!#6]);!$(N=[!#6]):1][#8:2]	1 4.4 0.4 base
 
-# Amines. Should be after anilines
-Amines_primary_secondary_tertiary	[NX3+0;H2,H1,H0;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2]	1	8.159107682388349	2.5183597445318147   base
+# Amines. Should be after anilines. From ACDlabs GALAS
+Amines_primary   [NX3+0;H2;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.4 0.4  base
+Amines_secondary [NX3+0;H1;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.8 0.4  base
+Amines_tertiary  [NX3+0;H0;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.0 0.4  base
 #Amines_primary_secondary_tertiary	[C:1]-[NX3+0:2]	1	8.159107682388349	2.5183597445318147   base
 
 # e.g., [*]P(=O)(O[H])[*]. Note that cannot match the internal phosphates of ATP, because
