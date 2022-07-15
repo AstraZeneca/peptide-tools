@@ -15,6 +15,7 @@ from extn_coeff_fasta import calc_extn_coeff
 from pI_fasta import calc_pI_fasta
 from rdkit_pI import calc_rdkit_pI
 
+import tempfile
 
 currentdir     = os.getcwd()
 
@@ -128,6 +129,59 @@ if __name__ == "__main__":
 
     args = arg_parser()
     INPUT=args.input
+    INPUT=INPUT.strip()
+
+    mol_name = 'none'
+    IN_lines = INPUT.split('\n')
+
+    if len(IN_lines) == 1:
+        IN_vals = IN_lines[0].split()
+        if len(IN_vals) == 1: 
+            INPUT = IN_vals[0]
+        else:
+            INPUT = IN_vals[0]
+            mol_name = IN_vals[1]
+
+    elif len(IN_lines) == 0 :
+        # Houston, we have a problem
+        # No INPUT, nothing to do
+        raise Exception('ERROR: no input in '+sys.argv[0])
+        sys.exit(1)
+
+    else:
+        # Multiple string input
+        if IN_lines[0][0] == '>' or IN_lines[0][0] == ';': # check https://en.wikipedia.org/wiki/FASTA_format
+        # Assuming the multiple rows are the FASTA file input 
+            tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.fasta',delete=True)
+            INPUT = tf.name
+            with open(INPUT,'w') as f:
+                for line in IN_lines:
+                    f.write(line+'\n')
+
+        elif '$$$$' in INPUT: 
+        # Assuming the multiple rows are SDF file
+            tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.sdf',delete=True)
+            INPUT = tf.name
+            with open(INPUT,'w') as f:
+                for line in IN_lines:
+                    f.write(line+'\n')
+
+#       elif not IN_lines[0].split()[0].isalpha(): 
+#       # Assuming the multiple rows are the smiles 
+#           tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.smi',delete=True)
+#           INPUT = tf.name
+#           with open(INPUT,'w') as f:
+#               for line in IN_lines:
+#                   f.write(line+'\n')
+
+        else:
+        # Assuming the multiple rows are the smiles 
+            tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.smi',delete=True)
+            INPUT = tf.name
+            with open(INPUT,'w') as f:
+                for line in IN_lines:
+                    f.write(line+'\n')
+
 
     known_file_types = ['.sdf','.smi','.smiles','.fasta']
 
@@ -145,8 +199,8 @@ if __name__ == "__main__":
             raise Exception('Error! File extention not in supported file types:'+str(known_file_types))
             sys.exit(1)
         else:
-            smi = ''
-            mol_name = 'none'
+            #smi = ''
+            #mol_name = 'none'
             inputFile = INPUT
             if file_extension == '.smi' or file_extension == '.smiles' or file_extension == '.csv' or file_extension == '.fasta':
                 out_fext = '.csv'
@@ -170,7 +224,7 @@ if __name__ == "__main__":
         #print("Input is SMILES")
         mol_unique_ID = 1
         smi = INPUT
-        mol_name = 'none'
+        #mol_name = 'none'
         fasta = get_fasta_from_smiles(smi)
         inputFile = ''
         outputFile = ''
@@ -186,7 +240,7 @@ if __name__ == "__main__":
         mol_unique_ID = 1
         fasta = INPUT
         smi = ''
-        mol_name = 'none'
+        #mol_name = 'none'
         inputFile = ''
         outputFile = ''
         l_calc_extn_coeff=True
@@ -274,12 +328,13 @@ if __name__ == "__main__":
                         'inputFile':inputFile,
                         'outputFile':'',
                         'use_acdlabs':False,
-                        'use_dimorphite':True,
+                        'use_pkamatcher':True,
                         'l_print_fragments':args.l_print_fragment_pkas,
                         'l_plot_titration_curve':lPlot,
                         'l_print_pka_set':args.l_print_pka_set,
                         'l_json':True
                          }
+                        #'use_dimorphite':True,
 
 
         dict_out_rdkit_pI = calc_rdkit_pI(rdkit_pI_options)
@@ -289,18 +344,12 @@ if __name__ == "__main__":
                                     'output_rdkit_pI':dict_out_rdkit_pI
                                     }
 
-
-    if outputFile == '':
-        # output JSON
+    ### ----------------------------------------------------------------------
+    # Output 
+    if outputFile == '': # output JSON
         print(json.dumps(dict_out_peptide_tools_master, indent=2))
 
-    else:
-
-
-
-
-
-        # output file
+    else: # output file
         if file_extension != '.fasta':
 
             #for mi in mol_supply_json.keys():

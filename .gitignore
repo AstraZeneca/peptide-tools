@@ -1,6 +1,7 @@
 */__pycache__
 *.png
 *.swp
+*.pyc
+rdkit_pI/TEST
 rdkit_pI/TEST_PKAMATCHER  
 rdkit_pI/TEST_PKAMATCHER_NNAA
-
