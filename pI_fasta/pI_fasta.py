@@ -9,6 +9,10 @@ import optparse
 import math
 from copy import copy
 
+import numpy as np 
+from matplotlib.pyplot import *
+from itertools import cycle
+
 import json
 from json import encoder
 encoder.FLOAT_REPR = lambda o: format(o, '.2f')
@@ -101,12 +105,27 @@ def calculateProteinCharge(pH):
     return protein_charge
 
 
+# Define pH span tocalcualte itration curve and where to search for pI.
+def define_pH_span():
+    pH_llim=-1
+    pH_hlim=15
+    return [pH_llim,pH_hlim]
+
+
 #def calculateIsoelectricPoint(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups):   
 def calculateIsoelectricPoint():   
 
     global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance
 
-    min_pH, max_pH = 0 , 14 
+    #tolerance=0.01
+    #charge_tol=0.05
+    #min_pH, max_pH = 0 , 14 
+    pH_lim = define_pH_span()
+    min_pH0 = pH_lim[0]
+    max_pH0 = pH_lim[1]
+
+    min_pH = min_pH0
+    max_pH = max_pH0
 
     while True:
         mid_pH = 0.5 * (max_pH + min_pH)
@@ -122,8 +141,6 @@ def calculateIsoelectricPoint():
         else:
             refcharge = 0.0
 
-
-  
         if protein_charge > refcharge + tolerance:
             min_pH = mid_pH
         elif protein_charge < refcharge - tolerance:
@@ -131,28 +148,39 @@ def calculateIsoelectricPoint():
         else:
             return mid_pH
             
-
-
-        if mid_pH <= 0:
-            return 0
-        elif mid_pH >= 14:
-            return 14
+        if mid_pH <= min_pH0:
+            return min_pH0
+        elif mid_pH >= max_pH0:
+            return max_pH0
             
 
 #def CalcChargepHCurve(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes):
-def CalcChargepHCurve():
-    from numpy import arange
-    global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance
-    
-    pH_a=arange(0,14,0.1)
-    Q_a=pH_a*0.0    
+#def CalcChargepHCurve():
+#   from numpy import arange
+#   global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance
+#   
+#   pH_a=arange(0,14,0.1)
+#   Q_a=pH_a*0.0    
 
+#   for i in range(len(pH_a)):
+#       #Q = calculateProteinCharge(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,pH_a[i])
+#       Q = calculateProteinCharge(pH_a[i])
+#       Q_a[i]=Q
+#       
+#   return pH_a, Q_a
+
+
+def CalcChargepHCurve():
+    global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance
+    pH_lim = define_pH_span()
+    pH_a=np.arange(pH_lim[0],pH_lim[1],0.1)
+    Q_a=pH_a*0.0    
     for i in range(len(pH_a)):
-        #Q = calculateProteinCharge(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,pH_a[i])
+#        Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i],constant_q=constant_q)
         Q = calculateProteinCharge(pH_a[i])
         Q_a[i]=Q
-        
-    return pH_a, Q_a
+    pH_Q = np.vstack((pH_a,Q_a))
+    return pH_Q
 
 
 def separateTerminalRes(sequence):
@@ -285,7 +313,8 @@ def print_pka_set():
 
 
 def print_output(dict_pI_fasta,lPrintpKaSets):
-    for molid_ind in dict_pI_fasta['molid_ind_list']:
+    #for molid_ind in dict_pI_fasta['molid_ind_list']:
+    for molid_ind in dict_pI_fasta.keys():
         dict_single = dict_pI_fasta[molid_ind]
         print_output_dict(dict_single['pI'],'pI') 
         print_output_dict(dict_single['QpH7'],'Q at pH7.4') 
@@ -391,62 +420,107 @@ Most Extended:     python pI.py -s GXKXAXXA  -n no  -c no  -p 2  -l 1  -d 1  -o 
 
 
 
+### PLOT titration curve
+def plot_titration_curve(pH_Q_dict,figFileName):
+    matplotlib.rcParams.update({'font.size': 16})
+    lines = ["-","--","-.",":"]
+    w1=4.0 ; w2=3.0 ; w3=2.0 ; w4=1.0
+    linew = [w1,w1, w2,w2, w3,3, w4,w4]
+    linecycler = cycle(lines)
+    linewcycler = cycle(linew)
 
+    figure(figsize=(8,6))
+    i=0
+    for pKaset in pKa_sets_to_use:
+        i+=1
+        pH_Q = pH_Q_dict[pKaset] 
+        l=plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
+        if pKaset == 'IPC_peptide': 
+            setp(l,linewidth=8,linestyle='-',color='k')
 
-def plot_titration_curve(fig_file_name='OUT_titration_curve.png'):
-        from numpy import arange, column_stack
-        from matplotlib.pyplot import plot, figure,setp,legend,ylabel,xlabel,title,minorticks_on,grid,savefig
-        #matplotlib.rcParams.update({'font.size': 16})
-        from itertools import cycle
-        global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance, tit
-        lines = ["-","--","-.",":"]
-        w1=4.0
-        w2=3.0
-        w3=2.0
-        w4=1.0
-        linew = [w1,w1, w2,w2, w3,3, w4,w4]
-        linecycler = cycle(lines)
-        linewcycler = cycle(linew)
+        # Store data for output
+        if i==1: 
+            pH = pH_Q[:,0]
+            Q_M = pH_Q[:,1]
+        else:
+            Q_M = np.column_stack([Q_M,pH_Q[:,1]])
 
-        figure()
+    plot(pH,pH*0,'k-')
+    plot([7,7],[np.min(Q_M),np.max(Q_M)],'k-')
+    #xlim([np.min(pH),np.max(pH)])
+    xlim([2,12])
+    ylim([np.min(Q_M),np.max(Q_M)])
 
-        i=0
-        for pKaset in pKa_sets_to_use:
-            i+=1
-            pKa_basic=pKa_sets[pKaset]['pKa_basic']
-            pKa_acidic=pKa_sets[pKaset]['pKa_acidic']
-            pKa_TerminusIonizableGroup=pKa_sets[pKaset]['pKa_TerminusIonizableGroup']
-
-            #pH,Q = CalcChargepHCurve(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes) 
-            pH,Q = CalcChargepHCurve() 
-   
-            l=plot(pH,Q,next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
-            if pKaset == 'ProMoST': 
-                setp(l,linewidth=8,linestyle='-',color='k')
-
-            # Store data for output
-            if i==1: Q_M = pH
-            Q_M=column_stack([Q_M,Q])
-
-
-        plot(pH,pH*0,'k-')
-        plot([7,7],[min(Q),max(Q)],'k-')
-
-        legend(loc="center right", bbox_to_anchor=[1.1, 0.5],ncol=1, shadow=True).get_frame().set_alpha(1)
-        ylabel('peptide charge')
-        xlabel('pH')
+    legend(loc="center right", bbox_to_anchor=[1.1, 0.5],ncol=1, shadow=True, fontsize=10).get_frame().set_alpha(1)
+    ylabel('peptide charge')
+    xlabel('pH')
 	
-        title(tit)    
+    title('pI based on FASTA sequence')    
 	
-        minorticks_on()
-        grid(True)
+    minorticks_on()
+    grid(True)
 
-        #show()
-        #savefig("OUT_titration_curve.png")
-        savefig(fig_file_name)
-        #pltsave("OUT_titration_curve", ext="png", close=True, verbose=True)
+    #show()
+    savefig(figFileName)
+    return
 
-        return
+
+
+
+#def plot_titration_curve(fig_file_name='OUT_titration_curve.png'):
+#       from numpy import arange, column_stack
+#       from matplotlib.pyplot import plot, figure,setp,legend,ylabel,xlabel,title,minorticks_on,grid,savefig
+#       #matplotlib.rcParams.update({'font.size': 16})
+#       from itertools import cycle
+#       global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance, tit
+#       lines = ["-","--","-.",":"]
+#       w1=4.0
+#       w2=3.0
+#       w3=2.0
+#       w4=1.0
+#       linew = [w1,w1, w2,w2, w3,3, w4,w4]
+#       linecycler = cycle(lines)
+#       linewcycler = cycle(linew)
+
+#       figure()
+
+#       i=0
+#       for pKaset in pKa_sets_to_use:
+#           i+=1
+#           pKa_basic=pKa_sets[pKaset]['pKa_basic']
+#           pKa_acidic=pKa_sets[pKaset]['pKa_acidic']
+#           pKa_TerminusIonizableGroup=pKa_sets[pKaset]['pKa_TerminusIonizableGroup']
+
+#           #pH,Q = CalcChargepHCurve(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes) 
+#           pH,Q = CalcChargepHCurve() 
+#  
+#           l=plot(pH,Q,next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
+#           if pKaset == 'ProMoST': 
+#               setp(l,linewidth=8,linestyle='-',color='k')
+
+#           # Store data for output
+#           if i==1: Q_M = pH
+#           Q_M=column_stack([Q_M,Q])
+
+
+#       plot(pH,pH*0,'k-')
+#       plot([7,7],[min(Q),max(Q)],'k-')
+
+#       legend(loc="center right", bbox_to_anchor=[1.1, 0.5],ncol=1, shadow=True).get_frame().set_alpha(1)
+#       ylabel('peptide charge')
+#       xlabel('pH')
+#       
+#       title(tit)    
+#       
+#       minorticks_on()
+#       grid(True)
+
+#       #show()
+#       #savefig("OUT_titration_curve.png")
+#       savefig(fig_file_name)
+#       #pltsave("OUT_titration_curve", ext="png", close=True, verbose=True)
+
+#       return
 
 
 
@@ -458,7 +532,7 @@ def read_fasta_file(inputFile):
     if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
 
     from Bio import SeqIO
-    biosuppl = SeqIO.parse(open(args.inputFile),'fasta')
+    biosuppl = SeqIO.parse(open(inputFile),'fasta')
 
     mol_supply_json={}
     mol_unique_ID = 0
@@ -502,21 +576,12 @@ def calc_pI_fasta(options={"inputFile":"","inputDict":{},"inputJSON":"","outputF
 
 
     dict_out_pI_fasta = {}
-    #molid_list = []
-    #molid_ind_list = []
-    #molid_ind = 0
-    #for molid,molfasta in suppl:
-
-    #for molid,molfasta in suppl:
     for mol_unique_ind in mol_supply_json.keys():
-        #molid_ind += 1
         options_single = copy(options)
         options_single["seq"] = mol_supply_json[mol_unique_ind]['fasta']
         dict_pI_fasta_single = calc_pI_fasta_single_sequence(options_single)
         dict_pI_fasta_single["mol_name"] = mol_supply_json[mol_unique_ind]['mol_name']
         dict_out_pI_fasta[mol_unique_ind] = dict_pI_fasta_single
-        #molid_ind_list.append(molid_ind)
-    #dict_out_pI_fasta['molid_ind_list'] = molid_ind_list
 
     return dict_out_pI_fasta
 
@@ -608,6 +673,7 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
         seq_dict={}
         pI_dict={}
         Q_dict={}
+        pH_Q_dict={}
 
         #for pKaset in pKa_sets.keys():
         for pKaset in pKa_sets_to_use:
@@ -616,48 +682,61 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
             pKa_acidic=pKa_sets[pKaset]['pKa_acidic']
             pKa_TerminusIonizableGroup=pKa_sets[pKaset]['pKa_TerminusIonizableGroup']
 
-            #pI = calculateIsoelectricPoint(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups)
             pI = calculateIsoelectricPoint()
             pI_dict[pKaset] = pI   
 
-            #Q_pH74 = calculateProteinCharge(IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,7.4,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups)
             Q_pH74 = calculateProteinCharge(7.4)
             Q_dict[pKaset] = Q_pH74
+
+            #pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = molecule_constant_charge)
+            pH_Q = CalcChargepHCurve()
+            pH_Q = pH_Q.T
+
+            pH_Q_dict[pKaset] = pH_Q
 
 
         # pI 
         pIl=[]
-        for k in pI_dict.keys(): 
-            pIl += [pI_dict[k]]
-
+        for k in pI_dict.keys(): pIl += [pI_dict[k]]
         pI_dict['pI mean']=mean(pIl)
         pI_dict['std']=stddev(pIl)
         pI_dict['err']=stderr(pIl)
-        #seq_dict[seq]=pI_dict
-        #PrintOutput_v2(seq_dict,'pI',lPrintpKa)
 
         # charge at pH=7.4
         Ql=[]
-        for k in Q_dict.keys(): 
-            Ql += [Q_dict[k]]
+        for k in Q_dict.keys(): Ql += [Q_dict[k]]
         Q_dict['Q at pH7.4 mean']=mean(Ql)
         Q_dict['std']=stddev(Ql)
         Q_dict['err']=stderr(Ql)
-        #seq_dict[seq]=Q_dict
-        #PrintOutput_v2(seq_dict,'Q at pH7.4',lPrintpKa)
-    
+
+        # print isoelectric interval
+        pKaset='IPC_peptide'
+        int_tr = 0.2    # TODO define it elsewhere 
+        pH_Q = pH_Q_dict[pKaset]
+        Q=pH_Q[:,1]
+        pH=pH_Q[:,0]
+        pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
+        pH_Q = pH_Q_dict[pKaset]
+
+        # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
+        if len(pH_int) > 1:
+            interval = (pH_int[0], pH_int[-1])
+        else:
+            interval = (float('NaN'), float('NaN'))
+
     ### Plot titration curve
     plot_filename = ''
     if lPlot:
         if "plot_filename" in options.keys():
             plot_filename = options["plot_filename"]
         else:
-            plot_filename = "OUT_titration_curve.png"
+            plot_filename = "OUT_titration_curve_pI_fasta.png"
             
-        plot_titration_curve(fig_file_name=plot_filename)
+        #plot_titration_curve(pH_Q_dict,fig_file_name=plot_filename)
+        plot_titration_curve(pH_Q_dict,plot_filename)
             
 
-    dict_pI_fasta = {'sequence':orig_seq,'pI':pI_dict,'QpH7':Q_dict,'plot_filename':plot_filename}
+    dict_pI_fasta = {'sequence':orig_seq,'pI':pI_dict,'QpH7':Q_dict,'pI_interval':interval,'plot_filename':plot_filename}
 
     return dict_pI_fasta
 
@@ -670,12 +749,12 @@ if __name__ == "__main__":
 
     options = options_parser()
     
-    dict_pI_fasta = calc_pI_fasta(options)
+    dict_out_pI_fasta = calc_pI_fasta(options)
     
     if not options['l_json']:
-        print_output(dict_pI_fasta,lPrintpKaSets)
+        print_output(dict_out_pI_fasta,lPrintpKaSets)
     else:
-        print(json.dumps(dict_pI_fasta))
+        print(json.dumps(dict_out_pI_fasta))
         
 
 
