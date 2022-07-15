@@ -7,6 +7,7 @@ Wrapper script to run all peptide tools programs in one go.
 
 HOW TO RUN
 
+
     ### Set path to dependencies
     #---------------------------
 
@@ -15,11 +16,10 @@ HOW TO RUN
 
     PEPTIDE_TOOLS_PATH=`echo $PWD`
 
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../smi2scrambledfasta_v1.0
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../extn_coeff_fasta_v2.2
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../pI_fasta_v1.4
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../dimorphite_dl_pka
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/../rdkit_pI_v3.2
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/smi2scrambledfasta
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/extn_coeff_fasta
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pI_fasta
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/rdkit_pI
 
     ### Example peptide structure
     #----------------------------
@@ -27,8 +27,11 @@ HOW TO RUN
 
     ### Example usage
     #----------------
-    #python peptide_tools_master.py --input "${INPUT_SMILES}"
-
+    #python peptide_tools_master.py --input "${INPUT_SMILES}" # SMILES input
+    #python peptide_tools_master.py --input  FPYVAE           # Fasta sequence input
+    #python peptide_tools_master.py --input  myfile.smi       # Smiles file input 
+    #python peptide_tools_master.py --input  myfile.fasta     # FASTA file input 
+    #python peptide_tools_master.py --input  myfile.sdf       # SDF file input 
 
 
 DEPENDENCIES 
@@ -41,8 +44,8 @@ DEPENDENCIES
     if --use_acdlabs enabled:
         acdperceptabatch     # "perceptabat" executable should be callable
 
-    if --use_dimorphite enabled:
-        dimorphite_dl_pka
+    if --use_pkamatcher enabled:
+        uses internal pKaMatcher to assign missing pKas
 
 
 PLATFORM

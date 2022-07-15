@@ -25,10 +25,6 @@ class Dict2Class(object):
         for key in my_dict: 
             setattr(self, key, my_dict[key]) 
 
-
-
-
-
 def clean_up_output(text):
     txt=text.split('\n')
     text_new=''
@@ -193,7 +189,8 @@ def calc_pkas_acdlabs(smi_list):
                 if ln[2] in ['MA','A']:
                     if pka > pka_lim_acid_1 and pka < pka_lim_acid_2: 
                         acid_pkas.append((pka,smi_list[mol_idx-1]))
-            
+
+### Examle of perceptabatch output 
 #PKA: Calculate apparent values using classic algorithm
 #1	 ID: 1
 #1	 ACD_pKa_IonicForm_Apparent: L
@@ -233,6 +230,7 @@ def calc_pkas_acdlabs(smi_list):
 
 
 # https://www.rdkit.org/docs/Cookbook.html
+# Replace all ionized centers by the corresponsing neutral form. Used to track constanty ionized fragments, like quaternary amines
 def neutralize_atoms(mol):
     pattern = Chem.MolFromSmarts("[+1!h0!$([*]~[-1,-2,-3,-4]),-1!$([*]~[+1,+2,+3,+4])]")
     at_matches = mol.GetSubstructMatches(pattern)
@@ -249,9 +247,7 @@ def neutralize_atoms(mol):
 
 
 def calc_molecule_constant_charge(net_Qs):
-    
     q = [ v[0] for v in net_Qs]
-
     if len(q)>0:
         constant_q = float(sum(q))/float(len(q))
     else:
@@ -266,17 +262,11 @@ def standardize_molecule(mol):
     return m
     
 
-
 def calc_net_Qs(smi_list):
-    
     net_Qs = []
     for smi in smi_list:
-
         mol = Chem.MolFromSmiles(smi)
-        #clean_mol = rdMolStandardize.Cleanup(mol)
-        #m = neutralize_atoms(clean_mol)
         m = standardize_molecule(mol)
-        
         pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4]")
         at_matches = m.GetSubstructMatches(pattern)
        
@@ -288,7 +278,7 @@ def calc_net_Qs(smi_list):
         
         
 
-
+# calcualtes pKa for the list of smiles. 
 def calc_pkas(smi_list, use_acdlabs=False, use_pkamatcher=True):
 
     if use_acdlabs and use_pkamatcher: raise Exception('Error: requested to use both ACDlabs and pKaMatcher for pka calculation. Should be only one. ')
@@ -341,8 +331,12 @@ def calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH, constant_q=0):
     #print(pH,charge)
     return charge
 
-pH_llim=-1
-pH_hlim=15
+
+# Define pH span tocalcualte itration curve and where to search for pI.
+def define_pH_span():
+    pH_llim=-1
+    pH_hlim=15
+    return [pH_llim,pH_hlim]
 
 
 def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):   
@@ -350,7 +344,10 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     charge_tol=0.05
     na=len(acid_pkas)+len(diacid_pkas)
     nb=len(base_pkas)
-    min_pH, max_pH = pH_llim , pH_hlim
+    
+    pH_lim = define_pH_span()
+    min_pH = pH_lim[0] 
+    max_pH = pH_lim[1] 
 
     while True:
         mid_pH = 0.5 * (max_pH + min_pH)
@@ -382,8 +379,8 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
             
 
 def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
-    #pH_a=arange(0,14,0.1)
-    pH_a=arange(pH_llim,pH_hlim,0.1)
+    pH_lim = define_pH_span()
+    pH_a=arange(pH_lim[0],pH_lim[1],0.1)
     Q_a=pH_a*0.0    
     for i in range(len(pH_a)):
         Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i],constant_q=constant_q)
@@ -509,7 +506,7 @@ def plot_titration_curve(pH_Q_dict,figFileName):
     plot(pH,pH*0,'k-')
     plot([7,7],[np.min(Q_M),np.max(Q_M)],'k-')
     #xlim([np.min(pH),np.max(pH)])
-    xlim([3,11])
+    xlim([2,12])
     ylim([np.min(Q_M),np.max(Q_M)])
 
     legend(loc="center right", bbox_to_anchor=[1.1, 0.5],ncol=1, shadow=True, fontsize=10).get_frame().set_alpha(1)
@@ -524,9 +521,6 @@ def plot_titration_curve(pH_Q_dict,figFileName):
     #show()
     savefig(figFileName)
     return
-
-
-
 
 
 def read_structure_file(inputFile):
@@ -551,12 +545,6 @@ def read_structure_file(inputFile):
 
 
 
-
-
-
-
-
-#def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_dimorphite':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_pkamatcher':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 
     args = Dict2Class(options)
@@ -582,33 +570,22 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         raise Exception('Error: either smiles or input file *.smi, sdf, or Json string should be given. Exit. ')
         sys.exit(1)
 
-            
-
-
-    # run calculations
+    # Run calculations
     dict_output_rdkit_pI={}
-    #molid_ind = 0
-    #molid_ind_list = []
-    #molid_list = []
 
     for molid_ind in mol_supply_json.keys():
-        #molid_ind+=1
         mol_name = mol_supply_json[molid_ind]['mol_name']    
         mol = mol_supply_json[molid_ind]['mol_obj']    
-        #molid_list += [molid]
         mol = standardize_molecule(mol)
 
         # break amide bonds
         frags_smi_list = break_amide_bonds_and_cap(mol)
-        #print(frags_smi_list)
-
 
         # match known amino-acids with defined pKas
         unknown_frags,base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fasta = get_pkas_for_known_AAs(frags_smi_list)
         #print('UNKNOWN_FRAGMENTS: '+'   '.join(unknown_frags))
 
         # caclulate pKas for unknown fragmets
-        #if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_dimorphite=args.use_dimorphite)
         if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_pkamatcher=args.use_pkamatcher)
         else: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = [],[],[],[]
 
@@ -641,7 +618,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
             pH_Q = pH_Q.T
             #print( "pI ACDlabs %6.3f" % (pI) )
 
-            # calculate isoelectric point
+            # calculate net charge at pH 7.4
             Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = molecule_constant_charge)
             #print( "Q at pH7.4 ACDlabs %4.1f" % (Q) )
 
@@ -651,27 +628,21 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
 
         # pI 
         pIl=[]
-        #for k,v in pI_dict.iteritems(): pIl += [v]
         for k in pI_dict.keys(): pIl += [pI_dict[k]]
         pI_dict['pI mean']=mean(pIl)
         pI_dict['std']=stddev(pIl)
         pI_dict['err']=stderr(pIl)
-        #seq_dict[seq]=pI_dict
-        #PrintOutput(pI_dict,'pI',l_print_pka_set=args.l_print_pka_set)
 
         # charge at pH=7.4
         Ql=[]
-        #for k,v in Q_dict.iteritems(): Ql += [v]
         for k in Q_dict.keys(): Ql += [Q_dict[k]]
         Q_dict['Q at pH7.4 mean']=mean(Ql)
         Q_dict['std']=stddev(Ql)
         Q_dict['err']=stderr(Ql)
-        #seq_dict[seq]=Q_dict
-        #PrintOutput(Q_dict,'Q at pH7.4',l_print_pka_set=False)
 
-        # print interval
+        # print isoelectric interval
         pKaset='IPC_peptide'
-        int_tr = 0.2
+        int_tr = 0.2    # TODO define it elsewhere 
 
         pH_Q = pH_Q_dict[pKaset]
         Q=pH_Q[:,1]
@@ -692,8 +663,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         else:
             figFileName = ""
         
-        #molid_ind_list.append(molid_ind)
-        
+        # output dict for given molecule 
         dict_output_rdkit_pI[molid_ind]={'mol_name':mol_name,
                                     'pI':pI_dict,
                                     'QpH7':Q_dict,
@@ -701,9 +671,10 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     'plot_filename':figFileName,
                                     'pI_interval_threshold':int_tr
                                     }
-        #if args.l_print_pka_set:
+        
         dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
 
+        
         if args.l_print_fragments:
             dict_output_rdkit_pI[molid_ind].update({
                                     'base_pkas_fasta':base_pkas_fasta,
@@ -713,11 +684,9 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     'constant_Qs_calc':net_Qs
                                     })
 
-
+                                    # Dicacids pkas are included as single apparent ionizaitions. No need to include diacids. 
                                     #'diacid_pkas_calc':diacid_pkas_calc,
                                     #'diacid_pkas_fasta':diacid_pkas_fasta,
-
-    #dict_output_rdkit_pI['molid_ind_list'] = molid_ind_list
 
     return dict_output_rdkit_pI
 
@@ -725,7 +694,6 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
 
 def print_output(dict_output_rdkit_pI,args):
 
-    #for molid_ind in dict_output_rdkit_pI['molid_ind_list']:
     for molid_ind in dict_output_rdkit_pI.keys():
     
         molid = dict_output_rdkit_pI[molid_ind]
@@ -734,7 +702,6 @@ def print_output(dict_output_rdkit_pI,args):
         print_output_prop_dict(dict_output_rdkit_pI[molid_ind]['QpH7'],'Q at pH7.4',l_print_pka_set=False)
 
         if args.use_acdlabs: predition_tool = 'ACDlabs'
-        #elif args.use_dimorphite: predition_tool = 'modified Dimorphite-DL'
         elif args.use_pkamatcher: predition_tool = 'pKaMatcher'
 
         int_tr = dict_output_rdkit_pI[molid_ind]['pI_interval_threshold']
@@ -802,8 +769,6 @@ def print_output(dict_output_rdkit_pI,args):
 
 
 def args_parser():
-    #usage = "rdkit_pI.py  -i input_file  --print_fragment_pkas"
-    #parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using modified Dimorphite-DL or ACDlabs, and calculating Henderson-Hasselbalch equation.")
     parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using pKaMatcher or ACDlabs, and calculating Henderson-Hasselbalch equation.")
     parser.add_argument("-j", dest="inputJSON", help="input molecule supply in JSON format",default='')
     parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
@@ -814,7 +779,6 @@ def args_parser():
     parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragments", help="Print out fragments with corresponding pKas used in pI calcution.")
     parser.add_argument("--print_pka_set",default=False, action='store_true',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
     parser.add_argument("--use_acdlabs",default=False, action='store_true',dest="use_acdlabs", help="Use acdlabs for pka prediction of unknown fragments.")
-    #parser.add_argument("--use_dimorphite",default=False, action='store_true',dest="use_dimorphite", help="Use modified Dimorphite-DL for pka prediction of unknown fragments.")
     parser.add_argument("--use_pkamatcher",default=False, action='store_true',dest="use_pkamatcher", help="Use pKaMatcher for pka prediction of unknown fragments.")
     parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Output in JSON format.")
 

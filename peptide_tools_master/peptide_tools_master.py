@@ -6,7 +6,6 @@ from time import strftime, gmtime
 from operator import itemgetter
 import argparse
 import json
-#import commands
 import csv
 
 from rdkit import Chem
@@ -18,10 +17,6 @@ from rdkit_pI import calc_rdkit_pI
 import tempfile
 
 currentdir     = os.getcwd()
-
-contact = "If you think this might be a bug. Please contact <a href=\"mailto:andrey.frolov@astrazeneca.com\">Andrey Frolov</a>"
-
-
 
 def get_fasta_from_smiles(smi):
     from smi2scrambledfasta import get_scrambledfasta_from_smiles
@@ -167,13 +162,6 @@ if __name__ == "__main__":
                     f.write(line+'\n')
 
 #       elif not IN_lines[0].split()[0].isalpha(): 
-#       # Assuming the multiple rows are the smiles 
-#           tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.smi',delete=True)
-#           INPUT = tf.name
-#           with open(INPUT,'w') as f:
-#               for line in IN_lines:
-#                   f.write(line+'\n')
-
         else:
         # Assuming the multiple rows are the smiles 
             tf = tempfile.NamedTemporaryFile(prefix='tmp_peptide_tools_master',suffix='.smi',delete=True)
