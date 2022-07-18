@@ -346,11 +346,11 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     nb=len(base_pkas)
     
     pH_lim = define_pH_span()
-    min_pH = pH_lim[0] 
-    max_pH = pH_lim[1] 
+    lower_pH = pH_lim[0] 
+    higher_pH = pH_lim[1] 
 
     while True:
-        mid_pH = 0.5 * (max_pH + min_pH)
+        mid_pH = 0.5 * (higher_pH + lower_pH)
         charge = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, mid_pH, constant_q=constant_q)
         
         if na == 0 and nb != 0:
@@ -366,16 +366,16 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
 
 
         if charge > refcharge + tolerance:
-            min_pH = mid_pH
+            lower_pH = mid_pH
         elif charge < refcharge - tolerance:
-            max_pH = mid_pH
+            higher_pH = mid_pH
         else:
             return mid_pH
             
-        if mid_pH <= pH_llim:
-            return pH_llim
-        elif mid_pH >= pH_hlim:
-            return pH_hlim
+        if mid_pH <= pH_lim[0]:
+            return pH_lim[0]
+        elif mid_pH >= pH_lim[1]:
+            return pH_lim[1]
             
 
 def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):

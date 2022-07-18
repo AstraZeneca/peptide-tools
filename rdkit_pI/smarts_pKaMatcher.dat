@@ -31,8 +31,8 @@ Phenol [OH1:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1  1  9.7  0.4 acid
 #Phenol	[c,n,o:1]-[OH1:2]	1	7.065359866910526	3.277356122295936  acid
 
 # 2F-imidazole
-2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][c][cH1,$(c-[#6])]1      5 10.9 0.6 base 
-2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][cH1,$(c-[#6])][c]1      5 10.9 0.6 base 
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][c][cH1,$(c-[#6])]1      5 3.6 0.4 base   1 10.9 0.4 acid
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][cH1,$(c-[#6])][c]1      5 3.6 0.4 base   1 10.9 0.4 acid
 
 # Ionizable imidazole including substitutions. Not allowing fsed rings like benzimidazole. 
 Imidazole [nH1,$(n-[#6])]1[c][nH0][c][cH1,$(c-[#6])]1      4 6.8 0.6 base 
