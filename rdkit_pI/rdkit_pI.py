@@ -517,7 +517,7 @@ def plot_titration_curve(pH_Q_dict,figFileName):
     ylabel('peptide charge')
     xlabel('pH')
 	
-    title('pI based on hybrid pKa set. Fasta and Fragments.')    
+    title('Titration curve')    
 	
     minorticks_on()
     grid(True)
