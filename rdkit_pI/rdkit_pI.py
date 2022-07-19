@@ -18,6 +18,10 @@ from smarts_matcher_aminoacids import *
 from itertools import cycle
 import bisect 
 
+from rdkit import RDLogger
+RDLogger.DisableLog("rdApp.info")
+
+
 
 # Turns a dictionary into a class 
 class Dict2Class(object): 
