@@ -20,12 +20,11 @@ import optparse
 
 all_known_pKa_sets=['ProMoST',
 'IPC_peptide',
-'Gauci_calib',
+'Gauci',
 'Bjellqvist',
 'Rodwell',
 'Grimsley',
 'Thurlkill',
-#'Gauci_ExPASy',
 'EMBOSS',
 'DTASelect',
 'Solomon',
@@ -42,8 +41,9 @@ def list_to_comma_seprated_string(l):
 	return s[:-1]
 
 ### Preselected set of pKa to display
-#pKa_sets_to_use=['ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
-pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
+#pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
+pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci','Bjellqvist','Grimsley','Thurlkill','Lehninger','Toseland']
+
 known_basic_res=['K','R','H']
 known_acidic_res=['D','E','C','Y','U']
 known_res=['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'Q', 'K', 'E', 'M', 'H', 'F', 'R', 'Y', 'W', 'X', 'Z', 'B', 'U']
@@ -284,7 +284,7 @@ for pKaset in pKa_sets_short.keys():
 
 
 ### Calibrated ExPASY - from Gauci et al. Proteomics 2008, 8, 4898 as implemented in pIR
-SetName='Gauci_calib'
+SetName='Gauci'
 
 # Acidic_Amino_Acids
 #             AA    Primary  N-Terminal  C-Terminal
