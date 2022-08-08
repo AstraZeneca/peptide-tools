@@ -12,6 +12,8 @@
 ###                as they hit too many unwanted structures.
 ### * 2020-09-11 added last column with acid-base classification.
 
+ #name SMARTS atom_idx pka pka_std dissociation_type ... (repeat last 4 for the next ionization centre)
+
 # 1,2-diOH-benzene
 12-diOH-Phenol [OH1][c]1[c](-[O])[c][c][c][c]1  1  9.3  0.4 acid 4 13.0 0.4 acid 
 13-diOH-Phenol [OH1][c]1[c][c](-[O])[c][c][c]1  1  8.9  0.4 acid 5 11.3 0.5 acid
@@ -45,7 +47,7 @@ Pyridine  [nX2:1]1[c:2][c:3][c:4][c:5][c:6]1 1 4.9 0.1 base
 Tetrazole  [nH1r5:1][nH0r5:2][nH0r5:3][nH0r5:4][cH0r5:5]  1   5.3 0.4 acid
 Tetrazole  [nH1r5:1][nH0r5:2][cH0r5:3][nH0r5:4][nH0r5:5]  1   5.3 0.4 acid
 
-Azide	[N+0:1]=[N+:2]=[N+0H1:3]	2	4.65	0.07071067811865513    acid
+Azide	[N+0:1]=[N+:2]=[N+0H1:3]	2	4.65	0.07    acid
 Nitro	[C,c,N,n,O,o:1]-[NX3:2](=[O:3])-[OH1:4]	3	-1000.0	0   acid
 
 # NitroGuanidine special case
@@ -57,24 +59,24 @@ OGuanidine      [O:1]-[N:2]=[C:3](-[N:4])-[N:5]         4 7.4 0.4  base
 
 # Change so it matches substitued guanidines
 #AmidineGuanidine1	[N:1]-[C:2](-[N:3])=[NX2H1:4]	3	12.025333333333334	1.5941046150769165   base
-AmidineGuanidine1	[N:1]-[C:2](-[N:3])=[NX2:4]	3	12.025333333333334	1.5941046150769165   base
-AmidineGuanidine2	[C:1](-[N:2])=[NX2+0:3]	2	10.035538461538462	2.1312826469414716  base
+AmidineGuanidine1	[N:1]-[C:2](-[N:3])=[NX2:4]	3	12.03	1.59   base
+AmidineGuanidine2	[C:1](-[N:2])=[NX2+0:3]	        2	10.04	2.13  base
 
-Sulfate	[SX4:1](=[O:2])(=[O:3])([O:4]-[C,c,N,n:5])-[OX2H1:6]	5	-2.36	1.3048043093561141  acid
-Sulfonate	[SX4:1](=[O:2])(=[O:3])(-[C,c,N,n:4])-[OX2H1:5]	4	-1.8184615384615386	1.4086213481855594  acid
-Sulfinic_acid	[SX3:1](=[O:2])-[OH1:3]	2	1.7933333333333332	0.4372070447739835  acid
-Phenyl_carboxylic_acid	[c,n,o:1]-[C:2](=[O:3])-[OH1:4]	3	3.463441968255319	1.2518054407928614  acid
+Sulfate	[SX4:1](=[O:2])(=[O:3])([O:4]-[C,c,N,n:5])-[OX2H1:6]	5	-2.36	1.30  acid
+Sulfonate	[SX4:1](=[O:2])(=[O:3])(-[C,c,N,n:4])-[OX2H1:5]	4	-1.82	1.41  acid
+Sulfinic_acid	[SX3:1](=[O:2])-[OH1:3]	2	1.79	0.44  acid
+Phenyl_carboxylic_acid	[c,n,o:1]-[C:2](=[O:3])-[OH1:4]	3	3.46	1.25  acid
 
 # too high uncertainty. Change to aliphatic caboxylic acid value from ACDlabs
 Carboxylic_acid [CX3](=O)[OX2H1]	2 4.8 1.3 acid
 #Carboxylic_acid [CX3](=O)[OX2H1]	2	3.456652971502591	1.2871420886834017   acid
 
-Thioic_acid	[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]	2	0.678267	1.497048763660801  acid
-Phenyl_Thiol	[c,n:1]-[SX2H1:2]	1	4.978235294117647	2.6137000480499806 acid
-Thiol	[C,N:1]-[SX2H1:2]	1	9.12448275862069	1.3317968158171463  acid
+Thioic_acid	[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]	2	0.68	1.50  acid
+Phenyl_Thiol	[c,n:1]-[SX2H1:2]	1	4.98	2.61 acid
+Thiol	[C,N:1]-[SX2H1:2]	1	9.12	1.33  acid
 
 # [*]OP(=O)(O[H])O[H]. Note that this matches terminal phosphate of ATP, ADP, AMP.
-Phosphate	[PX4:1](=[O:2])(-[OX2H1:3])(-[O+0:4])-[OX2H1:5]	2	2.4182608695652172	1.1091177991945305	acid 5	6.5055	0.9512787792174668  acid
+Phosphate	[PX4:1](=[O:2])(-[OX2H1:3])(-[O+0:4])-[OX2H1:5]	2	2.42	1.11	acid 5	6.51	0.95  acid
 
 # Note that Internal_phosphate_polyphos_chain and
 # Initial_phosphate_like_in_ATP_ADP were added on 6/2/2020 to better detail with
@@ -91,34 +93,34 @@ Internal_phosphate_polyphos_chain	[$([PX4:1](=O)([OX2][PX4](=O)([OX2])(O[H]))([O
 
 # For Initial_phosphate_like_in_ATP_ADP, we use the same values found for the
 # lower-pKa hydroxyl of Phosphate (above).
-Initial_phosphate_like_in_ATP_ADP	[$([PX4:1]([OX2][C,c,N,n])(=O)([OX2][PX4](=O)([OX2])(O[H])))][OH1]	1	2.4182608695652172	1.1091177991945305 acid
+Initial_phosphate_like_in_ATP_ADP	[$([PX4:1]([OX2][C,c,N,n])(=O)([OX2][PX4](=O)([OX2])(O[H])))][OH1]	1	2.42	1.11 acid
 
 # [*]P(=O)(O[H])O[H]. Cannot match terminal phosphate of ATP because O not among [C,c,N,n]
-Phosphonate	[PX4:1](=[O:2])(-[OX2H1:3])(-[C,c,N,n:4])-[OX2H1:5]	2	1.8835714285714287	0.5925999820080644	acid 5	7.247254901960784	0.8511476450801531  acid
+Phosphonate	[PX4:1](=[O:2])(-[OX2H1:3])(-[C,c,N,n:4])-[OX2H1:5]	2	1.88	0.59	acid 5	7.25	0.85  acid
 
 
-Peroxide1	[O:1]([$(C=O),$(C[Cl]),$(CF),$(C[Br]),$(CC#N):2])-[OH1:3]	2	8.738888888888889	0.7562592839596507  acid
-Peroxide2	[C:1]-[O:2]-[OH1:3]	2	11.978235294117647	0.8697645895163075  acid
-O=C-C=C-OH	[O:1]=[C;R:2]-[C;R:3]=[C;R:4]-[OH1:5]	4	3.554	0.803339458581667  acid
-Vinyl_alcohol	[C:1]=[C:2]-[OH1:3]	2	8.871850714285713	1.660200255394124 acid
+Peroxide1	[O:1]([$(C=O),$(C[Cl]),$(CF),$(C[Br]),$(CC#N):2])-[OH1:3]	2	8.74	0.76  acid
+Peroxide2	[C:1]-[O:2]-[OH1:3]	2	11.98	0.87  acid
+O=C-C=C-OH	[O:1]=[C;R:2]-[C;R:3]=[C;R:4]-[OH1:5]	4	3.55	0.80  acid
+Vinyl_alcohol	[C:1]=[C:2]-[OH1:3]	2	8.87	1.66 acid
 
 # Too high value to consider 
 #Alcohol	[C:1]-[OH1:2]	1	14.780384615384616	2.546464970533435 acid
-N-hydroxyamide	[C:1](=[O:2])-[N:3]-[OH1:4]	3	9.301904761904762	1.2181897185891002  acid
-Ringed_imide1	[O,S:1]=[C;R:2]([$([#8]),$([#7]),$([#16]),$([#6][Cl]),$([#6]F),$([#6][Br]):3])-[NH1;RH1:4]([C;R:5]=[O,S:6])	3	6.4525	0.5555627777308341  acid
-Ringed_imide2	[O,S:1]=[C;R:2]-[NH1;RH1:3]([C;R:4]=[O,S:5])	2	8.681666666666667	1.8657779975741713  acid
-Imide	[F,Cl,Br,S,s,P,p:1][#6:2][CX3:3](=[O,S:4])-[NX3H1+0:5]([CX3:6]=[O,S:7])	4	2.466666666666667	1.4843629385474877  acid
-Imide2	[O,S:1]=[CX3:2]-[NX3H1+0:3]([CX3:4]=[O,S:5])	2	10.23	1.1198214143335534  acid
-Amide_electronegative	[C:1](=[O:2])-[NH1:3](-[Br,Cl,I,F,S,O,N,P:4])	2	3.4896	2.688124315081677  acid
+N-hydroxyamide	[C:1](=[O:2])-[N:3]-[OH1:4]	3	9.30	1.22  acid
+Ringed_imide1	[O,S:1]=[C;R:2]([$([#8]),$([#7]),$([#16]),$([#6][Cl]),$([#6]F),$([#6][Br]):3])-[NH1;RH1:4]([C;R:5]=[O,S:6])	3	6.45	0.56  acid
+Ringed_imide2	[O,S:1]=[C;R:2]-[NH1;RH1:3]([C;R:4]=[O,S:5])	2	8.68	1.87  acid
+Imide	[F,Cl,Br,S,s,P,p:1][#6:2][CX3:3](=[O,S:4])-[NX3H1+0:5]([CX3:6]=[O,S:7])	4	2.47	1.48  acid
+Imide2	[O,S:1]=[CX3:2]-[NX3H1+0:3]([CX3:4]=[O,S:5])	2	10.23	1.12  acid
+Amide_electronegative	[C:1](=[O:2])-[NH1:3](-[Br,Cl,I,F,S,O,N,P:4])	2	3.49	2.69  acid
 
 # to avoid matching of nonionizable amides after
 TertiaryAmide	[C:1](=[O:2])-[NH0:3]	3	-1.1	0.5  base
-Amide	[C:1](=[O:2])-[NH1:3]	3	12.00611111111111	4.512491341218857  acid
+Amide	[C:1](=[O:2])-[NH1:3]	3	12.01	4.51  acid
 
-Sulfonamide	[SX4:1](=[O:2])(=[O:3])-[NX3H1+0:4]	3	7.9160326086956525	1.9842121316708763  acid
-Anilines_primary	[c:1]-[NX3+0H2:2]	2	3.899298673194805	2.068768503987161  base
-Anilines_secondary	[c:1]-[NX3+0H1:2]	2	4.335408163265306	2.1768842022330843  base
-Anilines_tertiary	[c:1]-[NX3+0H0:2]	2	4.16690685045614	2.005865735782679  base
+Sulfonamide	[SX4:1](=[O:2])(=[O:3])-[NX3H1+0:4]	3	7.92	1.98  acid
+Anilines_primary	[c:1]-[NX3+0H2:2]	2	3.90	2.07  base
+Anilines_secondary	[c:1]-[NX3+0H1:2]	2	4.34	2.18  base
+Anilines_tertiary	[c:1]-[NX3+0H0:2]	2	4.17	2.01  base
 
 
 # Hydroxylamines
@@ -132,16 +134,16 @@ Amines_tertiary  [NX3+0;H0;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.0 0.4  base
 
 # e.g., [*]P(=O)(O[H])[*]. Note that cannot match the internal phosphates of ATP, because
 # oxygen is not among [C,c,N,n,F,Cl,Br,I]  
-Phosphinic_acid	[PX4:1](=[O:2])(-[C,c,N,n,F,Cl,Br,I:3])(-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:5]	4	2.9745	0.6867886750744557  acid
+Phosphinic_acid	[PX4:1](=[O:2])(-[C,c,N,n,F,Cl,Br,I:3])(-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:5]	4	2.97	0.69  acid
 
 # e.g., [*]OP(=O)(O[H])O[*]. Cannot match ATP because P not among [C,c,N,n,F,Cl,Br,I]  
-Phosphate_diester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[O+0:5]-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:6]	6	2.7280434782608696	2.5437448856908316  acid
+Phosphate_diester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[O+0:5]-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:6]	6	2.73	2.54  acid
 
 # e.g., [*]P(=O)(O[H])O[*]. Cannot match ATP because O not among [C,c,N,n,F,Cl,Br,I].
-Phosphonate_ester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[C,c,N,n,F,Cl,Br,I:5])-[OX2H1:6]	5	2.0868	0.4503028610465036   acid
+Phosphonate_ester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[C,c,N,n,F,Cl,Br,I:5])-[OX2H1:6]	5	2.09	0.45   acid
 
 ### Should be base according to ACD
-#Primary_hydroxyl_amine	[C,c:1]-[O:2]-[NH2:3]	2	4.035714285714286	0.8463816543155368  acid
+#Primary_hydroxyl_amine	[C,c:1]-[O:2]-[NH2:3]	2	4.035714285714286	0.8463816543155368  base
 
 ### Too high number, just skip
 #Indole_pyrrole	[c;R:1]1[c;R:2][c;R:3][c;R:4][nH1;R:5]1	4	14.52875	4.06702491591416  acid
