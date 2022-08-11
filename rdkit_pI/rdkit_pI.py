@@ -645,20 +645,37 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         Q_dict['err']=stderr(Ql)
 
         # print isoelectric interval
-        pKaset='IPC_peptide'
+        #pKaset='IPC_peptide'
         int_tr = 0.2    # TODO define it elsewhere 
 
-        pH_Q = pH_Q_dict[pKaset]
-        Q=pH_Q[:,1]
-        pH=pH_Q[:,0]
-        pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
-       
-        # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
-        if len(pH_int) > 1:
-            interval = (pH_int[0], pH_int[-1])
-        else:
-            interval = (float('NaN'), float('NaN'))
+        interval_low_l = []
+        interval_high_l = []
+        for pKaset in pKa_sets_to_use:
+            pH_Q = pH_Q_dict[pKaset]
+            Q=pH_Q[:,1]
+            pH=pH_Q[:,0]
+            pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
             
+            # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
+            if len(pH_int) > 1:
+                #interval = (pH_int[0], pH_int[-1])
+                interval_low_l.append(pH_int[0])
+                interval_high_l.append(pH_int[-1])
+            #else:
+            #    interval_low.append(float('NaN'))
+            #    interval_low.append(float('NaN'))
+           
+        if len(interval_low_l)>0:
+            interval_low = mean(interval_low_l)
+        else:
+            interval_low = float('NaN')
+            
+        if len(interval_high_l)>0:
+            interval_high = mean(interval_high_l)
+        else:
+            interval_high = float('NaN')
+            
+        interval = (interval_low, interval_high) 
 
         # plot titration curve
         if args.l_plot_titration_curve:
@@ -676,7 +693,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     'pI_interval_threshold':int_tr
                                     }
         
-        dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
+        #dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
 
         
         if args.l_print_fragments:
@@ -712,7 +729,8 @@ def print_output(dict_output_rdkit_pI,args):
         pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
 
         print(" ")
-        print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pKaset,predition_tool) )
+        #print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pKaset,predition_tool) )
+        print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
         print("%4.1f - %4.1f" % (dict_output_rdkit_pI[molid_ind]['pI_interval'][0],dict_output_rdkit_pI[molid_ind]['pI_interval'][1]))
 
         if args.l_print_fragments:
@@ -742,13 +760,13 @@ def print_output(dict_output_rdkit_pI,args):
             print("List of calculated BASE pKa's with the corresponding fragments")
             for pkas,smi in zip(all_base_pkas,all_base_pkas_smi):
                 s_pkas = ["%4.1f"%(pkas)]
-                print("smiles or AA, base pka : %-15s %s" % (smi,' '.join(s_pkas)))
+                print("smiles or AA, base pKa : %-15s %s" % (smi,' '.join(s_pkas)))
 
             print(" ")
             print("List of calculated ACID pKa's with the corresponding fragments")
             for pkas,smi in zip(all_acid_pkas,all_acid_pkas_smi):
                 s_pkas = ["%4.1f"%(pkas)]
-                print("smiles or AA, acid pka : %-15s %s" % (smi,' '.join(s_pkas)))
+                print("smiles or AA, acid pKa : %-15s %s" % (smi,' '.join(s_pkas)))
 
 #            print(" ")
 #            print("List of calculated DIACID pKa's with the corresponding fragments")
@@ -757,7 +775,7 @@ def print_output(dict_output_rdkit_pI,args):
 #                print("smiles or AA, diacid pka : %-15s %s" % (smi,' '.join(s_pkas)))
 
             print(" ")
-            print("List of constantly ionized fragments with the corresponding fragments")
+            print("List of constantly ionized fragments")
             for v in constant_Qs_calc:
                 pkas = v[0]
                 smi = v[1]
