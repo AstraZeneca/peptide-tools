@@ -20,6 +20,7 @@ import optparse
 
 all_known_pKa_sets=['ProMoST',
 'IPC_peptide',
+'IPC2_peptide',
 'Gauci',
 'Bjellqvist',
 'Rodwell',
@@ -42,7 +43,8 @@ def list_to_comma_seprated_string(l):
 
 ### Preselected set of pKa to display
 #pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
-pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci','Bjellqvist','Grimsley','Thurlkill','Lehninger','Toseland']
+#pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci','Bjellqvist','Grimsley','Thurlkill','Lehninger','Toseland']
+pKa_sets_to_use=['IPC2_peptide','IPC_peptide','ProMoST','Gauci','Grimsley','Thurlkill','Lehninger','Toseland']
 
 known_basic_res=['K','R','H']
 known_acidic_res=['D','E','C','Y','U']
@@ -98,6 +100,20 @@ pKa_sets_short['EMBOSS']={
  'Nterm':   8.6  ,
  'Cterm':   3.6  
 }
+
+
+pKa_sets_short['IPC2_peptide']={
+ 'K':       8.165 ,
+ 'R':       11.493 ,
+ 'H':       6.439 ,
+ 'D':       3.969 ,
+ 'E':       4.507 ,
+ 'C':       9.439 ,
+ 'Y':       9.153 ,
+ 'Nterm':   7.947 ,
+ 'Cterm':   2.977  
+}
+
 
 pKa_sets_short['IPC_peptide']={
  'K':       10.517 ,
