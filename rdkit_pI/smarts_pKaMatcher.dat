@@ -12,7 +12,7 @@
 ###                as they hit too many unwanted structures.
 ### * 2020-09-11 added last column with acid-base classification.
 
- #name SMARTS atom_idx pka pka_std dissociation_type ... (repeat last 4 for the next ionization centre)
+#name SMARTS atom_idx pka pka_std dissociation_type ... (repeat last 4 for the next ionization centre)
 
 # 1,2-diOH-benzene
 12-diOH-Phenol [OH1][c]1[c](-[O])[c][c][c][c]1  1  9.3  0.4 acid 4 13.0 0.4 acid 
