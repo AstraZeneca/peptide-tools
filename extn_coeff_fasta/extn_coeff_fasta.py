@@ -188,7 +188,7 @@ def calc_extn_coeff_single_sequence(sequence):
     43*nV +
     923*nPepBond )
 
-    e280 = 5500*nW  +  1490*nY  +  125*nC 
+    e280 = 5500*nW  +  1490*nY  + 0.5*125*nC 
 
     return {'fasta':sequence,'e205':e205,'e214':e214,'e280':e280}
 
