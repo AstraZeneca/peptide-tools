@@ -125,6 +125,7 @@ if __name__ == "__main__":
     args = arg_parser()
     INPUT=args.input
     INPUT=INPUT.strip()
+    INPUT=INPUT.replace('ENDOFLINE','\n')
 
     mol_name = 'none'
     IN_lines = INPUT.split('\n')
