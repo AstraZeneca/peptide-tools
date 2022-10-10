@@ -642,8 +642,8 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         Q_dict['std']=stddev(Ql)
         Q_dict['err']=stderr(Ql)
 
+
         # print isoelectric interval
-        #pKaset='IPC_peptide'
         int_tr = 0.2    # TODO define it elsewhere 
 
         interval_low_l = []
@@ -691,7 +691,9 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     'pI_interval_threshold':int_tr
                                     }
         
-        #dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
+        # define pKaset for reporting pKa of individual amino acids and fragments
+        pKaset='IPC_peptide'
+        dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
 
         
         if args.l_print_fragments:
