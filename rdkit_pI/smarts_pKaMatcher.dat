@@ -68,8 +68,8 @@ Sulfinic_acid	[SX3:1](=[O:2])-[OH1:3]	2	1.79	0.44  acid
 Phenyl_carboxylic_acid	[c,n,o:1]-[C:2](=[O:3])-[OH1:4]	3	3.46	1.25  acid
 
 # too high uncertainty. Change to aliphatic caboxylic acid value from ACDlabs
-Carboxylic_acid [CX3](=O)[OX2H1]	2 4.8 1.3 acid
-#Carboxylic_acid [CX3](=O)[OX2H1]	2	3.456652971502591	1.2871420886834017   acid
+#Carboxylic_acid [CX3](=O)[OX2H1] 2 4.8 1.3 acid  # aliphatic ACDlabs
+Carboxylic_acid [CX3](=O)[OX2H1] 2 3.46	1.29  acid
 
 Thioic_acid	[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]	2	0.68	1.50  acid
 Phenyl_Thiol	[c,n:1]-[SX2H1:2]	1	4.98	2.61 acid
@@ -125,6 +125,9 @@ Anilines_tertiary	[c:1]-[NX3+0H0:2]	2	4.17	2.01  base
 
 # Hydroxylamines
 Hydroxylamine [NX3+0;H2,H1,H0;!$(NC=[!#6]);!$(NC#[!#6]);!$(N=[!#6]):1][#8:2]	1 4.4 0.4 base
+
+# Electron poor aliphatic amines. Common case of N-terminus of peptide backbone. pKa of CC(=O)C(C)N
+Amines_aliph_epoor [NX3+0;$(NCC=[!#6]);!$(NC=[!#6]);!$(NC#[!#6]):1]-[#6:2] 1 7.9 0.3 base
 
 # Amines. Should be after anilines. From ACDlabs GALAS
 Amines_primary   [NX3+0;H2;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.4 0.4  base
