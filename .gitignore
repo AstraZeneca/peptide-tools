@@ -2,6 +2,7 @@
 *.png
 *.swp
 *.pyc
+*.BK
 rdkit_pI/TEST
 rdkit_pI/TEST_PKAMATCHER  
 rdkit_pI/TEST_PKAMATCHER_NNAA
