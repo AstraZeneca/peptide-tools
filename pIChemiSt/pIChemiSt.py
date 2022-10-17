@@ -547,7 +547,7 @@ def read_structure_file(inputFile):
 
 
 
-def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_pkamatcher':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
+def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_pkamatcher':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 
     args = Dict2Class(options)
 
@@ -573,7 +573,7 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         sys.exit(1)
 
     # Run calculations
-    dict_output_rdkit_pI={}
+    dict_output_pIChemiSt={}
 
     for molid_ind in mol_supply_json.keys():
         mol_name = mol_supply_json[molid_ind]['mol_name']    
@@ -677,13 +677,13 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
 
         # plot titration curve
         if args.l_plot_titration_curve:
-            figFileName = "OUT_titration_curve_rdkit_pI.png"
+            figFileName = "OUT_titration_curve_pIChemiSt.png"
             plot_titration_curve(pH_Q_dict,figFileName)
         else:
             figFileName = ""
         
         # output dict for given molecule 
-        dict_output_rdkit_pI[molid_ind]={'mol_name':mol_name,
+        dict_output_pIChemiSt[molid_ind]={'mol_name':mol_name,
                                     'pI':pI_dict,
                                     'QpH7':Q_dict,
                                     'pI_interval':interval,
@@ -693,11 +693,11 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
         
         # define pKaset for reporting pKa of individual amino acids and fragments
         pKaset='IPC_peptide'
-        dict_output_rdkit_pI[molid_ind].update({'pKa_set':pKaset })
+        dict_output_pIChemiSt[molid_ind].update({'pKa_set':pKaset })
 
         
         if args.l_print_fragments:
-            dict_output_rdkit_pI[molid_ind].update({
+            dict_output_pIChemiSt[molid_ind].update({
                                     'base_pkas_fasta':base_pkas_fasta,
                                     'acid_pkas_fasta':acid_pkas_fasta,
                                     'base_pkas_calc':base_pkas_calc,
@@ -709,38 +709,38 @@ def calc_rdkit_pI(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile'
                                     #'diacid_pkas_calc':diacid_pkas_calc,
                                     #'diacid_pkas_fasta':diacid_pkas_fasta,
 
-    return dict_output_rdkit_pI
+    return dict_output_pIChemiSt
 
 
 
-def print_output(dict_output_rdkit_pI,args):
+def print_output(dict_output_pIChemiSt,args):
 
-    for molid_ind in dict_output_rdkit_pI.keys():
+    for molid_ind in dict_output_pIChemiSt.keys():
     
-        molid = dict_output_rdkit_pI[molid_ind]
+        molid = dict_output_pIChemiSt[molid_ind]
 
-        print_output_prop_dict(dict_output_rdkit_pI[molid_ind]['pI'],'pI',l_print_pka_set=args.l_print_pka_set)
-        print_output_prop_dict(dict_output_rdkit_pI[molid_ind]['QpH7'],'Q at pH7.4',l_print_pka_set=False)
+        print_output_prop_dict(dict_output_pIChemiSt[molid_ind]['pI'],'pI',l_print_pka_set=args.l_print_pka_set)
+        print_output_prop_dict(dict_output_pIChemiSt[molid_ind]['QpH7'],'Q at pH7.4',l_print_pka_set=False)
 
         if args.use_acdlabs: predition_tool = 'ACDlabs'
         elif args.use_pkamatcher: predition_tool = 'pKaMatcher'
 
-        int_tr = dict_output_rdkit_pI[molid_ind]['pI_interval_threshold']
-        pKaset = dict_output_rdkit_pI[molid_ind]['pKa_set']
+        int_tr = dict_output_pIChemiSt[molid_ind]['pI_interval_threshold']
+        pKaset = dict_output_pIChemiSt[molid_ind]['pKa_set']
 
         print(" ")
         #print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pKaset,predition_tool) )
         print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
-        print("%4.1f - %4.1f" % (dict_output_rdkit_pI[molid_ind]['pI_interval'][0],dict_output_rdkit_pI[molid_ind]['pI_interval'][1]))
+        print("%4.1f - %4.1f" % (dict_output_pIChemiSt[molid_ind]['pI_interval'][0],dict_output_pIChemiSt[molid_ind]['pI_interval'][1]))
 
         if args.l_print_fragments:
-            base_pkas_fasta = dict_output_rdkit_pI[molid_ind]['base_pkas_fasta']
-            acid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['acid_pkas_fasta']
-            #diacid_pkas_fasta = dict_output_rdkit_pI[molid_ind]['diacid_pkas_fasta']
-            base_pkas_calc = dict_output_rdkit_pI[molid_ind]['base_pkas_calc']
-            acid_pkas_calc = dict_output_rdkit_pI[molid_ind]['acid_pkas_calc']
-            #diacid_pkas_calc = dict_output_rdkit_pI[molid_ind]['diacid_pkas_calc']
-            constant_Qs_calc = dict_output_rdkit_pI[molid_ind]['constant_Qs_calc']
+            base_pkas_fasta = dict_output_pIChemiSt[molid_ind]['base_pkas_fasta']
+            acid_pkas_fasta = dict_output_pIChemiSt[molid_ind]['acid_pkas_fasta']
+            #diacid_pkas_fasta = dict_output_pIChemiSt[molid_ind]['diacid_pkas_fasta']
+            base_pkas_calc = dict_output_pIChemiSt[molid_ind]['base_pkas_calc']
+            acid_pkas_calc = dict_output_pIChemiSt[molid_ind]['acid_pkas_calc']
+            #diacid_pkas_calc = dict_output_pIChemiSt[molid_ind]['diacid_pkas_calc']
+            constant_Qs_calc = dict_output_pIChemiSt[molid_ind]['constant_Qs_calc']
 
             # merge fasta and calcualted pkas
             base_pkas = base_pkas_fasta[pKaset] + base_pkas_calc
@@ -797,7 +797,7 @@ def args_parser():
     parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. filenames are ignored",default='')
     parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. fasta",default='')
 
-    parser.add_argument("--plot_titration_curve",default=False, action='store_true',dest="l_plot_titration_curve", help="Plot titration curve and store it in OUT_titration_curve_rdkit_pI.png file.")
+    parser.add_argument("--plot_titration_curve",default=False, action='store_true',dest="l_plot_titration_curve", help="Plot titration curve and store it in OUT_titration_curve_pIChemiSt.png file.")
     parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragments", help="Print out fragments with corresponding pKas used in pI calcution.")
     parser.add_argument("--print_pka_set",default=False, action='store_true',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
     parser.add_argument("--use_acdlabs",default=False, action='store_true',dest="use_acdlabs", help="Use acdlabs for pka prediction of unknown fragments.")
@@ -815,12 +815,12 @@ if __name__ == "__main__":
 
     args,options = args_parser()
 
-    dict_output_rdkit_pI = calc_rdkit_pI(options)
+    dict_output_pIChemiSt = calc_pIChemiSt(options)
 
     if args.l_json:
-        print(json.dumps(dict_output_rdkit_pI))
+        print(json.dumps(dict_output_pIChemiSt))
     else:
-        print_output(dict_output_rdkit_pI,args)    
+        print_output(dict_output_pIChemiSt,args)    
         
 
 

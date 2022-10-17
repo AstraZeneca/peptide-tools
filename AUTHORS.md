@@ -7,7 +7,7 @@ extn_coeff_fasta_v2.2/
 pI_fasta_v1.4/
     Andrey I. Frolov
 
-rdkit_pI_v3.2/
+pIChemiSt_v3.2/
     Andrey I. Frolov
     Jonas Bostrom - contributed function of splitting molecule by peptide bonds
     Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code

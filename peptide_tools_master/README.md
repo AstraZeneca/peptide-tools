@@ -19,7 +19,7 @@ HOW TO RUN
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/smi2scrambledfasta
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/extn_coeff_fasta
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pI_fasta
-    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/rdkit_pI
+    export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pIChemiSt
 
     ### Example peptide structure
     #----------------------------

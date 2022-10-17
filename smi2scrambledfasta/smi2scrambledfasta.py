@@ -6,7 +6,7 @@ from rdkit.Chem import AllChem, Recap, Descriptors, Draw
 
 #from pka_sets_fasta import *
 from smarts_matcher_aminoacids import get_scrambled_fasta_from_frags
-from rdkit_pI import break_amide_bonds_and_cap
+from pIChemiSt import break_amide_bonds_and_cap
 
 #import pka_sets_fasta 
 #from smarts_matcher_aminoacids import *
