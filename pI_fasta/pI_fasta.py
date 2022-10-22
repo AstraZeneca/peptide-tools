@@ -655,13 +655,13 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
     charge_tol=0.05
     if na == 0 and nb != 0:
         print("---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, will estimate pH when peptide has charge less than "+str(charge_tol*100)+"% of the peptide maximum possible charge (by absolute value). Continue.")
-        lPlot = True
-        lCalc = True
+        #lPlot = True
+        #lCalc = True
 
     if nb == 0 and na != 0:
         print("---!Warning: no basic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, will estimate pH when peptide has charge less than "+str(charge_tol*100)+"% of the peptide maximum possible charge (by absolute value). Continue.")
-        lPlot = True
-        lCalc = True
+        #lPlot = True
+        #lCalc = True
 
 
 

@@ -7,6 +7,7 @@ import sys, os
 import argparse
 import json
 from copy import copy
+
 #from json import encoder
 #encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 
@@ -58,10 +59,24 @@ class Dict2Class(object):
             setattr(self, key, my_dict[key]) 
 
 
+def read_fasta_file(inputFile):
 
+    filename, ext = os.path.splitext(inputFile)
 
+    # Initialize file reader
+    if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
 
+    from Bio import SeqIO
+    biosuppl = SeqIO.parse(open(inputFile),'fasta')
 
+    mol_supply_json={}
+    mol_unique_ID = 0
+    for biofasta in biosuppl:
+        mol_unique_ID += 1
+        # unique index, mol title, RDkit mol object, mol fasta
+        mol_supply_json[mol_unique_ID] = {'mol_name':biofasta.id, 'mol_obj':None, 'fasta':str(biofasta.seq)}
+        
+    return mol_supply_json
 
 
 def calc_extn_coeff(options={}):
