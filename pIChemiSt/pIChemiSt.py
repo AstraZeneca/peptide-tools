@@ -796,8 +796,8 @@ def args_parser():
     parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using pKaMatcher or ACDlabs, and calculating Henderson-Hasselbalch equation.")
     parser.add_argument("-j", dest="inputJSON", help="input molecule supply in JSON format",default='')
     parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
-    parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. filenames are ignored",default='')
-    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. fasta",default='')
+    parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. Input filenames are ignored",default='')
+    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. csv or sdf",default='')
 
     parser.add_argument("--plot_titration_curve",default=False, action='store_true',dest="l_plot_titration_curve", help="Plot titration curve and store it in OUT_titration_curve_pIChemiSt.png file.")
     parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragments", help="Print out fragments with corresponding pKas used in pI calcution.")
