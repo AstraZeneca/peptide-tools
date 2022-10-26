@@ -757,12 +757,6 @@ if __name__ == "__main__":
     
     dict_out_pI_fasta = calc_pI_fasta(options)
     
-#   if not options['l_json']:
-#       print_output(dict_out_pI_fasta,lPrintpKaSets)
-#   else:
-#       print(json.dumps(dict_out_pI_fasta))
-        
-
     ### ----------------------------------------------------------------------
     # Output 
     if args.outputFile == '': # output plain text
