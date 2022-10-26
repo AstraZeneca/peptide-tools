@@ -549,6 +549,8 @@ def read_structure_file(inputFile):
 
 def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile':'','outputFile':'','use_acdlabs':False,'use_pkamatcher':True,'l_print_fragments':False,'l_plot_titration_curve':False,'l_print_pka_set':False,'l_json':False}):
 
+    global mol_supply_json
+
     args = Dict2Class(options)
 
     # Get options
@@ -817,11 +819,73 @@ if __name__ == "__main__":
 
     dict_output_pIChemiSt = calc_pIChemiSt(options)
 
-    if args.l_json:
-        print(json.dumps(dict_output_pIChemiSt))
-    else:
-        print_output(dict_output_pIChemiSt,args)    
-        
+    ### ----------------------------------------------------------------------
+    # Output 
+    if args.outputFile == '': # output plain text
+        if args.l_json:
+            print(json.dumps(dict_output_pIChemiSt, indent=2))
+        else:
+            print_output(dict_output_pIChemiSt,args)    
+
+    else: # output file
+
+        known_out_file_types = ['.sdf','.csv']
+        filename, out_fext = os.path.splitext(args.outputFile)
+        if out_fext not in known_out_file_types:
+            raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
+            sys.exit(1)
+
+        mol_list=[]
+        for mi in mol_supply_json.keys():
+            mol = mol_supply_json[mi]['mol_obj']
+            mol.SetProp('pI mean',"%.2f" % dict_output_pIChemiSt[mi]['pI']['pI mean'])
+            mol.SetProp('pI std',"%.2f" % dict_output_pIChemiSt[mi]['pI']['std'])
+            mol.SetProp('pI interval',' - '.join([ "%.2f" % x for x in dict_output_pIChemiSt[mi]['pI_interval'] ] ))
+            mol.SetProp('pI interval threshold',"%.2f" % dict_output_pIChemiSt[mi]['pI_interval_threshold'])
+
+            mol_list.append(mol)
+
+        if out_fext == '.sdf':
+            with Chem.SDWriter(args.outputFile) as sdf_w:
+                for mol in mol_list:
+                    sdf_w.write(mol)
+
+        elif out_fext == '.csv':
+            with open(args.outputFile,'w') as csv_f:
+                csv_w = csv.writer(csv_f)
+                count=0
+                for mol in mol_list:
+                    props = mol.GetPropsAsDict()
+
+                    count+=1
+                    if count == 1:
+                        header = ['SMILES'] + list(props.keys())
+                        csv_w.writerow(header)
+
+                    row=[Chem.MolToSmiles(mol)]
+                    for p in header[1:]:
+                        row += [props[p]] 
+                    csv_w.writerow(row)
+                        
+        # print info 
+        dict_file = {'outputFile':args.outputFile,'outputInfo':'Number of molecules processed:'+str(len(dict_output_pIChemiSt.keys()))}
+        print(json.dumps(dict_file))
+   
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
