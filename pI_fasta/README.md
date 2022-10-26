@@ -10,7 +10,16 @@ HOW TO RUN
 
     module load matplotlib
     cd TEST
+
+    # input a single sequence file and plot the charge versus pH curves
     python3 ../pI_fasta.py -i P43220.fasta -x
+
+    # input sequence as a string and output into JSON formated text
+    python3 ../pI_fasta.py -s AKD -j
+
+    # input multiple sequences from a file and output into a csv file
+    python3 ../pI_fasta.py -i multi.fasta -o multi_OUTPUT.csv
+
 
 DEPENDENCIES 
 
