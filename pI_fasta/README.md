@@ -9,6 +9,7 @@ The mean value and variation between different sets are also calculated. The pro
 HOW TO RUN
 
     module load matplotlib
+    cd TEST
     python3 ../pI_fasta.py -i P43220.fasta -x
 
 DEPENDENCIES 
