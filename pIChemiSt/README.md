@@ -2,13 +2,16 @@
 
 pIChemiSt.py
 
-Program calculates isoelectic point of protein/peptide based on 2D structure (SMILES string). For nonatural amino acids pKa values are predicted on the fly either using pKaMatcher (built-in tool based on SMARTS patters) orACDlabs perceptabatch pKa GALAS method (commercial tool that requires licence). For natural amino acids the following sets of amino-acid pKa values are implemented:'IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS' as described in http://isoelectric.org. The mean value and variation between different sets are also calculated. The program can plot the corresponding titration curves. Also the total charge at pH 7.4 is reported. 
+Program calculates isoelectic point of protein/peptide based on 2D structure (SMILES string). For nonatural amino acids pKa values are predicted on the fly either using pKaMatcher (built-in tool based on SMARTS patters) orACDlabs perceptabatch pKa GALAS method (commercial tool that requires licence). For natural amino acids the following sets of amino-acid pKa values are implemented:'IPC2_peptide','IPC_peptide','ProMoST','Gauci','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS' as described in http://isoelectric.org. The mean value and variation between different sets are also calculated. The program can plot the corresponding titration curves. Also the total charge at pH 7.4 is reported. 
 
 
 HOW TO RUN
 
     module load matplotlib
     module load rdkit
+
+    # navigate to the TEST folder
+    cd TEST
 
     # Use internal pKaMatcher for pKa calculation of nonatural amino acids
     python3 ../pIChemiSt.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --plot_titration_curve --print_fragment_pkas --use_pkamatcher
@@ -18,8 +21,16 @@ HOW TO RUN
     # Use ACDlabs for pKa calculation of nonatural amino acids
     module load acdperceptabatch     # "perceptabat" executable should be callable
     python3 ../pIChemiSt.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --plot_titration_curve --print_fragment_pkas --use_acdlabs
-    
-    
+   
+    # Output in JSON format
+    python3 ../pIChemiSt.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --use_pkamatcher --json 
+
+    # Output as an csv file
+    python3 ../pIChemiSt.py -i validation_set_modified_peptides.smi --use_pkamatcher -o validation_set_modified_peptides_OUTPUT.csv
+
+    # Output as a sdf file
+    python3 ../pIChemiSt.py -i validation_set_modified_peptides.smi --use_pkamatcher -o validation_set_modified_peptides_OUTPUT.sdf
+   
 
 DEPENDENCIES 
 
