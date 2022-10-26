@@ -409,6 +409,18 @@ pKa_sets['ProMoST']={
 }
 
 
+### Noncanonical AAs. These values used for all sets of pKa available for standard AAs.  
+# PTM. Not complete... to exdend upon request
+pKa_noncanonical = {'pKa1_phosphate':1.2,
+                    'pKa2_phosphate':6.9,
+                    'dpKa_alkylLys': 0.15, # data from ACD lab: pKa of amine: 10.69. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12, 
+                    'dpKa_dialkylLys': 0.15 - 0.75
+                   } # data from Zhang, Vogel et al.  (ACD lab: pKa of dimethylamine: 9.83 +- 0.28 - error too high. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12, 
+
+
+
+
+
 #Ala	A	Alanine
 #Arg	R	Arginine
 #Asn	N	Asparagine
