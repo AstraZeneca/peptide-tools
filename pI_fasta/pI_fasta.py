@@ -98,9 +98,9 @@ def calculateProteinCharge(pH):
 		
     # PTMs
     ### Now all phosphorilated AAs have the same pKa s for phosphate group 
-    if NPhosphateGroups != 0: protein_charge += NPhosphateGroups * calculatePhosphateCharge(pH, pKa1_phosphate, pKa2_phosphate)
-    if NAlkylLysGroups != 0: protein_charge += NAlkylLysGroups * calculateBasicAminoAcidCharge(pH, pKa_basic['K'][0] + dpKa_alkylLys)
-    if NDiAlkylLysGroups != 0: protein_charge += NDiAlkylLysGroups * calculateBasicAminoAcidCharge(pH, pKa_basic['K'][0] + dpKa_dialkylLys)
+    if NPhosphateGroups != 0: protein_charge += NPhosphateGroups * calculatePhosphateCharge(pH, pKa_noncanonical['pKa1_phosphate'], pKa_noncanonical['pKa2_phosphate'])
+    if NAlkylLysGroups != 0: protein_charge += NAlkylLysGroups * calculateBasicAminoAcidCharge(pH, pKa_basic['K'][0] + pKa_noncanonical['dpKa_alkylLys'])
+    if NDiAlkylLysGroups != 0: protein_charge += NDiAlkylLysGroups * calculateBasicAminoAcidCharge(pH, pKa_basic['K'][0] + pKa_noncanonical['dpKa_dialkylLys'])
 
     return protein_charge
 
@@ -204,7 +204,7 @@ def split_sequence(sequence):
                 if NTermRes == '_' and CTermRes == '_' and (IonizableTerminiOfNTermRes == '_' or IonizableTerminiOfNTermRes == '') and (IonizableTerminiOfCTermRes == '_' or IonizableTerminiOfCTermRes == ''):
                 	MiddleSeq = sequence[1:-1]
                 else:
-                        print("---NOTE! custom termini residues and/or ionizable termini given. No termini residues would be identified from the given sequence. Custom given residues will be used insted.")
+                        print("---NOTE! custom termini residues and/or ionizable termini given. No termini residues would be identified from the given sequence. Custom given residues will be used instead.")
                         if NTermRes == '_': 
                             print('---Error! custom termini specified => NTermRes thus must be specified explicitly ')
                             sys.exit(1)
@@ -299,12 +299,12 @@ def print_pka_set():
         print('--------------------------------------------------------------' )
         print('Supported nonatural aminoacids (teh same for all sets of pKa):')
         print()
-        print('   Phosphate pKa1  '+str(pKa1_phosphate) )
-        print ('   Phosphate pKa2  '+str(pKa2_phosphate) )
+        print('   Phosphate pKa1  '+str(pKa_noncanonical['pKa1_phosphate']) )
+        print ('   Phosphate pKa2  '+str(pKa_noncanonical['pKa2_phosphate']) )
         print() 
-        print('   Alkylated Lys: addition to Lys pKa  '+str(dpKa_alkylLys)+ "      data from ACD lab: pKa of amine: 10.69. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12" )
+        print('   Alkylated Lys: addition to Lys pKa  '+str(pKa_noncanonical['dpKa_alkylLys'])+ "      data from ACD lab: pKa of amine: 10.69. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12" )
         print() 
-        print('   Dialkylated Lys: addition to Lys pKa  '+str(dpKa_dialkylLys)+"       data from Zhang, Vogel et al.  (ACD lab: pKa of dimethylamine: 9.83 +- 0.28 - error too high. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12" )
+        print('   Dialkylated Lys: addition to Lys pKa  '+str(pKa_noncanonical['dpKa_dialkylLys'])+"       data from Zhang, Vogel et al.  (ACD lab: pKa of dimethylamine: 9.83 +- 0.28 - error too high. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12" )
         print()
 
         return
@@ -313,13 +313,12 @@ def print_pka_set():
 
 
 def print_output(dict_pI_fasta,lPrintpKaSets):
-    #for molid_ind in dict_pI_fasta['molid_ind_list']:
     for molid_ind in dict_pI_fasta.keys():
         dict_single = dict_pI_fasta[molid_ind]
         print_output_dict(dict_single['pI'],'pI') 
         print_output_dict(dict_single['QpH7'],'Q at pH7.4') 
         if lPrintpKaSets: print_pka_set()
-        return
+    return
     
 
 def print_output_dict(out_dict,prop):
@@ -351,46 +350,50 @@ def print_output_dict(out_dict,prop):
 
 def options_parser():
     # Parse options
-    usage = """pI.py is the program for calculation of peptide isoelectric points using Henderson-Hasselbalch equations. Various sets of pKa data are supported (see below).
+    usage = """pI_fasta.py is the program for calculation of peptide isoelectric points using Henderson-Hasselbalch equations. Various sets of pKa data are supported (see below).
 
-Minimum usage:          python pI.py -s GGKGD
-With plot:              python pI.py -s GGKGD -x yes
-Cyclic peptide:         python pI.py -s GGKGD -r yes -x yes
-Capped N terminus:      python pI.py -s GGKGD -b \"\" -x yes
-Capped C terminus:      python pI.py -s GGKGD -a \"\" -x yes
-Phosphorylated residue: python pI.py -s GXD -p 1 -x yes
-Monoalkylated Lys:      python pI.py -s GXD -l 1 -x yes
-Dialkylated Lys:        python pI.py -s GXD -d 1 -x yes
+Sequence input:         python pI_fasta.py -s GGKGD
+FASTA file input:       python pI_fasta.py -i example.fasta
+With plot:              python pI_fasta.py -s GGKGD -x 
+Cyclic peptide:         python pI_fasta.py -s GGKGD -r -x
+Capped N terminus:      python pI_fasta.py -s GGKGD -b \"\" -x
+Capped C terminus:      python pI_fasta.py -s GGKGD -a \"\" -x
+Phosphorylated residue: python pI_fasta.py -s GXD -p 1 -x
+Monoalkylated Lys:      python pI_fasta.py -s GXD -l 1 -x
+Dialkylated Lys:        python pI_fasta.py -s GXD -d 1 -x
 Branched peptide (custom terminal residues):
-                        python pI.py -s GGKGD   -c AX -n E   -a AX -b E -x yes
-Use custom pKa set:     python pI.py -s GGKGD -m ProMoST,Gauci_calib -x yes
-Help:                   python pI.py -h
+                        python pI_fasta.py -s GGKGD   -c AX -n E -a AX -b E -x
+Use custom pKa set:     python pI_fasta.py -s GGKGD -m IPC_peptide,ProMoST,Gauci -x
+Help:                   python pI_fasta.py -h
 Most extended. All defaults listed. Mind: \"_\" indicates that the residue is automatically deduced from the given sequence:
-                        python pI.py  -s GGKGD  -t 0.001  -c _  -n _  -a _  -b _  -r no  -p 0  -l 0  -d 0  -o no  -x no  -m ProMoST,Gauci_calib,Bjellqvist,Rodwell,Grimsley,Thurlkill
+                        python pI_fasta.py  -s GGKGD  -t 0.001  -c _  -n _  -a _  -b _  -p 0 -l 0 -d 0 -m IPC2_peptide,IPC_peptide,ProMoST,Gauci,Grimsley,Thurlkill,Lehninger,Toseland
+
+--- JSON fomatting
+JSON formated input:    python pI_fasta.py -g \'{\"1\":{\"mol_name\":\"name1\",\"fasta\":\"GGKGD\"}}\'
+JSON formated output:   python pI_fasta.py -s GGKGD -j
+
+Nested structure of JSON, top level - unique IDs of the molecules, bottom level data fields for each molecule "mol_name" and "fasta"
 
 See help for all the options.
-
-Several pKa sets are supported:
-Only the most accurate (~0.3 pH units RMSD) are used by default: see Audain et al. Bioinformatics 2016, 32, 821-827
 
 --- For theory and pKa sets see: http://isoelectric.ovh.org/theory.html
 For ProMoST and Gauchi sets pKa depends on whether the residue sits at the termini or in the middle of the sequence
 Also, the pKa of ionizable termini depends on the type of termini residue.
 The rest of the sets position invariant.
 for ProMoST set: see http://proteomics.mcw.edu/promost_adv.html
-for Gauci_calibrated set: see Gauci et al. Proteomics 2008, 8, 4898  and  https://github.com/ypriverol/pIR
+for Gauci set: see Gauci et al. Proteomics 2008, 8, 4898  and  https://github.com/ypriverol/pIR
 Supported nonatural aminoacids (the same for all sets of pKa): Monoalkylated Lys, DiAlkylated Lys, phosphorilations
-derived from literature, ACDlab predictions, see -o yes for more details.
+derived from literature, ACDlab predictions, see -z for more details.
 
 Andrey Frolov, AstraZeneca, Molndal. 04/03/2016
+Last updated 25/10/2022
 
-Most Extended:     python pI.py -s GXKXAXXA  -n no  -c no  -p 2  -l 1  -d 1  -o yes  -t 0.0001
 """
 
     parser = optparse.OptionParser(usage=usage)
     parser.add_option("-s", action="store", dest="seq", help="peptide sequence", default="")
     parser.add_option("-i", action="store", dest="inputFile", help="input file name in fasta format", default="")
-    parser.add_option("-o", action="store", dest="outputFile", help="output file name", default="")
+    parser.add_option("-g", action="store", dest="inputJSON", help="input file name in JSON format", default="")
     parser.add_option("-t", action="store", type="float", dest="tol", help="tolerance on total protein charge. default = 0.001", default=0.001)
 
     parser.add_option("-c", action="store", type='string',dest="CTermRes", help="Custom list of C terminus residues. By default it is set to the last residues of the given sequence. This option is useful if you have a branched peptide with several terminus residues", default='_')
@@ -402,17 +405,16 @@ Most Extended:     python pI.py -s GXKXAXXA  -n no  -c no  -p 2  -l 1  -d 1  -o 
 
     parser.add_option("-p", action="store", type='int',dest="NPhosphateGroups", help="Number of phosphorilated residues. Phosphorilated residues must be denoted as X in the sequence. default = 0", default=0)
     parser.add_option("-l", action="store", type='int',dest="NAlkylLysGroups", help="Number of monoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0", default=0)
-    parser.add_option("-d", action="store", type='int',dest="NDiAlkylLysGroups", help="Number of dinoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0", default=0)
+    parser.add_option("-d", action="store", type='int',dest="NDiAlkylLysGroups", help="Number of dialkylated Lys residues. These residues should be denoted as X in the sequence. default = 0", default=0)
 
     parser.add_option("-m", action="store", type='string',dest="pka_set_list", help="List of pKa sets to use in calculation (comma separated). default = "+list_to_comma_seprated_string(pKa_sets_to_use), default='')
     parser.add_option("-r", action="store_true", dest="lCyclic", help="Is it cyclic? No termini residues are derived from sequence and also no ionizable termini (-NH2 and -COOH) of the terminal residues are derived from sequence (However, custom values are not overwritten). default = False", default=False)
-    parser.add_option("-x", action="store_true",dest="lPlot", help="plot charge/pH curves. Requires NumPy and Matplotlib. default = False", default=False)
-    parser.add_option("-q", action="store_true",dest="lIgnoreC", help="print used pKa values in the output. default = False", default=False)
+    parser.add_option("-x", action="store_true", dest="lPlot", help="plot charge/pH curves. Requires NumPy and Matplotlib. default = False", default=False)
+    parser.add_option("-q", action="store_true", dest="lIgnoreC", help="ignore cysteins, assume they are protected. default = False", default=False)
     parser.add_option("-z", action="store_true", dest="lPrintpKa", help="print used pKa values in the output. default = False", default=False)
-    parser.add_option("-j", action="store_true", dest="l_json", help="print used pKa values in the output. default = False", default=False)
+    parser.add_option("-j", action="store_true", dest="l_json", help="use JSON as an output format. default = False", default=False)
 
     (options, args) = parser.parse_args()
-
 
     return options.__dict__
  
