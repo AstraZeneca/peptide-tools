@@ -396,7 +396,7 @@ Last updated 25/10/2022
     parser.add_option("-s", action="store", dest="seq", help="peptide sequence", default="")
     parser.add_option("-i", action="store", dest="inputFile", help="input file name in fasta format", default="")
     parser.add_option("-g", action="store", dest="inputJSON", help="input file name in JSON format", default="")
-    parser.add_option("-o", action="store", dest="outputFile", help="input file name in JSON format", default="")
+    parser.add_option("-o", action="store", dest="outputFile", help="output file name in csv format", default="")
     parser.add_option("-t", action="store", type="float", dest="tol", help="tolerance on total protein charge. default = 0.001", default=0.001)
 
     parser.add_option("-c", action="store", type='string',dest="CTermRes", help="Custom list of C terminus residues. By default it is set to the last residues of the given sequence. This option is useful if you have a branched peptide with several terminus residues", default='_')
