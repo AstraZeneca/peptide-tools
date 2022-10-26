@@ -9,6 +9,7 @@ HOW TO RUN
 
     module load rdkit
     export PYTHONPATH=<your_path>/peptide_tools/pIChemiSt_v3.1:${PYTHONPATH}
+    cd TEST
     python ../smi2scrambledfasta.py -i FPYVAE.smi -o FPYVAE.fasta
 
 DEPENDENCIES 
