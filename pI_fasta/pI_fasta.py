@@ -19,6 +19,8 @@ encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 
 from pka_sets_fasta import *
 
+import csv
+
 # Turns a dictionary into a class 
 class Dict2Class(object): 
     def __init__(self, my_dict): 
@@ -312,28 +314,28 @@ def print_pka_set():
 
 
 
-def print_output(dict_pI_fasta,lPrintpKaSets):
+def print_output(dict_pI_fasta,args):
     for molid_ind in dict_pI_fasta.keys():
         dict_single = dict_pI_fasta[molid_ind]
-        print_output_dict(dict_single['pI'],'pI') 
-        print_output_dict(dict_single['QpH7'],'Q at pH7.4') 
-        if lPrintpKaSets: print_pka_set()
+        print_output_dict(dict_single['pI'],'pI',dict_single['plot_title_info']) 
+        print_output_dict(dict_single['QpH7'],'Q at pH7.4',dict_single['plot_title_info']) 
+        if args.lPrintpKa: print_pka_set()
     return
     
 
-def print_output_dict(out_dict,prop):
-    global tit
+def print_output_dict(out_dict,prop,title_info):
+    #global tit
     lj=12
     keys=list(out_dict.keys())
     keys.remove('std'); keys.insert(0, 'std')
     keys.remove('err'); keys.insert(0, 'err')
     keys.remove(prop + ' mean'); keys.insert(0, prop+' mean')
 
-    tit="sequence: "+seq+titAdd
+    #tit="sequence: "+seq+titAdd
     p=out_dict
     print(" ")
     print("======================================================================================================================================================")
-    print(prop+" for " + tit )
+    print(prop+" for " + title_info  )
     print( "---------------------------------")
     for k in keys:
         print(k.rjust(lj)  + "  " +  str(round(p[k],2)).ljust(lj) )
@@ -394,6 +396,7 @@ Last updated 25/10/2022
     parser.add_option("-s", action="store", dest="seq", help="peptide sequence", default="")
     parser.add_option("-i", action="store", dest="inputFile", help="input file name in fasta format", default="")
     parser.add_option("-g", action="store", dest="inputJSON", help="input file name in JSON format", default="")
+    parser.add_option("-o", action="store", dest="outputFile", help="input file name in JSON format", default="")
     parser.add_option("-t", action="store", type="float", dest="tol", help="tolerance on total protein charge. default = 0.001", default=0.001)
 
     parser.add_option("-c", action="store", type='string',dest="CTermRes", help="Custom list of C terminus residues. By default it is set to the last residues of the given sequence. This option is useful if you have a branched peptide with several terminus residues", default='_')
@@ -738,7 +741,7 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
         plot_titration_curve(pH_Q_dict,plot_filename)
             
 
-    dict_pI_fasta = {'sequence':orig_seq,'pI':pI_dict,'QpH7':Q_dict,'pI_interval':interval,'plot_filename':plot_filename}
+    dict_pI_fasta = {'sequence':orig_seq,'pI':pI_dict,'QpH7':Q_dict,'pI_interval':interval,'plot_filename':plot_filename,'plot_title_info':tit}
 
     return dict_pI_fasta
 
@@ -750,14 +753,53 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
 if __name__ == "__main__":
 
     options = options_parser()
+    args = Dict2Class(options)
     
     dict_out_pI_fasta = calc_pI_fasta(options)
     
-    if not options['l_json']:
-        print_output(dict_out_pI_fasta,lPrintpKaSets)
-    else:
-        print(json.dumps(dict_out_pI_fasta))
+#   if not options['l_json']:
+#       print_output(dict_out_pI_fasta,lPrintpKaSets)
+#   else:
+#       print(json.dumps(dict_out_pI_fasta))
         
 
+    ### ----------------------------------------------------------------------
+    # Output 
+    if args.outputFile == '': # output plain text
+        if args.l_json:
+            print(json.dumps(dict_out_pI_fasta, indent=2))
+        else:
+            print_output(dict_out_pI_fasta,args)    
+
+    else: # output file
+
+        known_out_file_types = ['.csv']
+        filename, out_fext = os.path.splitext(args.outputFile)
+        if out_fext not in known_out_file_types:
+            raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
+            sys.exit(1)
+
+        elif out_fext == '.csv':
+            with open(args.outputFile,'w') as csv_f:
+                csv_w = csv.writer(csv_f)
+                count=0
+                for mi in dict_out_pI_fasta.keys():
+                    count+=1
+                    if count == 1:
+                        header = ['mol_name','fasta','pI mean','pI std','pI interval']
+                        csv_w.writerow(header)
+
+                    row = []
+                    row += [dict_out_pI_fasta[mi]['mol_name']] 
+                    row += [dict_out_pI_fasta[mi]['sequence']] 
+                    row += [dict_out_pI_fasta[mi]['pI']['pI mean']] 
+                    row += [dict_out_pI_fasta[mi]['pI']['std']]         
+                    row += [ ' - '.join([ "%.2f" % x for x in dict_out_pI_fasta[mi]['pI_interval'] ]) ] 
+                    csv_w.writerow(row)
+                        
+        # print info 
+        dict_file = {'outputFile':args.outputFile,'outputInfo':'Number of molecules processed:'+str(len(dict_out_pI_fasta.keys()))}
+        print(json.dumps(dict_file))
+   
 
 
