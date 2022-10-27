@@ -365,7 +365,7 @@ Monoalkylated Lys:      python pI_fasta.py -s GXD -l 1 -x
 Dialkylated Lys:        python pI_fasta.py -s GXD -d 1 -x
 Branched peptide (custom terminal residues):
                         python pI_fasta.py -s GGKGD   -c AX -n E -a AX -b E -x
-Use custom pKa set:     python pI_fasta.py -s GGKGD -m IPC_peptide,ProMoST,Gauci -x
+Use custom pKa set:     python pI_fasta.py -s GGKGD -m IPC2_peptide,ProMoST,Gauci -x
 Help:                   python pI_fasta.py -h
 Most extended. All defaults listed. Mind: \"_\" indicates that the residue is automatically deduced from the given sequence:
                         python pI_fasta.py  -s GGKGD  -t 0.001  -c _  -n _  -a _  -b _  -p 0 -l 0 -d 0 -m IPC2_peptide,IPC_peptide,ProMoST,Gauci,Grimsley,Thurlkill,Lehninger,Toseland
@@ -440,7 +440,7 @@ def plot_titration_curve(pH_Q_dict,figFileName):
         i+=1
         pH_Q = pH_Q_dict[pKaset] 
         l=plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
-        if pKaset == 'IPC_peptide': 
+        if pKaset == 'IPC2_peptide': 
             setp(l,linewidth=8,linestyle='-',color='k')
 
         # Store data for output
@@ -594,11 +594,11 @@ def calc_pI_fasta(options={"inputFile":"","inputDict":{},"inputJSON":"","outputF
 
 def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "_", "NTermRes": "_", "IonizableTerminiOfCTermRes": "_", "IonizableTerminiOfNTermRes": "_", "lCyclic": False, "NPhosphateGroups": 0, "NAlkylLysGroups": 0, "NDiAlkylLysGroups": 0, "lPrintpKa": False, "lPlot": False, "lIgnoreC": False,"plot_filename":"OUT_titration_curve.png","l_json":False}):
 
-    global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance, tit
+    global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance, tit, pKa_sets_to_use
 
     if len(options['seq']) == 0: raise Exception("no sequence given. See --help for more information")
 
-    #if options['pka_set_list'] != '': pKa_sets_to_use = options['pka_set_list'].split(',')
+    if options['pka_set_list'] != '': pKa_sets_to_use = options['pka_set_list'].split(',')
 
     for set in pKa_sets_to_use:
             if set not in all_known_pKa_sets: raise Exception("---Error! pKa set "+set+" is not known. Check your -m option. Exit.")
@@ -715,7 +715,7 @@ def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "
         Q_dict['err']=stderr(Ql)
 
         # print isoelectric interval
-        pKaset='IPC_peptide'
+        pKaset='IPC2_peptide'
         int_tr = 0.2    # TODO define it elsewhere 
         pH_Q = pH_Q_dict[pKaset]
         Q=pH_Q[:,1]
