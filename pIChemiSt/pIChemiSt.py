@@ -497,7 +497,7 @@ def plot_titration_curve(pH_Q_dict,figFileName):
         i+=1
         pH_Q = pH_Q_dict[pKaset] 
         l=plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
-        if pKaset == 'IPC_peptide': 
+        if pKaset == 'IPC2_peptide': 
             setp(l,linewidth=8,linestyle='-',color='k')
 
         # Store data for output
@@ -694,7 +694,7 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
                                     }
         
         # define pKaset for reporting pKa of individual amino acids and fragments
-        pKaset='IPC_peptide'
+        pKaset='IPC2_peptide'
         dict_output_pIChemiSt[molid_ind].update({'pKa_set':pKaset })
 
         
