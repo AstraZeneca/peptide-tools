@@ -4,7 +4,7 @@ Reaxys Nr.,FASTA sequence generated from the structure,pI exp,pIChemiSt pI with 
 2407420,YAGFM,8.64,9.02,8.6-9.4,9.02,8.6-9.4,5.7,Bohner Lang et al.,[H][C@](N)(CC1=CC=C(O)C=C1)C(=O)N[C@]([H])(C)C(=O)NCC(=O)N[C@@]([H])(CC1=CC=CC=C1)C(=O)N(C)[C@@]([H])(CCSC)C(N)=O
 4075243,YAGFM,5.26,5.91,3.8-7.5,5.91,3.8-7.5,5.7,Bohner Lang et al.,[H][C@](N)(CC1=CC=C(O)C=C1)C(=O)N[C@]([H])(C)C(=O)NCC(=O)N[C@@]([H])(CC1=CC=CC=C1)C(=O)N[C@@]([H])(CCSC)C(O)=O
 40459,XH,4.94,4.73,3.8-5.7,5,4.3-5.7,7.19,Greenstein & Klemperer,[H][C@](N)(CC(=O)N[C@@]([H])(CC1=CNC=N1)C(O)=O)C(O)=O
-92374,DH,4.92,5.1,4.5-5.7,5.1,4.5-5.7,4.99,Greenstein & Klemperer,[H][C@](N)(CC(O)=O)C(=O)N[C@]([H])(CC1=CNC=N1)C(O)=O
+92374,Dh,4.92,5.1,4.5-5.7,5.1,4.5-5.7,4.99,Greenstein & Klemperer,[H][C@](N)(CC(O)=O)C(=O)N[C@]([H])(CC1=CNC=N1)C(O)=O
 1730057,CGCG,4.8,4.84,4.1-5.5,5.47,4.1-6.9,5.28,Greenstein et al.,[H][C@](N)(CSSC[C@]([H])(N)C(=O)NCC(O)=O)C(=O)NCC(O)=O
 1730148,GCGC,5.3,5.94,4.2-7.3,6,4.5-7.3,5.27,Greenstein et al.,[H][C@@](CSSC[C@]([H])(NC(=O)CN)C(O)=O)(NC(=O)CN)C(O)=O
 1718208,CGGCGG,4.7,4.84,4.1-5.5,5.47,4.1-6.9,5.28,Greenstein et al.,[H][C@](N)(CSSC[C@]([H])(N)C(=O)NCC(=O)NCC(O)=O)C(=O)NCC(=O)NCC(O)=O
