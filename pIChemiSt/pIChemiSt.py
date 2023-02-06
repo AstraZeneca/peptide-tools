@@ -362,13 +362,11 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
         
         if na == 0 and nb != 0:
             #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            #refcharge = charge_tol * nb
-            refcharge = charge_tol * nb + constat_q
+            refcharge = charge_tol * nb
 
         elif nb == 0 and na != 0:
             #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            #refcharge = -charge_tol * na
-            refcharge = -charge_tol * na + constant_q
+            refcharge = -charge_tol * na
 
         else:
             refcharge = 0.0
