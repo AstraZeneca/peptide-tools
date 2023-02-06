@@ -387,7 +387,8 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
 
 def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     pH_lim = define_pH_span()
-    pH_a=arange(pH_lim[0],pH_lim[1],0.1)
+    dpH=0.1
+    pH_a=arange(pH_lim[0],pH_lim[1]+dpH,dpH)
     Q_a=pH_a*0.0    
     for i in range(len(pH_a)):
         Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i],constant_q=constant_q)
@@ -631,41 +632,16 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
 
 
 
-#           na=len(acid_pkas)+len(diacid_pkas)
-#           nb=len(base_pkas)
-#           if na == 0 and nb != 0:
-#               #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-#               #refcharge = charge_tol * nb
-#               refcharge = charge_tol * nb + constat_q
-
-#           elif nb == 0 and na != 0:
-#               #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-#               #refcharge = -charge_tol * na
-#               refcharge = -charge_tol * na + constant_q
-
-
-
             pI_dict[pKaset] = pI
             Q_dict[pKaset] = Q
             pH_Q_dict[pKaset] = pH_Q
 
-        # pI 
-        pIl=[]
-        for k in pI_dict.keys(): pIl += [pI_dict[k]]
-        pI_dict['pI mean']=mean(pIl)
-        pI_dict['std']=stddev(pIl)
-        pI_dict['err']=stderr(pIl)
-
-        # charge at pH=7.4
-        Ql=[]
-        for k in Q_dict.keys(): Ql += [Q_dict[k]]
-        Q_dict['Q at pH7.4 mean']=mean(Ql)
-        Q_dict['std']=stddev(Ql)
-        Q_dict['err']=stderr(Ql)
 
 
-        # print isoelectric interval
+        # calcualte isoelectric interval and reset undefined pI values 
         int_tr = 0.2    # TODO define it elsewhere 
+        
+        pH_lim = define_pH_span()
 
         interval_low_l = []
         interval_high_l = []
@@ -675,13 +651,22 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
             pH=pH_Q[:,0]
             pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
             
+            
             # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
-            if len(pH_int) > 1:
-                #interval = (pH_int[0], pH_int[-1])
+
+            #print(pH_int[0],pH_int[-1],pH_lim[0],pH_lim[1])
+            if len(pH_int) > 0:
+
+                # case when pI is not defined
+                if round(pH_int[0],4) == round(pH_lim[0],4) and round(pH_int[-1],4) == round(pH_lim[1],4):
+                    pI_dict[pKaset] = float('NaN')    
+
                 interval_low_l.append(pH_int[0])
                 interval_high_l.append(pH_int[-1])
             
-            elif len(pH_int) == 0:
+            else:
+                # case when pI is not defined
+                pI_dict[pKaset] = float('NaN')    
                 interval_low_l.append(pH[0])
                 interval_high_l.append(pH[-1])
            
@@ -696,6 +681,23 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
             interval_high = float('NaN')
             
         interval = (interval_low, interval_high) 
+
+
+
+
+        # pI 
+        pIl=[]
+        for k in pI_dict.keys(): pIl += [pI_dict[k]]
+        pI_dict['pI mean']=mean(pIl)
+        pI_dict['std']=stddev(pIl)
+        pI_dict['err']=stderr(pIl)
+
+        # charge at pH=7.4
+        Ql=[]
+        for k in Q_dict.keys(): Ql += [Q_dict[k]]
+        Q_dict['Q at pH7.4 mean']=mean(Ql)
+        Q_dict['std']=stddev(Ql)
+        Q_dict['err']=stderr(Ql)
 
         # plot titration curve
         if args.l_plot_titration_curve:
