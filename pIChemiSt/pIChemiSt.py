@@ -271,10 +271,13 @@ def calc_net_Qs(smi_list):
     for smi in smi_list:
         mol = Chem.MolFromSmiles(smi)
         m = standardize_molecule(mol)
-        pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4]")
+
+        # positively charged N, but not connected to any negatively charged atom. To avoid azido and nitro groups being counted.
+        pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4!$([#7+]~[*-])]")
         at_matches = m.GetSubstructMatches(pattern)
-       
+
         at_matches_list = [y[0] for y in at_matches]
+
         for v in at_matches_list:
             net_Qs.append( (1,smi) )
     
@@ -359,11 +362,13 @@ def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
         
         if na == 0 and nb != 0:
             #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = charge_tol * nb
+            #refcharge = charge_tol * nb
+            refcharge = charge_tol * nb + constat_q
 
         elif nb == 0 and na != 0:
             #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = -charge_tol * na
+            #refcharge = -charge_tol * na
+            refcharge = -charge_tol * na + constant_q
 
         else:
             refcharge = 0.0
@@ -626,6 +631,22 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
             Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = molecule_constant_charge)
             #print( "Q at pH7.4 ACDlabs %4.1f" % (Q) )
 
+
+
+#           na=len(acid_pkas)+len(diacid_pkas)
+#           nb=len(base_pkas)
+#           if na == 0 and nb != 0:
+#               #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
+#               #refcharge = charge_tol * nb
+#               refcharge = charge_tol * nb + constat_q
+
+#           elif nb == 0 and na != 0:
+#               #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
+#               #refcharge = -charge_tol * na
+#               refcharge = -charge_tol * na + constant_q
+
+
+
             pI_dict[pKaset] = pI
             Q_dict[pKaset] = Q
             pH_Q_dict[pKaset] = pH_Q
@@ -661,9 +682,10 @@ def calc_pIChemiSt(options={'smiles':'','inputDict':{},'inputJSON':'','inputFile
                 #interval = (pH_int[0], pH_int[-1])
                 interval_low_l.append(pH_int[0])
                 interval_high_l.append(pH_int[-1])
-            #else:
-            #    interval_low.append(float('NaN'))
-            #    interval_low.append(float('NaN'))
+            
+            elif len(pH_int) == 0:
+                interval_low_l.append(pH[0])
+                interval_high_l.append(pH[-1])
            
         if len(interval_low_l)>0:
             interval_low = mean(interval_low_l)
