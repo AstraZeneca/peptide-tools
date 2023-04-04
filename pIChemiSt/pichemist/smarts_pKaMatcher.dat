@@ -1,0 +1,158 @@
+### NOTICE: this file is based on "sites_substructures.smarts" file
+### * 2022-07-15 - compressed imidazole smarts 
+###              - split amines into primary, secondary, tertiary
+###              - change carboxylic acid value to ACDlab prediction
+###              - added mono- and di-halogenated phenols
+### * 2022-07-11 - added smarts patters to match tetrazole, substituted phenol, 
+###                substituted imidazoles, pyridines. Use pKa values predicted by 
+###                ACDlabs GALAS method.
+###              - fixed most of smarts patters such that they explicit hydrogens 
+###                compressed to heavy atom definition. Otherwise match did not work.
+###              - removed very generic definitions, like, aromatic N deprotonated
+###                as they hit too many unwanted structures.
+### * 2020-09-11 added last column with acid-base classification.
+
+#name SMARTS atom_idx pka pka_std dissociation_type ... (repeat last 4 for the next ionization centre)
+
+# 1,2-diOH-benzene
+12-diOH-Phenol [OH1][c]1[c](-[O])[c][c][c][c]1  1  9.3  0.4 acid 4 13.0 0.4 acid 
+13-diOH-Phenol [OH1][c]1[c][c](-[O])[c][c][c]1  1  8.9  0.4 acid 5 11.3 0.5 acid
+14-diOH-Phenol [OH1][c]1[c][c][c](-[O])[c][c]1  1  9.6  0.4 acid 6 11.5 0.5 acid
+
+# 2-NO2-Phe
+2-NO2-Phenol [OH1][c]1[c](-[N](=[O])[O])[c][c][c][c]1  1  7.2  0.4 acid
+
+# monohalogentaed phenols in 2 position
+2-Hal-Phenol [OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][cH1,!$(c-[F,Cl,Br,I]):7]1 1 8.3 0.4 acid
+
+# di-halogented phenols in 2,5 positions
+2-Hal-Phenol [OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][$(c-[F,Cl,Br,I]):7]1 1 6.6 0.4 acid
+
+# Tyrosine-like phenol
+Phenol [OH1:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1  1  9.7  0.4 acid
+#Phenol	[c,n,o:1]-[OH1:2]	1	7.065359866910526	3.277356122295936  acid
+
+# 2F-imidazole
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][c][cH1,$(c-[#6])]1      5 3.6 0.4 base   1 10.9 0.4 acid
+2F-Imidazole [nH1,$(n-[#6])]1[c](-[F])[nH0][cH1,$(c-[#6])][c]1      5 3.6 0.4 base   1 10.9 0.4 acid
+
+# Ionizable imidazole including substitutions. Not allowing fsed rings like benzimidazole. 
+Imidazole [nH1,$(n-[#6])]1[c][nH0][c][cH1,$(c-[#6])]1      4 6.8 0.6 base 
+Imidazole [nH1,$(n-[#6])]1[c][nH0][cH1,$(c-[#6])][c]1      4 6.8 0.6 base 
+
+# Ionizable pyridine including substitutions
+Pyridine  [nX2:1]1[c:2][c:3][c:4][c:5][c:6]1 1 4.9 0.1 base
+
+# multiple entries for tetrazole tautomers and ionization states
+Tetrazole  [nH1r5:1][nH0r5:2][nH0r5:3][nH0r5:4][cH0r5:5]  1   5.3 0.4 acid
+Tetrazole  [nH1r5:1][nH0r5:2][cH0r5:3][nH0r5:4][nH0r5:5]  1   5.3 0.4 acid
+
+Azide	[N+0:1]=[N+:2]=[N+0H1:3]	2	4.65	0.07    acid
+Nitro	[C,c,N,n,O,o:1]-[NX3:2](=[O:3])-[OH1:4]	3	-1000.0	0   acid
+
+# NitroGuanidine special case
+NO2Guanidine	[N:1]-[C:2](=[NX2:3])-[N:4]-[N:5](=[O:6])-[O:7]	3 -0.8 0.4  base
+
+# Canavanine special case
+OGuanidine	[O:1]-[N:2]-[C:3](=[NX2:4])-[N:5]	4 7.4 0.4  base
+OGuanidine      [O:1]-[N:2]=[C:3](-[N:4])-[N:5]         4 7.4 0.4  base
+
+# Change so it matches substitued guanidines
+#AmidineGuanidine1	[N:1]-[C:2](-[N:3])=[NX2H1:4]	3	12.025333333333334	1.5941046150769165   base
+AmidineGuanidine1	[N:1]-[C:2](-[N:3])=[NX2:4]	3	12.03	1.59   base
+AmidineGuanidine2	[C:1](-[N:2])=[NX2+0:3]	        2	10.04	2.13  base
+
+Sulfate	[SX4:1](=[O:2])(=[O:3])([O:4]-[C,c,N,n:5])-[OX2H1:6]	5	-2.36	1.30  acid
+Sulfonate	[SX4:1](=[O:2])(=[O:3])(-[C,c,N,n:4])-[OX2H1:5]	4	-1.82	1.41  acid
+Sulfinic_acid	[SX3:1](=[O:2])-[OH1:3]	2	1.79	0.44  acid
+Phenyl_carboxylic_acid	[c,n,o:1]-[C:2](=[O:3])-[OH1:4]	3	3.46	1.25  acid
+
+# too high uncertainty. Change to aliphatic caboxylic acid value from ACDlabs
+#Carboxylic_acid [CX3](=O)[OX2H1] 2 4.8 1.3 acid  # aliphatic ACDlabs
+Carboxylic_acid [CX3](=O)[OX2H1] 2 3.46	1.29  acid
+
+Thioic_acid	[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]	2	0.68	1.50  acid
+Phenyl_Thiol	[c,n:1]-[SX2H1:2]	1	4.98	2.61 acid
+Thiol	[C,N:1]-[SX2H1:2]	1	9.12	1.33  acid
+
+# [*]OP(=O)(O[H])O[H]. Note that this matches terminal phosphate of ATP, ADP, AMP.
+Phosphate	[PX4:1](=[O:2])(-[OX2H1:3])(-[O+0:4])-[OX2H1:5]	2	2.42	1.11	acid 5	6.51	0.95  acid
+
+# Note that Internal_phosphate_polyphos_chain and
+# Initial_phosphate_like_in_ATP_ADP were added on 6/2/2020 to better detail with
+# molecules that have polyphosphate chains (e.g., ATP, ADP, NADH, etc.). Unlike
+# the other protonation states, these two were not determined by analyzing a set
+# of many compounds with experimentally determined pKa values.
+
+# For Internal_phosphate_polyphos_chain, we use a mean pKa value of 0.9, per
+# DOI: 10.7554/eLife.38821. For the precision value we use 1.0, which is roughly
+# the precision of the two ionizable hydroxyls from Phosphate (see above). Note
+# that when using recursive SMARTS strings, RDKit considers only the first atom
+# to be a match. Subsequent atoms define the environment.
+Internal_phosphate_polyphos_chain	[$([PX4:1](=O)([OX2][PX4](=O)([OX2])(O[H]))([OX2][PX4](=O)(O[H])([OX2])))][OH1:2]	1	0.9	1.0  acid
+
+# For Initial_phosphate_like_in_ATP_ADP, we use the same values found for the
+# lower-pKa hydroxyl of Phosphate (above).
+Initial_phosphate_like_in_ATP_ADP	[$([PX4:1]([OX2][C,c,N,n])(=O)([OX2][PX4](=O)([OX2])(O[H])))][OH1]	1	2.42	1.11 acid
+
+# [*]P(=O)(O[H])O[H]. Cannot match terminal phosphate of ATP because O not among [C,c,N,n]
+Phosphonate	[PX4:1](=[O:2])(-[OX2H1:3])(-[C,c,N,n:4])-[OX2H1:5]	2	1.88	0.59	acid 5	7.25	0.85  acid
+
+
+Peroxide1	[O:1]([$(C=O),$(C[Cl]),$(CF),$(C[Br]),$(CC#N):2])-[OH1:3]	2	8.74	0.76  acid
+Peroxide2	[C:1]-[O:2]-[OH1:3]	2	11.98	0.87  acid
+O=C-C=C-OH	[O:1]=[C;R:2]-[C;R:3]=[C;R:4]-[OH1:5]	4	3.55	0.80  acid
+Vinyl_alcohol	[C:1]=[C:2]-[OH1:3]	2	8.87	1.66 acid
+
+# Too high value to consider 
+#Alcohol	[C:1]-[OH1:2]	1	14.780384615384616	2.546464970533435 acid
+N-hydroxyamide	[C:1](=[O:2])-[N:3]-[OH1:4]	3	9.30	1.22  acid
+Ringed_imide1	[O,S:1]=[C;R:2]([$([#8]),$([#7]),$([#16]),$([#6][Cl]),$([#6]F),$([#6][Br]):3])-[NH1;RH1:4]([C;R:5]=[O,S:6])	3	6.45	0.56  acid
+Ringed_imide2	[O,S:1]=[C;R:2]-[NH1;RH1:3]([C;R:4]=[O,S:5])	2	8.68	1.87  acid
+Imide	[F,Cl,Br,S,s,P,p:1][#6:2][CX3:3](=[O,S:4])-[NX3H1+0:5]([CX3:6]=[O,S:7])	4	2.47	1.48  acid
+Imide2	[O,S:1]=[CX3:2]-[NX3H1+0:3]([CX3:4]=[O,S:5])	2	10.23	1.12  acid
+Amide_electronegative	[C:1](=[O:2])-[NH1:3](-[Br,Cl,I,F,S,O,N,P:4])	2	3.49	2.69  acid
+
+# to avoid matching of nonionizable amides after
+TertiaryAmide	[C:1](=[O:2])-[NH0:3]	3	-1.1	0.5  base
+Amide	[C:1](=[O:2])-[NH1:3]	3	12.01	4.51  acid
+
+Sulfonamide	[SX4:1](=[O:2])(=[O:3])-[NX3H1+0:4]	3	7.92	1.98  acid
+Anilines_primary	[c:1]-[NX3+0H2:2]	2	3.90	2.07  base
+Anilines_secondary	[c:1]-[NX3+0H1:2]	2	4.34	2.18  base
+Anilines_tertiary	[c:1]-[NX3+0H0:2]	2	4.17	2.01  base
+
+
+# Hydroxylamines
+Hydroxylamine [NX3+0;H2,H1,H0;!$(NC=[!#6]);!$(NC#[!#6]);!$(N=[!#6]):1][#8:2]	1 4.4 0.4 base
+
+# Electron poor aliphatic amines. Common case of N-terminus of peptide backbone. pKa of CC(=O)C(C)N
+Amines_aliph_epoor [NX3+0;$(NCC=[!#6]);!$(NC=[!#6]);!$(NC#[!#6]):1]-[#6:2] 1 7.9 0.3 base
+
+# Amines. Should be after anilines. From ACDlabs GALAS
+Amines_primary   [NX3+0;H2;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.4 0.4  base
+Amines_secondary [NX3+0;H1;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.8 0.4  base
+Amines_tertiary  [NX3+0;H0;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2] 1 10.0 0.4  base
+#Amines_primary_secondary_tertiary	[C:1]-[NX3+0:2]	1	8.159107682388349	2.5183597445318147   base
+
+# e.g., [*]P(=O)(O[H])[*]. Note that cannot match the internal phosphates of ATP, because
+# oxygen is not among [C,c,N,n,F,Cl,Br,I]  
+Phosphinic_acid	[PX4:1](=[O:2])(-[C,c,N,n,F,Cl,Br,I:3])(-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:5]	4	2.97	0.69  acid
+
+# e.g., [*]OP(=O)(O[H])O[*]. Cannot match ATP because P not among [C,c,N,n,F,Cl,Br,I]  
+Phosphate_diester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[O+0:5]-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:6]	6	2.73	2.54  acid
+
+# e.g., [*]P(=O)(O[H])O[*]. Cannot match ATP because O not among [C,c,N,n,F,Cl,Br,I].
+Phosphonate_ester	[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[C,c,N,n,F,Cl,Br,I:5])-[OX2H1:6]	5	2.09	0.45   acid
+
+### Should be base according to ACD
+#Primary_hydroxyl_amine	[C,c:1]-[O:2]-[NH2:3]	2	4.035714285714286	0.8463816543155368  base
+
+### Too high number, just skip
+#Indole_pyrrole	[c;R:1]1[c;R:2][c;R:3][c;R:4][nH1;R:5]1	4	14.52875	4.06702491591416  acid
+
+### too generic. e.g. matches 3 nitrogens of tetrazole
+#Aromatic_nitrogen_unprotonated	[n+0&H0:1]	0	4.3535441240733945	2.0714072661859584  base
+#Aromatic_nitrogen_protonated	[n:1]-[H]	0	7.17	2.94602395490212    acid
+
+
