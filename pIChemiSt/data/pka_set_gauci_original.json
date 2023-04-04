@@ -1,0 +1,323 @@
+{
+  "name": "Gauci",
+  "values": {
+    "acidic": {
+      "D": [
+        {
+          "position": "primary",
+          "value": 4.05
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.05
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.05
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 9.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 9.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 9.0
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 4.45
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.45
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.45
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 10.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 10.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 10.0
+        }
+      ],
+      "U": [
+        {
+          "position": "primary",
+          "value": 5.43
+        },
+        {
+          "position": "n-terminal",
+          "value": 5.2
+        },
+        {
+          "position": "c-terminal",
+          "value": 5.6
+        }
+      ]
+    },
+    "basic": {
+      "R": [
+        {
+          "position": "primary",
+          "value": 12.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 12.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 12.0
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 5.98
+        },
+        {
+          "position": "n-terminal",
+          "value": 5.98
+        },
+        {
+          "position": "c-terminal",
+          "value": 5.98
+        }
+      ],
+      "K": [
+        {
+          "position": "primary",
+          "value": 10.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 10.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 10.0
+        }
+      ]
+    },
+    "terminus_ionizable": {
+      "A": [
+        {
+          "position": "primary",
+          "value": 7.59
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "N": [
+        {
+          "position": "primary",
+          "value": 6.7
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "D": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.55
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 6.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 7.7
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.75
+        }
+      ],
+      "Q": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "G": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "I": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "L": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "K": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "M": [
+        {
+          "position": "primary",
+          "value": 7.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "F": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "P": [
+        {
+          "position": "primary",
+          "value": 8.3599
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "S": [
+        {
+          "position": "primary",
+          "value": 6.93
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "T": [
+        {
+          "position": "primary",
+          "value": 6.82
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "W": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ],
+      "V": [
+        {
+          "position": "primary",
+          "value": 7.44
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.55
+        }
+      ]
+    }
+  }
+}

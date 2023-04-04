@@ -5,6 +5,7 @@
 
 import sys
 import optparse
+import json
 
 #import numpy as np
 #import pylab
@@ -13,6 +14,24 @@ import optparse
 #from json import encoder
 #encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 
+
+# Conversion maps
+
+pka_json_type_matching = {
+     "acidic": "pKa_acidic",
+     "basic": "pKa_basic",
+     "terminus_ionizable": "pKa_TerminusIonizableGroup"
+}
+
+pka_json_indices = {
+     "primary": 0,
+     "n-terminal": 1,
+     "c-terminal": 2
+}
+
+def invert_dict(my_map):
+    inv_map = {v: k for k, v in my_map.items()}
+    return inv_map
 
 ######
 ###### Some global definitions
@@ -304,61 +323,30 @@ for pKaset in pKa_sets_short.keys():
     ConvertpKaSetIntoProMoSTformat(pKaset)
 
 
-### Calibrated ExPASY - from Gauci et al. Proteomics 2008, 8, 4898 as implemented in pIR
-SetName='Gauci'
+def read_json_set(filepath):
+    # Read in
+    with open(filepath) as f:
+        data = json.load(f)
+    
+    # print(pka_set)
+    old_dict = dict()
+    values = data["values"]
+    for new_name, original_name in pka_json_type_matching.items():
+        # print(new_name)
+        old_dict[original_name] = {}
+        pka_type_set = values[new_name]
+        for aa, values_list in pka_type_set.items():
+            old_values = list()
+            for val_obj in values_list:
+                pka = val_obj["value"]
+                old_values.append(pka)
+            old_dict[original_name][aa] = old_values
+    return old_dict
 
-# Acidic_Amino_Acids
-#             AA    Primary  N-Terminal  C-Terminal
-pKa_acidic1 = { 
- "D": [ 4.05, 4.05, 4.05 ],
- "C": [ 9.0 , 9.0 , 9.0  ],
- "E": [ 4.45, 4.45, 4.45 ],
- "Y": [ 10.0, 10.0, 10.0 ], 
- 'U': [ 5.43, 5.20, 5.60 ]  # pK for U was taken from Byun et al. Biopolymers 2011, 95, 345
-}
-
-
-# Basic_Amino_Acids
-#             AA    Primary  N-Terminal  C-Terminal
-pKa_basic1 = { 
- "R": [ 12.0, 12.0, 12.0 ],
- "H": [ 5.98, 5.98, 5.98 ],
- "K": [ 10.0, 10.0, 10.0 ]
-}
-
-
-# Terminal_Amino_Acids
-# AA N-term  C-Term
-pKa_TerminusIonizableGroup1 = { 
- "A": [  7.59,   3.55 ], 
- "R": [  7.5,    3.55 ], 
- "N": [  6.7,    3.55 ], 
- "D": [  7.5,    4.55 ], 
- "C": [  6.5,    3.55 ], 
- "E": [  7.7,    4.75 ], 
- "Q": [  7.5,    3.55 ], 
- "G": [  7.5,    3.55 ], 
- "H": [  7.5,    3.55 ], 
- "I": [  7.5,    3.55 ], 
- "L": [  7.5,    3.55 ], 
- "K": [  7.5,    3.55 ], 
- "M": [  7.0,    3.55 ], 
- "F": [  7.5,    3.55 ], 
- "P": [  8.3599, 3.55 ],
- "S": [  6.93,   3.55 ], 
- "T": [  6.82,   3.55 ], 
- "W": [  7.5,    3.55 ], 
- "Y": [  7.5,    3.55 ], 
- "V": [  7.44,   3.55 ]   
-}
-
-
-PKA_SETS[SetName]={
- 'pKa_acidic': pKa_acidic1,
- 'pKa_basic': pKa_basic1,
- 'pKa_TerminusIonizableGroup': FillMissingAAtopKa_TerminusIonizableGroup(pKa_TerminusIonizableGroup1)
-}
-
+### Read Gauci from data file
+filepath = "data/pka_set_gauci_refined.json"
+gauci = read_json_set(filepath)
+PKA_SETS["Gauci"] = gauci
 
 
 ###
@@ -414,100 +402,43 @@ PKA_SETS['ProMoST']={
 }
 
 
-#Ala	A	Alanine
-#Arg	R	Arginine
-#Asn	N	Asparagine
-#Asp	D	Aspartic acid
-#Cys	C	Cysteine
-#Gln	Q	Glutamine
-#Glu	E	Glutamic acid
-#Gly	G	Glycine
-#His	H	Histidine
-#Ile	I	Isoleucine
-#Leu	L	Leucine
-#Lys	K	Lysine
-#Met	M	Methionine
-#Phe	F	Phenylalanine
-#Pro	P	Proline
-#Pyl	O	Pyrrolysine
-#Ser	S	Serine
-#Sec	U	Selenocysteine
-#Thr	T	Threonine
-#Trp	W	Tryptophan
-#Tyr	Y	Tyrosine
-#Val	V	Valine
-#Asx	B	Aspartic acid or Asparagine
-#Glx	Z	Glutamic acid or Glutamine
-#Xaa	X	Any amino acid
-#Xle	J	Leucine or Isoleucine
-#TERM		termination codon
-
-pka_json_type_matching = {
-     "acidic": "pKa_acidic",
-     "basic": "pKa_basic",
-     "terminus_ionizable": "pKa_TerminusIonizableGroup"
-}
-
-pka_json_indices = {
-     "primary": 0,
-     "n-terminal": 1,
-     "c-terminal": 2
-}
-
-def invert_dict(my_map):
-    inv_map = {v: k for k, v in my_map.items()}
-    return inv_map
-
 if __name__ == '__main__':
     #  print(PKA_SETS)
     # print(PKA_SETS[SetName])
 
     # Write out
-    pka_set = PKA_SETS[SetName]
-    pka_dict = dict()
-    pka_dict["name"] = SetName
-    # pka_values
-    values = {
-         "acidic": {},
-         "basic": {},
-         "terminus_ionizable": {}
-    }
-    pka_dict["values"] = values
-    for new_name, original_name in pka_json_type_matching.items():
-        pka_type_set = pka_set[original_name]
-        print(values[new_name])
-        for aa, value_list in pka_type_set.items():
-            new_values = list()
-            for i in range(len(value_list)):
-                pka = value_list[i]
-                position = invert_dict(pka_json_indices)[i]
-                new_values.append({
-                    "position": position,
-                    "value": pka
-                })
-            values[new_name][aa] = new_values
+    # pka_set = PKA_SETS[SetName]
+    # pka_dict = dict()
+    # pka_dict["name"] = SetName
+    # # pka_values
+    # values = {
+    #      "acidic": {},
+    #      "basic": {},
+    #      "terminus_ionizable": {}
+    # }
+    # pka_dict["values"] = values
+    # for new_name, original_name in pka_json_type_matching.items():
+    #     pka_type_set = pka_set[original_name]
+    #     for aa, value_list in pka_type_set.items():
+    #         new_values = list()
+    #         for i in range(len(value_list)):
+    #             pka = value_list[i]
+    #             position = invert_dict(pka_json_indices)[i]
+    #             new_values.append({
+    #                 "position": position,
+    #                 "value": pka
+    #             })
+    #         values[new_name][aa] = new_values
     
-    import json
-    with open("data/gauci_pka_set.json", "w") as f:
-        json.dump(pka_dict, f, indent=2)
+    # filepath = "data/pka_set_gauci_refined.json"
+    # with open(filepath, "w") as f:
+    #     json.dump(pka_dict, f, indent=2)
     # print(pka_dict)
 
-    # Read in
-    with open("data/gauci_pka_set.json") as f:
-        data = json.load(f)
-    
-    # print(pka_set)
-    old_dict = dict()
-    values = data["values"]
-    for new_name, original_name in pka_json_type_matching.items():
-        # print(new_name)
-        old_dict[original_name] = {}
-        pka_type_set = values[new_name]
-        for aa, values_list in pka_type_set.items():
-            old_values = list()
-            for val_obj in values_list:
-                pka = val_obj["value"]
-                old_values.append(pka)
-            old_dict[original_name][aa] = old_values
-        
+    # old_dict = read_json_set(filepath)
+    # print(old_dict)
+
+    # TODO: Ensure that pka_set_gauci_refined = FillMissingAAtopKa_TerminusIonizableGroup(pka_set_gauci_original)
+
+    # old_dict["pKa_TerminusIonizableGroup"] = FillMissingAAtopKa_TerminusIonizableGroup(old_dict["pKa_TerminusIonizableGroup"])
     assert pka_set == old_dict
