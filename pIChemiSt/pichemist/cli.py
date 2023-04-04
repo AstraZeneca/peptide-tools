@@ -573,7 +573,7 @@ def calc_pIChemiSt(options={"smiles": "",
 
         interval_low_l = []
         interval_high_l = []
-        for pKaset in pKa_sets_to_use:
+        for pKaset in PKA_SETS_NAMES:
             pH_Q = pH_Q_dict[pKaset]
             Q=pH_Q[:,1]
             pH=pH_Q[:,0]
