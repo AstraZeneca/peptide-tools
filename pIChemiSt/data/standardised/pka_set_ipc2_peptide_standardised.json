@@ -1,0 +1,349 @@
+{
+  "name": "IPC2_peptide",
+  "values": {
+    "acidic": {
+      "D": [
+        {
+          "position": "primary",
+          "value": 3.969
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.969
+        },
+        {
+          "position": "c-terminal",
+          "value": 3.969
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 4.507
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.507
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.507
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 9.439
+        },
+        {
+          "position": "n-terminal",
+          "value": 9.439
+        },
+        {
+          "position": "c-terminal",
+          "value": 9.439
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 9.153
+        },
+        {
+          "position": "n-terminal",
+          "value": 9.153
+        },
+        {
+          "position": "c-terminal",
+          "value": 9.153
+        }
+      ]
+    },
+    "basic": {
+      "K": [
+        {
+          "position": "primary",
+          "value": 8.165
+        },
+        {
+          "position": "n-terminal",
+          "value": 8.165
+        },
+        {
+          "position": "c-terminal",
+          "value": 8.165
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 11.493
+        },
+        {
+          "position": "n-terminal",
+          "value": 11.493
+        },
+        {
+          "position": "c-terminal",
+          "value": 11.493
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 6.439
+        },
+        {
+          "position": "n-terminal",
+          "value": 6.439
+        },
+        {
+          "position": "c-terminal",
+          "value": 6.439
+        }
+      ]
+    },
+    "terminus_ionizable": {
+      "G": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "A": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "S": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "P": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "V": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "T": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "I": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "L": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "N": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "D": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "Q": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "K": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "M": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "F": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "W": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "X": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "Z": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "B": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ],
+      "U": [
+        {
+          "position": "primary",
+          "value": 7.947
+        },
+        {
+          "position": "n-terminal",
+          "value": 2.977
+        }
+      ]
+    }
+  }
+}

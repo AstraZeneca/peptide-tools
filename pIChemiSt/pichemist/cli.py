@@ -5,12 +5,6 @@ import os.path
 import math
 import subprocess
 
-# TODO: Configure permanent path for pichemist module
-import sys
-this_script_dir = os.path.dirname(os.path.realpath(__file__))
-print(this_script_dir)
-sys.path.insert(0, f"{this_script_dir}/..")
-
 # TODO: Explicit imports 
 from numpy import *
 from matplotlib.pyplot import *

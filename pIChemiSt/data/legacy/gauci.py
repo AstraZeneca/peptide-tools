@@ -3,7 +3,7 @@ SetName='Gauci'
 
 # Acidic_Amino_Acids
 #             AA    Primary  N-Terminal  C-Terminal
-pKa_acidic1 = { 
+acidic1 = { 
  "D": [ 4.05, 4.05, 4.05 ],
  "C": [ 9.0 , 9.0 , 9.0  ],
  "E": [ 4.45, 4.45, 4.45 ],
@@ -14,7 +14,7 @@ pKa_acidic1 = {
 
 # Basic_Amino_Acids
 #             AA    Primary  N-Terminal  C-Terminal
-pKa_basic1 = { 
+basic1 = { 
  "R": [ 12.0, 12.0, 12.0 ],
  "H": [ 5.98, 5.98, 5.98 ],
  "K": [ 10.0, 10.0, 10.0 ]
@@ -23,7 +23,7 @@ pKa_basic1 = {
 
 # Terminal_Amino_Acids
 # AA N-term  C-Term
-pKa_TerminusIonizableGroup1 = { 
+terminus_ionizable1 = { 
  "A": [  7.59,   3.55 ], 
  "R": [  7.5,    3.55 ], 
  "N": [  6.7,    3.55 ], 

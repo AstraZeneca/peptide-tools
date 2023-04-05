@@ -1,0 +1,349 @@
+{
+  "name": "Toseland",
+  "values": {
+    "acidic": {
+      "D": [
+        {
+          "position": "primary",
+          "value": 3.6
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.6
+        },
+        {
+          "position": "c-terminal",
+          "value": 3.6
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 4.29
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.29
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.29
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 6.87
+        },
+        {
+          "position": "n-terminal",
+          "value": 6.87
+        },
+        {
+          "position": "c-terminal",
+          "value": 6.87
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 9.61
+        },
+        {
+          "position": "n-terminal",
+          "value": 9.61
+        },
+        {
+          "position": "c-terminal",
+          "value": 9.61
+        }
+      ]
+    },
+    "basic": {
+      "K": [
+        {
+          "position": "primary",
+          "value": 10.45
+        },
+        {
+          "position": "n-terminal",
+          "value": 10.45
+        },
+        {
+          "position": "c-terminal",
+          "value": 10.45
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 12.0
+        },
+        {
+          "position": "n-terminal",
+          "value": 12.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 12.0
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 6.33
+        },
+        {
+          "position": "n-terminal",
+          "value": 6.33
+        },
+        {
+          "position": "c-terminal",
+          "value": 6.33
+        }
+      ]
+    },
+    "terminus_ionizable": {
+      "G": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "A": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "S": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "P": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "V": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "T": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "I": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "L": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "N": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "D": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "Q": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "K": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "M": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "F": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "W": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "X": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "Z": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "B": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ],
+      "U": [
+        {
+          "position": "primary",
+          "value": 8.71
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.19
+        }
+      ]
+    }
+  }
+}

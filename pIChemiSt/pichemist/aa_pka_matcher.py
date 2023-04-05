@@ -33,12 +33,12 @@ def _match_d_capped_aa(smiles,
 
                 # ANDREY: the iterator is not used
                 # for _ in range(nhits):
-                if aa in pka_set['pKa_basic'].keys():
-                    pka_basic = pka_set['pKa_basic'][aa][0]
-                    base_pka_fast_dict[n].append([pka_basic, aa])
+                if aa in pka_set['basic'].keys():
+                    basic = pka_set['basic'][aa][0]
+                    base_pka_fast_dict[n].append([basic, aa])
 
-                if aa in pka_set['pKa_acidic'].keys():
-                    pka_acid = pka_set['pKa_acidic'][aa][0]
+                if aa in pka_set['acidic'].keys():
+                    pka_acid = pka_set['acidic'][aa][0]
                     acid_pka_fast_dict[n].append([pka_acid, aa]) 
             return True
     return False
@@ -71,9 +71,9 @@ def get_aa_pkas(smi_list):
                 for name in PKA_SETS_NAMES:
                     pka_set = PKA_SETS[name]
                     for i in range(nhits):
-                        if aa in pka_set['pKa_basic'].keys(): base_pka_fast_dict[name].append( [ pka_set['pKa_basic'][aa][1] , aa ] )
-                        if aa in pka_set['pKa_acidic'].keys(): acid_pka_fast_dict[name].append( [ pka_set['pKa_acidic'][aa][1] , aa ] ) 
-                        base_pka_fast_dict[name].append( [ pka_set['pKa_TerminusIonizableGroup'][aa][0], aa+'_N-term' ])  # N-terminus
+                        if aa in pka_set['basic'].keys(): base_pka_fast_dict[name].append( [ pka_set['basic'][aa][1] , aa ] )
+                        if aa in pka_set['acidic'].keys(): acid_pka_fast_dict[name].append( [ pka_set['acidic'][aa][1] , aa ] ) 
+                        base_pka_fast_dict[name].append( [ pka_set['terminus_ionizable'][aa][0], aa+'_N-term' ])  # N-terminus
                 match=True
                 #print(aa)
                 break
@@ -85,9 +85,9 @@ def get_aa_pkas(smi_list):
                 for name in PKA_SETS_NAMES:
                     pka_set = PKA_SETS[name]
                     for i in range(nhits):
-                        if aa in pka_set['pKa_basic'].keys(): base_pka_fast_dict[name].append( [ pka_set['pKa_basic'][aa][2] , aa ] )
-                        if aa in pka_set['pKa_acidic'].keys(): acid_pka_fast_dict[name].append( [ pka_set['pKa_acidic'][aa][2] , aa ] ) 
-                        acid_pka_fast_dict[name].append( [ pka_set['pKa_TerminusIonizableGroup'][aa][1], aa+'_C-term' ])  # C-terminus
+                        if aa in pka_set['basic'].keys(): base_pka_fast_dict[name].append( [ pka_set['basic'][aa][2] , aa ] )
+                        if aa in pka_set['acidic'].keys(): acid_pka_fast_dict[name].append( [ pka_set['acidic'][aa][2] , aa ] ) 
+                        acid_pka_fast_dict[name].append( [ pka_set['terminus_ionizable'][aa][1], aa+'_C-term' ])  # C-terminus
                 match=True
                 #print(aa)
                 break
