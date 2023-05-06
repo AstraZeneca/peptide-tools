@@ -8,16 +8,22 @@ import subprocess
 # TODO: Explicit imports 
 from numpy import *
 from matplotlib.pyplot import *
-from pka_sets_fasta import *
+
 
 
 from itertools import cycle
 from rdkit import Chem
 
-from pichemist.aa_pka_matcher import get_aa_pkas
 from pichemist.io import read_structure_file
 from pichemist.molecule import standardize_molecule
 from pichemist.molecule import break_amide_bonds_and_cap
+from pichemist.fasta.pka_matcher import get_aa_pkas_for_list
+from pichemist.fasta.pka_sets import *
+
+from pichemist.stats import mean
+from pichemist.stats import stddev
+from pichemist.stats import stderr
+
 
 from rdkit import RDLogger
 RDLogger.DisableLog("rdApp.info")
@@ -371,28 +377,6 @@ def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     return pH_Q
 
 
-def mean(lst):
-    """calculates mean"""
-    return sum(lst) / len(lst)
-
-def stddev(lst):
-    """returns the standard deviation of lst"""
-    mn = mean(lst)
-    variance = sum([(e-mn)**2 for e in lst])
-    return math.sqrt(variance)
-
-def stddev(lst):
-    """returns the standard deviation of lst"""
-    mn = mean(lst)
-    variance = sum([(e-mn)**2 for e in lst])
-    return math.sqrt(variance)
-
-def stderr(lst):
-    """returns the standard error of the mean of lst"""
-    mn = mean(lst)
-    variance = sum([(e-mn)**2 for e in lst])
-    return math.sqrt(variance) / math.sqrt(len(lst))
-
 def print_output_prop_dict(prop_dict,prop,l_print_pka_set=False):
     global tit
     lj=12
@@ -504,23 +488,27 @@ def calc_pIChemiSt(options={"smiles": "",
     dict_output={}
 
     for mol_idx in dict_input.keys():
+        # Prepare molecule and break into fragments
         mol_name = dict_input[mol_idx]['mol_name']    
         mol = dict_input[mol_idx]['mol_obj']    
         mol = standardize_molecule(mol)
         frags_smi_list = break_amide_bonds_and_cap(mol)
+        # print(frags_smi_list)
 
-        # match known amino-acids with defined pKas
-        unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas(frags_smi_list)
+        # Match known pKas from FASTA definitions
+        unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas_for_list(frags_smi_list)
         # print(unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta)
+        # print(unknown_frags)
         # print(base_pkas_fasta)
         # exit(0)
 
         # caclulate pKas for unknown fragmets
-        if len(unknown_frags) > 0: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs,use_pkamatcher=args.use_pkamatcher)
-        else: base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_Qs = [],[],[],[]
+        if len(unknown_frags) > 0:
+            base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = calc_pkas(unknown_frags,use_acdlabs=args.use_acdlabs, use_pkamatcher=args.use_pkamatcher)
+        else:
+            base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = [],[],[],[]
 
         # loop over all pKa sets
-        seq_dict={}
         pI_dict={}
         Q_dict={}
         pH_Q_dict={}

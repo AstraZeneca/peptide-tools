@@ -1,5 +1,5 @@
 # module with hardcoded smarts of capped aminoacids 
-D_cappedAA_smarts = {
+d_capped_aa_smarts = {
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)C([H])([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)C([H])([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)C([H])([H])[H])C([H])([H])C([H])([H])C([H])([H])N=C(N([H])[H])N([H])[H]':   'R',
@@ -67,7 +67,7 @@ D_cappedAA_smarts = {
 }
 
 
-D_NtermfreeAA_smarts = {
+d_nterm_free_aa_smarts = {
 '[H]C([H])([H])C(=O)C([H])(N([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)C([H])(N([H])[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)C([H])(N([H])[H])C([H])([H])C([H])([H])C([H])([H])N=C(N([H])[H])N([H])[H]':   'R',
@@ -134,7 +134,7 @@ D_NtermfreeAA_smarts = {
 '[H]C([H])([H])C(=O)C([H])([N+]([H])([H])[H])C([H])(C([H])([H])[H])C([H])([H])C([H])([H])[H]':   'I'
 }
 
-D_CtermfreeAA_smarts = {
+d_cterm_free_aa_smarts = {
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)O[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)O[H])C([H])([H])C([H])([H])C([H])([H])N([H])C(=N[H])N([H])[H]':   'R',
 '[H]C([H])([H])C(=O)N([H])C([H])(C(=O)O[H])C([H])([H])C([H])([H])C([H])([H])N=C(N([H])[H])N([H])[H]':   'R',

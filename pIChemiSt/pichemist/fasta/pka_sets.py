@@ -153,10 +153,12 @@ def create_logic_set_from_standardised_json(filepath):
             logic_set[original_name][aa] = value_list
     return logic_set, data["name"]
 
+
 # Get the root dir of the software repo
 import os
 root_dir = os.path.dirname(
-    os.path.dirname(os.path.realpath(__file__)))
+    os.path.dirname(
+    os.path.dirname(os.path.realpath(__file__))))
 
 # Get all the pKa file paths
 standardised_pka_sets_dir = f"{root_dir}/data/standardised"
