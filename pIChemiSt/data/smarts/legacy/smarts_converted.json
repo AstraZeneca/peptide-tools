@@ -1,9 +1,4 @@
 {
-    "notes": {
-        "2022-07-15": "compressed imidazole smarts; split amines into primary, secondary, tertiary; change carboxylic acid value to ACDlab prediction; added monoand di-halogenated phenols",
-        "2022-07-11": "added smarts patters to match tetrazole, substituted phenol, substituted imidazoles, pyridines. Use pKa values predicted by ACDlabs GALAS method; fixed most of smarts patters such that they explicit hydrogens compressed to heavy atom definition, otherwise match did not work; removed very generic definitions, like, aromatic N deprotonated as they hit too many unwanted structures",
-        "2020-09-11": "added last column with acid-base classification"
-    },
     "smarts": {
         "[OH1][c]1[c](-[O])[c][c][c][c]1": {
             "name": "12-diOH-Phenol",
@@ -15,7 +10,7 @@
                     "type": "acid"
                 },
                 {
-                    "pka": 13,
+                    "pka": 13.0,
                     "pka_std": 0.4,
                     "idx": 4,
                     "type": "acid"
@@ -204,8 +199,8 @@
             "name": "Nitro",
             "data": [
                 {
-                    "pka": -1000,
-                    "pka_std": 0,
+                    "pka": -1000.0,
+                    "pka_std": 0.0,
                     "idx": 3,
                     "type": "acid"
                 }
@@ -376,7 +371,7 @@
             "data": [
                 {
                     "pka": 0.9,
-                    "pka_std": 1,
+                    "pka_std": 1.0,
                     "idx": 1,
                     "type": "acid"
                 }
@@ -634,7 +629,7 @@
             "name": "Amines_tertiary",
             "data": [
                 {
-                    "pka": 10,
+                    "pka": 10.0,
                     "pka_std": 0.4,
                     "idx": 1,
                     "type": "base"

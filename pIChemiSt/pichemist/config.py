@@ -51,5 +51,8 @@ ALL_KNOWN_PKA_SETS_NAMES = ["ProMoST",
 SRC_DIR = pichemist.__path__[0]
 ROOT_DIR = os.path.dirname(SRC_DIR)
 DATA_DIR = f"{ROOT_DIR}/data"
-PKA_DATA_DIR = f"{DATA_DIR}/pka"
-PKA_DATA_SETS_DIR = f"{PKA_DATA_DIR}/standardised"
+FASTA_PKA_DATA_DIR = f"{DATA_DIR}/fasta"
+FASTA_PKA_SETS_DIR = f"{FASTA_PKA_DATA_DIR}/standardised"
+SMARTS_PKA_DATA_DIR = f"{DATA_DIR}/smarts"
+SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
+                            "smarts_set_standardised.json"  

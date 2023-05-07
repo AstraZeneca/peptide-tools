@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # module to read "smarts_pKaMatcher.dat" into list_smarts_pka
-import sys, os
+import os
 
 def read_smarts_pKaMatcher():
     list_smarts_pka = []
@@ -34,10 +34,11 @@ if __name__ == "__main__":
     """
     import json
     data = read_smarts_pKaMatcher()
-    result = {}
-    for k in data:
-        res_data = []
-        for i in k:
+    print(data)
+    result = dict()
+    for e in data:
+        res_data = list()
+        for i in e:
             smarts = i["smarts"]
             name = i["name"]
             res_data.append({
@@ -51,5 +52,32 @@ if __name__ == "__main__":
                 "name": name,
                 "data": res_data
             }
-    with open("smarts_converted.json", "w") as f:
-        json.dump({"smarts": result}, f)
+    
+    # with open("smarts_converted.json", "w") as f:
+    #     json.dump({"smarts": result}, f, indent=4)
+
+    # create_logic_set_from_standardised_json
+    # print(result)
+    new_data = list()
+
+    for smarts, v in result.items():
+        res_data = list()
+        name = v["name"]
+        data = v["data"]
+        for d in data:
+            res_data.append({
+                "pka": d["pka"],
+                "ind": d["idx"],
+                "pka_std": d["pka_std"],
+                "type": d["type"],
+                "smarts": smarts,
+                "name": name
+            })
+        new_data.append(res_data)
+    
+    # assert new_data == data
+    # print(new_data)
+    with open("../expected.json") as f:
+        exp = json.load(f)
+    
+    assert exp == new_data

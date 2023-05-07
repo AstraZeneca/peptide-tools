@@ -1,7 +1,7 @@
 import os
 import json
 
-from pichemist.config import PKA_DATA_SETS_DIR
+from pichemist.config import FASTA_PKA_SETS_DIR
 from pichemist.config import PKA_JSON_TYPE_MATCHING
 
 
@@ -57,7 +57,7 @@ def _generate_pka_sets():
     """
     # Get all the pKa file paths
     pka_sets = dict()
-    standardised_pka_sets_dir = PKA_DATA_SETS_DIR
+    standardised_pka_sets_dir = FASTA_PKA_SETS_DIR
     with os.scandir(standardised_pka_sets_dir) as pka_files:
         pka_filepaths = [f"{standardised_pka_sets_dir}/{pka_file.name}"
                          for pka_file in pka_files]
@@ -68,4 +68,4 @@ def _generate_pka_sets():
     return pka_sets
 
 
-PKA_SETS = _generate_pka_sets()
+FASTA_PKA_SETS = _generate_pka_sets()

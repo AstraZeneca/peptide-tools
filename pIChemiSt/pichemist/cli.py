@@ -17,8 +17,7 @@ from rdkit import Chem
 from pichemist.io import read_structure_file
 from pichemist.molecule import standardize_molecule
 from pichemist.molecule import break_amide_bonds_and_cap
-from pichemist.fasta.pka_matcher import get_aa_pkas_for_list
-from pichemist.fasta.pka_sets import *
+from pichemist.fasta.matcher import get_aa_pkas_for_list
 from pichemist.config import PKA_SETS_NAMES
 
 from pichemist.stats import mean
@@ -98,7 +97,7 @@ def run_exe(exe):
 
 def calc_pkas_pkamatcher(unknown_fragments):
     from rdkit import Chem
-    from smarts_pKaMatcher import list_smarts_pka
+    from pichemist.smarts.pka_set import SMARTS_PKA_SET
 
     pka_lim_base_1=2
     pka_lim_base_2=15
@@ -115,7 +114,7 @@ def calc_pkas_pkamatcher(unknown_fragments):
     for smiles in unknown_fragments:
         mol = Chem.MolFromSmiles(smiles)
         matched_indices = set()
-        for pka_dict_list in list_smarts_pka:
+        for pka_dict_list in SMARTS_PKA_SET:
           for smarts_pka in pka_dict_list:
             pat = Chem.MolFromSmarts(smarts_pka['smarts'])
  

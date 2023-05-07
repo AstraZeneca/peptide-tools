@@ -1,0 +1,678 @@
+{
+  "smarts": {
+    "[OH1][c]1[c](-[O])[c][c][c][c]1": {
+      "name": "12-diOH-Phenol",
+      "data": [
+        {
+          "pka": 9.3,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        },
+        {
+          "pka": 13.0,
+          "pka_std": 0.4,
+          "idx": 4,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1][c]1[c][c](-[O])[c][c][c]1": {
+      "name": "13-diOH-Phenol",
+      "data": [
+        {
+          "pka": 8.9,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        },
+        {
+          "pka": 11.3,
+          "pka_std": 0.5,
+          "idx": 5,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1][c]1[c][c][c](-[O])[c][c]1": {
+      "name": "14-diOH-Phenol",
+      "data": [
+        {
+          "pka": 9.6,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        },
+        {
+          "pka": 11.5,
+          "pka_std": 0.5,
+          "idx": 6,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1][c]1[c](-[N](=[O])[O])[c][c][c][c]1": {
+      "name": "2-NO2-Phenol",
+      "data": [
+        {
+          "pka": 7.2,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][cH1,!$(c-[F,Cl,Br,I]):7]1": {
+      "name": "2-Hal-Phenol",
+      "data": [
+        {
+          "pka": 8.3,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1:1][c:2]1[$(c-[F,Cl,Br,I]):3][c:4][c:5][c:6][$(c-[F,Cl,Br,I]):7]1": {
+      "name": "2-Hal-Phenol",
+      "data": [
+        {
+          "pka": 6.6,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[OH1:1][c:2]1[c:3][c:4][c:5][c:6][c:7]1": {
+      "name": "Phenol",
+      "data": [
+        {
+          "pka": 9.7,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[nH1,$(n-[#6])]1[c](-[F])[nH0][c][cH1,$(c-[#6])]1": {
+      "name": "2F-Imidazole",
+      "data": [
+        {
+          "pka": 3.6,
+          "pka_std": 0.4,
+          "idx": 5,
+          "type": "base"
+        },
+        {
+          "pka": 10.9,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[nH1,$(n-[#6])]1[c](-[F])[nH0][cH1,$(c-[#6])][c]1": {
+      "name": "2F-Imidazole",
+      "data": [
+        {
+          "pka": 3.6,
+          "pka_std": 0.4,
+          "idx": 5,
+          "type": "base"
+        },
+        {
+          "pka": 10.9,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[nH1,$(n-[#6])]1[c][nH0][c][cH1,$(c-[#6])]1": {
+      "name": "Imidazole",
+      "data": [
+        {
+          "pka": 6.8,
+          "pka_std": 0.6,
+          "idx": 4,
+          "type": "base"
+        }
+      ]
+    },
+    "[nH1,$(n-[#6])]1[c][nH0][cH1,$(c-[#6])][c]1": {
+      "name": "Imidazole",
+      "data": [
+        {
+          "pka": 6.8,
+          "pka_std": 0.6,
+          "idx": 4,
+          "type": "base"
+        }
+      ]
+    },
+    "[nX2:1]1[c:2][c:3][c:4][c:5][c:6]1": {
+      "name": "Pyridine",
+      "data": [
+        {
+          "pka": 4.9,
+          "pka_std": 0.1,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[nH1r5:1][nH0r5:2][nH0r5:3][nH0r5:4][cH0r5:5]": {
+      "name": "Tetrazole",
+      "data": [
+        {
+          "pka": 5.3,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[nH1r5:1][nH0r5:2][cH0r5:3][nH0r5:4][nH0r5:5]": {
+      "name": "Tetrazole",
+      "data": [
+        {
+          "pka": 5.3,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[N+0:1]=[N+:2]=[N+0H1:3]": {
+      "name": "Azide",
+      "data": [
+        {
+          "pka": 4.65,
+          "pka_std": 0.07,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C,c,N,n,O,o:1]-[NX3:2](=[O:3])-[OH1:4]": {
+      "name": "Nitro",
+      "data": [
+        {
+          "pka": -1000.0,
+          "pka_std": 0.0,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[N:1]-[C:2](=[NX2:3])-[N:4]-[N:5](=[O:6])-[O:7]": {
+      "name": "NO2Guanidine",
+      "data": [
+        {
+          "pka": -0.8,
+          "pka_std": 0.4,
+          "idx": 3,
+          "type": "base"
+        }
+      ]
+    },
+    "[O:1]-[N:2]-[C:3](=[NX2:4])-[N:5]": {
+      "name": "OGuanidine",
+      "data": [
+        {
+          "pka": 7.4,
+          "pka_std": 0.4,
+          "idx": 4,
+          "type": "base"
+        }
+      ]
+    },
+    "[O:1]-[N:2]=[C:3](-[N:4])-[N:5]": {
+      "name": "OGuanidine",
+      "data": [
+        {
+          "pka": 7.4,
+          "pka_std": 0.4,
+          "idx": 4,
+          "type": "base"
+        }
+      ]
+    },
+    "[N:1]-[C:2](-[N:3])=[NX2:4]": {
+      "name": "AmidineGuanidine1",
+      "data": [
+        {
+          "pka": 12.03,
+          "pka_std": 1.59,
+          "idx": 3,
+          "type": "base"
+        }
+      ]
+    },
+    "[C:1](-[N:2])=[NX2+0:3]": {
+      "name": "AmidineGuanidine2",
+      "data": [
+        {
+          "pka": 10.04,
+          "pka_std": 2.13,
+          "idx": 2,
+          "type": "base"
+        }
+      ]
+    },
+    "[SX4:1](=[O:2])(=[O:3])([O:4]-[C,c,N,n:5])-[OX2H1:6]": {
+      "name": "Sulfate",
+      "data": [
+        {
+          "pka": -2.36,
+          "pka_std": 1.3,
+          "idx": 5,
+          "type": "acid"
+        }
+      ]
+    },
+    "[SX4:1](=[O:2])(=[O:3])(-[C,c,N,n:4])-[OX2H1:5]": {
+      "name": "Sulfonate",
+      "data": [
+        {
+          "pka": -1.82,
+          "pka_std": 1.41,
+          "idx": 4,
+          "type": "acid"
+        }
+      ]
+    },
+    "[SX3:1](=[O:2])-[OH1:3]": {
+      "name": "Sulfinic_acid",
+      "data": [
+        {
+          "pka": 1.79,
+          "pka_std": 0.44,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[c,n,o:1]-[C:2](=[O:3])-[OH1:4]": {
+      "name": "Phenyl_carboxylic_acid",
+      "data": [
+        {
+          "pka": 3.46,
+          "pka_std": 1.25,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[CX3](=O)[OX2H1]": {
+      "name": "Carboxylic_acid",
+      "data": [
+        {
+          "pka": 3.46,
+          "pka_std": 1.29,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C,c,N,n:1](=[O,S:2])-[SX2H1,OX2H1:3]": {
+      "name": "Thioic_acid",
+      "data": [
+        {
+          "pka": 0.68,
+          "pka_std": 1.5,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[c,n:1]-[SX2H1:2]": {
+      "name": "Phenyl_Thiol",
+      "data": [
+        {
+          "pka": 4.98,
+          "pka_std": 2.61,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C,N:1]-[SX2H1:2]": {
+      "name": "Thiol",
+      "data": [
+        {
+          "pka": 9.12,
+          "pka_std": 1.33,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[PX4:1](=[O:2])(-[OX2H1:3])(-[O+0:4])-[OX2H1:5]": {
+      "name": "Phosphate",
+      "data": [
+        {
+          "pka": 2.42,
+          "pka_std": 1.11,
+          "idx": 2,
+          "type": "acid"
+        },
+        {
+          "pka": 6.51,
+          "pka_std": 0.95,
+          "idx": 5,
+          "type": "acid"
+        }
+      ]
+    },
+    "[$([PX4:1](=O)([OX2][PX4](=O)([OX2])(O[H]))([OX2][PX4](=O)(O[H])([OX2])))][OH1:2]": {
+      "name": "Internal_phosphate_polyphos_chain",
+      "data": [
+        {
+          "pka": 0.9,
+          "pka_std": 1.0,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[$([PX4:1]([OX2][C,c,N,n])(=O)([OX2][PX4](=O)([OX2])(O[H])))][OH1]": {
+      "name": "Initial_phosphate_like_in_ATP_ADP",
+      "data": [
+        {
+          "pka": 2.42,
+          "pka_std": 1.11,
+          "idx": 1,
+          "type": "acid"
+        }
+      ]
+    },
+    "[PX4:1](=[O:2])(-[OX2H1:3])(-[C,c,N,n:4])-[OX2H1:5]": {
+      "name": "Phosphonate",
+      "data": [
+        {
+          "pka": 1.88,
+          "pka_std": 0.59,
+          "idx": 2,
+          "type": "acid"
+        },
+        {
+          "pka": 7.25,
+          "pka_std": 0.85,
+          "idx": 5,
+          "type": "acid"
+        }
+      ]
+    },
+    "[O:1]([$(C=O),$(C[Cl]),$(CF),$(C[Br]),$(CC#N):2])-[OH1:3]": {
+      "name": "Peroxide1",
+      "data": [
+        {
+          "pka": 8.74,
+          "pka_std": 0.76,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C:1]-[O:2]-[OH1:3]": {
+      "name": "Peroxide2",
+      "data": [
+        {
+          "pka": 11.98,
+          "pka_std": 0.87,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[O:1]=[C;R:2]-[C;R:3]=[C;R:4]-[OH1:5]": {
+      "name": "O=C-C=C-OH",
+      "data": [
+        {
+          "pka": 3.55,
+          "pka_std": 0.8,
+          "idx": 4,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C:1]=[C:2]-[OH1:3]": {
+      "name": "Vinyl_alcohol",
+      "data": [
+        {
+          "pka": 8.87,
+          "pka_std": 1.66,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C:1](=[O:2])-[N:3]-[OH1:4]": {
+      "name": "N-hydroxyamide",
+      "data": [
+        {
+          "pka": 9.3,
+          "pka_std": 1.22,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[O,S:1]=[C;R:2]([$([#8]),$([#7]),$([#16]),$([#6][Cl]),$([#6]F),$([#6][Br]):3])-[NH1;RH1:4]([C;R:5]=[O,S:6])": {
+      "name": "Ringed_imide1",
+      "data": [
+        {
+          "pka": 6.45,
+          "pka_std": 0.56,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[O,S:1]=[C;R:2]-[NH1;RH1:3]([C;R:4]=[O,S:5])": {
+      "name": "Ringed_imide2",
+      "data": [
+        {
+          "pka": 8.68,
+          "pka_std": 1.87,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[F,Cl,Br,S,s,P,p:1][#6:2][CX3:3](=[O,S:4])-[NX3H1+0:5]([CX3:6]=[O,S:7])": {
+      "name": "Imide",
+      "data": [
+        {
+          "pka": 2.47,
+          "pka_std": 1.48,
+          "idx": 4,
+          "type": "acid"
+        }
+      ]
+    },
+    "[O,S:1]=[CX3:2]-[NX3H1+0:3]([CX3:4]=[O,S:5])": {
+      "name": "Imide2",
+      "data": [
+        {
+          "pka": 10.23,
+          "pka_std": 1.12,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C:1](=[O:2])-[NH1:3](-[Br,Cl,I,F,S,O,N,P:4])": {
+      "name": "Amide_electronegative",
+      "data": [
+        {
+          "pka": 3.49,
+          "pka_std": 2.69,
+          "idx": 2,
+          "type": "acid"
+        }
+      ]
+    },
+    "[C:1](=[O:2])-[NH0:3]": {
+      "name": "TertiaryAmide",
+      "data": [
+        {
+          "pka": -1.1,
+          "pka_std": 0.5,
+          "idx": 3,
+          "type": "base"
+        }
+      ]
+    },
+    "[C:1](=[O:2])-[NH1:3]": {
+      "name": "Amide",
+      "data": [
+        {
+          "pka": 12.01,
+          "pka_std": 4.51,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[SX4:1](=[O:2])(=[O:3])-[NX3H1+0:4]": {
+      "name": "Sulfonamide",
+      "data": [
+        {
+          "pka": 7.92,
+          "pka_std": 1.98,
+          "idx": 3,
+          "type": "acid"
+        }
+      ]
+    },
+    "[c:1]-[NX3+0H2:2]": {
+      "name": "Anilines_primary",
+      "data": [
+        {
+          "pka": 3.9,
+          "pka_std": 2.07,
+          "idx": 2,
+          "type": "base"
+        }
+      ]
+    },
+    "[c:1]-[NX3+0H1:2]": {
+      "name": "Anilines_secondary",
+      "data": [
+        {
+          "pka": 4.34,
+          "pka_std": 2.18,
+          "idx": 2,
+          "type": "base"
+        }
+      ]
+    },
+    "[c:1]-[NX3+0H0:2]": {
+      "name": "Anilines_tertiary",
+      "data": [
+        {
+          "pka": 4.17,
+          "pka_std": 2.01,
+          "idx": 2,
+          "type": "base"
+        }
+      ]
+    },
+    "[NX3+0;H2,H1,H0;!$(NC=[!#6]);!$(NC#[!#6]);!$(N=[!#6]):1][#8:2]": {
+      "name": "Hydroxylamine",
+      "data": [
+        {
+          "pka": 4.4,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[NX3+0;$(NCC=[!#6]);!$(NC=[!#6]);!$(NC#[!#6]):1]-[#6:2]": {
+      "name": "Amines_aliph_epoor",
+      "data": [
+        {
+          "pka": 7.9,
+          "pka_std": 0.3,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[NX3+0;H2;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2]": {
+      "name": "Amines_primary",
+      "data": [
+        {
+          "pka": 10.4,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[NX3+0;H1;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2]": {
+      "name": "Amines_secondary",
+      "data": [
+        {
+          "pka": 10.8,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[NX3+0;H0;!$(NC=[!#6]);!$(NC#[!#6]):1][#6:2]": {
+      "name": "Amines_tertiary",
+      "data": [
+        {
+          "pka": 10.0,
+          "pka_std": 0.4,
+          "idx": 1,
+          "type": "base"
+        }
+      ]
+    },
+    "[PX4:1](=[O:2])(-[C,c,N,n,F,Cl,Br,I:3])(-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:5]": {
+      "name": "Phosphinic_acid",
+      "data": [
+        {
+          "pka": 2.97,
+          "pka_std": 0.69,
+          "idx": 4,
+          "type": "acid"
+        }
+      ]
+    },
+    "[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[O+0:5]-[C,c,N,n,F,Cl,Br,I:4])-[OX2H1:6]": {
+      "name": "Phosphate_diester",
+      "data": [
+        {
+          "pka": 2.73,
+          "pka_std": 2.54,
+          "idx": 6,
+          "type": "acid"
+        }
+      ]
+    },
+    "[PX4:1](=[O:2])(-[OX2:3]-[C,c,N,n,F,Cl,Br,I:4])(-[C,c,N,n,F,Cl,Br,I:5])-[OX2H1:6]": {
+      "name": "Phosphonate_ester",
+      "data": [
+        {
+          "pka": 2.09,
+          "pka_std": 0.45,
+          "idx": 5,
+          "type": "acid"
+        }
+      ]
+    }
+  },
+  "notes": {
+    "2022-07-15": "compressed imidazole smarts; split amines into primary, secondary, tertiary; change carboxylic acid value to ACDlab prediction; added monoand di-halogenated phenols",
+    "2022-07-11": "added smarts patters to match tetrazole, substituted phenol, substituted imidazoles, pyridines. Use pKa values predicted by ACDlabs GALAS method; fixed most of smarts patters such that they explicit hydrogens compressed to heavy atom definition, otherwise match did not work; removed very generic definitions, like, aromatic N deprotonated as they hit too many unwanted structures",
+    "2020-09-11": "added last column with acid-base classification"
+  }
+}
