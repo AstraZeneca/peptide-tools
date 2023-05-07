@@ -19,6 +19,7 @@ from pichemist.molecule import standardize_molecule
 from pichemist.molecule import break_amide_bonds_and_cap
 from pichemist.fasta.pka_matcher import get_aa_pkas_for_list
 from pichemist.fasta.pka_sets import *
+from pichemist.config import PKA_SETS_NAMES
 
 from pichemist.stats import mean
 from pichemist.stats import stddev

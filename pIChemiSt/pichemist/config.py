@@ -1,9 +1,13 @@
-KNOWN_BASIC_RESIDUES = ['K', 'R', 'H']
-KNOWN_ACIDIC_RESIDUES = ['D', 'E', 'C', 'Y', 'U']
-KNOWN_RESIDUES = ['G', 'A', 'S', 'P', 'V', 'T', 'C',
-                  'I', 'L', 'N', 'D', 'Q', 'K', 'E',
-                  'M', 'H', 'F', 'R', 'Y', 'W', 'X',
-                  'Z', 'B', 'U']
+import os
+import pichemist
+
+# Definitions
+KNOWN_BASIC_RESIDUES = ["K", "R", "H"]
+KNOWN_ACIDIC_RESIDUES = ["D", "E", "C", "Y", "U"]
+KNOWN_RESIDUES = ["G", "A", "S", "P", "V", "T", "C",
+                  "I", "L", "N", "D", "Q", "K", "E",
+                  "M", "H", "F", "R", "Y", "W", "X",
+                  "Z", "B", "U"]
 
 PKA_JSON_TYPE_MATCHING = {
      "acidic": "acidic",
@@ -16,3 +20,36 @@ PKA_JSON_INDICES = {
      "n-terminal": 1,
      "c-terminal": 2
 }
+
+PKA_SETS_NAMES = ["IPC2_peptide",
+                  "IPC_peptide",
+                  "ProMoST",
+                  "Gauci",
+                  "Grimsley",
+                  "Thurlkill",
+                  "Lehninger",
+                  "Toseland"]
+
+ALL_KNOWN_PKA_SETS_NAMES = ["ProMoST",
+                            "IPC_peptide",
+                            "IPC2_peptide",
+                            "Gauci",
+                            "Bjellqvist",
+                            "Rodwell",
+                            "Grimsley",
+                            "Thurlkill",
+                            "EMBOSS",
+                            "DTASelect",
+                            "Solomon",
+                            "Sillero",
+                            "Lehninger",
+                            "Toseland",
+                            "Nozaki",
+                            "Dawson"]
+
+# Paths
+SRC_DIR = pichemist.__path__[0]
+ROOT_DIR = os.path.dirname(SRC_DIR)
+DATA_DIR = f"{ROOT_DIR}/data"
+PKA_DATA_DIR = f"{DATA_DIR}/pka"
+PKA_DATA_SETS_DIR = f"{PKA_DATA_DIR}/standardised"

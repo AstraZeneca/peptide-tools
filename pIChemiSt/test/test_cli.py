@@ -28,17 +28,7 @@ def test_pka_matcher_json():
     assert expected == output
 
 
-def test_pka_sets_1():
-    with open(f"{this_script_dir}/pka_sets_expected.json") as f:
+def test_pka_sets():
+    with open(f"{this_script_dir}/examples/pka_sets_expected.json") as f:
         expected = json.load(f)
     assert expected == PKA_SETS
-
-def test_pka_sets_2():
-    with open(f"{this_script_dir}/pka_sets_gauci_expected.json") as f:
-        expected = json.load(f)
-    assert expected == PKA_SETS["Gauci"]
-
-def test_pka_sets_3():
-    with open(f"{this_script_dir}/pka_sets_nozaki_expected.json") as f:
-        expected = json.load(f)
-    assert expected == PKA_SETS["Nozaki"]

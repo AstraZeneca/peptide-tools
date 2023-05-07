@@ -1,0 +1,363 @@
+{
+  "name": "ProMoST",
+  "values": {
+    "acidic": {
+      "D": [
+        {
+          "position": "primary",
+          "value": 4.07
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.57
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 4.45
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.15
+        },
+        {
+          "position": "c-terminal",
+          "value": 4.75
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 8.28
+        },
+        {
+          "position": "n-terminal",
+          "value": 8.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 9.0
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 9.84
+        },
+        {
+          "position": "n-terminal",
+          "value": 9.34
+        },
+        {
+          "position": "c-terminal",
+          "value": 10.34
+        }
+      ],
+      "U": [
+        {
+          "position": "primary",
+          "value": 5.43
+        },
+        {
+          "position": "n-terminal",
+          "value": 5.2
+        },
+        {
+          "position": "c-terminal",
+          "value": 5.6
+        }
+      ]
+    },
+    "basic": {
+      "K": [
+        {
+          "position": "primary",
+          "value": 9.8
+        },
+        {
+          "position": "n-terminal",
+          "value": 10.0
+        },
+        {
+          "position": "c-terminal",
+          "value": 10.3
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 12.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 11.5
+        },
+        {
+          "position": "c-terminal",
+          "value": 11.5
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 6.08
+        },
+        {
+          "position": "n-terminal",
+          "value": 4.89
+        },
+        {
+          "position": "c-terminal",
+          "value": 6.89
+        }
+      ]
+    },
+    "terminus_ionizable": {
+      "G": [
+        {
+          "position": "primary",
+          "value": 7.5
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.7
+        }
+      ],
+      "A": [
+        {
+          "position": "primary",
+          "value": 7.58
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.75
+        }
+      ],
+      "S": [
+        {
+          "position": "primary",
+          "value": 6.86
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.61
+        }
+      ],
+      "P": [
+        {
+          "position": "primary",
+          "value": 8.36
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.4
+        }
+      ],
+      "V": [
+        {
+          "position": "primary",
+          "value": 7.44
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.69
+        }
+      ],
+      "T": [
+        {
+          "position": "primary",
+          "value": 7.02
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        }
+      ],
+      "C": [
+        {
+          "position": "primary",
+          "value": 8.12
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.1
+        }
+      ],
+      "I": [
+        {
+          "position": "primary",
+          "value": 7.48
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.72
+        }
+      ],
+      "L": [
+        {
+          "position": "primary",
+          "value": 7.46
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.73
+        }
+      ],
+      "N": [
+        {
+          "position": "primary",
+          "value": 7.22
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.64
+        }
+      ],
+      "D": [
+        {
+          "position": "primary",
+          "value": 7.7
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.5
+        }
+      ],
+      "Q": [
+        {
+          "position": "primary",
+          "value": 6.73
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        }
+      ],
+      "K": [
+        {
+          "position": "primary",
+          "value": 6.67
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.4
+        }
+      ],
+      "E": [
+        {
+          "position": "primary",
+          "value": 7.19
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.5
+        }
+      ],
+      "M": [
+        {
+          "position": "primary",
+          "value": 6.98
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.68
+        }
+      ],
+      "H": [
+        {
+          "position": "primary",
+          "value": 7.18
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.17
+        }
+      ],
+      "F": [
+        {
+          "position": "primary",
+          "value": 6.96
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.98
+        }
+      ],
+      "R": [
+        {
+          "position": "primary",
+          "value": 6.76
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.41
+        }
+      ],
+      "Y": [
+        {
+          "position": "primary",
+          "value": 6.83
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.6
+        }
+      ],
+      "W": [
+        {
+          "position": "primary",
+          "value": 7.11
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.78
+        }
+      ],
+      "X": [
+        {
+          "position": "primary",
+          "value": 7.26
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        }
+      ],
+      "U": [
+        {
+          "position": "primary",
+          "value": 7.26
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        }
+      ],
+      "Z": [
+        {
+          "position": "primary",
+          "value": 6.96
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.54
+        }
+      ],
+      "B": [
+        {
+          "position": "primary",
+          "value": 7.46
+        },
+        {
+          "position": "n-terminal",
+          "value": 3.57
+        }
+      ]
+    }
+  }
+}

@@ -1,16 +1,12 @@
 import os
 import json
 
+from legacy_conversion import _invert_dict
 from pichemist.config import KNOWN_BASIC_RESIDUES
 from pichemist.config import KNOWN_ACIDIC_RESIDUES
 from pichemist.config import KNOWN_RESIDUES
 from pichemist.config import PKA_JSON_TYPE_MATCHING
 from pichemist.config import PKA_JSON_INDICES
-
-
-def _invert_dict(my_map):
-    inv_map = {v: k for k, v in my_map.items()}
-    return inv_map
 
 
 def enrich_short_pka_set(pka_set):

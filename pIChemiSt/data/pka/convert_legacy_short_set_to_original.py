@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     # Converts each data set from pka_sets_short into JSON
     for name in pka_sets_short.keys():
-        filepath = f"{parent_dir}/original_short/pka_set_{name.lower()}_original.json"
+        filepath = f"{parent_dir}/original_short/" \
+            f"pka_set_{name.lower()}_original.json"
         convert_short_set_to_original_json(pka_sets_short, name,
-                                  filepath)
+                                           filepath)

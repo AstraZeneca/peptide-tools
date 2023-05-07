@@ -1,6 +1,6 @@
 from rdkit import Chem
+from pichemist.config import PKA_SETS_NAMES
 from pichemist.fasta.pka_sets import PKA_SETS
-from pichemist.fasta.pka_sets import PKA_SETS_NAMES
 from pichemist.fasta.smarts import d_capped_aa_smarts
 from pichemist.fasta.smarts import d_nterm_free_aa_smarts
 from pichemist.fasta.smarts import d_cterm_free_aa_smarts
