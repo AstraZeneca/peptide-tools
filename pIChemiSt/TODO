@@ -1,2 +1,8 @@
-- Notes from data should be migrated into files:
-    - gauci.py contains notes on the specific amino acids
+- exclude legacy code from flaking
+- create pkmatcher class
+- create acd tests
+- create pkamatcher tests
+- create viz tests
+- clean up tests folder
+- create setup.py / initialisation of path
+- 

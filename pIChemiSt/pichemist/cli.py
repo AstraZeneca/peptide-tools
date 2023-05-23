@@ -4,6 +4,7 @@ import json
 import os.path
 import math
 import subprocess
+from pichemist.smarts.pka_set import SS_SMARTS_PKA_SET
 
 # TODO: Explicit imports 
 from numpy import *
@@ -96,8 +97,7 @@ def run_exe(exe):
 
 
 def calc_pkas_pkamatcher(unknown_fragments):
-    from rdkit import Chem
-    from pichemist.smarts.pka_set import SMARTS_PKA_SET
+    
 
     pka_lim_base_1=2
     pka_lim_base_2=15
@@ -114,7 +114,7 @@ def calc_pkas_pkamatcher(unknown_fragments):
     for smiles in unknown_fragments:
         mol = Chem.MolFromSmiles(smiles)
         matched_indices = set()
-        for pka_dict_list in SMARTS_PKA_SET:
+        for pka_dict_list in SS_SMARTS_PKA_SET:
           for smarts_pka in pka_dict_list:
             pat = Chem.MolFromSmarts(smarts_pka['smarts'])
  

@@ -10,7 +10,7 @@ def _add_notes_to_smarts_dict(smarts_dict):
     return smarts_dict
 
 
-def convert_legacy_smarts_to_json(output_filepath):
+def convert_legacy_ss_smarts_to_json(output_filepath):
     """
     Conversion of DAT semi-structured data into JSON.
     It also adds notes on how the data set was created.
@@ -47,5 +47,5 @@ if __name__ == '__main__':
 
     # Converts the legacy data set into JSON
     filepath = f"{parent_dir}/standardised/" \
-        f"smarts_set_standardised.json"
-    convert_legacy_smarts_to_json(filepath)
+        f"ss_smarts_set_standardised.json"
+    convert_legacy_ss_smarts_to_json(filepath)

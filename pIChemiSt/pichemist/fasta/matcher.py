@@ -1,9 +1,7 @@
 from rdkit import Chem
 from pichemist.config import PKA_SETS_NAMES
 from pichemist.fasta.pka_sets import FASTA_PKA_SETS
-from pichemist.fasta.smarts import d_capped_aa_smarts
-from pichemist.fasta.smarts import d_nterm_free_aa_smarts
-from pichemist.fasta.smarts import d_cterm_free_aa_smarts
+from pichemist.fasta.smarts import AA_SMARTS_SET
 
 
 def _pattern_match_rdkit(smiles, smarts):
@@ -118,7 +116,8 @@ def _get_aa_pkas(smiles,
 
     # Middle
     CAPPED_AA_IDX = 0
-    for smarts, aa in d_capped_aa_smarts.items():
+    CAPPED_AA_SMARTS = AA_SMARTS_SET["d_capped_aa_smarts"]
+    for smarts, aa in CAPPED_AA_SMARTS.items():
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():
@@ -135,7 +134,8 @@ def _get_aa_pkas(smiles,
     # N-term
     NTERM_FREE_AA_IDX = 1
     NTERM_ION_AA_IDX = 0
-    for smarts, aa in d_nterm_free_aa_smarts.items():
+    NTERM_AA_SMARTS = AA_SMARTS_SET["d_nterm_free_aa_smarts"]
+    for smarts, aa in NTERM_AA_SMARTS.items():
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():
@@ -157,7 +157,8 @@ def _get_aa_pkas(smiles,
     # C-term
     CTERM_FREE_AA_IDX = 2
     CTERM_ION_AA_IDX = 1
-    for smarts, aa in d_cterm_free_aa_smarts.items():
+    CTERM_AA_SMARTS = AA_SMARTS_SET["d_cterm_free_aa_smarts"]
+    for smarts, aa in CTERM_AA_SMARTS.items():
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():

@@ -54,5 +54,7 @@ DATA_DIR = f"{ROOT_DIR}/data"
 FASTA_PKA_DATA_DIR = f"{DATA_DIR}/fasta"
 FASTA_PKA_SETS_DIR = f"{FASTA_PKA_DATA_DIR}/standardised"
 SMARTS_PKA_DATA_DIR = f"{DATA_DIR}/smarts"
-SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
-                            "smarts_set_standardised.json"  
+SS_SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
+                            "ss_smarts_set_standardised.json"
+AA_SMARTS_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
+                         "aa_smarts_set_standardised.json"

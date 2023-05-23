@@ -7,8 +7,9 @@ sys.path.insert(0, f"{this_script_dir}/../pichemist")
 import cli
 import json
 
+from pichemist.fasta.smarts import AA_SMARTS_SET
 from pichemist.fasta.pka_sets import FASTA_PKA_SETS
-from pichemist.smarts.pka_set import SMARTS_PKA_SET
+from pichemist.smarts.pka_set import SS_SMARTS_PKA_SET
 
 def test_pka_matcher_json():
     options = {"inputJSON": "",
@@ -35,7 +36,12 @@ def test_fasta_pka_sets():
     assert expected == FASTA_PKA_SETS
 
 
-def test_smarts_pka_set():
-    with open(f"{this_script_dir}/examples/smarts_pka_set_expected.json") as f:
+def test_ss_smarts_pka_set():
+    with open(f"{this_script_dir}/examples/ss_smarts_pka_set_expected.json") as f:
         expected = json.load(f)
-    assert expected == SMARTS_PKA_SET
+    assert expected == SS_SMARTS_PKA_SET
+
+def test_aa_smarts_pka_set():
+    with open(f"{this_script_dir}/examples/aa_smarts_pka_set_expected.json") as f:
+        expected = json.load(f)
+    assert expected == AA_SMARTS_SET
