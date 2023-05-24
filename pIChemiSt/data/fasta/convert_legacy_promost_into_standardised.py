@@ -1,5 +1,4 @@
 import os
-import json
 
 from legacy import promost
 from legacy_conversion import convert_legacy_set_to_json

@@ -2,6 +2,7 @@ import json
 
 from pichemist.config import SS_SMARTS_PKA_SET_FILEPATH
 
+
 def create_logic_set_from_standardised_json(filepath):
     """
     Reads a pKa set from standardised JSON and converts it
@@ -11,7 +12,7 @@ def create_logic_set_from_standardised_json(filepath):
     """
     with open(filepath) as f:
         data = json.load(f)
-    
+
     logic_set = list()
     for smarts, v in data["smarts"].items():
         res_data = list()
@@ -26,8 +27,9 @@ def create_logic_set_from_standardised_json(filepath):
                 "smarts": smarts,
                 "name": name
             })
-        logic_set.append(res_data)       
+        logic_set.append(res_data)
     return logic_set
+
 
 # Read in the data
 SS_SMARTS_PKA_SET = create_logic_set_from_standardised_json(

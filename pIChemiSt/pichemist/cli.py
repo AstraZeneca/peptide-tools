@@ -16,8 +16,8 @@ from itertools import cycle
 from rdkit import Chem
 
 from pichemist.io import read_structure_file
-from pichemist.molecule import standardize_molecule
-from pichemist.molecule import break_amide_bonds_and_cap
+from pichemist.molecule import Standardiser
+from pichemist.molecule import PeptideCapper
 from pichemist.fasta.matcher import get_aa_pkas_for_list
 from pichemist.config import PKA_SETS_NAMES
 
@@ -250,11 +250,12 @@ def calc_net_Qs(smi_list):
     net_Qs = []
     for smi in smi_list:
         mol = Chem.MolFromSmiles(smi)
-        m = standardize_molecule(mol)
+        mol_std = Standardiser()
+        mol = mol_std.standardise_molecule(mol)
 
         # positively charged N, but not connected to any negatively charged atom. To avoid azido and nitro groups being counted.
         pattern = Chem.MolFromSmarts("[#7+;!H1;!H2;!H3;!H4!$([#7+]~[*-])]")
-        at_matches = m.GetSubstructMatches(pattern)
+        at_matches = mol.GetSubstructMatches(pattern)
 
         at_matches_list = [y[0] for y in at_matches]
 
@@ -491,8 +492,10 @@ def calc_pIChemiSt(options={"smiles": "",
         # Prepare molecule and break into fragments
         mol_name = dict_input[mol_idx]['mol_name']    
         mol = dict_input[mol_idx]['mol_obj']    
-        mol = standardize_molecule(mol)
-        frags_smi_list = break_amide_bonds_and_cap(mol)
+        mol_std = Standardiser()
+        mol = mol_std.standardise_molecule(mol)
+        capper = PeptideCapper()
+        frags_smi_list = capper.break_amide_bonds_and_cap(mol)
         # print(frags_smi_list)
 
         # Match known pKas from FASTA definitions
