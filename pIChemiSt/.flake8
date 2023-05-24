@@ -2,3 +2,4 @@
 exclude =
     legacy
     cli.py
+    dimorphite.py

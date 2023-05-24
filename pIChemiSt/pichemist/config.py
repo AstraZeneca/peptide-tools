@@ -1,7 +1,10 @@
 import os
 import pichemist
 
-# Definitions
+from pichemist.model import PKaMethod
+from pichemist.model import PKaType
+
+# FASTA definitions
 KNOWN_BASIC_RESIDUES = ["K", "R", "H"]
 KNOWN_ACIDIC_RESIDUES = ["D", "E", "C", "Y", "U"]
 KNOWN_RESIDUES = ["G", "A", "S", "P", "V", "T", "C",
@@ -46,6 +49,17 @@ ALL_KNOWN_PKA_SETS_NAMES = ["ProMoST",
                             "Toseland",
                             "Nozaki",
                             "Dawson"]
+
+# SMARTS definitions
+SKIP_SMARTS_NAMES = []
+PKA_METHODS = [PKaMethod[x].value for x in PKaMethod._member_names_]
+PKA_TYPES = [PKaType[x].value for x in PKaType._member_names_]
+PKA_LIMITS = {
+    "acid_1": -5,
+    "acid_2": 12,
+    "base_1": 2,
+    "base_2": 15,
+}
 
 # Paths
 SRC_DIR = pichemist.__path__[0]

@@ -21,7 +21,7 @@ def create_logic_set_from_standardised_json(filepath):
         for d in data:
             res_data.append({
                 "pka": d["pka"],
-                "ind": d["idx"],
+                "idx": d["idx"],
                 "pka_std": d["pka_std"],
                 "type": d["type"],
                 "smarts": smarts,

@@ -18,8 +18,7 @@ def test_pka_matcher_json():
                "l_plot_titration_curve": False,
                "l_print_fragments": False,
                "l_print_pka_set": False,
-               "use_acdlabs": False,
-               "use_pkamatcher": True,
+               "method": "pkamatcher",
                "l_json": True}
 
     expected = {1:

@@ -6,7 +6,12 @@ from pichemist.utils import get_logger
 log = get_logger(__name__)
 
 
-class Standardiser(object):
+class Atoms(Enum):
+    CARBON = Chem.Atom(6)
+    OXYGEN = Chem.Atom(8)
+
+
+class MolStandardiser(object):
     """Deals with molecule standardisation."""
 
     def __init__(self):
@@ -47,11 +52,6 @@ class Standardiser(object):
         return m
 
 
-class Atoms(Enum):
-    CARBON = Chem.Atom(6)
-    OXYGEN = Chem.Atom(8)
-
-
 class PeptideCapper(object):
     """Deals with splitting and capping of peptides."""
 
@@ -69,28 +69,28 @@ class PeptideCapper(object):
         rw_mol.AddBond(c_carbonyl_idx, methyl_idx, Chem.BondType.SINGLE)
         return rw_mol
 
-    def _fragment_and_cap(self, mol, breakable_points):
+    def _fragment_and_cap(self, mol, amide_atoms):
         """
         Function for breaking and capping.
         Creates a RW mol; iterates through a set of breakable
         atom indices; for each pair of indices, splits the
         molecule in two parts and adds an acetyl capping
-        to the first atom (amine NH), and a carbon to the
-        second atom (carbonyl C=O). This ensures that
-        both fragments are capped with acetyles.
+        to the first atom (nitrogen of the amine NH), and a carbon
+        to the second atom (carbon of the carbonyl C=O). This
+        ensures that both fragments are capped with acetyles.
 
         """
         rw_mol = Chem.RWMol(mol)
-        for atom in breakable_points:
-            atom_1_idx = atom[0]
-            atom_2_idx = atom[1]
+        for atoms in amide_atoms:
+            amine_idx = atoms[0]
+            carbonyl_idx = atoms[1]
             # Break bond
-            rw_mol.RemoveBond(atom_1_idx, atom_2_idx)
+            rw_mol.RemoveBond(amine_idx, carbonyl_idx)
             # Add acetyl to the amine
-            rw_mol = PeptideCapper._add_acetyl_to_mol(rw_mol, atom_1_idx)
+            rw_mol = PeptideCapper._add_acetyl_to_mol(rw_mol, amine_idx)
             # Add carbon to the carbonyl
             c_idx = rw_mol.AddAtom(Atoms.CARBON.value)
-            rw_mol.AddBond(atom_2_idx, c_idx, Chem.BondType.SINGLE)
+            rw_mol.AddBond(carbonyl_idx, c_idx, Chem.BondType.SINGLE)
         return Chem.MolToSmiles(rw_mol)
 
     def break_amide_bonds_and_cap(self, mol):
@@ -99,17 +99,19 @@ class PeptideCapper(object):
         caps them with acetyl groups.
 
         """
-        # SMARTS - Secondary and tertiary amide bonds
+        # Secondary and tertiary amide bonds
         AMIDE_SMARTS = '[NX3,NX4;H0,H1][CX3](=[OX1])'
         amide_pattern = Chem.MolFromSmarts(AMIDE_SMARTS)
 
-        breakable_points = list()
+        amide_atoms = list()
         smiles = Chem.MolToSmiles(mol)
         if mol.HasSubstructMatch(amide_pattern):
-            atom_idxs = mol.GetSubstructMatches(amide_pattern)
-            for atom in atom_idxs:
-                breakable_points.append((atom[0], atom[1]))
-            smiles = self._fragment_and_cap(mol, breakable_points)
+            amide_matches = mol.GetSubstructMatches(amide_pattern)
+            for atoms in amide_matches:
+                amine_idx = atoms[0]
+                carbonyl_idx = atoms[1]
+                amide_atoms.append((amine_idx, carbonyl_idx))
+            smiles = self._fragment_and_cap(mol, amide_atoms)
 
         smiles_list = smiles.split(".")
         log.debug(f"Obtained {len(smiles_list)} fragments")
