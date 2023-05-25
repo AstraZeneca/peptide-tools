@@ -52,7 +52,7 @@ class MolStandardiser(object):
         return m
 
 
-class PeptideCapper(object):
+class PeptideCutter(object):
     """Deals with splitting and capping of peptides."""
 
     def __init__(self):
@@ -87,7 +87,7 @@ class PeptideCapper(object):
             # Break bond
             rw_mol.RemoveBond(amine_idx, carbonyl_idx)
             # Add acetyl to the amine
-            rw_mol = PeptideCapper._add_acetyl_to_mol(rw_mol, amine_idx)
+            rw_mol = PeptideCutter._add_acetyl_to_mol(rw_mol, amine_idx)
             # Add carbon to the carbonyl
             c_idx = rw_mol.AddAtom(Atoms.CARBON.value)
             rw_mol.AddBond(carbonyl_idx, c_idx, Chem.BondType.SINGLE)

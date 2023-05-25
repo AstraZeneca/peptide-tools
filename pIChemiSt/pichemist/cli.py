@@ -15,7 +15,7 @@ from pichemist.config import PKA_SETS_NAMES
 from pichemist.config import PKA_METHODS
 from pichemist.io import read_structure_file
 from pichemist.molecule import MolStandardiser
-from pichemist.molecule import PeptideCapper
+from pichemist.molecule import PeptideCutter
 from pichemist.fasta.matcher import get_aa_pkas_for_list
 from pichemist.pkamatcher import PKaMatcher
 from pichemist.model import PKaMethod
@@ -389,7 +389,7 @@ def calc_pIChemiSt(options=None):
         mol_name = dict_input[mol_idx]['mol_name']    
         mol = dict_input[mol_idx]['mol_obj']    
         mol = MolStandardiser().standardise_molecule(mol)
-        frags_smi_list = PeptideCapper().break_amide_bonds_and_cap(mol)
+        frags_smi_list = PeptideCutter().break_amide_bonds_and_cap(mol)
 
         # Match known pKas from FASTA definitions
         unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas_for_list(frags_smi_list)
