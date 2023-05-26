@@ -8,6 +8,11 @@ class BaseEnum(str, Enum):
     pass
 
 
+class FileExtension(BaseEnum):
+    SDF = "sdf"
+    SMILES = "smi"
+
+
 class PKaType(BaseEnum):
     ACIDIC = "acid"
     BASIC = "base"

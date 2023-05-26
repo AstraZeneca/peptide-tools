@@ -6,3 +6,4 @@
 - clean up tests folder
 - create setup.py / initialisation of path
 - finish pka matcher implementation / clean up
+- do not change IO for now since it's used by other modules in the repo

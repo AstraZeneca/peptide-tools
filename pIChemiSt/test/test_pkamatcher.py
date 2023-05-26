@@ -1,4 +1,4 @@
-from pichemist.pkamatcher import PKaMatcher
+from pichemist.pka.pkamatcher import PKaMatcher
 
 matcher = PKaMatcher()
 

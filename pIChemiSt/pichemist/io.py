@@ -1,19 +1,10 @@
 import os
 import json
 
-from enum import Enum
 from rdkit import Chem
 from pichemist.model import InputFormat
-
-
-class FileExtension(str, Enum):
-    SDF = "sdf"
-    SMILES = "smi"
-
-    @classmethod
-    def repr(cls):
-        return str({x: FileExtension[x].value
-                    for x in FileExtension.__members__})
+from pichemist.model import FileExtension
+from pichemist.model import MODELS
 
 
 class FileFormatError(Exception):
@@ -53,7 +44,7 @@ def read_structure_file(input_filepath):
         suppl = Chem.SmilesMolSupplier(input_filepath, titleLine=False)
     else:
         raise FileFormatError("Warning: Only the formats "
-                              f"'{FileExtension.repr()} are accepted")
+                              f"'{MODELS[FileExtension]} are accepted")
 
     # Populate input and assign properties
     dict_input = dict()
