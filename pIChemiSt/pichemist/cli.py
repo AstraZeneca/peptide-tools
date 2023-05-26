@@ -12,13 +12,15 @@ from rdkit import Chem
 from rdkit import RDLogger
 
 from pichemist.config import PKA_SETS_NAMES
-from pichemist.config import PKA_METHODS
-from pichemist.io import read_structure_file
+from pichemist.io import generate_input
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
 from pichemist.fasta.matcher import get_aa_pkas_for_list
 from pichemist.pkamatcher import PKaMatcher
 from pichemist.model import PKaMethod
+from pichemist.model import InputFormat
+from pichemist.model import OutputFormat
+from pichemist.model import MODELS
 
 from pichemist.stats import mean
 from pichemist.stats import stddev
@@ -29,12 +31,6 @@ from pichemist.utils import get_logger
 log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
 
-
-# Turns a dictionary into a class 
-class Dict2Class(object): 
-    def __init__(self, my_dict): 
-        for key in my_dict: 
-            setattr(self, key, my_dict[key]) 
 
 def clean_up_output(text):
     txt=text.split('\n')
@@ -178,7 +174,7 @@ def calc_net_Qs(smi_list):
 # calcualtes pKa for the list of smiles. 
 def calc_pkas(smi_list, method):
 
-    if method not in PKA_METHODS:
+    if method not in MODELS[PKaMethod]:
         raise Exception("TODO...")
 
     if method == PKaMethod.ACD.value:
@@ -284,7 +280,7 @@ def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     return pH_Q
 
 
-def print_output_prop_dict(prop_dict,prop,l_print_pka_set=False):
+def print_output_prop_dict(prop_dict, prop, print_pka_set=False):
     global tit
     lj=12
     #keys = prop_dict.keys()
@@ -302,7 +298,7 @@ def print_output_prop_dict(prop_dict,prop,l_print_pka_set=False):
         print(k.rjust(lj)  + "  " +  str(round(p,2)).ljust(lj) )
     print(" ")
 
-    if l_print_pka_set: print_pka_set()
+    if print_pka_set: print_pka_set()
 
     return
 
@@ -351,45 +347,23 @@ def plot_titration_curve(pH_Q_dict,figFileName):
 
 # TODO: use input and type to determine input
 # TODO: use method instead of use_acdlabs and use_pkamatcher
-def calc_pIChemiSt(options=None):
-
-    global dict_input
-    args = Dict2Class(options)
-
-    # Get options
-    if len(args.smiles)!=0:
-        # assume smiles input
-        mol_unique_ID = 1
-        mol = Chem.MolFromSmiles(args.smiles)
-        dict_input = dict()
-        dict_input[mol_unique_ID] = {'mol_name': 'none', 'mol_obj': mol, 'fasta':'none'}
-
-    elif len(args.inputFile)!=0:
-        # Assume filename as input
-        inputFile = args.inputFile
-        dict_input = read_structure_file(inputFile)
-
-    elif len(args.inputJSON)!=0:
-        # Assume molecule JSON supply as input
-        dict_input = json.loads(args.inputJSON)
-
-    elif args.inputDict: # if not an empty dictionary
-        # Assume Dict olecule supply as input
-        dict_input = args.inputDict
-
-    # TODO: Move at the beginning and use Enum class
-    else:
-        raise Exception('Error: either smiles or input file *.smi, sdf, or Json string should be given. Exit. ')
+def calc_pichemist(input_dict, method,
+                   plot_titration_curve=False,
+                   print_fragments=False,
+                   print_pka_set=False):
 
     # Run calculations
     dict_output={}
-
-    for mol_idx in dict_input.keys():
+    for mol_idx in input_dict.keys():
         # Prepare molecule and break into fragments
-        mol_name = dict_input[mol_idx]['mol_name']    
-        mol = dict_input[mol_idx]['mol_obj']    
+        mol_name = input_dict[mol_idx]['mol_name']
+        mol = input_dict[mol_idx]['mol_obj']    
         mol = MolStandardiser().standardise_molecule(mol)
         frags_smi_list = PeptideCutter().break_amide_bonds_and_cap(mol)
+
+        # TODO: Match and calc pKas should be an API that contains the following
+            # TODO: Match AA pKas from SMILES list should also be an API
+            # TODO: Predict pKas from SMILES list should also be an API
 
         # Match known pKas from FASTA definitions
         unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas_for_list(frags_smi_list)
@@ -398,7 +372,7 @@ def calc_pIChemiSt(options=None):
         base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = list(), list(), list(), list()
         if len(unknown_frags) > 0:
             base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = calc_pkas(unknown_frags,
-                                                                                 method=args.method)
+                                                                                 method=method)
 
         # loop over all pKa sets
         pI_dict={}
@@ -535,7 +509,7 @@ def calc_pIChemiSt(options=None):
         interval = (interval_low, interval_high) 
 
         # plot titration curve
-        if args.l_plot_titration_curve:
+        if plot_titration_curve:
             figFileName = "OUT_titration_curve_pIChemiSt.png"
             plot_titration_curve(pH_Q_dict,figFileName)
         else:
@@ -543,19 +517,19 @@ def calc_pIChemiSt(options=None):
         
         # output dict for given molecule 
         dict_output[mol_idx]={'mol_name':mol_name,
-                                    'pI':pI_dict,
-                                    'QpH7':Q_dict,
-                                    'pI_interval':interval,
-                                    'plot_filename':figFileName,
-                                    'pI_interval_threshold':int_tr
-                                    }
+                            'pI':pI_dict,
+                            'QpH7':Q_dict,
+                            'pI_interval':interval,
+                            'plot_filename':figFileName,
+                            'pI_interval_threshold':int_tr
+                            }
         
         # define pKaset for reporting pKa of individual amino acids and fragments
         pKaset='IPC2_peptide'
         dict_output[mol_idx].update({'pKa_set':pKaset })
 
         
-        if args.l_print_fragments:
+        if print_fragments:
             dict_output[mol_idx].update({
                                     'base_pkas_fasta':base_pkas_fasta,
                                     'acid_pkas_fasta':acid_pkas_fasta,
@@ -572,17 +546,19 @@ def calc_pIChemiSt(options=None):
 
 
 
-def print_output(dict_output,args):
+def print_output(dict_output, args):
 
     for mol_idx in dict_output.keys():
     
         molid = dict_output[mol_idx]
 
-        print_output_prop_dict(dict_output[mol_idx]['pI'],'pI',l_print_pka_set=args.l_print_pka_set)
-        print_output_prop_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4',l_print_pka_set=False)
+        print_output_prop_dict(dict_output[mol_idx]['pI'],'pI', print_pka_set=args.print_pka_set)
+        print_output_prop_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4', print_pka_set=False)
 
-        if args.use_acdlabs: predition_tool = 'ACDlabs'
-        elif args.use_pkamatcher: predition_tool = 'pKaMatcher'
+        if args.method == "acd":
+            predition_tool = 'ACDlabs'
+        if args.method == "pkamatcher":
+            predition_tool = 'pKaMatcher'
 
         int_tr = dict_output[mol_idx]['pI_interval_threshold']
         pKaset = dict_output[mol_idx]['pKa_set']
@@ -592,7 +568,7 @@ def print_output(dict_output,args):
         print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
         print("%4.1f - %4.1f" % (dict_output[mol_idx]['pI_interval'][0],dict_output[mol_idx]['pI_interval'][1]))
 
-        if args.l_print_fragments:
+        if args.print_fragments:
             base_pkas_fasta = dict_output[mol_idx]['base_pkas_fasta']
             acid_pkas_fasta = dict_output[mol_idx]['acid_pkas_fasta']
             #diacid_pkas_fasta = dict_output[mol_idx]['diacid_pkas_fasta']
@@ -645,42 +621,57 @@ def print_output(dict_output,args):
 
 
 
+__doc__ = "Calculates the isoelectric point (pI) of a molecules by cutting its amide bonds, retreiving the pKa values for known AAs, predicting pKas of unknown fragments using pKaMatcher or ACDlabs, and finally calculating the pI using the Henderson-Hasselbalch equation."
 
 
 
-
-def args_parser():
-    parser = argparse.ArgumentParser(description="Script caclultes isoelectric point of a molecules by cutting all amide bonds, retreiving stored pka values for known AAs, predicting pKas of unknown fragemnts using pKaMatcher or ACDlabs, and calculating Henderson-Hasselbalch equation.")
-    parser.add_argument("-j", dest="inputJSON", help="input molecule supply in JSON format",default='')
-    parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
-    parser.add_argument("-s", dest="smiles", help="input smiles. if used then single smi is assumed and fasta returned in stdout. Input filenames are ignored",default='')
-    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. csv or sdf",default='')
-
-    parser.add_argument("--plot_titration_curve",default=False, action='store_true',dest="l_plot_titration_curve", help="Plot titration curve and store it in OUT_titration_curve_pIChemiSt.png file.")
-    parser.add_argument("--print_fragment_pkas",default=False, action='store_true',dest="l_print_fragments", help="Print out fragments with corresponding pKas used in pI calcution.")
-    parser.add_argument("--print_pka_set",default=False, action='store_true',dest="l_print_pka_set", help="Print out stored pka sets explicitly.")
-    parser.add_argument("--use_acdlabs",default=False, action='store_true',dest="use_acdlabs", help="Use acdlabs for pka prediction of unknown fragments.")
-    parser.add_argument("--use_pkamatcher",default=False, action='store_true',dest="use_pkamatcher", help="Use pKaMatcher for pka prediction of unknown fragments.")
-    parser.add_argument("--method", default=PKA_METHODS[1], choices=PKA_METHODS, help="Use ACD or pKaMatcher for pka prediction of unknown fragments.")
+def arg_parser():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-i", dest="input",
+                        help="Input to the algorithm. Depends on the format used",
+                        default=None)
+    parser.add_argument("-if", dest="input_format",
+                        help="Format of the input", choices=MODELS[InputFormat],
+                        default=InputFormat.SMILES_FILE)
+    parser.add_argument("-o", dest="output_file",
+                        help="Output file for the results of the calculation",
+                        default=None)
+    parser.add_argument("-of", dest="output_format",
+                        help="Format of the input", choices=MODELS[OutputFormat],
+                        default=OutputFormat.JSON)
+    parser.add_argument("--plot_titration_curve", default=False,
+                        action='store_true', dest="plot_titration_curve",
+                        help="TODO:")
+    parser.add_argument("--print_fragment_pkas", default=False,
+                        action='store_true', dest="print_fragment_pkas",
+                        help="TODO: Print out fragments with corresponding pKas used in pI calcution.")
+    parser.add_argument("--print_pka_set", default=False,
+                        action='store_true', dest="print_pka_set",
+                        help="TODO: Print out stored pka sets explicitly.")
+    parser.add_argument("--method",
+                        choices=MODELS[PKaMethod],
+                        default=PKaMethod.PKA_MATCHER,
+                        help="Method for the prediction of pKas of unknown fragments")
     parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Output in JSON format.")
 
     args = parser.parse_args()
-    options = args.__dict__
-
-    return args, options
-
+    return args
 
 
 if __name__ == "__main__":
 
-    args, options = args_parser()
-    # print(args, options)
-    dict_output = calc_pIChemiSt(options)
+    args = arg_parser()
+    input_dict = generate_input(args.input_format, args.input)
+    dict_output = calc_pichemist(input_dict, args.method,
+                                 args.plot_titration_curve,
+                                 args.print_fragment_pkas)
+    print(dict_output)
+    exit(0)
 
     ### ----------------------------------------------------------------------
-    # Output 
-    if args.outputFile == '': # output plain text
-        if args.l_json:
+    # Output
+    if args.output_file is None: # output plain text
+        if args.output_format == OutputFormat.JSON:
             print(json.dumps(dict_output, indent=2))
         else:
             print_output(dict_output,args)    
@@ -688,14 +679,14 @@ if __name__ == "__main__":
     else: # output file
 
         known_out_file_types = ['.sdf','.csv']
-        filename, out_fext = os.path.splitext(args.outputFile)
+        filename, out_fext = os.path.splitext(args.output_file)
         if out_fext not in known_out_file_types:
             raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
             sys.exit(1)
 
         mol_list=[]
-        for mi in dict_input.keys():
-            mol = dict_input[mi]['mol_obj']
+        for mi in input_dict.keys():
+            mol = input_dict[mi]['mol_obj']
             mol.SetProp('pI mean',"%.2f" % dict_output[mi]['pI']['pI mean'])
             mol.SetProp('pI std',"%.2f" % dict_output[mi]['pI']['std'])
             mol.SetProp('pI interval',' - '.join([ "%.2f" % x for x in dict_output[mi]['pI_interval'] ] ))
@@ -704,12 +695,12 @@ if __name__ == "__main__":
             mol_list.append(mol)
 
         if out_fext == '.sdf':
-            with Chem.SDWriter(args.outputFile) as sdf_w:
+            with Chem.SDWriter(args.output_file) as sdf_w:
                 for mol in mol_list:
                     sdf_w.write(mol)
 
         elif out_fext == '.csv':
-            with open(args.outputFile,'w') as csv_f:
+            with open(args.output_file,'w') as csv_f:
                 csv_w = csv.writer(csv_f)
                 count=0
                 for mol in mol_list:
@@ -726,7 +717,7 @@ if __name__ == "__main__":
                     csv_w.writerow(row)
                         
         # print info 
-        dict_file = {'outputFile':args.outputFile,'outputInfo':'Number of molecules processed:'+str(len(dict_output.keys()))}
+        dict_file = {'output_file':args.output_file,'outputInfo':'Number of molecules processed:'+str(len(dict_output.keys()))}
         print(json.dumps(dict_file))
    
 

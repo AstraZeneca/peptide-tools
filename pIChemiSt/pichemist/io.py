@@ -1,7 +1,9 @@
 import os
+import json
 
 from enum import Enum
 from rdkit import Chem
+from pichemist.model import InputFormat
 
 
 class FileExtension(str, Enum):
@@ -16,6 +18,20 @@ class FileExtension(str, Enum):
 
 class FileFormatError(Exception):
     pass
+
+
+def generate_input(input_format, input):
+    """Produces an input dictionary compatible with the logic."""
+    input_dict = dict()
+    if input_format == InputFormat.SMILES_FILE:
+        input_dict = read_structure_file(input)
+    if input_format == InputFormat.SMILES:
+        input_dict[1] = {"mol_name": input,
+                         "mol_obj": Chem.MolFromSmiles(input),
+                         "fasta": None}
+    if input_format == InputFormat.JSON:
+        input_dict = json.loads(input)
+    return input_dict
 
 
 def read_structure_file(input_filepath):

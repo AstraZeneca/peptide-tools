@@ -1,8 +1,6 @@
 import os
 import pichemist
 
-from pichemist.model import PKaMethod
-from pichemist.model import PKaType
 
 # FASTA definitions
 KNOWN_BASIC_RESIDUES = ["K", "R", "H"]
@@ -52,8 +50,6 @@ ALL_KNOWN_PKA_SETS_NAMES = ["ProMoST",
 
 # SMARTS definitions
 SKIP_SMARTS_NAMES = []
-PKA_METHODS = [PKaMethod[x].value for x in PKaMethod._member_names_]
-PKA_TYPES = [PKaType[x].value for x in PKaType._member_names_]
 PKA_LIMITS = {
     "acid_1": -5,
     "acid_2": 12,

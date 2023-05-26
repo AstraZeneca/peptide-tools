@@ -1,8 +1,8 @@
 from rdkit import Chem
 from pichemist.config import SKIP_SMARTS_NAMES
 from pichemist.config import PKA_LIMITS
-from pichemist.config import PKA_TYPES
 from pichemist.smarts.pka_set import SS_SMARTS_PKA_SET
+from pichemist.model import MODELS
 from pichemist.model import PKaType
 
 
@@ -47,7 +47,7 @@ class PKaMatcher(object):
                     match_idxs = set(match)
                     available_idxs = match_idxs.difference(all_used_idxs_set)
                     pka = pka_dict['pka']
-                    if pka_dict['type'] not in PKA_TYPES:
+                    if pka_dict['type'] not in MODELS[PKaType]:
                         raise PKaMatcherException(
                             f"Unknown site type (got {pka_dict['type']})")
 
@@ -79,7 +79,7 @@ class PKaMatcher(object):
         """Calculates the pKa values for a list of SMILES."""
         base_pkas = list()
         acid_pkas = list()
-        diacid_pkas = list()    # ANDREY: not used
+        diacid_pkas = list()    # not used at the moment
 
         for smiles in smiles_list:
             results = self._pka_dict_from_smiles(smiles)

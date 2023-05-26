@@ -14,7 +14,9 @@ HOW TO RUN
     cd TEST
 
     # Use internal pKaMatcher for pKa calculation of nonatural amino acids
-    python3 ../pichemist/cli.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --plot_titration_curve --print_fragment_pkas --use_pkamatcher
+    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
+
+    python3 pichemist/cli.py -i "CC(=O)NCC(=O)NC" -if smiles --print_fragment_pkas --method pkamatcher
 
     or
 

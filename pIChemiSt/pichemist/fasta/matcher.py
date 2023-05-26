@@ -102,12 +102,11 @@ def _get_aa_pkas(smiles,
                  unknown_fragments,
                  base_pka_dict,
                  acid_pka_dict,
-                 diacid_pka_dict,   # ANDREY: this is not used
+                 diacid_pka_dict,   # TODO: this is not used
                  pka_sets):
     """
     For a given SMILES, it matches its pKa
     value against a set of pKa sets.
-
     NOTE: Tried to break this function down
     further but integration tests break.
 
@@ -121,7 +120,7 @@ def _get_aa_pkas(smiles,
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():
-                # ANDREY: the iterator is not used
+                # Add pKa values for each match
                 for _ in range(nhits):
                     _add_pka_to_acidic_and_basic_dicts(aa, n,
                                                        base_pka_dict,
@@ -139,7 +138,7 @@ def _get_aa_pkas(smiles,
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():
-                # ANDREY: the iterator is not used
+                # Add pKa values for each match
                 for _ in range(nhits):
                     _add_pka_to_acidic_and_basic_dicts(aa, n,
                                                        base_pka_dict,
@@ -162,7 +161,7 @@ def _get_aa_pkas(smiles,
         nhits = pattern_match(smiles, smarts)
         if nhits > 0:
             for n, pka_set in pka_sets.items():
-                # ANDREY: the iterator is not used
+                # Add pKa values for each match
                 for _ in range(nhits):
                     _add_pka_to_acidic_and_basic_dicts(aa, n,
                                                        base_pka_dict,
@@ -183,7 +182,7 @@ def _get_aa_pkas(smiles,
     return unknown_fragments, base_pka_dict, acid_pka_dict, diacid_pka_dict
 
 
-def get_aa_pkas_for_list(smi_list):
+def get_aa_pkas_for_list(smiles_list):
     """
     Matches a list of SMILES against
     the pKa values in a set of pKa sets.
@@ -197,7 +196,7 @@ def get_aa_pkas_for_list(smi_list):
     base_pka_dict, acid_pka_dict, diacid_pka_dict = \
         _initialise_pka_dicts(PKA_SETS_NAMES)
 
-    for s in smi_list:
+    for s in smiles_list:
         unknown_fragments, base_pka_dict, \
             acid_pka_dict, diacid_pka_dict = _get_aa_pkas(
                 s, unknown_fragments, base_pka_dict,

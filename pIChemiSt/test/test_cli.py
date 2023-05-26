@@ -1,20 +1,18 @@
 import os
 
-from pichemist import cli
+from pichemist.io import generate_input
+from pichemist.cli import calc_pichemist
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def test_pka_matcher_json():
-    options = {"inputJSON": "",
-               "inputFile": f"{script_dir}/example_pka_matcher_1.smi",
-               "smiles": "",
-               "outputFile": "",
-               "l_plot_titration_curve": False,
-               "l_print_fragments": False,
-               "l_print_pka_set": False,
-               "method": "pkamatcher",
-               "l_json": True}
+    args = {"input": f"{script_dir}/example_pka_matcher_1.smi",
+            "input_format": "smiles_file",
+            "plot_titration_curve": False,
+            "print_fragments": False,
+            "print_pka_set": False,
+            "method": "pkamatcher"}
 
     expected = {1:
                 {"mol_name": "Phe-Ornithine-aMeAsp-Lys-dAla",
@@ -51,5 +49,9 @@ def test_pka_matcher_json():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    output = cli.calc_pIChemiSt(options)
+    input_dict = generate_input(args["input_format"], args["input"])
+    output = calc_pichemist(input_dict, args["method"],
+                            args["plot_titration_curve"],
+                            args["print_fragments"],
+                            args["print_pka_set"])
     assert expected == output
