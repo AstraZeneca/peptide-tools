@@ -210,7 +210,7 @@ def calc_pichemist(input_dict, method,
         mol = input_dict[mol_idx]['mol_obj']    
         mol = MolStandardiser().standardise_molecule(mol)
         frags_smi_list = PeptideCutter().break_amide_bonds_and_cap(mol)
-        # ANDREY: calc_net_Qs wants standardise_molecule() for each mol in the list
+        # ANDREY: calculate_net_qs wants standardise_molecule() for each mol in the list
         # should that be done here instead or maybe not at all since we do for the
         # full peptide?
 

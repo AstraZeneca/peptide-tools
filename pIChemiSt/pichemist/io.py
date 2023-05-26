@@ -43,7 +43,7 @@ def read_structure_file(input_filepath):
     elif ext[1:] == FileExtension.SMILES.value:
         suppl = Chem.SmilesMolSupplier(input_filepath, titleLine=False)
     else:
-        raise FileFormatError("Warning: Only the formats "
+        raise FileFormatError("Invalid format. Only the formats "
                               f"'{MODELS[FileExtension]} are accepted")
 
     # Populate input and assign properties
