@@ -2,5 +2,5 @@
 exclude =
     legacy
     cli.py
-    dimorphite.py
     acd.py
+    phpi.py

@@ -11,16 +11,21 @@ from rdkit import Chem
 from rdkit import RDLogger
 
 from pichemist.config import PKA_SETS_NAMES
-from pichemist.api import calc_pkas
+from pichemist.core import calculate_pkas_from_list
+from pichemist.charges import SmartsChargeCalculator
+from pichemist.charges import PKaChargeCalculator
 from pichemist.io import generate_input
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
 from pichemist.fasta.matcher import get_aa_pkas_for_list
+from pichemist.fasta.matcher import get_pka_sets_names
 from pichemist.model import PKaMethod
 from pichemist.model import InputFormat
 from pichemist.model import OutputFormat
 from pichemist.model import MODELS
-
+from pichemist.phpi import get_pH_span
+from pichemist.phpi import CalcChargepHCurve
+from pichemist.phpi import calculateIsoelectricPoint
 from pichemist.stats import mean
 from pichemist.stats import stddev
 from pichemist.stats import stderr
@@ -39,95 +44,6 @@ def calc_molecule_constant_charge(net_Qs):
         constant_q = 0.0
 
     return constant_q
-
-
-        
-def calculateBasicCharge(pH, pKa):
-        return 1 / (1 + 10**(pH - pKa))
-
-def calculateAcidicCharge(pH, pKa):
-        return -1 / (1 + 10**(pKa - pH))
-
-def calculateDiacidCharge(pH, pKa1, pKa2):
-        Ka1=10**(-pKa1)
-        Ka2=10**(-pKa2)
-        H=10**(-pH)
-        f1 = (H*Ka1)/(H**2+H*Ka1+Ka1*Ka2)  # fraction of [AH-]
-        f2 = f1 * Ka2 / H                  # fraction of [A2-]
-        return -2*f2 + (-1)*f1     # average charge of phosphate group
-
-
-def calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH, constant_q=0):
-    charge = constant_q
-    for pka in base_pkas:
-        charge += calculateBasicCharge(pH, pka)
-
-    for pka in acid_pkas:
-        charge += calculateAcidicCharge(pH, pka)
-
-    for pkas in diacid_pkas:
-        charge += calculateDiacidCharge(pH, pkas)
-
-    #print(pH,charge)
-    return charge
-
-
-# Define pH span tocalcualte itration curve and where to search for pI.
-def define_pH_span():
-    pH_llim=-1
-    pH_hlim=15
-    return [pH_llim,pH_hlim]
-
-
-def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):   
-    tolerance=0.01
-    charge_tol=0.05
-    na=len(acid_pkas)+len(diacid_pkas)
-    nb=len(base_pkas)
-    
-    pH_lim = define_pH_span()
-    lower_pH = pH_lim[0] 
-    higher_pH = pH_lim[1] 
-
-    while True:
-        mid_pH = 0.5 * (higher_pH + lower_pH)
-        charge = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, mid_pH, constant_q=constant_q)
-        
-        if na == 0 and nb != 0:
-            #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = charge_tol * nb
-
-        elif nb == 0 and na != 0:
-            #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = -charge_tol * na
-
-        else:
-            refcharge = 0.0
-
-
-        if charge > refcharge + tolerance:
-            lower_pH = mid_pH
-        elif charge < refcharge - tolerance:
-            higher_pH = mid_pH
-        else:
-            return mid_pH
-            
-        if mid_pH <= pH_lim[0]:
-            return pH_lim[0]
-        elif mid_pH >= pH_lim[1]:
-            return pH_lim[1]
-            
-
-def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
-    pH_lim = define_pH_span()
-    dpH=0.1
-    pH_a = np.arange(pH_lim[0],pH_lim[1]+dpH,dpH)
-    Q_a=pH_a*0.0    
-    for i in range(len(pH_a)):
-        Q = calculateMolCharge(base_pkas, acid_pkas, diacid_pkas, pH_a[i],constant_q=constant_q)
-        Q_a[i]=Q
-    pH_Q = np.vstack((pH_a,Q_a))
-    return pH_Q
 
 
 def print_output_prop_dict(prop_dict, prop):
@@ -161,11 +77,11 @@ def _plot_titration_curve(pH_Q_dict,figFileName):
 
     plt.figure(figsize=(8,6))
     i=0
-    for pKaset in PKA_SETS_NAMES:
+    for pka_set in PKA_SETS_NAMES:
         i+=1
-        pH_Q = pH_Q_dict[pKaset] 
-        l = plt.plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pKaset,linewidth=next(linewcycler)) 
-        if pKaset == 'IPC2_peptide': 
+        pH_Q = pH_Q_dict[pka_set] 
+        l = plt.plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pka_set,linewidth=next(linewcycler)) 
+        if pka_set == 'IPC2_peptide': 
             plt.setp(l,linewidth=8,linestyle='-',color='k')
 
         # Store data for output
@@ -215,69 +131,58 @@ def calc_pichemist(input_dict, method,
             # TODO: Predict pKas from SMILES list should also be an API
 
         # Match known pKas from FASTA definitions
+        pka_sets_names = get_pka_sets_names()
         unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas_for_list(frags_smi_list)
 
         # caclulate pKas for unknown fragmets
-        base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = list(), list(), list(), list()
         if len(unknown_frags) > 0:
-            base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_Qs = calc_pkas(unknown_frags,
+            base_pkas_calc, acid_pkas_calc, diacid_pkas_calc = calculate_pkas_from_list(unknown_frags,
                                                                                  method=method)
+        net_Qs = SmartsChargeCalculator().calculate_net_qs_from_list(unknown_frags)
 
-        # loop over all pKa sets
+        # print(base_pkas_fasta)
+        # exit()
+
         pI_dict={}
         Q_dict={}
         pH_Q_dict={}
-        for pKaset in PKA_SETS_NAMES:
+        pH_lim = get_pH_span()
+        for pka_set in pka_sets_names:
+
+            def merge_pka_lists(list_of_lists):
+                merged_pkas = list()
+                for l in list_of_lists:
+                    for t in l:
+                        merged_pkas.append(t[0])
+                return merged_pkas
 
             # merge fasta and calcualted pkas
-            base_pkas = base_pkas_fasta[pKaset] + base_pkas_calc
-            acid_pkas = acid_pkas_fasta[pKaset] + acid_pkas_calc
-            diacid_pkas = diacid_pkas_fasta[pKaset] + diacid_pkas_calc
-
-            all_base_pkas=[]
-            all_acid_pkas=[]
-            all_diacid_pkas=[]
-            if len(base_pkas) != 0:
-                all_base_pkas, all_base_pkas_smi = zip(*base_pkas) 
-            else:
-                all_base_pkas, all_base_pkas_smi = [],[]
-            if len(acid_pkas) != 0:
-                all_acid_pkas, all_acid_pkas_smi = zip(*acid_pkas) 
-            else:
-                all_acid_pkas, all_acid_pkas_smi = [],[]
-            if len(diacid_pkas) != 0:
-                all_diacid_pkas, all_diacid_pkas_smi = zip(*diacid_pkas) 
-            else:
-                all_diacid_pkas, all_diacid_pkas_smi = [],[]
+            base_pkas = merge_pka_lists([base_pkas_fasta[pka_set], base_pkas_calc])
+            acid_pkas = merge_pka_lists([acid_pkas_fasta[pka_set], acid_pkas_calc])
+            diacid_pkas = merge_pka_lists([diacid_pkas_fasta[pka_set], diacid_pkas_calc])
 
             # calculate isoelectric point
             molecule_constant_charge = calc_molecule_constant_charge(net_Qs)
-            pI = calculateIsoelectricPoint(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = molecule_constant_charge)
-            pH_Q = CalcChargepHCurve(all_base_pkas, all_acid_pkas, all_diacid_pkas, constant_q = molecule_constant_charge)
+            Q = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas, diacid_pkas,
+                                                       pH=7.4, constant_q=molecule_constant_charge)
+            pI = calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
+            pH_Q = CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
             pH_Q = pH_Q.T
-            #print( "pI ACDlabs %6.3f" % (pI) )
-
-            # calculate net charge at pH 7.4
-            Q = calculateMolCharge(all_base_pkas, all_acid_pkas, all_diacid_pkas, 7.4, constant_q = molecule_constant_charge)
-            #print( "Q at pH7.4 ACDlabs %4.1f" % (Q) )
-
-
-
-            pI_dict[pKaset] = pI
-            Q_dict[pKaset] = Q
-            pH_Q_dict[pKaset] = pH_Q
+            pI_dict[pka_set] = pI
+            Q_dict[pka_set] = Q
+            pH_Q_dict[pka_set] = pH_Q
 
 
 
         # calcualte isoelectric interval and reset undefined pI values 
         int_tr = 0.2    # TODO define it elsewhere 
         
-        pH_lim = define_pH_span()
+        
 
         interval_low_l = []
         interval_high_l = []
-        for pKaset in PKA_SETS_NAMES:
-            pH_Q = pH_Q_dict[pKaset]
+        for pka_set in PKA_SETS_NAMES:
+            pH_Q = pH_Q_dict[pka_set]
             Q=pH_Q[:,1]
             pH=pH_Q[:,0]
             pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
@@ -290,14 +195,14 @@ def calc_pichemist(input_dict, method,
 
                 # case when pI is not defined
                 if round(pH_int[0],4) == round(pH_lim[0],4) and round(pH_int[-1],4) == round(pH_lim[1],4):
-                    pI_dict[pKaset] = float('NaN')    
+                    pI_dict[pka_set] = float('NaN')    
 
                 interval_low_l.append(pH_int[0])
                 interval_high_l.append(pH_int[-1])
             
             else:
                 # case when pI is not defined
-                pI_dict[pKaset] = float('NaN')    
+                pI_dict[pka_set] = float('NaN')    
                 interval_low_l.append(pH[0])
                 interval_high_l.append(pH[-1])
            
@@ -336,8 +241,8 @@ def calc_pichemist(input_dict, method,
 
         interval_low_l = []
         interval_high_l = []
-        for pKaset in PKA_SETS_NAMES:
-            pH_Q = pH_Q_dict[pKaset]
+        for pka_set in PKA_SETS_NAMES:
+            pH_Q = pH_Q_dict[pka_set]
             Q=pH_Q[:,1]
             pH=pH_Q[:,0]
             pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
@@ -379,9 +284,9 @@ def calc_pichemist(input_dict, method,
                             'pI_interval_threshold':int_tr
                             }
         
-        # define pKaset for reporting pKa of individual amino acids and fragments
-        pKaset='IPC2_peptide'
-        dict_output[mol_idx].update({'pKa_set':pKaset })
+        # define pka_set for reporting pKa of individual amino acids and fragments
+        pka_set='IPC2_peptide'
+        dict_output[mol_idx].update({'pKa_set':pka_set })
 
         
         if print_fragments:
@@ -416,10 +321,10 @@ def print_output(dict_output, method, print_fragments=False):
             predition_tool = 'pKaMatcher'
 
         int_tr = dict_output[mol_idx]['pI_interval_threshold']
-        pKaset = dict_output[mol_idx]['pKa_set']
+        pka_set = dict_output[mol_idx]['pKa_set']
 
         print(" ")
-        #print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pKaset,predition_tool) )
+        #print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pka_set,predition_tool) )
         print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
         print("%4.1f - %4.1f" % (dict_output[mol_idx]['pI_interval'][0],dict_output[mol_idx]['pI_interval'][1]))
 
@@ -433,18 +338,18 @@ def print_output(dict_output, method, print_fragments=False):
             constant_Qs_calc = dict_output[mol_idx]['constant_Qs_calc']
 
             # merge fasta and calcualted pkas
-            base_pkas = base_pkas_fasta[pKaset] + base_pkas_calc
-            acid_pkas = acid_pkas_fasta[pKaset] + acid_pkas_calc
-            #diacid_pkas = diacid_pkas_fasta[pKaset] + diacid_pkas_calc
+            base_pkas = base_pkas_fasta[pka_set] + base_pkas_calc
+            acid_pkas = acid_pkas_fasta[pka_set] + acid_pkas_calc
+            #diacid_pkas = diacid_pkas_fasta[pka_set] + diacid_pkas_calc
             all_base_pkas=[]
-            all_acid_pkas=[]
-            all_diacid_pkas=[]
+            acid_pkas=[]
+            diacid_pkas=[]
             if len(base_pkas) != 0: all_base_pkas,all_base_pkas_smi = zip(*base_pkas) 
             else: all_base_pkas,all_base_pkas_smi = [],[]
-            if len(acid_pkas) != 0: all_acid_pkas,all_acid_pkas_smi = zip(*acid_pkas) 
-            else: all_acid_pkas,all_acid_pkas_smi = [],[]
-            #if len(diacid_pkas) != 0: all_diacid_pkas,all_diacid_pkas_smi = zip(*diacid_pkas) 
-            #else: all_diacid_pkas,all_diacid_pkas_smi = [],[]
+            if len(acid_pkas) != 0: acid_pkas,all_acid_pkas_smi = zip(*acid_pkas) 
+            else: acid_pkas,all_acid_pkas_smi = [],[]
+            #if len(diacid_pkas) != 0: diacid_pkas,all_diacid_pkas_smi = zip(*diacid_pkas) 
+            #else: diacid_pkas,all_diacid_pkas_smi = [],[]
         
             print(" ")
             print("List of calculated BASE pKa's with the corresponding fragments")
@@ -454,13 +359,13 @@ def print_output(dict_output, method, print_fragments=False):
 
             print(" ")
             print("List of calculated ACID pKa's with the corresponding fragments")
-            for pkas,smi in zip(all_acid_pkas,all_acid_pkas_smi):
+            for pkas,smi in zip(acid_pkas,all_acid_pkas_smi):
                 s_pkas = ["%4.1f"%(pkas)]
                 print("smiles or AA, acid pKa : %-15s %s" % (smi,' '.join(s_pkas)))
 
 #            print(" ")
 #            print("List of calculated DIACID pKa's with the corresponding fragments")
-#            for pkas,smi in zip(all_diacid_pkas,all_diacid_pkas_smi):
+#            for pkas,smi in zip(diacid_pkas,all_diacid_pkas_smi):
 #                s_pkas = ["%4.1f  %4.1f"%(pkas[0],pkas[1])]
 #                print("smiles or AA, diacid pka : %-15s %s" % (smi,' '.join(s_pkas)))
 
@@ -515,8 +420,6 @@ if __name__ == "__main__":
     dict_output = calc_pichemist(input_dict, args.method,
                                  args.plot_titration_curve,
                                  args.print_fragment_pkas)
-    # print(dict_output)
-    # exit(0)
 
     ### ----------------------------------------------------------------------
     # Output

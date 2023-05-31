@@ -1,6 +1,6 @@
-from pichemist.charges import ChargeCalculator
+from pichemist.charges import SmartsChargeCalculator
 
-qcalc = ChargeCalculator()
+qcalc = SmartsChargeCalculator()
 
 
 def test_charges_smiles_1():

@@ -182,6 +182,11 @@ def _get_aa_pkas(smiles,
     return unknown_fragments, base_pka_dict, acid_pka_dict, diacid_pka_dict
 
 
+def get_pka_sets_names():
+    """Getter for the names of the sets."""
+    return PKA_SETS_NAMES
+
+
 def get_aa_pkas_for_list(smiles_list):
     """
     Matches a list of SMILES against
