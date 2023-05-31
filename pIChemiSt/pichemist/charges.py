@@ -20,25 +20,29 @@ class ChargeCalculator(object):
         """Converts SMARTS strings into objects."""
         return {name: Chem.MolFromSmarts(s)
                 for name, s in self.smarts.items()}
+    
+    def _get_mol_from_smiles(self, smiles):
+        """Get mol object from SMILES."""
+        return Chem.MolFromSmiles(smiles)
 
     def calculate_net_qs_from_list(self, smiles_list):
         """Produces a list of charges and matching SMILES."""
         net_qs = list()
         for smiles in smiles_list:
             # sic - Appends one charge and the SMILES for each match
-            for _ in self._get_net_qs_matches_from_smiles(smiles):
+            mol = self._get_mol_from_smiles(smiles)
+            # TODO: Remove redundant standardisation after refactoring
+            mol = MolStandardiser().standardise_molecule(mol)
+            for _ in self._get_net_qs_matches_from_mol(mol):
                 net_qs.append((1, smiles))
         return net_qs
 
-    def _get_net_qs_matches_from_smiles(self, smiles):
+    def _get_net_qs_matches_from_mol(self, mol):
         """
         Matches a nitrogen cation pattern against a
         molecule and returns a list of matches.
 
         """
-        mol = Chem.MolFromSmiles(smiles)
-        # ANDREY: Do we need to standardise again???
-        mol = MolStandardiser().standardise_molecule(mol)
         pattern = self.patterns["nitrogen_cation"]
         matches = mol.GetSubstructMatches(pattern)
         return [y[0] for y in matches]
@@ -46,4 +50,6 @@ class ChargeCalculator(object):
     def calculate_net_qs_from_smiles(self, smiles):
         """Returns the number of charges for a given SMILES."""
         # sic - The charges corresponds to the number of matches
-        return len(self._get_net_qs_matches_from_smiles(smiles))
+        mol = self._get_mol_from_smiles(smiles)
+        mol = MolStandardiser().standardise_molecule(mol)
+        return len(self._get_net_qs_matches_from_mol(mol))

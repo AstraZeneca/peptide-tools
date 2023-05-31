@@ -34,8 +34,8 @@ def read_structure_file(input_filepath):
     """
     _, ext = os.path.splitext(input_filepath)
     if not ext:
-        raise FileNotFoundError("Something wrong with the file "
-                                f"{input_filepath}")
+        raise FileFormatError("Something wrong with the file "
+                              f"{input_filepath}")
 
     # Initialize file reader
     if ext[1:] == FileExtension.SDF.value:

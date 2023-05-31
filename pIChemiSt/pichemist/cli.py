@@ -130,7 +130,7 @@ def CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
     return pH_Q
 
 
-def print_output_prop_dict(prop_dict, prop, print_pka_set=False):
+def print_output_prop_dict(prop_dict, prop):
     global tit
     lj=12
     #keys = prop_dict.keys()
@@ -147,9 +147,6 @@ def print_output_prop_dict(prop_dict, prop, print_pka_set=False):
         p = prop_dict[k]
         print(k.rjust(lj)  + "  " +  str(round(p,2)).ljust(lj) )
     print(" ")
-
-    if print_pka_set: print_pka_set()   # ANDREY: print_pka_set() does not exist anywhere
-
     return
 
 
@@ -199,8 +196,7 @@ def _plot_titration_curve(pH_Q_dict,figFileName):
 # TODO: use method instead of use_acdlabs and use_pkamatcher
 def calc_pichemist(input_dict, method,
                    plot_titration_curve=False,
-                   print_fragments=False,
-                   print_pka_set=False):
+                   print_fragments=False):
 
     # Run calculations
     dict_output={}
@@ -405,18 +401,18 @@ def calc_pichemist(input_dict, method,
 
 
 
-def print_output(dict_output, args):
+def print_output(dict_output, method, print_fragments=False):
 
     for mol_idx in dict_output.keys():
     
         molid = dict_output[mol_idx]
 
-        print_output_prop_dict(dict_output[mol_idx]['pI'],'pI', print_pka_set=args.print_pka_set)
-        print_output_prop_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4', print_pka_set=False)
+        print_output_prop_dict(dict_output[mol_idx]['pI'], 'pI')
+        print_output_prop_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4')
 
-        if args.method == "acd":
+        if method == "acd":
             predition_tool = 'ACDlabs'
-        if args.method == "pkamatcher":
+        if method == "pkamatcher":
             predition_tool = 'pKaMatcher'
 
         int_tr = dict_output[mol_idx]['pI_interval_threshold']
@@ -427,7 +423,7 @@ def print_output(dict_output, args):
         print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
         print("%4.1f - %4.1f" % (dict_output[mol_idx]['pI_interval'][0],dict_output[mol_idx]['pI_interval'][1]))
 
-        if args.print_fragments:
+        if print_fragments:
             base_pkas_fasta = dict_output[mol_idx]['base_pkas_fasta']
             acid_pkas_fasta = dict_output[mol_idx]['acid_pkas_fasta']
             #diacid_pkas_fasta = dict_output[mol_idx]['diacid_pkas_fasta']
@@ -497,22 +493,17 @@ def arg_parser():
                         default=None)
     parser.add_argument("-of", dest="output_format",
                         help="Format of the input", choices=MODELS[OutputFormat],
-                        default=OutputFormat.JSON)
+                        default=OutputFormat.CONSOLE)
     parser.add_argument("--plot_titration_curve", default=False,
                         action='store_true', dest="plot_titration_curve",
                         help="TODO:")
     parser.add_argument("--print_fragment_pkas", default=False,
                         action='store_true', dest="print_fragment_pkas",
                         help="TODO: Print out fragments with corresponding pKas used in pI calcution.")
-    parser.add_argument("--print_pka_set", default=False,
-                        action='store_true', dest="print_pka_set",
-                        help="TODO: Print out stored pka sets explicitly.")
     parser.add_argument("--method",
                         choices=MODELS[PKaMethod],
                         default=PKaMethod.PKA_MATCHER,
                         help="Method for the prediction of pKas of unknown fragments")
-    parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Output in JSON format.")
-
     args = parser.parse_args()
     return args
 
@@ -524,16 +515,18 @@ if __name__ == "__main__":
     dict_output = calc_pichemist(input_dict, args.method,
                                  args.plot_titration_curve,
                                  args.print_fragment_pkas)
-    print(dict_output)
-    exit(0)
+    # print(dict_output)
+    # exit(0)
 
     ### ----------------------------------------------------------------------
     # Output
     if args.output_file is None: # output plain text
         if args.output_format == OutputFormat.JSON:
             print(json.dumps(dict_output, indent=2))
+        elif args.output_format == OutputFormat.CONSOLE:
+            print_output(dict_output, args.method, args.print_fragment_pkas)
         else:
-            print_output(dict_output,args)    
+            raise RuntimeError("TODO")  
 
     else: # output file
 

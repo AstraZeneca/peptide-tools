@@ -34,6 +34,7 @@ class OutputFormat(BaseEnum):
     JSON = "json"
     SD_FILE = "sdf"
     CSV_FILE = "csv"
+    CONSOLE = "console"
 
 
 class Models(object):

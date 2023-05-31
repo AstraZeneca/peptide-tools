@@ -11,7 +11,6 @@ def test_pka_matcher_json():
             "input_format": "smiles_file",
             "plot_titration_curve": False,
             "print_fragments": False,
-            "print_pka_set": False,
             "method": "pkamatcher"}
 
     expected = {1:
@@ -52,6 +51,5 @@ def test_pka_matcher_json():
     input_dict = generate_input(args["input_format"], args["input"])
     output = calc_pichemist(input_dict, args["method"],
                             args["plot_titration_curve"],
-                            args["print_fragments"],
-                            args["print_pka_set"])
+                            args["print_fragments"])
     assert expected == output

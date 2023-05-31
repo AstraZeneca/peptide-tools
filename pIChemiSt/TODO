@@ -7,3 +7,7 @@
 - create setup.py / initialisation of path
 - finish pka matcher implementation / clean up
 - do not change IO for now since it's used by other modules in the repo
+
+
+Future improvements
+- ChargeCalculator should be more versatile: match all +s and -s, and sum them up to get the net charge - or use RDKit built in functions to get net charge GetFormalCharge()
