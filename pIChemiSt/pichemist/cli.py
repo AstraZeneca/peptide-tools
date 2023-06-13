@@ -10,22 +10,19 @@ from itertools import cycle
 from rdkit import Chem
 from rdkit import RDLogger
 
+from pichemist.api import match_and_calculate_pkas_and_charges_from_list
 from pichemist.config import PKA_SETS_NAMES
-from pichemist.core import calculate_pkas_from_list
-from pichemist.charges import SmartsChargeCalculator
 from pichemist.charges import PKaChargeCalculator
+from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.io import generate_input
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
-from pichemist.fasta.matcher import get_aa_pkas_for_list
-from pichemist.fasta.matcher import get_pka_sets_names
 from pichemist.model import PKaMethod
 from pichemist.model import InputFormat
 from pichemist.model import OutputFormat
 from pichemist.model import MODELS
-from pichemist.phpi import get_pH_span
-from pichemist.phpi import CalcChargepHCurve
-from pichemist.phpi import calculateIsoelectricPoint
+from pichemist.isoelectric import CurveCalculator
+from pichemist.isoelectric import calculateIsoelectricPoint
 from pichemist.stats import mean
 from pichemist.stats import stddev
 from pichemist.stats import stderr
@@ -36,8 +33,8 @@ log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
 
 
-def calc_molecule_constant_charge(net_Qs):
-    q = [ v[0] for v in net_Qs]
+def calc_molecule_constant_charge(net_qs):
+    q = [ v[0] for v in net_qs]
     if len(q)>0:
         constant_q = float(sum(q))/float(len(q))
     else:
@@ -67,7 +64,7 @@ def print_output_prop_dict(prop_dict, prop):
 
 
 ### PLOT titration curve
-def _plot_titration_curve(pH_Q_dict,figFileName):
+def _plot_titration_curve(pH_q_dict,figFileName):
     plt.matplotlib.rcParams.update({'font.size': 16})
     lines = ["-","--","-.",":"]
     w1=4.0 ; w2=3.0 ; w3=2.0 ; w4=1.0
@@ -79,7 +76,7 @@ def _plot_titration_curve(pH_Q_dict,figFileName):
     i=0
     for pka_set in PKA_SETS_NAMES:
         i+=1
-        pH_Q = pH_Q_dict[pka_set] 
+        pH_Q = pH_q_dict[pka_set] 
         l = plt.plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pka_set,linewidth=next(linewcycler)) 
         if pka_set == 'IPC2_peptide': 
             plt.setp(l,linewidth=8,linestyle='-',color='k')
@@ -108,6 +105,14 @@ def _plot_titration_curve(pH_Q_dict,figFileName):
     plt.savefig(figFileName)
     return
 
+def _merge_pka_lists(list_of_lists):
+    PKA_VALUE_IDX = 0
+    merged_pkas = list()
+    for l in list_of_lists:
+        for tup in l:
+            merged_pkas.append(tup[PKA_VALUE_IDX])
+    return merged_pkas
+
 # TODO: use input and type to determine input
 # TODO: use method instead of use_acdlabs and use_pkamatcher
 def calc_pichemist(input_dict, method,
@@ -117,72 +122,48 @@ def calc_pichemist(input_dict, method,
     # Run calculations
     dict_output={}
     for mol_idx in input_dict.keys():
+
         # Prepare molecule and break into fragments
         mol_name = input_dict[mol_idx]['mol_name']
         mol = input_dict[mol_idx]['mol_obj']    
         mol = MolStandardiser().standardise_molecule(mol)
-        frags_smi_list = PeptideCutter().break_amide_bonds_and_cap(mol)
-        # ANDREY: calculate_net_qs wants standardise_molecule() for each mol in the list
-        # should that be done here instead or maybe not at all since we do for the
-        # full peptide?
+        smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
 
-        # TODO: Match and calc pKas should be an API that contains the following
-            # TODO: Match AA pKas from SMILES list should also be an API
-            # TODO: Predict pKas from SMILES list should also be an API
-
-        # Match known pKas from FASTA definitions
-        pka_sets_names = get_pka_sets_names()
-        unknown_frags, base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta = get_aa_pkas_for_list(frags_smi_list)
-
-        # caclulate pKas for unknown fragmets
-        if len(unknown_frags) > 0:
-            base_pkas_calc, acid_pkas_calc, diacid_pkas_calc = calculate_pkas_from_list(unknown_frags,
-                                                                                 method=method)
-        net_Qs = SmartsChargeCalculator().calculate_net_qs_from_list(unknown_frags)
-
-        # print(base_pkas_fasta)
-        # exit()
-
+        # Calculate pKas and charges
+        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs = \
+            match_and_calculate_pkas_and_charges_from_list(smiles_list, method)
+        
+        # TODO: Move this into APIs
+        # Calculate the curves
         pI_dict={}
-        Q_dict={}
-        pH_Q_dict={}
-        pH_lim = get_pH_span()
+        q_dict={}
+        pH_q_dict={}
+        pH_lim = CurveCalculator().get_pH_span()
+        pka_sets_names = FastaPKaMatcher().get_pka_sets_names()
         for pka_set in pka_sets_names:
-
-            def merge_pka_lists(list_of_lists):
-                merged_pkas = list()
-                for l in list_of_lists:
-                    for t in l:
-                        merged_pkas.append(t[0])
-                return merged_pkas
-
-            # merge fasta and calcualted pkas
-            base_pkas = merge_pka_lists([base_pkas_fasta[pka_set], base_pkas_calc])
-            acid_pkas = merge_pka_lists([acid_pkas_fasta[pka_set], acid_pkas_calc])
-            diacid_pkas = merge_pka_lists([diacid_pkas_fasta[pka_set], diacid_pkas_calc])
+            
+            # merge fasta and calculated pkas
+            base_pkas = base_pkas_dict[pka_set]
+            acid_pkas = acid_pkas_dict[pka_set]
+            diacid_pkas = diacid_pkas_dict[pka_set]
 
             # calculate isoelectric point
-            molecule_constant_charge = calc_molecule_constant_charge(net_Qs)
+            molecule_constant_charge = calc_molecule_constant_charge(net_qs)
             Q = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas, diacid_pkas,
                                                        pH=7.4, constant_q=molecule_constant_charge)
             pI = calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
-            pH_Q = CalcChargepHCurve(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
+            pH_Q = CurveCalculator().calculate_charged_curve(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
             pH_Q = pH_Q.T
             pI_dict[pka_set] = pI
-            Q_dict[pka_set] = Q
-            pH_Q_dict[pka_set] = pH_Q
-
-
+            q_dict[pka_set] = Q
+            pH_q_dict[pka_set] = pH_Q
 
         # calcualte isoelectric interval and reset undefined pI values 
         int_tr = 0.2    # TODO define it elsewhere 
-        
-        
-
         interval_low_l = []
         interval_high_l = []
         for pka_set in PKA_SETS_NAMES:
-            pH_Q = pH_Q_dict[pka_set]
+            pH_Q = pH_q_dict[pka_set]
             Q=pH_Q[:,1]
             pH=pH_Q[:,0]
             pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
@@ -219,8 +200,6 @@ def calc_pichemist(input_dict, method,
         interval = (interval_low, interval_high) 
 
 
-
-
         # pI 
         pIl=[]
         for k in pI_dict.keys(): pIl += [pI_dict[k]]
@@ -230,10 +209,10 @@ def calc_pichemist(input_dict, method,
 
         # charge at pH=7.4
         Ql=[]
-        for k in Q_dict.keys(): Ql += [Q_dict[k]]
-        Q_dict['Q at pH7.4 mean']=mean(Ql)
-        Q_dict['std']=stddev(Ql)
-        Q_dict['err']=stderr(Ql)
+        for k in q_dict.keys(): Ql += [q_dict[k]]
+        q_dict['Q at pH7.4 mean']=mean(Ql)
+        q_dict['std']=stddev(Ql)
+        q_dict['err']=stderr(Ql)
 
 
         # print isoelectric interval
@@ -242,7 +221,7 @@ def calc_pichemist(input_dict, method,
         interval_low_l = []
         interval_high_l = []
         for pka_set in PKA_SETS_NAMES:
-            pH_Q = pH_Q_dict[pka_set]
+            pH_Q = pH_q_dict[pka_set]
             Q=pH_Q[:,1]
             pH=pH_Q[:,0]
             pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
@@ -271,14 +250,14 @@ def calc_pichemist(input_dict, method,
         # plot titration curve
         if plot_titration_curve:
             figFileName = "OUT_titration_curve_pIChemiSt.png"
-            _plot_titration_curve(pH_Q_dict,figFileName)
+            _plot_titration_curve(pH_q_dict,figFileName)
         else:
             figFileName = ""
         
         # output dict for given molecule 
         dict_output[mol_idx]={'mol_name':mol_name,
                             'pI':pI_dict,
-                            'QpH7':Q_dict,
+                            'QpH7':q_dict,
                             'pI_interval':interval,
                             'plot_filename':figFileName,
                             'pI_interval_threshold':int_tr
@@ -295,7 +274,7 @@ def calc_pichemist(input_dict, method,
                                     'acid_pkas_fasta':acid_pkas_fasta,
                                     'base_pkas_calc':base_pkas_calc,
                                     'acid_pkas_calc':acid_pkas_calc,
-                                    'constant_Qs_calc':net_Qs
+                                    'constant_Qs_calc':net_qs
                                     })
 
                                     # Dicacids pkas are included as single apparent ionizaitions. No need to include diacids. 

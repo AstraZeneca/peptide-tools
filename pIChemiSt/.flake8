@@ -3,4 +3,3 @@ exclude =
     legacy
     cli.py
     acd.py
-    phpi.py
