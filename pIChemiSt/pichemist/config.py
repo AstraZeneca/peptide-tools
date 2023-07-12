@@ -10,12 +10,6 @@ KNOWN_RESIDUES = ["G", "A", "S", "P", "V", "T", "C",
                   "M", "H", "F", "R", "Y", "W", "X",
                   "Z", "B", "U"]
 
-PKA_JSON_TYPE_MATCHING = {
-     "acidic": "acidic",
-     "basic": "basic",
-     "terminus_ionizable": "terminus_ionizable"
-}
-
 PKA_JSON_INDICES = {
      "primary": 0,
      "n-terminal": 1,
@@ -68,3 +62,4 @@ SS_SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                             "ss_smarts_set_standardised.json"
 AA_SMARTS_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                          "aa_smarts_set_standardised.json"
+TITRATION_FILENAME = "out_titration_curve.png"

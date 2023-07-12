@@ -1,32 +1,28 @@
-import sys, os, csv
-import argparse
+import os
+import sys
+import csv
 import json
-import os.path
-
-# TODO: Explicit imports 
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
-from itertools import cycle
+
 from rdkit import Chem
 from rdkit import RDLogger
-
-from pichemist.api import match_and_calculate_pkas_and_charges_from_list
+from itertools import cycle
 from pichemist.api import calculate_pI_pH_and_charge_dicts
+from pichemist.api import calculate_isoelectric_interval_and_threshold
+from pichemist.api import match_and_calculate_pkas_and_charges_from_list
+from pichemist.api import merge_matched_and_calculated_pkas
 from pichemist.config import PKA_SETS_NAMES
-from pichemist.charges import PKaChargeCalculator
-from pichemist.fasta.matcher import FastaPKaMatcher
+from pichemist.config import TITRATION_FILENAME
 from pichemist.io import generate_input
+from pichemist.io import output_property_dict
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
 from pichemist.model import PKaMethod
 from pichemist.model import InputFormat
 from pichemist.model import OutputFormat
 from pichemist.model import MODELS
-from pichemist.isoelectric import CurveCalculator
-from pichemist.isoelectric import IsoelectricPointCalculator
-from pichemist.stats import mean
-from pichemist.stats import stddev
-from pichemist.stats import stderr
 from pichemist.utils import get_logger
 
 # Configure logging
@@ -34,28 +30,8 @@ log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
 
 
-def print_output_prop_dict(prop_dict, prop):
-    global tit
-    lj=12
-    #keys = prop_dict.keys()
-    keys = list(prop_dict.keys())
-    keys.remove('std'); keys.insert(0, 'std')
-    keys.remove('err'); keys.insert(0, 'err')
-    keys.remove(prop + ' mean'); keys.insert(0, prop+' mean')
-    tit="sequence"
-    print(" ")
-    print("======================================================================================================================================================")
-    print(prop)
-    print( "---------------------------------")
-    for k in keys:
-        p = prop_dict[k]
-        print(k.rjust(lj)  + "  " +  str(round(p,2)).ljust(lj) )
-    print(" ")
-    return
-
-
 ### PLOT titration curve
-def _plot_titration_curve(pH_q_dict,figFileName):
+def _plot_titration_curve(pH_q_dict,fig_filename):
     plt.matplotlib.rcParams.update({'font.size': 16})
     lines = ["-","--","-.",":"]
     w1=4.0 ; w2=3.0 ; w3=2.0 ; w4=1.0
@@ -93,11 +69,9 @@ def _plot_titration_curve(pH_q_dict,figFileName):
     plt.grid(True)
 
     #show()
-    plt.savefig(figFileName)
+    plt.savefig(fig_filename)
     return
 
-# TODO: use input and type to determine input
-# TODO: use method instead of use_acdlabs and use_pkamatcher
 def calc_pichemist(input_dict, method,
                    plot_titration_curve=False,
                    print_fragments=False):
@@ -113,164 +87,75 @@ def calc_pichemist(input_dict, method,
         smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
 
         # Calculate pKas and charges
-        base_pkas_fasta, acid_pkas_fasta, _, \
-        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags = \
+        base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta, \
+        base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_qs_and_frags = \
             match_and_calculate_pkas_and_charges_from_list(smiles_list, method)
-
+        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict = \
+            merge_matched_and_calculated_pkas(
+                base_pkas_fasta, base_pkas_calc,
+                acid_pkas_fasta, acid_pkas_calc,
+                diacid_pkas_fasta, diacid_pkas_calc)
+        
         # Calculate the curves
         pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
             base_pkas_dict, acid_pkas_dict,
             diacid_pkas_dict, net_qs_and_frags)
 
-        # calcualte isoelectric interval and reset undefined pI values 
-        int_tr = 0.2    # TODO define it elsewhere 
-        interval_low_l = []
-        interval_high_l = []
-        pH_lim = CurveCalculator().get_pH_span()
-        for pka_set in PKA_SETS_NAMES:
-            pH_Q = pH_q_dict[pka_set]
-            Q=pH_Q[:,1]
-            pH=pH_Q[:,0]
-            pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
-            
-            
-            # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
+        # Calculate isoelectric interval
+        interval, interval_threshold = \
+            calculate_isoelectric_interval_and_threshold(pH_q_dict)
 
-            #print(pH_int[0],pH_int[-1],pH_lim[0],pH_lim[1])
-            if len(pH_int) > 0:
-
-                # case when pI is not defined
-                if round(pH_int[0],4) == round(pH_lim[0],4) and round(pH_int[-1],4) == round(pH_lim[1],4):
-                    pI_dict[pka_set] = float('NaN')    
-
-                interval_low_l.append(pH_int[0])
-                interval_high_l.append(pH_int[-1])
-            
-            else:
-                # case when pI is not defined
-                pI_dict[pka_set] = float('NaN')    
-                interval_low_l.append(pH[0])
-                interval_high_l.append(pH[-1])
-           
-        if len(interval_low_l)>0:
-            interval_low = mean(interval_low_l)
-        else:
-            interval_low = float('NaN')
-            
-        if len(interval_high_l)>0:
-            interval_high = mean(interval_high_l)
-        else:
-            interval_high = float('NaN')
-            
-        interval = (interval_low, interval_high) 
-
-
-        # pI 
-        pIl=[]
-        for k in pI_dict.keys(): pIl += [pI_dict[k]]
-        pI_dict['pI mean']=mean(pIl)
-        pI_dict['std']=stddev(pIl)
-        pI_dict['err']=stderr(pIl)
-
-        # charge at pH=7.4
-        Ql=[]
-        for k in q_dict.keys(): Ql += [q_dict[k]]
-        q_dict['Q at pH7.4 mean']=mean(Ql)
-        q_dict['std']=stddev(Ql)
-        q_dict['err']=stderr(Ql)
-
-
-        # print isoelectric interval
-        int_tr = 0.2    # TODO define it elsewhere 
-
-        interval_low_l = []
-        interval_high_l = []
-        for pka_set in PKA_SETS_NAMES:
-            pH_Q = pH_q_dict[pka_set]
-            Q=pH_Q[:,1]
-            pH=pH_Q[:,0]
-            pH_int = ( pH[(Q>-int_tr) & (Q<int_tr)] )
-            
-            # isoelectric interval - pH range where the charge is within the given threshold. If molecule permanently has a charge the interval is not defined and NaN are provided. 
-            if len(pH_int) > 1:
-                #interval = (pH_int[0], pH_int[-1])
-                interval_low_l.append(pH_int[0])
-                interval_high_l.append(pH_int[-1])
-            #else:
-            #    interval_low.append(float('NaN'))
-            #    interval_low.append(float('NaN'))
-           
-        if len(interval_low_l)>0:
-            interval_low = mean(interval_low_l)
-        else:
-            interval_low = float('NaN')
-            
-        if len(interval_high_l)>0:
-            interval_high = mean(interval_high_l)
-        else:
-            interval_high = float('NaN')
-            
-        interval = (interval_low, interval_high) 
-
-        # plot titration curve
+        # Plot titration curve
+        fig_filename = ""
         if plot_titration_curve:
-            figFileName = "OUT_titration_curve_pIChemiSt.png"
-            _plot_titration_curve(pH_q_dict,figFileName)
-        else:
-            figFileName = ""
+            fig_filename = TITRATION_FILENAME
+            _plot_titration_curve(pH_q_dict, fig_filename)
+            
+        # Output for given molecule 
+        dict_output[mol_idx]={
+            'mol_name': mol_name,
+            'pI': pI_dict,
+            'QpH7': q_dict,
+            'pI_interval': interval,
+            'plot_filename': fig_filename,
+            'pI_interval_threshold': interval_threshold}
         
-        # output dict for given molecule 
-        dict_output[mol_idx]={'mol_name':mol_name,
-                            'pI':pI_dict,
-                            'QpH7':q_dict,
-                            'pI_interval':interval,
-                            'plot_filename':figFileName,
-                            'pI_interval_threshold':int_tr
-                            }
-        
-        # define pka_set for reporting pKa of individual amino acids and fragments
+        # Define pka_set for reporting pKa of
+        # individual amino acids and fragments
         pka_set='IPC2_peptide'
-        dict_output[mol_idx].update({'pKa_set':pka_set })
+        dict_output[mol_idx].update({'pKa_set': pka_set})
 
-        
         if print_fragments:
+            # No need to include diacids pkas as they 
+            # are included as single apparent ionizaitions
             dict_output[mol_idx].update({
-                                    'base_pkas_fasta':base_pkas_fasta,
-                                    'acid_pkas_fasta':acid_pkas_fasta,
-                                    'base_pkas_calc':base_pkas_calc,
-                                    'acid_pkas_calc':acid_pkas_calc,
-                                    'constant_Qs_calc':net_qs_and_frags
+                                    'base_pkas_fasta': base_pkas_fasta,
+                                    'acid_pkas_fasta': acid_pkas_fasta,
+                                    'base_pkas_calc': base_pkas_calc,
+                                    'acid_pkas_calc': acid_pkas_calc,
+                                    'constant_Qs_calc': net_qs_and_frags
                                     })
-
-                                    # Dicacids pkas are included as single apparent ionizaitions. No need to include diacids. 
-                                    #'diacid_pkas_calc':diacid_pkas_calc,
-                                    #'diacid_pkas_fasta':diacid_pkas_fasta,
-
     return dict_output
-
 
 
 def print_output(dict_output, method, print_fragments=False):
 
     for mol_idx in dict_output.keys():
-    
         molid = dict_output[mol_idx]
-
-        print_output_prop_dict(dict_output[mol_idx]['pI'], 'pI')
-        print_output_prop_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4')
+        output_property_dict(dict_output[mol_idx]['pI'], 'pI')
+        output_property_dict(dict_output[mol_idx]['QpH7'],'Q at pH7.4')
 
         if method == "acd":
-            predition_tool = 'ACDlabs'
+            prediction_tool = 'ACDlabs'
         if method == "pkamatcher":
-            predition_tool = 'pKaMatcher'
+            prediction_tool = 'pKaMatcher'
 
         int_tr = dict_output[mol_idx]['pI_interval_threshold']
         pka_set = dict_output[mol_idx]['pKa_set']
 
         print(" ")
-        #print("pH interval with charge between %4.1f and %4.1f for pKa set: %s and prediction tool: %s" % (-int_tr,int_tr,pka_set,predition_tool) )
-        print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr,int_tr,predition_tool) )
-        print("%4.1f - %4.1f" % (dict_output[mol_idx]['pI_interval'][0],dict_output[mol_idx]['pI_interval'][1]))
+        print("pH interval with charge between %4.1f and %4.1f and prediction tool: %s" % (-int_tr, int_tr, prediction_tool) )
+        print("pI interval: %4.1f - %4.1f" % (dict_output[mol_idx]['pI_interval'][0], dict_output[mol_idx]['pI_interval'][1]))
 
         if print_fragments:
             base_pkas_fasta = dict_output[mol_idx]['base_pkas_fasta']
@@ -325,9 +210,10 @@ def print_output(dict_output, method, print_fragments=False):
 
 
 
-__doc__ = "Calculates the isoelectric point (pI) of a molecules by cutting its amide bonds, retreiving the pKa values for known AAs, predicting pKas of unknown fragments using pKaMatcher or ACDlabs, and finally calculating the pI using the Henderson-Hasselbalch equation."
-
-
+__doc__ = """Calculates the isoelectric point (pI) of a molecules by cutting its 
+amide bonds, retreiving the pKa values for known AAs, predicting pKas of unknown 
+fragments using pKaMatcher or ACDlabs, and finally calculating the pI using the 
+Henderson-Hasselbalch equation."""
 
 def arg_parser():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -345,7 +231,7 @@ def arg_parser():
                         default=OutputFormat.CONSOLE)
     parser.add_argument("--plot_titration_curve", default=False,
                         action='store_true', dest="plot_titration_curve",
-                        help="TODO:")
+                        help="Generate an image of the titration curve into a file")
     parser.add_argument("--print_fragment_pkas", default=False,
                         action='store_true', dest="print_fragment_pkas",
                         help="TODO: Print out fragments with corresponding pKas used in pI calcution.")
@@ -380,7 +266,7 @@ if __name__ == "__main__":
         known_out_file_types = ['.sdf','.csv']
         filename, out_fext = os.path.splitext(args.output_file)
         if out_fext not in known_out_file_types:
-            raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
+            raise Exception('Error! Output file extention not in supported file types:' + str(known_out_file_types))
             sys.exit(1)
 
         mol_list=[]

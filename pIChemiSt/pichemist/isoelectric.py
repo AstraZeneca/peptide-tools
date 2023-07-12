@@ -44,12 +44,13 @@ class CurveCalculator(object):
         return np.vstack((self.pH_range, self.q_range)).T
 
 
-class IsoelectricPointCalculator(object):
-    """Calculates the isoelectric point."""
+class IsoelectricCalculator(object):
+    """Calculates the isoelectric point and interval."""
 
     def __init__(self):
         self.tolerance = 0.01
         self.charge_tolerance = 0.05
+        self.interval_threshold = 0.2
         self.pH_limit = CurveCalculator().get_pH_span()
         self.lower_pH = self.pH_limit[0]
         self.higher_pH = self.pH_limit[1]
@@ -99,3 +100,10 @@ class IsoelectricPointCalculator(object):
                 return self.pH_limit[0]
             elif self.middle_pH >= self.pH_limit[1]:
                 return self.pH_limit[1]
+
+    def calculate_interval(self, pH_q):
+        """Calculates the isoelectric interval."""
+        q = pH_q[:, 1]
+        pH = pH_q[:, 0]
+        return (pH[(q > -self.interval_threshold)
+                   & (q < self.interval_threshold)])

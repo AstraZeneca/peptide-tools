@@ -73,9 +73,9 @@ class PKaChargeCalculator(object):
         Ka1 = 10**(-pKa1)
         Ka2 = 10**(-pKa2)
         H = 10**(-pH)
-        f1 = (H*Ka1)/(H**2+H*Ka1+Ka1*Ka2)  # fraction of [AH-]
-        f2 = f1 * Ka2 / H                  # fraction of [A2-]
-        return -2*f2 + (-1)*f1             # average charge of phosphate
+        f1 = (H*Ka1) / (H**2 + H*Ka1 + Ka1*Ka2)  # fraction of [AH-]
+        f2 = f1 * Ka2 / H                        # fraction of [A2-]
+        return -2*f2 + (-1)*f1                   # average charge of phosphate
 
     def calculate_charge(self, base_pkas, acid_pkas, diacid_pkas,
                          pH, constant_q=0):

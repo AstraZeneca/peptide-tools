@@ -105,7 +105,7 @@ class FastaPKaMatcher(object):
                      unknown_fragments,
                      base_pka_dict,
                      acid_pka_dict,
-                     diacid_pka_dict,   # TODO: this is not used
+                     diacid_pka_dict,  # sic - not used
                      pka_sets):
         """
         For a given SMILES, it matches its pKa

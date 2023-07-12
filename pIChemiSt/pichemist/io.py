@@ -57,3 +57,26 @@ def read_structure_file(input_filepath):
                             "fasta": None}
         uuid += 1
     return dict_input
+
+
+def output_property_dict(prop_dict, prop):
+    """TODO:..."""
+    # global title
+    lj = 12
+    keys = list(prop_dict.keys())
+    keys.remove('std')
+    keys.insert(0, 'std')
+    keys.remove('err')
+    keys.insert(0, 'err')
+    keys.remove(prop + ' mean')
+    keys.insert(0, prop+' mean')
+    # title = "sequence"
+    print(" ")
+    print("=" * 150)
+    print(prop)
+    print("-" * 33)
+    for k in keys:
+        p = prop_dict[k]
+        print(k.rjust(lj) + "  " + str(round(p, 2)).ljust(lj))
+    print(" ")
+    return

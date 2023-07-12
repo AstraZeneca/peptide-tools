@@ -17,6 +17,7 @@ HOW TO RUN
     python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/example_pka_matcher_1.smi -of json --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/example_pka_matcher_2.smi -of json --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i "CC(=O)NCC(=O)NC" -if smiles --print_fragment_pkas --method pkamatcher
 

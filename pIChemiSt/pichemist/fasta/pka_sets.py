@@ -2,7 +2,6 @@ import os
 import json
 
 from pichemist.config import FASTA_PKA_SETS_DIR
-from pichemist.config import PKA_JSON_TYPE_MATCHING
 
 
 def create_logic_set_from_standardised_json(filepath):
@@ -34,18 +33,18 @@ def create_logic_set_from_standardised_json(filepath):
 
     logic_set = dict()
     values = data["values"]
-    for new_name, original_name in PKA_JSON_TYPE_MATCHING.items():
+    for value_type in values.keys():
 
         # Initialise a dict and populate it using
         # a list of values instead of objects
-        logic_set[original_name] = dict()
-        pka_type_set = values[new_name]
+        logic_set[value_type] = dict()
+        pka_type_set = values[value_type]
         for aa, values_list in pka_type_set.items():
             value_list = list()
             for val_obj in values_list:
                 pka = val_obj["value"]
                 value_list.append(pka)
-            logic_set[original_name][aa] = value_list
+            logic_set[value_type][aa] = value_list
     return logic_set, data["name"]
 
 
