@@ -1,7 +1,7 @@
-- create pkmatcher class
+- create tests for the console print (cli)
 - create acd tests
-- create pkamatcher tests
-- create viz tests
+- create plot tests
+- create cli tests
 - clean up tests folder
 - create setup.py / initialisation of path
 - finish pka matcher implementation / clean up

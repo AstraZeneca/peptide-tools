@@ -6,6 +6,7 @@ import argparse
 
 from rdkit import Chem
 from rdkit import RDLogger
+from pichemist.api import pichemist_from_list
 from pichemist.io import generate_input
 from pichemist.io import output_property_dict
 from pichemist.model import PKaMethod
@@ -72,12 +73,6 @@ def print_output(dict_output, method, print_fragments=False):
             for pkas,smi in zip(acid_pkas,all_acid_pkas_smi):
                 s_pkas = ["%4.1f"%(pkas)]
                 print("smiles or AA, acid pKa : %-15s %s" % (smi,' '.join(s_pkas)))
-
-#            print(" ")
-#            print("List of calculated DIACID pKa's with the corresponding fragments")
-#            for pkas,smi in zip(diacid_pkas,all_diacid_pkas_smi):
-#                s_pkas = ["%4.1f  %4.1f"%(pkas[0],pkas[1])]
-#                print("smiles or AA, diacid pka : %-15s %s" % (smi,' '.join(s_pkas)))
 
             print(" ")
             print("List of constantly ionized fragments")
