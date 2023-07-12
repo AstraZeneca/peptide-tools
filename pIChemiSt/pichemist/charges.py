@@ -88,3 +88,11 @@ class PKaChargeCalculator(object):
         for pkas in diacid_pkas:
             charge += self._calculate_diacidic_charge(pH, pkas)
         return charge
+
+    def calculate_constant_charge(self, net_qs):
+        """Calculates the constant charge from the net charges."""
+        if len(net_qs) > 0:
+            constant_q = float(sum(net_qs)) / float(len(net_qs))
+        else:
+            constant_q = 0.0
+        return constant_q

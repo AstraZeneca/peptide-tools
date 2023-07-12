@@ -1,10 +1,14 @@
 import numpy as np
 
 from pichemist.charges import PKaChargeCalculator
+from pichemist.utils import get_logger
+
+log = get_logger(__name__)
 
 
 class CurveCalculator(object):
     """Uses pKa values to calculate the pH/Q curve."""
+
     def __init__(self):
         self.pH_lower_bound = -1
         self.pH_upper_bound = 15
@@ -15,7 +19,7 @@ class CurveCalculator(object):
     def _define_pH_range(self):
         """Sets the pH range for the curve (X axis)."""
         pH_limit = self.get_pH_span()
-        return np.arange(pH_limit[0], pH_limit[1]+self.pH_step, self.pH_step)
+        return np.arange(pH_limit[0], pH_limit[1] + self.pH_step, self.pH_step)
 
     def _define_charge_range(self):
         """Sets the charge range (Y axis)."""
@@ -37,43 +41,61 @@ class CurveCalculator(object):
                 base_pkas, acid_pkas, diacid_pkas,
                 self.pH_range[i], constant_q=constant_q)
             self.q_range[i] = charge
-        return np.vstack((self.pH_range, self.q_range))
+        return np.vstack((self.pH_range, self.q_range)).T
 
 
-def calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q=0):
-    tolerance=0.01
-    charge_tol=0.05
-    na=len(acid_pkas)+len(diacid_pkas)
-    nb=len(base_pkas)
-    
-    pH_lim = CurveCalculator().get_pH_span()
-    lower_pH = pH_lim[0] 
-    higher_pH = pH_lim[1] 
+class IsoelectricPointCalculator(object):
+    """Calculates the isoelectric point."""
 
-    while True:
-        mid_pH = 0.5 * (higher_pH + lower_pH)
-        charge = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas, diacid_pkas, mid_pH, constant_q=constant_q)
-        
-        if na == 0 and nb != 0:
-            #print "---!Warning: no acidic ionizable groups, only basic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = charge_tol * nb
+    def __init__(self):
+        self.tolerance = 0.01
+        self.charge_tolerance = 0.05
+        self.pH_limit = CurveCalculator().get_pH_span()
+        self.lower_pH = self.pH_limit[0]
+        self.higher_pH = self.pH_limit[1]
 
-        elif nb == 0 and na != 0:
-            #print "---!Warning: no basic ionizable groups, only acidic groups present in the sequence. pI is not defined and thus won't be calculated. However, you can still plot the titration curve. Continue."
-            refcharge = -charge_tol * na
+    def calculate_pI(self, base_pkas, acid_pkas,
+                     diacid_pkas, constant_q=0):
+        """
+        Uses the pKas and charge to iteratively calculate
+        the isoelectric point of a molecule.
 
-        else:
-            refcharge = 0.0
+        """
+        while True:
+            self.middle_pH = 0.5 * (self.higher_pH + self.lower_pH)
+            charge = PKaChargeCalculator().calculate_charge(
+                base_pkas, acid_pkas, diacid_pkas,
+                self.middle_pH, constant_q=constant_q)
+            na = len(acid_pkas) + len(diacid_pkas)
+            nb = len(base_pkas)
 
+            if na == 0 and nb != 0:
+                log.debug("Warning: no acidic ionizable groups, "
+                          "only basic groups present in the "
+                          "sequence. pI is not defined and thus "
+                          "won't be calculated""")
+                reference_charge = self.charge_tolerance * nb
+            elif nb == 0 and na != 0:
+                log.debug("Warning: no basic ionizable groups, "
+                          "only acidic groups present in the "
+                          "sequence. pI is not defined and thus "
+                          "won't be calculated""")
+                reference_charge = -self.charge_tolerance * na
+            else:
+                reference_charge = 0.0
 
-        if charge > refcharge + tolerance:
-            lower_pH = mid_pH
-        elif charge < refcharge - tolerance:
-            higher_pH = mid_pH
-        else:
-            return mid_pH
-            
-        if mid_pH <= pH_lim[0]:
-            return pH_lim[0]
-        elif mid_pH >= pH_lim[1]:
-            return pH_lim[1]
+            # sic - instance attributes are updates as the
+            # while block keeps looping
+            if charge > reference_charge + self.tolerance:
+                self.lower_pH = self.middle_pH
+            elif charge < reference_charge - self.tolerance:
+                self.higher_pH = self.middle_pH
+            else:
+                return self.middle_pH
+
+            # If middle pH ends up outside the bounds
+            # then return the bounds instead
+            if self.middle_pH <= self.pH_limit[0]:
+                return self.pH_limit[0]
+            elif self.middle_pH >= self.pH_limit[1]:
+                return self.pH_limit[1]

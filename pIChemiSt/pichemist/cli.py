@@ -11,6 +11,7 @@ from rdkit import Chem
 from rdkit import RDLogger
 
 from pichemist.api import match_and_calculate_pkas_and_charges_from_list
+from pichemist.api import calculate_pI_pH_and_charge_dicts
 from pichemist.config import PKA_SETS_NAMES
 from pichemist.charges import PKaChargeCalculator
 from pichemist.fasta.matcher import FastaPKaMatcher
@@ -22,7 +23,7 @@ from pichemist.model import InputFormat
 from pichemist.model import OutputFormat
 from pichemist.model import MODELS
 from pichemist.isoelectric import CurveCalculator
-from pichemist.isoelectric import calculateIsoelectricPoint
+from pichemist.isoelectric import IsoelectricPointCalculator
 from pichemist.stats import mean
 from pichemist.stats import stddev
 from pichemist.stats import stderr
@@ -31,16 +32,6 @@ from pichemist.utils import get_logger
 # Configure logging
 log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
-
-
-def calc_molecule_constant_charge(net_qs):
-    q = [ v[0] for v in net_qs]
-    if len(q)>0:
-        constant_q = float(sum(q))/float(len(q))
-    else:
-        constant_q = 0.0
-
-    return constant_q
 
 
 def print_output_prop_dict(prop_dict, prop):
@@ -105,14 +96,6 @@ def _plot_titration_curve(pH_q_dict,figFileName):
     plt.savefig(figFileName)
     return
 
-def _merge_pka_lists(list_of_lists):
-    PKA_VALUE_IDX = 0
-    merged_pkas = list()
-    for l in list_of_lists:
-        for tup in l:
-            merged_pkas.append(tup[PKA_VALUE_IDX])
-    return merged_pkas
-
 # TODO: use input and type to determine input
 # TODO: use method instead of use_acdlabs and use_pkamatcher
 def calc_pichemist(input_dict, method,
@@ -130,38 +113,20 @@ def calc_pichemist(input_dict, method,
         smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
 
         # Calculate pKas and charges
-        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs = \
+        base_pkas_fasta, acid_pkas_fasta, _, \
+        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags = \
             match_and_calculate_pkas_and_charges_from_list(smiles_list, method)
-        
-        # TODO: Move this into APIs
-        # Calculate the curves
-        pI_dict={}
-        q_dict={}
-        pH_q_dict={}
-        pH_lim = CurveCalculator().get_pH_span()
-        pka_sets_names = FastaPKaMatcher().get_pka_sets_names()
-        for pka_set in pka_sets_names:
-            
-            # merge fasta and calculated pkas
-            base_pkas = base_pkas_dict[pka_set]
-            acid_pkas = acid_pkas_dict[pka_set]
-            diacid_pkas = diacid_pkas_dict[pka_set]
 
-            # calculate isoelectric point
-            molecule_constant_charge = calc_molecule_constant_charge(net_qs)
-            Q = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas, diacid_pkas,
-                                                       pH=7.4, constant_q=molecule_constant_charge)
-            pI = calculateIsoelectricPoint(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
-            pH_Q = CurveCalculator().calculate_charged_curve(base_pkas, acid_pkas, diacid_pkas, constant_q = molecule_constant_charge)
-            pH_Q = pH_Q.T
-            pI_dict[pka_set] = pI
-            q_dict[pka_set] = Q
-            pH_q_dict[pka_set] = pH_Q
+        # Calculate the curves
+        pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
+            base_pkas_dict, acid_pkas_dict,
+            diacid_pkas_dict, net_qs_and_frags)
 
         # calcualte isoelectric interval and reset undefined pI values 
         int_tr = 0.2    # TODO define it elsewhere 
         interval_low_l = []
         interval_high_l = []
+        pH_lim = CurveCalculator().get_pH_span()
         for pka_set in PKA_SETS_NAMES:
             pH_Q = pH_q_dict[pka_set]
             Q=pH_Q[:,1]
@@ -274,7 +239,7 @@ def calc_pichemist(input_dict, method,
                                     'acid_pkas_fasta':acid_pkas_fasta,
                                     'base_pkas_calc':base_pkas_calc,
                                     'acid_pkas_calc':acid_pkas_calc,
-                                    'constant_Qs_calc':net_qs
+                                    'constant_Qs_calc':net_qs_and_frags
                                     })
 
                                     # Dicacids pkas are included as single apparent ionizaitions. No need to include diacids. 
