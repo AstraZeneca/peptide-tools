@@ -3,3 +3,4 @@ exclude =
     legacy
     cli.py
     acd.py
+    plot.py

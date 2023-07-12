@@ -1,7 +1,7 @@
 import os
 
 from pichemist.io import generate_input
-from pichemist.cli import calc_pichemist
+from pichemist.api import pichemist_from_list
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -50,9 +50,9 @@ def test_pka_matcher_json_1():
                 }
 
     input_dict = generate_input(args["input_format"], args["input"])
-    output = calc_pichemist(input_dict, args["method"],
-                            args["plot_titration_curve"],
-                            args["print_fragments"])
+    output = pichemist_from_list(input_dict, args["method"],
+                                 args["plot_titration_curve"],
+                                 args["print_fragments"])
     assert expected == output
 
 
@@ -100,7 +100,7 @@ def test_pka_matcher_json_2():
                 }
 
     input_dict = generate_input(args["input_format"], args["input"])
-    output = calc_pichemist(input_dict, args["method"],
-                            args["plot_titration_curve"],
-                            args["print_fragments"])
+    output = pichemist_from_list(input_dict, args["method"],
+                                 args["plot_titration_curve"],
+                                 args["print_fragments"])
     assert expected == output

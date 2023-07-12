@@ -3,22 +3,11 @@ import sys
 import csv
 import json
 import argparse
-import numpy as np
-import matplotlib.pyplot as plt
 
 from rdkit import Chem
 from rdkit import RDLogger
-from itertools import cycle
-from pichemist.api import calculate_pI_pH_and_charge_dicts
-from pichemist.api import calculate_isoelectric_interval_and_threshold
-from pichemist.api import match_and_calculate_pkas_and_charges_from_list
-from pichemist.api import merge_matched_and_calculated_pkas
-from pichemist.config import PKA_SETS_NAMES
-from pichemist.config import TITRATION_FILENAME
 from pichemist.io import generate_input
 from pichemist.io import output_property_dict
-from pichemist.molecule import MolStandardiser
-from pichemist.molecule import PeptideCutter
 from pichemist.model import PKaMethod
 from pichemist.model import InputFormat
 from pichemist.model import OutputFormat
@@ -28,114 +17,6 @@ from pichemist.utils import get_logger
 # Configure logging
 log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
-
-
-### PLOT titration curve
-def _plot_titration_curve(pH_q_dict,fig_filename):
-    plt.matplotlib.rcParams.update({'font.size': 16})
-    lines = ["-","--","-.",":"]
-    w1=4.0 ; w2=3.0 ; w3=2.0 ; w4=1.0
-    linew = [w1,w1, w2,w2, w3,3, w4,w4]
-    linecycler = cycle(lines)
-    linewcycler = cycle(linew)
-
-    plt.figure(figsize=(8,6))
-    i=0
-    for pka_set in PKA_SETS_NAMES:
-        i+=1
-        pH_Q = pH_q_dict[pka_set] 
-        l = plt.plot(pH_Q[:,0],pH_Q[:,1],next(linecycler),label=pka_set,linewidth=next(linewcycler)) 
-        if pka_set == 'IPC2_peptide': 
-            plt.setp(l,linewidth=8,linestyle='-',color='k')
-
-        # Store data for output
-        if i==1: 
-            pH = pH_Q[:,0]
-            Q_M = pH_Q[:,1]
-        else:
-            Q_M = np.column_stack([Q_M,pH_Q[:,1]])
-
-    plt.plot(pH,pH*0,'k-')
-    plt.plot([7,7],[np.min(Q_M),np.max(Q_M)],'k-')
-    #xlim([np.min(pH),np.max(pH)])
-    plt.xlim([2,12])
-    plt.ylim([np.min(Q_M),np.max(Q_M)])
-
-    plt.legend(loc="center right", bbox_to_anchor=[1.1, 0.5],ncol=1, shadow=True, fontsize=10).get_frame().set_alpha(1)
-    plt.ylabel('peptide charge')
-    plt.xlabel('pH')
-	
-    plt.minorticks_on()
-    plt.grid(True)
-
-    #show()
-    plt.savefig(fig_filename)
-    return
-
-def calc_pichemist(input_dict, method,
-                   plot_titration_curve=False,
-                   print_fragments=False):
-
-    # Run calculations
-    dict_output={}
-    for mol_idx in input_dict.keys():
-
-        # Prepare molecule and break into fragments
-        mol_name = input_dict[mol_idx]['mol_name']
-        mol = input_dict[mol_idx]['mol_obj']    
-        mol = MolStandardiser().standardise_molecule(mol)
-        smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
-
-        # Calculate pKas and charges
-        base_pkas_fasta, acid_pkas_fasta, diacid_pkas_fasta, \
-        base_pkas_calc, acid_pkas_calc, diacid_pkas_calc, net_qs_and_frags = \
-            match_and_calculate_pkas_and_charges_from_list(smiles_list, method)
-        base_pkas_dict, acid_pkas_dict, diacid_pkas_dict = \
-            merge_matched_and_calculated_pkas(
-                base_pkas_fasta, base_pkas_calc,
-                acid_pkas_fasta, acid_pkas_calc,
-                diacid_pkas_fasta, diacid_pkas_calc)
-        
-        # Calculate the curves
-        pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
-            base_pkas_dict, acid_pkas_dict,
-            diacid_pkas_dict, net_qs_and_frags)
-
-        # Calculate isoelectric interval
-        interval, interval_threshold = \
-            calculate_isoelectric_interval_and_threshold(pH_q_dict)
-
-        # Plot titration curve
-        fig_filename = ""
-        if plot_titration_curve:
-            fig_filename = TITRATION_FILENAME
-            _plot_titration_curve(pH_q_dict, fig_filename)
-            
-        # Output for given molecule 
-        dict_output[mol_idx]={
-            'mol_name': mol_name,
-            'pI': pI_dict,
-            'QpH7': q_dict,
-            'pI_interval': interval,
-            'plot_filename': fig_filename,
-            'pI_interval_threshold': interval_threshold}
-        
-        # Define pka_set for reporting pKa of
-        # individual amino acids and fragments
-        pka_set='IPC2_peptide'
-        dict_output[mol_idx].update({'pKa_set': pka_set})
-
-        if print_fragments:
-            # No need to include diacids pkas as they 
-            # are included as single apparent ionizaitions
-            dict_output[mol_idx].update({
-                                    'base_pkas_fasta': base_pkas_fasta,
-                                    'acid_pkas_fasta': acid_pkas_fasta,
-                                    'base_pkas_calc': base_pkas_calc,
-                                    'acid_pkas_calc': acid_pkas_calc,
-                                    'constant_Qs_calc': net_qs_and_frags
-                                    })
-    return dict_output
 
 
 def print_output(dict_output, method, print_fragments=False):
@@ -247,9 +128,9 @@ if __name__ == "__main__":
 
     args = arg_parser()
     input_dict = generate_input(args.input_format, args.input)
-    dict_output = calc_pichemist(input_dict, args.method,
-                                 args.plot_titration_curve,
-                                 args.print_fragment_pkas)
+    dict_output = pichemist_from_list(input_dict, args.method,
+                                      args.plot_titration_curve,
+                                      args.print_fragment_pkas)
 
     ### ----------------------------------------------------------------------
     # Output

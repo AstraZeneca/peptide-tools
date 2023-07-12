@@ -16,6 +16,8 @@ PKA_JSON_INDICES = {
      "c-terminal": 2
 }
 
+REFERENCE_PKA_SET = "IPC2_peptide"
+
 PKA_SETS_NAMES = ["IPC2_peptide",
                   "IPC_peptide",
                   "ProMoST",
