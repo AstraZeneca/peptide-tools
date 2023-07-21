@@ -37,6 +37,16 @@ class OutputFormat(BaseEnum):
     CONSOLE = "console"
 
 
+class OutputConsoleFormat(BaseEnum):
+    JSON = "json"
+    CONSOLE = "console"
+
+
+class OutputFileFormat(BaseEnum):
+    SD_FILE = "sdf"
+    CSV_FILE = "csv"
+
+
 class Models(object):
     """Contains the definitions of all models."""
 

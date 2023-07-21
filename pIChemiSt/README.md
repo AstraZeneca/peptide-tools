@@ -14,11 +14,12 @@ HOW TO RUN
     cd TEST
 
     # Use internal pKaMatcher for pKa calculation of nonatural amino acids
-    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi -of json --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/example_pka_matcher_2.smi -of json --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi -of json --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi -o results.sdf -of sdf --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_2.smi -of json --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i "CC(=O)NCC(=O)NC" -if smiles --print_fragment_pkas --method pkamatcher
 
     or
@@ -28,7 +29,7 @@ HOW TO RUN
     python3 ../pIChemiSt.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --plot_titration_curve --print_fragment_pkas --use_acdlabs
    
     # Output in JSON format
-    python3 pichemist/cli.py -i test/example_pka_matcher_1.smi --use_pkamatcher --json 
+    python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --use_pkamatcher --json 
 
     # Output as an csv file
     python3 ../pIChemiSt.py -i validation_set_modified_peptides.smi --use_pkamatcher -o validation_set_modified_peptides_OUTPUT.csv

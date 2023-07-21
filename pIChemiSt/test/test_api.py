@@ -1,14 +1,11 @@
-import os
-
+from helpers import examples_dir
 from pichemist.io import generate_input
 from pichemist.api import pichemist_from_list
-
-script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def test_pka_matcher_json_1():
     """Example with mixed amino acids using pKaMatcher."""
-    args = {"input": f"{script_dir}/example_pka_matcher_1.smi",
+    args = {"input": f"{examples_dir}/pka_matcher_1.smi",
             "input_format": "smiles_file",
             "plot_titration_curve": False,
             "print_fragments": False,
@@ -58,7 +55,7 @@ def test_pka_matcher_json_1():
 
 def test_pka_matcher_json_2():
     """Example with only natural amino acids (only FASTA matching)."""
-    args = {"input": f"{script_dir}/example_pka_matcher_2.smi",
+    args = {"input": f"{examples_dir}/pka_matcher_2.smi",
             "input_format": "smiles_file",
             "plot_titration_curve": False,
             "print_fragments": False,

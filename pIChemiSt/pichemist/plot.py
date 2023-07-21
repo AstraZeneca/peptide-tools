@@ -6,7 +6,7 @@ from pichemist.config import PKA_SETS_NAMES
 
 
 ### PLOT titration curve
-def generate_and_save_titration_curve(pH_q_dict,fig_filename):
+def generate_and_save_titration_curve(pH_q_dict, fig_filename):
     plt.matplotlib.rcParams.update({'font.size': 16})
     lines = ["-","--","-.",":"]
     w1=4.0 ; w2=3.0 ; w3=2.0 ; w4=1.0

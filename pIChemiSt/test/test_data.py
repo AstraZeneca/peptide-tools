@@ -1,12 +1,9 @@
-import os
 import json
 
+from helpers import examples_dir
 from pichemist.fasta.smarts import AA_SMARTS_SET
 from pichemist.fasta.pka_sets import FASTA_PKA_SETS
 from pichemist.smarts.pka_set import SS_SMARTS_PKA_SET
-
-script_dir = os.path.dirname(os.path.realpath(__file__))
-examples_dir = os.path.join(script_dir, "examples")
 
 
 def test_fasta_pka_sets():

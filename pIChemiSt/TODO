@@ -1,7 +1,9 @@
-- create tests for the console print (cli)
+- clean up the io.py
+- plot.py
+- create tests for the cli file dump
+- io.py - replace hardcoded names with objects from model.py
 - create acd tests
 - create plot tests
-- create cli tests
 - clean up tests folder
 - create setup.py / initialisation of path
 - finish pka matcher implementation / clean up
@@ -10,3 +12,6 @@
 
 Future improvements
 - ChargeCalculator should be more versatile: match all +s and -s, and sum them up to get the net charge - or use RDKit built in functions to get net charge GetFormalCharge()
+- plot should be outside pichemist?
+
+requirements pytest, pytest-subtests
