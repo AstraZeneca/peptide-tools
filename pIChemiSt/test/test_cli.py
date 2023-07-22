@@ -1,3 +1,5 @@
+import base64
+import hashlib
 import json
 import os
 import tempfile
@@ -71,3 +73,45 @@ def test_file_sdf_output():
         with open(tmp_filepath, "r") as f:
             results = f.read()
             assert results == expected
+
+
+def test_file_titration_plot_1():
+    """Validity of the titration plot file."""
+    tmp_file_prefix = tempfile.NamedTemporaryFile().name
+    tmp_filepath = f"{tmp_file_prefix}_1.png"
+    args = arg_parser(["-i", f"{examples_dir}/pka_matcher_1.smi",
+                       "-of", "json", "--print_fragment_pkas",
+                       "-tfp", tmp_file_prefix,
+                       "--plot_titration_curve",
+                       "--method", "pkamatcher"])
+    _ = stdout_to_variable(run_cli, args)
+    if not os.path.exists(tmp_filepath):
+        raise TestError("File was not created.")
+    with open(tmp_filepath, "rb") as f:
+        img_txt = f.read()
+    base64_hash = base64.b64encode(img_txt)
+    hash_object = hashlib.sha224(base64_hash)
+    hex_dig = hash_object.hexdigest()
+    expected = "6e612de5b63edc90da7b090bdf209f74f096a6feb9a0167385d425b5"
+    assert hex_dig == expected
+
+
+def test_file_titration_plot_2():
+    """Validity of the titration plot file."""
+    tmp_file_prefix = tempfile.NamedTemporaryFile().name
+    tmp_filepath = f"{tmp_file_prefix}_1.png"
+    args = arg_parser(["-i", f"{examples_dir}/pka_matcher_2.smi",
+                       "-of", "json", "--print_fragment_pkas",
+                       "-tfp", tmp_file_prefix,
+                       "--plot_titration_curve",
+                       "--method", "pkamatcher"])
+    _ = stdout_to_variable(run_cli, args)
+    if not os.path.exists(tmp_filepath):
+        raise TestError("File was not created.")
+    with open(tmp_filepath, "rb") as f:
+        img_txt = f.read()
+    base64_hash = base64.b64encode(img_txt)
+    hash_object = hashlib.sha224(base64_hash)
+    hex_dig = hash_object.hexdigest()
+    expected = "33ae664e79247014266e751b2ac9a013d2f974c21559dd1ab8daeb7e"
+    assert hex_dig == expected

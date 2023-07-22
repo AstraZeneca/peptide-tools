@@ -1,6 +1,5 @@
-from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
-from pichemist.config import TITRATION_FILENAME
+from pichemist.charges import SmartsChargeCalculator
 from pichemist.core import calculate_pI_pH_and_charge_dicts
 from pichemist.core import calculate_isoelectric_interval_and_threshold
 from pichemist.core import merge_matched_and_calculated_pkas
@@ -10,8 +9,9 @@ from pichemist.molecule import PeptideCutter
 from pichemist.pka.acd import calc_pkas_acdlabs
 from pichemist.pka.pkamatcher import PKaMatcher
 from pichemist.model import PKaMethod
+from pichemist.model import OutputAttributes
 from pichemist.model import MODELS
-from pichemist.plot import generate_and_save_titration_curve
+from pichemist.plot import output_titration_curve
 
 
 class ApiExcepton(Exception):
@@ -59,6 +59,7 @@ def pkas_and_charges_from_list(smiles_list, method):
 
 
 def pichemist_from_list(input_dict, method,
+                        titration_file_prefix=None,
                         plot_titration_curve=False,
                         print_fragments=False):
     """Runs the full logic for a given input dictionary."""
@@ -91,33 +92,38 @@ def pichemist_from_list(input_dict, method,
             calculate_isoelectric_interval_and_threshold(pH_q_dict)
 
         # Plot titration curve
+        if plot_titration_curve and not titration_file_prefix:
+            raise ApiExcepton("A file prefix for the titration plots must "
+                              "be specified.")
         # TODO: ANDREY - fig_filename can be removed from dict_output
         # when the plot is not generated
         fig_filename = ""
         if plot_titration_curve:
-            fig_filename = TITRATION_FILENAME
-            generate_and_save_titration_curve(pH_q_dict, fig_filename)
+            fig_filename = f"{titration_file_prefix}_{mol_idx}"
+            output_titration_curve(pH_q_dict, fig_filename)
 
         # Output for given molecule
         dict_output[mol_idx] = {
-            "mol_name": mol_name,
-            "pI": pI_dict,
-            "QpH7": q_dict,
-            "pI_interval": interval,
-            "plot_filename": fig_filename,
-            "pI_interval_threshold": interval_threshold}
+            OutputAttributes.MOL_NAME.value: mol_name,
+            OutputAttributes.PI.value: pI_dict,
+            OutputAttributes.Q_PH7.value: q_dict,
+            OutputAttributes.PI_INTERVAL.value: interval,
+            OutputAttributes.PI_INTERVAL_THRESHOLD.value: interval_threshold,
+            OutputAttributes.PLOT_FILENAME.value: fig_filename}
 
         # Define set for reporting pKa of individual amino acids and fragments
-        dict_output[mol_idx].update({"pKa_set": REFERENCE_PKA_SET})
+        dict_output[mol_idx].update(
+            {OutputAttributes.PKA_SET.value: REFERENCE_PKA_SET})
 
         if print_fragments:
             # No need to include diacids pkas as they
-            # are included as single apparent ionizaitions
-            dict_output[mol_idx].update({
-                                    "base_pkas_fasta": base_pkas_fasta,
-                                    "acid_pkas_fasta": acid_pkas_fasta,
-                                    "base_pkas_calc": base_pkas_calc,
-                                    "acid_pkas_calc": acid_pkas_calc,
-                                    "constant_Qs_calc": net_qs_and_frags
-                                    })
+            # are included as single apparent ionisations
+            dict_output[
+                mol_idx].update({
+                    OutputAttributes.BASE_PKA_FASTA.value: base_pkas_fasta,
+                    OutputAttributes.ACID_PKA_FASTA.value: acid_pkas_fasta,
+                    OutputAttributes.BASE_PKA_CALC.value: base_pkas_calc,
+                    OutputAttributes.ACID_PKA_CALC.value: acid_pkas_calc,
+                    OutputAttributes.CONSTANT_QS.value: net_qs_and_frags
+                    })
     return dict_output

@@ -4,7 +4,7 @@ import json
 
 from rdkit import Chem
 from pichemist.model import InputFormat
-from pichemist.model import FileExtension
+from pichemist.model import InputFileExtension
 from pichemist.model import OutputFileFormat
 from pichemist.model import OutputConsoleFormat
 from pichemist.model import MODELS
@@ -41,18 +41,18 @@ def read_structure_file(input_filepath):
     """
     _, ext = os.path.splitext(input_filepath)
     if not ext:
-        raise FileFormatError("Something wrong with the file "
+        raise FileFormatError("Something is wrong with the file "
                               f"{input_filepath}")
 
     # Initialize file reader
     try:
-        if ext[1:] == FileExtension.SDF.value:
+        if ext[1:] == InputFileExtension.SDF.value:
             suppl = Chem.SDMolSupplier(input_filepath)
-        elif ext[1:] == FileExtension.SMILES.value:
+        elif ext[1:] == InputFileExtension.SMILES.value:
             suppl = Chem.SmilesMolSupplier(input_filepath, titleLine=False)
         else:
             raise FileFormatError("Invalid format. Only the formats "
-                                  f"{MODELS[FileExtension]} are accepted")
+                                  f"{MODELS[InputFileExtension]} are accepted")
     except OSError:
         raise OSError(f"File error: Does the file exist? {input_filepath}")
 

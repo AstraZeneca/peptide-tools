@@ -2,4 +2,3 @@
 exclude =
     legacy
     acd.py
-    plot.py

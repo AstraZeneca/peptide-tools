@@ -2,6 +2,7 @@ import sys
 import argparse
 
 from rdkit import RDLogger
+from pichemist.config import TITRATION_FILE_PREFIX
 from pichemist.api import pichemist_from_list
 from pichemist.io import generate_input
 from pichemist.io import output_results
@@ -24,14 +25,14 @@ the pI using the Henderson-Hasselbalch equation."""
 def arg_parser(args):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("-i", dest="input",
-                        help="Input to the algorithm",
+                        help="Input filepath",
                         default=None)
     parser.add_argument("-if", dest="input_format",
                         help="Format of the input",
                         choices=MODELS[InputFormat],
                         default=InputFormat.SMILES_FILE)
     parser.add_argument("-o", dest="output_file",
-                        help="Output file",
+                        help="Output filepath",
                         default=None)
     parser.add_argument("-of", dest="output_format",
                         help="Format of the output",
@@ -41,6 +42,9 @@ def arg_parser(args):
                         action='store_true', dest="plot_titration_curve",
                         help="Generate an image of the "
                              "titration curve into a file")
+    parser.add_argument("-tfp", dest="titration_file_prefix",
+                        help="Titration plot file prefix",
+                        default=TITRATION_FILE_PREFIX)
     parser.add_argument("--print_fragment_pkas", default=False,
                         action='store_true', dest="print_fragment_pkas",
                         help="Print the fragments with corresponding "
@@ -57,6 +61,7 @@ def run_cli(args):
     """Main function for running pIChemiSt."""
     input_dict = generate_input(args.input_format, args.input)
     output_dict = pichemist_from_list(input_dict, args.method,
+                                      args.titration_file_prefix,
                                       args.plot_titration_curve,
                                       args.print_fragment_pkas)
     output_results(input_dict, output_dict,

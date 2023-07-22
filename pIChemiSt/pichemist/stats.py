@@ -1,20 +1,20 @@
 import math
 
 
-def mean(lst):
-    """calculates mean"""
-    return sum(lst) / len(lst)
+def mean(input_list):
+    """Calculates the mean for an input list."""
+    return sum(input_list) / len(input_list)
 
 
-def stddev(lst):
-    """returns the standard deviation of lst"""
-    mn = mean(lst)
-    variance = sum([(e-mn)**2 for e in lst])
+def stddev(input_list):
+    """Calculates the standard deviation for an input list."""
+    mn = mean(input_list)
+    variance = sum([(e-mn)**2 for e in input_list])
     return math.sqrt(variance)
 
 
-def stderr(lst):
-    """returns the standard error of the mean of lst"""
-    mn = mean(lst)
-    variance = sum([(e-mn)**2 for e in lst])
-    return math.sqrt(variance) / math.sqrt(len(lst))
+def stderr(input_list):
+    """Calculates the standard error for an input list."""
+    mn = mean(input_list)
+    variance = sum([(e-mn)**2 for e in input_list])
+    return math.sqrt(variance) / math.sqrt(len(input_list))

@@ -8,7 +8,7 @@ class BaseEnum(str, Enum):
     pass
 
 
-class FileExtension(BaseEnum):
+class InputFileExtension(BaseEnum):
     SDF = "sdf"
     SMILES = "smi"
 
@@ -30,6 +30,21 @@ class InputFormat(BaseEnum):
     SD_FILE = "sdf"
 
 
+class OutputAttributes(BaseEnum):
+    MOL_NAME = "mol_name"
+    PI = "pI"
+    Q_PH7 = "QpH7"
+    PI_INTERVAL = "pI_interval"
+    PI_INTERVAL_THRESHOLD = "pI_interval_threshold"
+    PLOT_FILENAME = "plot_filename"
+    PKA_SET = "pKa_set"
+    BASE_PKA_FASTA = "base_pkas_fasta"
+    ACID_PKA_FASTA = "acid_pkas_fasta"
+    BASE_PKA_CALC = "base_pkas_calc"
+    ACID_PKA_CALC = "acid_pkas_calc"
+    CONSTANT_QS = "constant_Qs_calc"
+
+
 class OutputFormat(BaseEnum):
     JSON = "json"
     SD_FILE = "sdf"
@@ -48,7 +63,7 @@ class OutputFileFormat(BaseEnum):
 
 
 class Models(object):
-    """Contains the definitions of all models."""
+    """Contains the definitions of all data models."""
 
     def __init__(self):
         self.definitions = self._get_definitions()

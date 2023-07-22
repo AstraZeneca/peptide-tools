@@ -76,18 +76,18 @@ def calculate_pI_pH_and_charge_dicts(base_pkas_dict, acid_pkas_dict,
         # Calculate isoelectric point
         net_qs = get_net_qs_from_qs_and_frags(net_qs_and_frags)
         constant_q = PKaChargeCalculator().calculate_constant_charge(net_qs)
-        Q = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas,
+        q = PKaChargeCalculator().calculate_charge(base_pkas, acid_pkas,
                                                    diacid_pkas, pH=7.4,
                                                    constant_q=constant_q)
         pI = IsoelectricCalculator().calculate_pI(base_pkas, acid_pkas,
                                                   diacid_pkas,
                                                   constant_q=constant_q)
-        pH_Q = CurveCalculator().calculate_charged_curve(base_pkas, acid_pkas,
+        pH_q = CurveCalculator().calculate_charged_curve(base_pkas, acid_pkas,
                                                          diacid_pkas,
                                                          constant_q=constant_q)
         pI_dict[pka_set] = pI
-        q_dict[pka_set] = Q
-        pH_q_dict[pka_set] = pH_Q
+        q_dict[pka_set] = q
+        pH_q_dict[pka_set] = pH_q
 
     # Generate stats
     pI_dict = generate_stats_on_dict(pI_dict, mean_title="pI mean")

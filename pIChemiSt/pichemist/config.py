@@ -53,6 +53,14 @@ PKA_LIMITS = {
     "base_2": 15,
 }
 
+# Plot definitions
+PLOT_LINE_WIDTHS = {
+    "w1": 4.0,
+    "w2": 3.0,
+    "w3": 2.0,
+    "w4": 1.0
+}
+
 # Paths
 SRC_DIR = pichemist.__path__[0]
 ROOT_DIR = os.path.dirname(SRC_DIR)
@@ -64,4 +72,4 @@ SS_SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                             "ss_smarts_set_standardised.json"
 AA_SMARTS_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                          "aa_smarts_set_standardised.json"
-TITRATION_FILENAME = "out_titration_curve.png"
+TITRATION_FILE_PREFIX = "out_titration_curve"

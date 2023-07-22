@@ -15,6 +15,7 @@ HOW TO RUN
 
     # Use internal pKaMatcher for pKa calculation of nonatural amino acids
     python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
+    python3 pichemist/cli.py -i test/examples/pka_matcher_2.smi --plot_titration_curve -tfp plot --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi -of json --print_fragment_pkas --method pkamatcher
     python3 pichemist/cli.py -i test/examples/pka_matcher_1.smi -o results.sdf -of sdf --print_fragment_pkas --method pkamatcher
