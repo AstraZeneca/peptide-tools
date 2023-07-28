@@ -13,7 +13,7 @@ class TestError(Exception):
     __test__ = False
 
 
-def stdout_to_variable(function, *args, **kwargs):
+def stdout_to_variable(func, *args, **kwargs):
     """
     Assign sys.stdout somewhere else and plug the
     result variable to that pipe to collect the print.
@@ -21,6 +21,6 @@ def stdout_to_variable(function, *args, **kwargs):
     """
     tmp_stdout = sys.stdout
     sys.stdout = result = StringIO()
-    function(*args, **kwargs)
+    func(*args, **kwargs)
     sys.stdout = tmp_stdout
     return result.getvalue()

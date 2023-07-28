@@ -1,6 +1,7 @@
 import os
 import pichemist
 
+from pichemist.model import ACDPKaFlag
 
 # FASTA definitions
 KNOWN_BASIC_RESIDUES = ["K", "R", "H"]
@@ -52,6 +53,10 @@ PKA_LIMITS = {
     "base_1": 2,
     "base_2": 15,
 }
+
+# ACD configuration
+ACD_METHOD = ACDPKaFlag.CLASSIC
+# ACD_METHOD = ACDPKaFlag.GALAS
 
 # Plot definitions
 PLOT_LINE_WIDTHS = {

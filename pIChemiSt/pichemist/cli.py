@@ -16,14 +16,16 @@ from pichemist.utils import get_logger
 log = get_logger(__name__)
 RDLogger.DisableLog("rdApp.info")
 
-__doc__ = """Calculates the isoelectric point (pI) of a molecules by cutting
+__prog__ = "pIChemiSt"
+__doc__ = """Calculates the isoelectric point (pI) of a molecule by cutting
 its amide bonds, retreiving the pKa values for known AAs, predicting pKas
 of unknown fragments using pKaMatcher or ACDlabs, and finally calculating
 the pI using the Henderson-Hasselbalch equation."""
 
 
 def arg_parser(args):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(prog=__prog__,
+                                     description=__doc__)
     parser.add_argument("-i", dest="input",
                         help="Input filepath",
                         default=None)
@@ -54,6 +56,8 @@ def arg_parser(args):
                         default=PKaMethod.PKA_MATCHER,
                         help="Method for the prediction of the "
                              "pKa of unknown fragments")
+    if not args:
+        args = ["-h"]
     return parser.parse_args(args)
 
 

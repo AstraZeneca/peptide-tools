@@ -23,6 +23,11 @@ class PKaMethod(BaseEnum):
     ACD = "acd"
 
 
+class ACDPKaFlag(BaseEnum):
+    CLASSIC = "-MPKAAPP"
+    GALAS = "-MPKAAPPGALAS"
+
+
 class InputFormat(BaseEnum):
     SMILES = "smiles"
     SMILES_FILE = "smiles_file"

@@ -1,4 +1,3 @@
 [flake8]
 exclude =
     legacy
-    acd.py

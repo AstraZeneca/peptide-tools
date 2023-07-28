@@ -6,7 +6,7 @@ from pichemist.core import merge_matched_and_calculated_pkas
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
-from pichemist.pka.acd import calc_pkas_acdlabs
+from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
 from pichemist.model import PKaMethod
 from pichemist.model import OutputAttributes
@@ -14,7 +14,7 @@ from pichemist.model import MODELS
 from pichemist.plot import output_titration_curve
 
 
-class ApiExcepton(Exception):
+class ApiException(Exception):
     pass
 
 
@@ -26,10 +26,11 @@ def fasta_pkas_from_list(smiles_list):
 def calculated_pkas_from_list(smiles_list, method):
     """Calculates pKa values using ACD or pKa Matcher."""
     if method not in MODELS[PKaMethod]:
-        raise ApiExcepton("Invalid method. Only the formats "
-                          f"{MODELS[PKaMethod]} are accepted")
+        raise NotImplementedError("Invalid method. Only the formats "
+                                  f"{MODELS[PKaMethod]} are accepted")
     if method == PKaMethod.ACD.value:
-        base_pkas, acid_pkas, diacid_pkas = calc_pkas_acdlabs(smiles_list)
+        base_pkas, acid_pkas, diacid_pkas = \
+            ACDPKaCalculator().calculate_pka_from_list(smiles_list)
     if method == PKaMethod.PKA_MATCHER.value:
         base_pkas, acid_pkas, diacid_pkas = \
             PKaMatcher().calculate_pka_from_list(smiles_list)
@@ -93,8 +94,8 @@ def pichemist_from_list(input_dict, method,
 
         # Plot titration curve
         if plot_titration_curve and not titration_file_prefix:
-            raise ApiExcepton("A file prefix for the titration plots must "
-                              "be specified.")
+            raise ApiException("A file prefix for the titration plots must "
+                               "be specified.")
         # TODO: ANDREY - fig_filename can be removed from dict_output
         # when the plot is not generated
         fig_filename = ""

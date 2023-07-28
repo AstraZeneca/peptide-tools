@@ -1,8 +1,9 @@
 - io.py - replace hardcoded names with objects from model.py - can introduce both Input and Output attributes
-- create acd tests
+- create acd tests in CLI
 - clean up tests folder (files???)
 - create setup.py / initialisation of path
 - unit tests should be run while building the distribution
+- polish readme
 
 Future improvements
 - ChargeCalculator should be more versatile: match all +s and -s, and sum them up to get the net charge - or use RDKit built in functions to get net charge GetFormalCharge()
