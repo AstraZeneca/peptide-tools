@@ -51,6 +51,14 @@ DEPENDENCIES
         acdperceptabatch     # "perceptabat" executable should be callable
 
 
+CONTRIBUTIONS
+
+    Andrey I. Frolov
+    Gian Marco Ghiandoni
+    Jonas Bostrom - contributed function of splitting molecule by peptide bonds
+    Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code
+
+
 PLATFORM
 
     Tested on linux CentOS
