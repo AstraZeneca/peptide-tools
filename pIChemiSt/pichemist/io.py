@@ -4,9 +4,11 @@ import json
 
 from rdkit import Chem
 from pichemist.model import InputFormat
+from pichemist.model import InputAttribute
 from pichemist.model import InputFileExtension
 from pichemist.model import OutputFileFormat
 from pichemist.model import OutputConsoleFormat
+from pichemist.model import OutputAttribute
 from pichemist.model import MODELS
 
 
@@ -24,9 +26,9 @@ def generate_input(input_format, input):
     if input_format == InputFormat.SMILES_FILE:
         input_dict = read_structure_file(input)
     if input_format == InputFormat.SMILES:
-        input_dict[1] = {"mol_name": input,
-                         "mol_obj": Chem.MolFromSmiles(input),
-                         "fasta": None}
+        input_dict[1] = {InputAttribute.MOL_NAME.value: input,
+                         InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input),
+                         InputAttribute.MOL_FASTA.value: None}
     if input_format == InputFormat.JSON:
         input_dict = json.loads(input)
     return input_dict
@@ -62,9 +64,9 @@ def read_structure_file(input_filepath):
     for mol in suppl:
         if not mol.HasProp("_Name"):
             mol.SetProp("_Name", "tmp_" + str(uuid))
-        dict_input[uuid] = {"mol_name": mol.GetProp("_Name"),
-                            "mol_obj": mol,
-                            "fasta": None}
+        dict_input[uuid] = {InputAttribute.MOL_NAME.value: mol.GetProp("_Name"),
+                            InputAttribute.MOL_OBJECT.value: mol,
+                            InputAttribute.MOL_FASTA.value: None}
         uuid += 1
     return dict_input
 
@@ -98,25 +100,26 @@ def _output_json_to_console(dict_output):
 def _output_text_to_console(dict_output, method, print_fragments=False):
     """Generates a formatted text output to console."""
     for mol_idx in dict_output.keys():
+        dict_mol = dict_output[mol_idx]
         _format_results_for_console_output(
-            dict_output[mol_idx]["pI"], "pI")
+            dict_mol[OutputAttribute.PI.value], "pI")
         _format_results_for_console_output(
-            dict_output[mol_idx]["QpH7"], "Q at pH7.4")
+            dict_mol[OutputAttribute.Q_PH7.value], "Q at pH7.4")
 
-        int_tr = dict_output[mol_idx]["pI_interval_threshold"]
-        pka_set = dict_output[mol_idx]["pKa_set"]
+        int_tr = dict_mol[OutputAttribute.PI_INTERVAL_THRESHOLD.value]
+        pka_set = dict_mol[OutputAttribute.PKA_SET.value]
 
         print("\npH interval with charge between %4.1f and %4.1f and "
               "prediction tool: %s" % (-int_tr, int_tr, method))
-        print("pI interval: %4.1f - %4.1f" % (dict_output[mol_idx][
-              "pI_interval"][0], dict_output[mol_idx]["pI_interval"][1]))
+        print("pI interval: %4.1f - %4.1f" % (dict_mol[
+              "pI_interval"][0], dict_mol[OutputAttribute.PI_INTERVAL.value][1]))
 
         if print_fragments:
-            base_pkas_fasta = dict_output[mol_idx]["base_pkas_fasta"]
-            acid_pkas_fasta = dict_output[mol_idx]["acid_pkas_fasta"]
-            base_pkas_calc = dict_output[mol_idx]["base_pkas_calc"]
-            acid_pkas_calc = dict_output[mol_idx]["acid_pkas_calc"]
-            constant_Qs_calc = dict_output[mol_idx]["constant_Qs_calc"]
+            base_pkas_fasta = dict_mol[OutputAttribute.BASE_PKA_FASTA.value]
+            acid_pkas_fasta = dict_mol[OutputAttribute.ACID_PKA_FASTA.value]
+            base_pkas_calc = dict_mol[OutputAttribute.BASE_PKA_CALC.value]
+            acid_pkas_calc = dict_mol[OutputAttribute.ACID_PKA_CALC.value]
+            constant_Qs_calc = dict_mol[OutputAttribute.CONSTANT_QS.value]
 
             # Merge fasta and calculated pKas
             base_pkas = base_pkas_fasta[pka_set] + base_pkas_calc
@@ -125,8 +128,8 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
             acid_pkas = list()
 
             # NOTE: Diacids prints disabled
-            # diacid_pkas_fasta = dict_output[mol_idx]["diacid_pkas_fasta"]
-            # diacid_pkas_calc = dict_output[mol_idx]["diacid_pkas_calc"]
+            # diacid_pkas_fasta = dict_mol["diacid_pkas_fasta"]
+            # diacid_pkas_calc = dict_mol["diacid_pkas_calc"]
             # diacid_pkas = diacid_pkas_fasta[pka_set] + diacid_pkas_calc
             # diacid_pkas = list()
 
@@ -158,6 +161,20 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
                       % (smi, " ".join(s_pkas)))
 
 
+def output_results(input_dict, output_dict, output_file, output_format,
+                   method, print_fragment_pkas):
+    """Interface to dispatch different outputs."""
+    if not output_file:
+        _check_supported_output_console_format(output_format)
+        _output_to_console(output_dict, output_format,
+                           method, print_fragment_pkas)
+    else:
+        _check_supported_output_file_format(output_format)
+        _output_to_file(input_dict, output_dict,
+                        output_file, output_format)
+        _print_summary_to_console(output_dict, output_file)
+
+
 def _check_supported_output_console_format(output_format):
     """Checks the supported output format."""
     if output_format not in MODELS[OutputConsoleFormat]:
@@ -172,8 +189,6 @@ def _output_to_console(output_dict, output_format,
         _output_json_to_console(output_dict)
     elif output_format == OutputConsoleFormat.CONSOLE:
         _output_text_to_console(output_dict, method, print_fragment_pkas)
-    else:
-        raise RuntimeError("TODO")
 
 
 def _check_supported_output_file_format(output_format):
@@ -188,21 +203,21 @@ def _prepare_output_list(input_dict, output_dict):
     """Merges input and output to prepare a list of results."""
     mol_list = list()
     for mi in input_dict.keys():
-        mol = input_dict[mi]["mol_obj"]
+        mol = input_dict[mi][InputAttribute.MOL_OBJECT.value]
         mol.SetProp("pI mean", "%.2f"
-                    % output_dict[mi]["pI"]["pI mean"])
+                    % output_dict[mi][OutputAttribute.PI.value]["pI mean"])
         mol.SetProp("pI std", "%.2f"
-                    % output_dict[mi]["pI"]["std"])
+                    % output_dict[mi][OutputAttribute.PI.value]["std"])
         # NOTE: String interval is disabled
-        # print(output_dict[mi]["pI_interval"])
+        # print(output_dict[mi][PI_INTERVAL.value])
         # mol.SetProp("pI interval", " - ".join(
-        #     ["%.2f" % x for x in output_dict[mi]["pI_interval"]]))
+        #     ["%.2f" % x for x in output_dict[mi][PI_INTERVAL.value]]))
         mol.SetProp("pI interval lower bound", "%.2f"
-                    % output_dict[mi]["pI_interval"][0])
+                    % output_dict[mi][OutputAttribute.PI_INTERVAL.value][0])
         mol.SetProp("pI interval upper bound", "%.2f"
-                    % output_dict[mi]["pI_interval"][1])
+                    % output_dict[mi][OutputAttribute.PI_INTERVAL.value][1])
         mol.SetProp("pI interval threshold", "%.2f"
-                    % output_dict[mi]["pI_interval_threshold"])
+                    % output_dict[mi][OutputAttribute.PI_INTERVAL_THRESHOLD.value])
         mol_list.append(mol)
     return mol_list
 
@@ -216,7 +231,7 @@ def _output_csv_to_file(mol_list, output_file):
             props = mol.GetPropsAsDict()
             count += 1
             if count == 1:
-                header = ["SMILES"] + list(props.keys())
+                header = [OutputAttribute.SMILES.value] + list(props.keys())
                 csv_w.writerow(header)
             row = [Chem.MolToSmiles(mol)]
             for p in header[1:]:
@@ -243,17 +258,3 @@ def _print_summary_to_console(output_dict, output_file):
                  "output_info": "Number of molecules processed: "
                  f"{len(output_dict.keys())}"}
     print(json.dumps(dict_file))
-
-
-def output_results(input_dict, output_dict, output_file, output_format,
-                   method, print_fragment_pkas):
-    """Interface to dispatch different outputs."""
-    if not output_file:
-        _check_supported_output_console_format(output_format)
-        _output_to_console(output_dict, output_format,
-                           method, print_fragment_pkas)
-    else:
-        _check_supported_output_file_format(output_format)
-        _output_to_file(input_dict, output_dict,
-                        output_file, output_format)
-        _print_summary_to_console(output_dict, output_file)

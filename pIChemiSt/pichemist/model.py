@@ -28,6 +28,12 @@ class ACDPKaFlag(BaseEnum):
     GALAS = "-MPKAAPPGALAS"
 
 
+class InputAttribute(BaseEnum):
+    MOL_NAME = "mol_name"
+    MOL_OBJECT = "mol_obj"
+    MOL_FASTA = "fasta"
+
+
 class InputFormat(BaseEnum):
     SMILES = "smiles"
     SMILES_FILE = "smiles_file"
@@ -35,8 +41,9 @@ class InputFormat(BaseEnum):
     SD_FILE = "sdf"
 
 
-class OutputAttributes(BaseEnum):
+class OutputAttribute(BaseEnum):
     MOL_NAME = "mol_name"
+    SMILES = "SMILES"
     PI = "pI"
     Q_PH7 = "QpH7"
     PI_INTERVAL = "pI_interval"

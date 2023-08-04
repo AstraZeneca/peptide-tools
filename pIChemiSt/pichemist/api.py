@@ -6,11 +6,12 @@ from pichemist.core import merge_matched_and_calculated_pkas
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
+from pichemist.model import InputAttribute
+from pichemist.model import OutputAttribute
+from pichemist.model import PKaMethod
+from pichemist.model import MODELS
 from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
-from pichemist.model import PKaMethod
-from pichemist.model import OutputAttributes
-from pichemist.model import MODELS
 from pichemist.plot import output_titration_curve
 
 
@@ -68,8 +69,8 @@ def pichemist_from_list(input_dict, method,
     for mol_idx in input_dict.keys():
 
         # Prepare molecule and break into fragments
-        mol_name = input_dict[mol_idx]["mol_name"]
-        mol = input_dict[mol_idx]["mol_obj"]
+        mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
+        mol = input_dict[mol_idx][InputAttribute.MOL_OBJECT.value]
         mol = MolStandardiser().standardise_molecule(mol)
         smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
 
@@ -105,26 +106,26 @@ def pichemist_from_list(input_dict, method,
 
         # Output for given molecule
         dict_output[mol_idx] = {
-            OutputAttributes.MOL_NAME.value: mol_name,
-            OutputAttributes.PI.value: pI_dict,
-            OutputAttributes.Q_PH7.value: q_dict,
-            OutputAttributes.PI_INTERVAL.value: interval,
-            OutputAttributes.PI_INTERVAL_THRESHOLD.value: interval_threshold,
-            OutputAttributes.PLOT_FILENAME.value: fig_filename}
+            OutputAttribute.MOL_NAME.value: mol_name,
+            OutputAttribute.PI.value: pI_dict,
+            OutputAttribute.Q_PH7.value: q_dict,
+            OutputAttribute.PI_INTERVAL.value: interval,
+            OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold,
+            OutputAttribute.PLOT_FILENAME.value: fig_filename}
 
         # Define set for reporting pKa of individual amino acids and fragments
         dict_output[mol_idx].update(
-            {OutputAttributes.PKA_SET.value: REFERENCE_PKA_SET})
+            {OutputAttribute.PKA_SET.value: REFERENCE_PKA_SET})
 
         if print_fragments:
             # No need to include diacids pkas as they
             # are included as single apparent ionisations
             dict_output[
                 mol_idx].update({
-                    OutputAttributes.BASE_PKA_FASTA.value: base_pkas_fasta,
-                    OutputAttributes.ACID_PKA_FASTA.value: acid_pkas_fasta,
-                    OutputAttributes.BASE_PKA_CALC.value: base_pkas_calc,
-                    OutputAttributes.ACID_PKA_CALC.value: acid_pkas_calc,
-                    OutputAttributes.CONSTANT_QS.value: net_qs_and_frags
+                    OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
+                    OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
+                    OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
+                    OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
+                    OutputAttribute.CONSTANT_QS.value: net_qs_and_frags
                     })
     return dict_output
