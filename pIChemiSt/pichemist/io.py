@@ -23,12 +23,14 @@ class IOException(Exception):
 def generate_input(input_format, input):
     """Produces an input dictionary compatible with the logic."""
     input_dict = dict()
-    if input_format == InputFormat.SMILES_FILE:
+    if input_format == InputFormat.SMILES_FILE or \
+            input_format == InputFormat.SD_FILE:
         input_dict = read_structure_file(input)
-    if input_format == InputFormat.SMILES:
+    if input_format == InputFormat.SMILES_STDIN:
         input_dict[1] = {InputAttribute.MOL_NAME.value: input,
                          InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input),
                          InputAttribute.MOL_FASTA.value: None}
+    # TODO: ANDREY - Remove JSON input or implement SMILES parsing
     if input_format == InputFormat.JSON:
         input_dict = json.loads(input)
     return input_dict

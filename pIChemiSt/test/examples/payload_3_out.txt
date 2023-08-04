@@ -1,0 +1,1305 @@
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.02        
+         err  0.55        
+         std  1.55        
+IPC2_peptide  8.56        
+ IPC_peptide  9.81        
+     ProMoST  8.12        
+       Gauci  8.75        
+    Grimsley  9.0         
+   Thurlkill  8.94        
+   Lehninger  9.84        
+    Toseland  9.16        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.74        
+         err  0.25        
+         std  0.71        
+IPC2_peptide  0.76        
+ IPC_peptide  0.99        
+     ProMoST  0.2         
+       Gauci  0.55        
+    Grimsley  0.66        
+   Thurlkill  0.8         
+   Lehninger  0.99        
+    Toseland  0.95        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  8.6 -  9.4
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : Y_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.91        
+         err  0.71        
+         std  2.0         
+IPC2_peptide  5.0         
+ IPC_peptide  7.0         
+     ProMoST  5.25        
+       Gauci  5.5         
+    Grimsley  5.5         
+   Thurlkill  6.0         
+   Lehninger  7.0         
+    Toseland  6.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.26       
+         err  0.25        
+         std  0.71        
+IPC2_peptide  -0.24       
+ IPC_peptide  -0.01       
+     ProMoST  -0.8        
+       Gauci  -0.45       
+    Grimsley  -0.34       
+   Thurlkill  -0.2        
+   Lehninger  -0.01       
+    Toseland  -0.05       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  3.8 -  7.5
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : Y_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.02        
+         err  0.55        
+         std  1.55        
+IPC2_peptide  8.56        
+ IPC_peptide  9.81        
+     ProMoST  8.12        
+       Gauci  8.75        
+    Grimsley  9.0         
+   Thurlkill  8.94        
+   Lehninger  9.84        
+    Toseland  9.16        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.74        
+         err  0.25        
+         std  0.71        
+IPC2_peptide  0.76        
+ IPC_peptide  0.99        
+     ProMoST  0.2         
+       Gauci  0.55        
+    Grimsley  0.66        
+   Thurlkill  0.8         
+   Lehninger  0.99        
+    Toseland  0.95        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  8.6 -  9.4
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : Y_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.91        
+         err  0.71        
+         std  2.0         
+IPC2_peptide  5.0         
+ IPC_peptide  7.0         
+     ProMoST  5.25        
+       Gauci  5.5         
+    Grimsley  5.5         
+   Thurlkill  6.0         
+   Lehninger  7.0         
+    Toseland  6.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.26       
+         err  0.25        
+         std  0.71        
+IPC2_peptide  -0.24       
+ IPC_peptide  -0.01       
+     ProMoST  -0.8        
+       Gauci  -0.45       
+    Grimsley  -0.34       
+   Thurlkill  -0.2        
+   Lehninger  -0.01       
+    Toseland  -0.05       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  3.8 -  7.5
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : Y_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.0         
+         err  0.19        
+         std  0.53        
+IPC2_peptide  5.0         
+ IPC_peptide  4.75        
+     ProMoST  5.25        
+       Gauci  4.88        
+    Grimsley  5.12        
+   Thurlkill  5.25        
+   Lehninger  4.75        
+    Toseland  5.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -1.14       
+         err  0.06        
+         std  0.18        
+IPC2_peptide  -1.14       
+ IPC_peptide  -1.2        
+     ProMoST  -1.0        
+       Gauci  -1.2        
+    Grimsley  -1.1        
+   Thurlkill  -1.12       
+   Lehninger  -1.2        
+    Toseland  -1.16       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.3 -  5.7
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)C[C@H](N)C(=O)O  7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.1         
+         err  0.13        
+         std  0.36        
+IPC2_peptide  5.25        
+ IPC_peptide  4.94        
+     ProMoST  5.25        
+       Gauci  5.06        
+    Grimsley  5.12        
+   Thurlkill  5.25        
+   Lehninger  4.94        
+    Toseland  5.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -1.1        
+         err  0.14        
+         std  0.4         
+IPC2_peptide  -1.12       
+ IPC_peptide  -0.97       
+     ProMoST  -1.1        
+       Gauci  -1.41       
+    Grimsley  -1.2        
+   Thurlkill  -1.08       
+   Lehninger  -0.97       
+    Toseland  -0.97       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.5 -  5.7
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : D_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.47        
+         err  0.29        
+         std  0.82        
+IPC2_peptide  5.5         
+ IPC_peptide  5.0         
+     ProMoST  5.75        
+       Gauci  5.75        
+    Grimsley  5.5         
+   Thurlkill  5.75        
+   Lehninger  5.0         
+    Toseland  5.5         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.48       
+         err  0.0         
+         std  0.0         
+IPC2_peptide  -0.48       
+ IPC_peptide  -0.48       
+     ProMoST  -0.48       
+       Gauci  -0.48       
+    Grimsley  -0.48       
+   Thurlkill  -0.48       
+   Lehninger  -0.48       
+    Toseland  -0.48       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.1 -  6.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
+smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  6.0         
+         err  0.6         
+         std  1.7         
+IPC2_peptide  5.75        
+ IPC_peptide  7.0         
+     ProMoST  5.5         
+       Gauci  5.5         
+    Grimsley  5.5         
+   Thurlkill  5.75        
+   Lehninger  7.0         
+    Toseland  6.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.42       
+         err  0.34        
+         std  0.97        
+IPC2_peptide  -0.44       
+ IPC_peptide  -0.01       
+     ProMoST  -0.89       
+       Gauci  -0.89       
+    Grimsley  -0.67       
+   Thurlkill  -0.4        
+   Lehninger  -0.01       
+    Toseland  -0.09       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.5 -  7.3
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : G_N-term         7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.47        
+         err  0.29        
+         std  0.82        
+IPC2_peptide  5.5         
+ IPC_peptide  5.0         
+     ProMoST  5.75        
+       Gauci  5.75        
+    Grimsley  5.5         
+   Thurlkill  5.75        
+   Lehninger  5.0         
+    Toseland  5.5         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.48       
+         err  0.0         
+         std  0.0         
+IPC2_peptide  -0.48       
+ IPC_peptide  -0.48       
+     ProMoST  -0.48       
+       Gauci  -0.48       
+    Grimsley  -0.48       
+   Thurlkill  -0.48       
+   Lehninger  -0.48       
+    Toseland  -0.48       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.1 -  6.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
+smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.75        
+         err  0.0         
+         std  0.0         
+IPC2_peptide  5.75        
+ IPC_peptide  5.75        
+     ProMoST  5.75        
+       Gauci  5.75        
+    Grimsley  5.75        
+   Thurlkill  5.75        
+   Lehninger  5.75        
+    Toseland  5.75        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.48       
+         err  0.0         
+         std  0.0         
+IPC2_peptide  -0.48       
+ IPC_peptide  -0.48       
+     ProMoST  -0.48       
+       Gauci  -0.48       
+    Grimsley  -0.48       
+   Thurlkill  -0.48       
+   Lehninger  -0.48       
+    Toseland  -0.48       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.5 -  6.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O  7.9
+smiles or AA, base pKa : N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O  7.9
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  10.98       
+         err  0.29        
+         std  0.81        
+IPC2_peptide  10.31       
+ IPC_peptide  11.25       
+     ProMoST  11.12       
+       Gauci  11.0        
+    Grimsley  11.19       
+   Thurlkill  10.94       
+   Lehninger  11.19       
+    Toseland  10.81       
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.07        
+         err  0.04        
+         std  0.1         
+IPC2_peptide  1.08        
+ IPC_peptide  1.04        
+     ProMoST  1.04        
+       Gauci  1.03        
+    Grimsley  1.14        
+   Thurlkill  1.12        
+   Lehninger  1.04        
+    Toseland  1.07        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval: 10.4 - 11.5
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : H                6.4
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  8.06        
+         err  0.21        
+         std  0.59        
+IPC2_peptide  7.75        
+ IPC_peptide  8.0         
+     ProMoST  8.0         
+       Gauci  8.0         
+    Grimsley  8.5         
+   Thurlkill  8.25        
+   Lehninger  8.0         
+    Toseland  8.0         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.07        
+         err  0.04        
+         std  0.1         
+IPC2_peptide  0.08        
+ IPC_peptide  0.04        
+     ProMoST  0.04        
+       Gauci  0.03        
+    Grimsley  0.14        
+   Thurlkill  0.12        
+   Lehninger  0.04        
+    Toseland  0.07        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  6.9 -  9.2
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : H                6.4
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  4.39        
+         err  0.09        
+         std  0.26        
+IPC2_peptide  4.43        
+ IPC_peptide  4.38        
+     ProMoST  4.52        
+       Gauci  4.52        
+    Grimsley  4.25        
+   Thurlkill  4.37        
+   Lehninger  4.36        
+    Toseland  4.27        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -1.21       
+         err  0.17        
+         std  0.48        
+IPC2_peptide  -1.22       
+ IPC_peptide  -1.01       
+     ProMoST  -1.44       
+       Gauci  -1.44       
+    Grimsley  -1.33       
+   Thurlkill  -1.2        
+   Lehninger  -1.0        
+    Toseland  -1.05       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.3 -  4.5
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  4.2         
+         err  0.13        
+         std  0.38        
+IPC2_peptide  4.22        
+ IPC_peptide  4.09        
+     ProMoST  4.3         
+       Gauci  4.49        
+    Grimsley  4.09        
+   Thurlkill  4.17        
+   Lehninger  4.06        
+    Toseland  4.12        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -2.21       
+         err  0.17        
+         std  0.48        
+IPC2_peptide  -2.22       
+ IPC_peptide  -2.0        
+     ProMoST  -2.44       
+       Gauci  -2.44       
+    Grimsley  -2.33       
+   Thurlkill  -2.2        
+   Lehninger  -2.0        
+    Toseland  -2.04       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.1 -  4.2
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  3.76        
+         err  0.17        
+         std  0.47        
+IPC2_peptide  3.78        
+ IPC_peptide  3.69        
+     ProMoST  3.98        
+       Gauci  4.06        
+    Grimsley  3.56        
+   Thurlkill  3.71        
+   Lehninger  3.67        
+    Toseland  3.59        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -3.21       
+         err  0.17        
+         std  0.48        
+IPC2_peptide  -3.22       
+ IPC_peptide  -3.01       
+     ProMoST  -3.44       
+       Gauci  -3.44       
+    Grimsley  -3.33       
+   Thurlkill  -3.2        
+   Lehninger  -3.0        
+    Toseland  -3.05       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  3.7 -  3.8
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  4.98        
+         err  0.09        
+         std  0.27        
+IPC2_peptide  5.11        
+ IPC_peptide  4.91        
+     ProMoST  5.07        
+       Gauci  5.1         
+    Grimsley  4.89        
+   Thurlkill  4.94        
+   Lehninger  4.86        
+    Toseland  4.94        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -4.0        
+         err  0.19        
+         std  0.55        
+IPC2_peptide  -4.06       
+ IPC_peptide  -3.88       
+     ProMoST  -4.3        
+       Gauci  -4.33       
+    Grimsley  -3.92       
+   Thurlkill  -3.83       
+   Lehninger  -3.89       
+    Toseland  -3.81       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.9 -  5.0
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  7.86        
+         err  0.33        
+         std  0.94        
+IPC2_peptide  7.77        
+ IPC_peptide  8.25        
+     ProMoST  7.5         
+       Gauci  7.31        
+    Grimsley  7.78        
+   Thurlkill  7.86        
+   Lehninger  8.38        
+    Toseland  8.03        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.48        
+         err  0.34        
+         std  0.95        
+IPC2_peptide  0.67        
+ IPC_peptide  0.35        
+     ProMoST  0.16        
+       Gauci  -0.11       
+    Grimsley  0.9         
+   Thurlkill  0.89        
+   Lehninger  0.34        
+    Toseland  0.66        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  7.6 -  8.1
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.36        
+         err  0.11        
+         std  0.3         
+IPC2_peptide  5.5         
+ IPC_peptide  5.22        
+     ProMoST  5.34        
+       Gauci  5.34        
+    Grimsley  5.45        
+   Thurlkill  5.45        
+   Lehninger  5.18        
+    Toseland  5.36        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -3.91       
+         err  0.21        
+         std  0.6         
+IPC2_peptide  -3.82       
+ IPC_peptide  -3.84       
+     ProMoST  -4.25       
+       Gauci  -4.29       
+    Grimsley  -3.78       
+   Thurlkill  -3.71       
+   Lehninger  -3.85       
+    Toseland  -3.73       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  5.3 -  5.4
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  8.81        
+         err  0.42        
+         std  1.2         
+IPC2_peptide  7.96        
+ IPC_peptide  9.38        
+     ProMoST  8.59        
+       Gauci  8.66        
+    Grimsley  8.88        
+   Thurlkill  8.75        
+   Lehninger  9.38        
+    Toseland  8.87        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.5         
+         err  0.21        
+         std  0.58        
+IPC2_peptide  1.2         
+ IPC_peptide  1.75        
+     ProMoST  1.3         
+       Gauci  1.31        
+    Grimsley  1.42        
+   Thurlkill  1.55        
+   Lehninger  1.75        
+    Toseland  1.69        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  8.7 -  8.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : CC(=O)NCCCC[C@H](N)C(C)=O  7.9
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  5.86        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  6.02        
+ IPC_peptide  5.64        
+     ProMoST  5.81        
+       Gauci  5.62        
+    Grimsley  6.14        
+   Thurlkill  6.09        
+   Lehninger  5.62        
+    Toseland  5.91        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -2.89       
+         err  0.18        
+         std  0.52        
+IPC2_peptide  -2.82       
+ IPC_peptide  -2.84       
+     ProMoST  -3.07       
+       Gauci  -3.29       
+    Grimsley  -2.78       
+   Thurlkill  -2.71       
+   Lehninger  -2.85       
+    Toseland  -2.73       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  5.8 -  5.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.38        
+         err  0.48        
+         std  1.37        
+IPC2_peptide  8.21        
+ IPC_peptide  9.8         
+     ProMoST  9.3         
+       Gauci  9.41        
+    Grimsley  9.77        
+   Thurlkill  9.43        
+   Lehninger  9.78        
+    Toseland  9.34        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.73        
+         err  0.21        
+         std  0.58        
+IPC2_peptide  1.43        
+ IPC_peptide  1.99        
+     ProMoST  1.54        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.93        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  9.4 -  9.5
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  7.56        
+         err  0.37        
+         std  1.05        
+IPC2_peptide  7.47        
+ IPC_peptide  8.0         
+     ProMoST  7.08        
+       Gauci  7.03        
+    Grimsley  7.45        
+   Thurlkill  7.56        
+   Lehninger  8.12        
+    Toseland  7.78        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.01        
+         err  0.19        
+         std  0.55        
+IPC2_peptide  0.08        
+ IPC_peptide  0.11        
+     ProMoST  -0.3        
+       Gauci  -0.33       
+    Grimsley  0.08        
+   Thurlkill  0.16        
+   Lehninger  0.11        
+    Toseland  0.19        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  7.2 -  7.9
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  8.51        
+         err  0.66        
+         std  1.86        
+IPC2_peptide  7.99        
+ IPC_peptide  9.51        
+     ProMoST  7.94        
+       Gauci  7.94        
+    Grimsley  8.06        
+   Thurlkill  8.27        
+   Lehninger  9.61        
+    Toseland  8.8         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.32        
+         err  0.35        
+         std  0.98        
+IPC2_peptide  1.17        
+ IPC_peptide  1.75        
+     ProMoST  0.87        
+       Gauci  0.88        
+    Grimsley  1.09        
+   Thurlkill  1.36        
+   Lehninger  1.75        
+    Toseland  1.67        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  8.5 -  8.7
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : CC(=O)NCCCC[C@H](N)C(C)=O  7.9
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.52        
+         err  0.52        
+         std  1.46        
+IPC2_peptide  8.26        
+ IPC_peptide  9.95        
+     ProMoST  9.45        
+       Gauci  9.53        
+    Grimsley  9.92        
+   Thurlkill  9.61        
+   Lehninger  9.94        
+    Toseland  9.53        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.74        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  1.45        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.94        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  9.5 -  9.6
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  4.64        
+         err  0.07        
+         std  0.19        
+IPC2_peptide  4.73        
+ IPC_peptide  4.59        
+     ProMoST  4.72        
+       Gauci  4.71        
+    Grimsley  4.56        
+   Thurlkill  4.62        
+   Lehninger  4.55        
+    Toseland  4.61        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -2.11       
+         err  0.14        
+         std  0.41        
+IPC2_peptide  -2.12       
+ IPC_peptide  -1.96       
+     ProMoST  -2.2        
+       Gauci  -2.4        
+    Grimsley  -2.2        
+   Thurlkill  -2.08       
+   Lehninger  -1.96       
+    Toseland  -1.97       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  4.6 -  4.7
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  7.3         
+         err  0.4         
+         std  1.14        
+IPC2_peptide  7.19        
+ IPC_peptide  7.75        
+     ProMoST  6.81        
+       Gauci  6.75        
+    Grimsley  7.16        
+   Thurlkill  7.28        
+   Lehninger  8.0         
+    Toseland  7.5         
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -0.14       
+         err  0.17        
+         std  0.48        
+IPC2_peptide  -0.12       
+ IPC_peptide  0.03        
+     ProMoST  -0.4        
+       Gauci  -0.4        
+    Grimsley  -0.2        
+   Thurlkill  -0.08       
+   Lehninger  0.03        
+    Toseland  0.03        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  6.8 -  7.8
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.74        
+         err  0.57        
+         std  1.62        
+IPC2_peptide  8.31        
+ IPC_peptide  10.18       
+     ProMoST  9.66        
+       Gauci  9.7         
+    Grimsley  10.12       
+   Thurlkill  9.9         
+   Lehninger  10.18       
+    Toseland  9.88        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.74        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  1.47        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.95        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  9.7 -  9.8
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  6.29        
+         err  0.21        
+         std  0.61        
+IPC2_peptide  6.44        
+ IPC_peptide  6.05        
+     ProMoST  6.42        
+       Gauci  6.0         
+    Grimsley  6.55        
+   Thurlkill  6.52        
+   Lehninger  6.03        
+    Toseland  6.34        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  -1.04       
+         err  0.15        
+         std  0.42        
+IPC2_peptide  -1.02       
+ IPC_peptide  -0.93       
+     ProMoST  -1.16       
+       Gauci  -1.37       
+    Grimsley  -1.06       
+   Thurlkill  -0.96       
+   Lehninger  -0.93       
+    Toseland  -0.89       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  6.2 -  6.4
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : H                6.4
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  9.99        
+         err  0.49        
+         std  1.4         
+IPC2_peptide  8.8         
+ IPC_peptide  10.41       
+     ProMoST  9.81        
+       Gauci  10.0        
+    Grimsley  10.38       
+   Thurlkill  10.11       
+   Lehninger  10.39       
+    Toseland  10.06       
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  1.76        
+         err  0.18        
+         std  0.51        
+IPC2_peptide  1.62        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.8         
+   Lehninger  1.99        
+    Toseland  1.95        
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  9.9 - 10.1
+
+List of calculated BASE pKa values with their fragments
+smiles or AA, base pKa : G_N-term         7.9
+smiles or AA, base pKa : K                8.2
+smiles or AA, base pKa : R               11.5
+smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
+
+List of calculated ACID pKa values with their fragments
+
+List of constantly ionized fragments
+smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0

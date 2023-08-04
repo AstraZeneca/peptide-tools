@@ -8,11 +8,6 @@ class BaseEnum(str, Enum):
     pass
 
 
-class InputFileExtension(BaseEnum):
-    SDF = "sdf"
-    SMILES = "smi"
-
-
 class PKaType(BaseEnum):
     ACIDIC = "acid"
     BASIC = "base"
@@ -35,10 +30,15 @@ class InputAttribute(BaseEnum):
 
 
 class InputFormat(BaseEnum):
-    SMILES = "smiles"
+    SMILES_STDIN = "smiles_stdin"
     SMILES_FILE = "smiles_file"
     JSON = "json"
     SD_FILE = "sdf"
+
+
+class InputFileExtension(BaseEnum):
+    SDF = "sdf"
+    SMILES = "smi"
 
 
 class OutputAttribute(BaseEnum):
