@@ -1,68 +1,34 @@
-![Maturity level-0](https://img.shields.io/badge/Maturity%20Level-ML--0-red)
+# pIChemiSt
 
-pIChemiSt.py
+## Description
+The program calculates the isoelectric point of proteins or peptides based on their 2D structure. The input structure is cut into monomers by targeting its amide bonds, and then each monomer's pKa value is determined using different methods: Natural amino acids pKa values are matched against a dictionary; non-natural amino acid values are calculated using either pKaMatcher (built-in tool based on SMARTS patterns) or ACD perceptabatch (a commercial tool that requires licence). For natural amino acids the following sets of amino-acid pKa values are implemented: 'IPC2_peptide', 'IPC_peptide', 'ProMoST', 'Gauci', 'Rodwell', 'Grimsley', 'Thurlkill', 'Solomon', 'Lehninger', 'EMBOSS' as described in http://isoelectric.org. The mean value and variation between different sets are also calculated as well as the total charge at pH 7.4. The program can also plot the corresponding titration curves for each input structure.
 
-Program calculates isoelectic point of protein/peptide based on 2D structure (SMILES string). For nonatural amino acids pKa values are predicted on the fly either using pKaMatcher (built-in tool based on SMARTS patters) orACDlabs perceptabatch pKa GALAS method (commercial tool that requires licence). For natural amino acids the following sets of amino-acid pKa values are implemented:'IPC2_peptide','IPC_peptide','ProMoST','Gauci','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS' as described in http://isoelectric.org. The mean value and variation between different sets are also calculated. The program can plot the corresponding titration curves. Also the total charge at pH 7.4 is reported. 
+## How to install the software
+- Clone the repository
+- Ensure that you have Python version >=3.8
+- Enter the package folder `cd peptide-tools/pIChemiSt`
+- Run `pip install dist/pichemist-*.whl`
+- (optional) - To use ACD for the prediction of non-natural amino acid pKa, make sure that the command `perceptabat` points to its binary
 
+## Examples of usage
+### TODO: Examples divided per sections
+```bash
+python3 pichemist/cli.py -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin --plot_titration_curve --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_1.smi -if smiles_file --plot_titration_curve --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_2.smi --plot_titration_curve -tfp plot --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/validation_set_modified_peptides.smi -if smiles_file --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/validation_set_modified_peptides.sdf -if sdf --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_1.smi -of json --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_1.smi --print_fragment_pkas --method acd
+python3 pichemist/cli.py -i test/examples/payload_1.smi -o results.sdf -of sdf --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_2.smi -of json --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i test/examples/payload_1.smi --print_fragment_pkas --method pkamatcher
+python3 pichemist/cli.py -i "CC(=O)NCC(=O)NC" -if smiles --print_fragment_pkas --method pkamatcher
+```
 
-HOW TO RUN
-
-    module load matplotlib
-    module load rdkit
-
-    # navigate to the TEST folder
-    cd TEST
-
-    # Use internal pKaMatcher for pKa calculation of nonatural amino acids
-    python3 pichemist/cli.py -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin --plot_titration_curve --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_1.smi --plot_titration_curve --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_1.smi -if smiles_file --plot_titration_curve --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_2.smi --plot_titration_curve -tfp plot --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/validation_set_modified_peptides.smi -if smiles_file --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/validation_set_modified_peptides.sdf -if sdf --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_1.smi -of json --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_1.smi --print_fragment_pkas --method acd
-    python3 pichemist/cli.py -i test/examples/payload_1.smi -o results.sdf -of sdf --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_2.smi -of json --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i test/examples/payload_1.smi --print_fragment_pkas --method pkamatcher
-    python3 pichemist/cli.py -i "CC(=O)NCC(=O)NC" -if smiles --print_fragment_pkas --method pkamatcher
-
-    or
-
-    # Use ACDlabs for pKa calculation of nonatural amino acids
-    module load acdperceptabatch     # "perceptabat" executable should be callable
-    python3 ../pIChemiSt.py -i Phe-Ornithine-aMeAsp-Lys-dAla.smi --plot_titration_curve --print_fragment_pkas --use_acdlabs
-   
-    # Output in JSON format
-    python3 pichemist/cli.py -i test/examples/payload_1.smi --use_pkamatcher --json 
-
-    # Output as an csv file
-    python3 ../pIChemiSt.py -i validation_set_modified_peptides.smi --use_pkamatcher -o validation_set_modified_peptides_OUTPUT.csv
-
-    # Output as a sdf file
-    python3 ../pIChemiSt.py -i validation_set_modified_peptides.smi --use_pkamatcher -o validation_set_modified_peptides_OUTPUT.sdf
-   
-
-DEPENDENCIES 
-
-    python3 or later 
-    rdkit/2021.03.1 (tested with)
-    matplotlib/3.0.3 (tested with) 
-    Biopython/1.73 (tested with)
-    
-    if --use_acdlabs enabled:
-        acdperceptabatch     # "perceptabat" executable should be callable
-
-
-CONTRIBUTIONS
-
-    Andrey I. Frolov
-    Gian Marco Ghiandoni
-    Jonas Bostrom - contributed function of splitting molecule by peptide bonds
-    Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code
-
-
-PLATFORM
-
-    Tested on linux CentOS
-
+## Contributions
+Andrey I. Frolov (https://orcid.org/0000-0001-9801-3253)
+Gian Marco Ghiandoni (https://orcid.org/0000-0002-2592-2939)
+Jonas Boström - contributed function of splitting molecule by peptide bonds (https://orcid.org/0000-0002-9719-9137)
+Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code (https://orcid.org/0009-0004-7655-2212)
