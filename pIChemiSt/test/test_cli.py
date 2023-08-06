@@ -1,7 +1,8 @@
-import base64
-import hashlib
-import json
 import os
+import base64
+import json
+import hashlib
+import pytest
 import tempfile
 
 from helpers import TestError
@@ -19,7 +20,7 @@ def test_parser_creation():
 
 
 def test_console_text_output_1():
-    """Validity of console text output."""
+    """Validity of console text output using pKaMatcher."""
     args = arg_parser(["-i", f"{examples_dir}/payload_1.smi",
                        "--print_fragment_pkas", "--method", "pkamatcher"])
     result = stdout_to_variable(run_cli, args)
@@ -29,11 +30,22 @@ def test_console_text_output_1():
 
 
 def test_console_text_output_2():
-    """Validity of console text output."""
+    """Validity of console text output using pKaMatcher."""
     args = arg_parser(["-i", f"{examples_dir}/payload_3.smi",
                        "--print_fragment_pkas", "--method", "pkamatcher"])
     result = stdout_to_variable(run_cli, args)
     with open(f"{examples_dir}/payload_3_out.txt", "r") as f:
+        expected = f.read()
+    assert result == expected
+
+
+@pytest.mark.acd
+def test_console_text_output_3():
+    """Validity of console text output using ACD."""
+    args = arg_parser(["-i", f"{examples_dir}/payload_5.smi",
+                       "--print_fragment_pkas", "--method", "acd"])
+    result = stdout_to_variable(run_cli, args)
+    with open(f"{examples_dir}/payload_5_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
 

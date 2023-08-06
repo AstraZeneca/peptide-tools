@@ -6,9 +6,15 @@ build:
 install:
 	pip install dist/cse-*.whl
 
-test:
+test_core:
 	pytest -vvs test
-	# pytest -vs test/test_api.py
+
+test_acd:
+	pytest -vvs test -m acd
+
+test_full:
+	make test_core
+	make test_acd
 
 coverage:
 	pytest --cov=src test/ -vv --cov-report term-missing

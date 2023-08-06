@@ -1,3 +1,5 @@
+import pytest
+
 from helpers import examples_dir
 from pichemist.io import generate_input
 from pichemist.api import pichemist_from_list
@@ -53,7 +55,7 @@ def test_pka_matcher_json_1():
     assert expected == output
 
 
-def test_pka_matcher_json_2():
+def test_natural_aa_json_1():
     """Example with only natural amino acids (only FASTA matching)."""
     args = {"input": f"{examples_dir}/payload_2.smi",
             "input_format": "smiles_file",
@@ -103,8 +105,9 @@ def test_pka_matcher_json_2():
     assert expected == output
 
 
+@pytest.mark.acd
 def test_acd_json_1():
-    """Example with mixed amino acids using pKaMatcher."""
+    """Example with mixed amino acids using ACD."""
     args = {"input": f"{examples_dir}/payload_1.smi",
             "input_format": "smiles_file",
             "plot_titration_curve": False,
@@ -115,32 +118,32 @@ def test_acd_json_1():
                 {"mol_name": "Phe-Ornithine-aMeAsp-Lys-dAla",
                  "pI":
                     {
-                        "IPC2_peptide": 8.046875,
-                        "IPC_peptide": 9.6875,
-                        "ProMoST": 8.25,
-                        "Gauci": 8.625,
-                        "Grimsley": 8.8125,
-                        "Thurlkill": 8.9375,
-                        "Lehninger": 9.734375,
-                        "Toseland": 9.28125,
-                        "pI mean": 8.921875,
-                        "std": 1.6409969816395154,
-                        "err": 0.5801800468119789},
+                        "IPC2_peptide": 8.0625,
+                        "IPC_peptide": 10.03125,
+                        "ProMoST": 8.375,
+                        "Gauci": 8.75,
+                        "Grimsley": 9.125,
+                        "Thurlkill": 9.1875,
+                        "Lehninger": 10.09375,
+                        "Toseland": 9.5625,
+                        "pI mean": 9.1484375,
+                        "std": 1.9449202666819019,
+                        "err": 0.6876331547189606},
                  "QpH7":
                     {
-                        "IPC2_peptide": 0.6310414090183989,
-                        "IPC_peptide": 0.9911047394526975,
-                        "ProMoST": 0.26129142294713636,
-                        "Gauci": 0.5536138638734092,
-                        "Grimsley": 0.6640917422930985,
-                        "Thurlkill": 0.7970937531080793,
-                        "Lehninger": 0.9927791553876366,
-                        "Toseland": 0.9511467343021454,
-                        "Q at pH7.4 mean": 0.7302703525478254,
-                        "std": 0.6749606913955383,
-                        "err": 0.23863464096007284
+                        "IPC2_peptide": 0.6323748200446536,
+                        "IPC_peptide": 0.9924381504789521,
+                        "ProMoST": 0.2626248339733912,
+                        "Gauci": 0.5549472748996638,
+                        "Grimsley": 0.665425153319353,
+                        "Thurlkill": 0.7984271641343339,
+                        "Lehninger": 0.9941125664138912,
+                        "Toseland": 0.9524801453284001,
+                        "Q at pH7.4 mean": 0.7316037635740799,
+                        "std": 0.6749606913955382,
+                        "err": 0.2386346409600728
                     },
-                 "pI_interval": (8.599999999999996, 9.237499999999997),
+                 "pI_interval": (8.687499999999998, 9.612499999999997),
                  "plot_filename": "",
                  "pI_interval_threshold": 0.2,
                  "pKa_set": "IPC2_peptide"}
@@ -153,8 +156,9 @@ def test_acd_json_1():
     assert expected == output
 
 
-def test_acd_json_2():
-    """Example with mixed amino acids using pKaMatcher."""
+@pytest.mark.acd
+def test_natural_aa_json_2():
+    """Example with only natural amino acids (only FASTA matching)."""
     args = {"input": f"{examples_dir}/payload_2.smi",
             "input_format": "smiles_file",
             "plot_titration_curve": False,
