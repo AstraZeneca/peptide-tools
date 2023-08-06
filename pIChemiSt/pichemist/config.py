@@ -55,8 +55,7 @@ PKA_LIMITS = {
 }
 
 # ACD configuration
-ACD_METHOD = ACDPKaFlag.CLASSIC
-# ACD_METHOD = ACDPKaFlag.GALAS
+ACD_METHOD = ACDPKaFlag.GALAS
 
 # Plot definitions
 PLOT_LINE_WIDTHS = {
