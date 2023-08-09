@@ -30,9 +30,6 @@ def generate_input(input_format, input):
         input_dict[1] = {InputAttribute.MOL_NAME.value: input,
                          InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input),
                          InputAttribute.MOL_FASTA.value: None}
-    # TODO: ANDREY - Remove JSON input or implement SMILES parsing
-    if input_format == InputFormat.JSON:
-        input_dict = json.loads(input)
     return input_dict
 
 

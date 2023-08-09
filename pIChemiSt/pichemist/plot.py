@@ -7,8 +7,8 @@ from pichemist.config import PLOT_LINE_WIDTHS as pld
 from pichemist.config import REFERENCE_PKA_SET
 
 
-def output_titration_curve(ph_q_dict, fig_filename):
-    """Generates a titration curve plot and saves it."""
+def output_ph_q_curve(ph_q_dict, fig_filename):
+    """Generates a pH/Q curve plot and saves it."""
     # Static parameters
     plt.matplotlib.rcParams.update({"font.size": 16})
     plt.figure(figsize=(8, 6))

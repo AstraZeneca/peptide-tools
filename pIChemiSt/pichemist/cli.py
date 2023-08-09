@@ -2,7 +2,7 @@ import sys
 import argparse
 
 from rdkit import RDLogger
-from pichemist.config import TITRATION_FILE_PREFIX
+from pichemist.config import PH_Q_FILE_PREFIX
 from pichemist.api import pichemist_from_list
 from pichemist.io import generate_input
 from pichemist.io import output_results
@@ -27,7 +27,7 @@ def arg_parser(args):
     parser = argparse.ArgumentParser(prog=__prog__,
                                      description=__doc__)
     parser.add_argument("-i", dest="input",
-                        help="Input filepath",
+                        help="Input filepath (or SMILES string)",
                         default=None)
     parser.add_argument("-if", dest="input_format",
                         help="Format of the input",
@@ -40,13 +40,13 @@ def arg_parser(args):
                         help="Format of the output",
                         choices=MODELS[OutputFormat],
                         default=OutputFormat.CONSOLE)
-    parser.add_argument("--plot_titration_curve", default=False,
-                        action='store_true', dest="plot_titration_curve",
+    parser.add_argument("--plot_ph_q_curve", default=False,
+                        action='store_true', dest="plot_ph_q_curve",
                         help="Generate an image of the "
-                             "titration curve into a file")
-    parser.add_argument("-tfp", dest="titration_file_prefix",
-                        help="Titration plot file prefix",
-                        default=TITRATION_FILE_PREFIX)
+                             "pH/Q curve into a file")
+    parser.add_argument("-pp", dest="ph_q_curve_file_prefix",
+                        help="pH/Q plot file prefix",
+                        default=PH_Q_FILE_PREFIX)
     parser.add_argument("--print_fragment_pkas", default=False,
                         action='store_true', dest="print_fragment_pkas",
                         help="Print the fragments with corresponding "
@@ -65,8 +65,8 @@ def run_cli(args):
     """Main function for running pIChemiSt."""
     input_dict = generate_input(args.input_format, args.input)
     output_dict = pichemist_from_list(input_dict, args.method,
-                                      args.titration_file_prefix,
-                                      args.plot_titration_curve,
+                                      args.ph_q_curve_file_prefix,
+                                      args.plot_ph_q_curve,
                                       args.print_fragment_pkas)
     output_results(input_dict, output_dict,
                    args.output_file, args.output_format,

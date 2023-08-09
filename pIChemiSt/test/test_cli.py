@@ -148,20 +148,21 @@ def test_smiles_stdin_input():
     assert result == expected
 
 
-def test_file_titration_plot_1():
-    """Validity of the titration plot file."""
+def test_file_ph_q_plot_1():
+    """Validity of the pH/Q plot file."""
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
     tmp_filepath = f"{tmp_file_prefix}_1.png"
     args = arg_parser(["-i", f"{examples_dir}/payload_1.smi",
                        "-of", "json", "--print_fragment_pkas",
-                       "-tfp", tmp_file_prefix,
-                       "--plot_titration_curve",
+                       "-pp", tmp_file_prefix,
+                       "--plot_ph_q_curve",
                        "--method", "pkamatcher"])
     _ = stdout_to_variable(run_cli, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(tmp_filepath, "rb") as f:
         img_txt = f.read()
+    os.remove(tmp_filepath)
     base64_hash = base64.b64encode(img_txt)
     hash_object = hashlib.sha224(base64_hash)
     hex_dig = hash_object.hexdigest()
@@ -169,20 +170,21 @@ def test_file_titration_plot_1():
     assert hex_dig == expected
 
 
-def test_file_titration_plot_2():
-    """Validity of the titration plot file."""
+def test_file_ph_q_plot_2():
+    """Validity of the pH/Q plot file."""
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
     tmp_filepath = f"{tmp_file_prefix}_1.png"
     args = arg_parser(["-i", f"{examples_dir}/payload_2.smi",
                        "-of", "json", "--print_fragment_pkas",
-                       "-tfp", tmp_file_prefix,
-                       "--plot_titration_curve",
+                       "-pp", tmp_file_prefix,
+                       "--plot_ph_q_curve",
                        "--method", "pkamatcher"])
     _ = stdout_to_variable(run_cli, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(tmp_filepath, "rb") as f:
         img_txt = f.read()
+    os.remove(tmp_filepath)
     base64_hash = base64.b64encode(img_txt)
     hash_object = hashlib.sha224(base64_hash)
     hex_dig = hash_object.hexdigest()

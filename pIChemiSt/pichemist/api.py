@@ -12,7 +12,7 @@ from pichemist.model import PKaMethod
 from pichemist.model import MODELS
 from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
-from pichemist.plot import output_titration_curve
+from pichemist.plot import output_ph_q_curve
 
 
 class ApiException(Exception):
@@ -61,8 +61,8 @@ def pkas_and_charges_from_list(smiles_list, method):
 
 
 def pichemist_from_list(input_dict, method,
-                        titration_file_prefix=None,
-                        plot_titration_curve=False,
+                        ph_q_curve_file_prefix=None,
+                        plot_ph_q_curve=False,
                         print_fragments=False):
     """Runs the full logic for a given input dictionary."""
     dict_output = dict()
@@ -93,25 +93,23 @@ def pichemist_from_list(input_dict, method,
         interval, interval_threshold = \
             calculate_isoelectric_interval_and_threshold(pH_q_dict)
 
-        # Plot titration curve
-        if plot_titration_curve and not titration_file_prefix:
-            raise ApiException("A file prefix for the titration plots must "
-                               "be specified.")
-        # TODO: ANDREY - fig_filename can be removed from dict_output
-        # when the plot is not generated
-        fig_filename = ""
-        if plot_titration_curve:
-            fig_filename = f"{titration_file_prefix}_{mol_idx}"
-            output_titration_curve(pH_q_dict, fig_filename)
-
         # Output for given molecule
         dict_output[mol_idx] = {
             OutputAttribute.MOL_NAME.value: mol_name,
             OutputAttribute.PI.value: pI_dict,
             OutputAttribute.Q_PH7.value: q_dict,
             OutputAttribute.PI_INTERVAL.value: interval,
-            OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold,
-            OutputAttribute.PLOT_FILENAME.value: fig_filename}
+            OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold}
+
+        # Plot pH/Q curve
+        if plot_ph_q_curve and not ph_q_curve_file_prefix:
+            raise ApiException("A file prefix for the pH/Q curve plots must "
+                               "be specified.")
+        if plot_ph_q_curve:
+            fig_filename = f"{ph_q_curve_file_prefix}_{mol_idx}.png"
+            output_ph_q_curve(pH_q_dict, fig_filename)
+            dict_output[mol_idx][OutputAttribute.PLOT_FILENAME.value] = \
+                fig_filename
 
         # Define set for reporting pKa of individual amino acids and fragments
         dict_output[mol_idx].update(

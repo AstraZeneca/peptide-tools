@@ -28,7 +28,7 @@ class CurveCalculator(object):
     def get_pH_span(self):
         """
         Define pH span to, for example, calculate the
-        titration curve or where to search for pI.
+        pH/Q curve or where to search for pI.
 
         """
         return [self.pH_lower_bound, self.pH_upper_bound]

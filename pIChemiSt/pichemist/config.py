@@ -76,4 +76,4 @@ SS_SMARTS_PKA_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                             "ss_smarts_set_standardised.json"
 AA_SMARTS_SET_FILEPATH = f"{SMARTS_PKA_DATA_DIR}/standardised/" \
                          "aa_smarts_set_standardised.json"
-TITRATION_FILE_PREFIX = "out_titration_curve"
+PH_Q_FILE_PREFIX = "out_ph_q_curve"

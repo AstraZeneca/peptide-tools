@@ -31,7 +31,6 @@
             8.624999999999998,
             9.362499999999997
         ],
-        "plot_filename": "",
         "pI_interval_threshold": 0.2,
         "pKa_set": "IPC2_peptide",
         "base_pkas_fasta": {

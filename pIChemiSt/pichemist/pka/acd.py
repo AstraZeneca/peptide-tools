@@ -110,8 +110,6 @@ class ACDPKaCalculator(object):
     def calculate_pka_from_list(self, smi_list):
         """Calculates the pKa values of a list of SMILES."""
         # Run the calculations
-        # TODO: ANDREY - I had to switch back to the classic
-        # algo because GALAS would not work - maybe ACD version?
         self._prepare_temp_input_file(smi_list)
         cmd = self._build_command()
         self._run_acd_exe(cmd)

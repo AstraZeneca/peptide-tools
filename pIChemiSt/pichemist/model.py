@@ -32,7 +32,6 @@ class InputAttribute(BaseEnum):
 class InputFormat(BaseEnum):
     SMILES_STDIN = "smiles_stdin"
     SMILES_FILE = "smiles_file"
-    JSON = "json"
     SD_FILE = "sdf"
 
 
