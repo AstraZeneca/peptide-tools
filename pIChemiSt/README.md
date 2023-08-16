@@ -87,7 +87,7 @@ pichemist -i test/examples/payload_1.smi --method acd
 - Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code (https://orcid.org/0009-0004-7655-2212)
 
 ## For developers
-- The package can be installed from the wheel in the `dist/` folder. When a new version needs to be released, a new build must be created. That can be done by changing the version of the package inside `setup.py` then calling `python setup.py sdist` which will build the release. TODO: Do not use wheels 
+- The package can be installed from the wheel in the `dist/` folder. When a new version needs to be released, a new build must be created. That can be done by changing the version of the package inside `setup.py` then calling `python setup.py sdist` which will build the release. Do not use wheels since `bdist_wheel` does not include the required static files in the wheel distribution
 - The code can be automatically tested using `python setup.py test` which requires `pytest` to be installed
 - Tests can also be run using the `Makefile` in the root of the repository. The file allows granular testing as follows:
   - `make test_core` runs only the `core` tests including pKaMatcher and plots
