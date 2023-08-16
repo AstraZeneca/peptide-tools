@@ -66,9 +66,8 @@ PLOT_LINE_WIDTHS = {
 }
 
 # Paths
-SRC_DIR = pichemist.__path__[0]
-ROOT_DIR = os.path.dirname(SRC_DIR)
-DATA_DIR = f"{ROOT_DIR}/data"
+MODULE_DIR = pichemist.__path__[0]
+DATA_DIR = f"{MODULE_DIR}/data"
 FASTA_PKA_DATA_DIR = f"{DATA_DIR}/fasta"
 FASTA_PKA_SETS_DIR = f"{FASTA_PKA_DATA_DIR}/standardised"
 SMARTS_PKA_DATA_DIR = f"{DATA_DIR}/smarts"

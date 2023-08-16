@@ -1,10 +1,10 @@
 .PHONY: build install test coverage
 
 build:
-	python setup.py bdist_wheel
+	python setup.py sdist
 
 install:
-	pip install dist/cse-*.whl
+	pip install dist/pichemist-*
 
 test_core:
 	pytest -vvs test
@@ -12,7 +12,7 @@ test_core:
 test_acd:
 	pytest -vvs test -m acd
 
-test_full:
+test:
 	make test_core
 	make test_acd
 
