@@ -8,7 +8,7 @@ The program calculates the isoelectric point of proteins or peptides based on th
 - Ensure that you have Python version >=3.8
 - Enter the package folder `cd peptide-tools/pIChemiSt`
 - Run `pip install dist/pichemist-*` to install the Python library
-- Run `sh setup.cli` to configure the CLI (effects take change only when the a new terminal is started)
+- Run `sh setup.cli` to configure the CLI (effects take change only when a new terminal is started)
 - (optional) - To use ACD for the prediction of non-natural amino acid pKa, make sure that the command `perceptabat` points to its binary
 
 ## Examples of usage
@@ -83,8 +83,8 @@ pichemist -i test/examples/payload_1.smi --method acd
 ## Contributions
 - Andrey I. Frolov (https://orcid.org/0000-0001-9801-3253)
 - Gian Marco Ghiandoni (https://orcid.org/0000-0002-2592-2939)
-- Jonas Boström - contributed function of splitting molecule by peptide bonds (https://orcid.org/0000-0002-9719-9137)
-- Johan Ulander - contributed idea to do SMARTS pattern matching Smiles into Amino Acid single letter code (https://orcid.org/0009-0004-7655-2212)
+- Jonas Boström - contributed the function of splitting molecules by peptide bonds (https://orcid.org/0000-0002-9719-9137)
+- Johan Ulander - contributed the idea to do SMARTS pattern matching Smiles into Amino Acid single letter code (https://orcid.org/0009-0004-7655-2212)
 
 ## For developers
 - The package can be installed from the wheel in the `dist/` folder. When a new version needs to be released, a new build must be created. That can be done by changing the version of the package inside `setup.py` then calling `python setup.py sdist` which will build the release. Do not use wheels since `bdist_wheel` does not include the required static files in the wheel distribution
