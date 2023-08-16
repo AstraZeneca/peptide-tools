@@ -1,22 +1,31 @@
 ###
-### Last  update: Andrey Frolov, AstraZeneca, Molndal. 29/01/2021
+### Last  update: Andrey Frolov, AstraZeneca, Molndal. 08/01/2020
 ### First verion: Andrey Frolov, AstraZeneca, Molndal. 11/02/2016
 ###
 
 import sys
+import optparse
+
+#import numpy as np
+#import pylab
+
+#import json
+#from json import encoder
+#encoder.FLOAT_REPR = lambda o: format(o, '.2f')
+
 
 ######
-###### Global definitions
+###### Some global definitions
 ######
 
 all_known_pKa_sets=['ProMoST',
 'IPC_peptide',
-'Gauci_calib',
+'IPC2_peptide',
+'Gauci',
 'Bjellqvist',
 'Rodwell',
 'Grimsley',
 'Thurlkill',
-#'Gauci_ExPASy',
 'EMBOSS',
 'DTASelect',
 'Solomon',
@@ -27,8 +36,15 @@ all_known_pKa_sets=['ProMoST',
 'Dawson']
 
 
+def list_to_comma_seprated_string(l):
+	s=""
+	for v in l: s+=str(v)+","
+	return s[:-1]
+
 ### Preselected set of pKa to display
-pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
+#pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci_calib','Bjellqvist','Rodwell','Grimsley','Thurlkill','Solomon','Lehninger','EMBOSS']
+#pKa_sets_to_use=['IPC_peptide','ProMoST','Gauci','Bjellqvist','Grimsley','Thurlkill','Lehninger','Toseland']
+pKa_sets_to_use=['IPC2_peptide','IPC_peptide','ProMoST','Gauci','Grimsley','Thurlkill','Lehninger','Toseland']
 
 known_basic_res=['K','R','H']
 known_acidic_res=['D','E','C','Y','U']
@@ -84,6 +100,20 @@ pKa_sets_short['EMBOSS']={
  'Nterm':   8.6  ,
  'Cterm':   3.6  
 }
+
+
+pKa_sets_short['IPC2_peptide']={
+ 'K':       8.165 ,
+ 'R':       11.493 ,
+ 'H':       6.439 ,
+ 'D':       3.969 ,
+ 'E':       4.507 ,
+ 'C':       9.439 ,
+ 'Y':       9.153 ,
+ 'Nterm':   7.947 ,
+ 'Cterm':   2.977  
+}
+
 
 pKa_sets_short['IPC_peptide']={
  'K':       10.517 ,
@@ -270,7 +300,7 @@ for pKaset in pKa_sets_short.keys():
 
 
 ### Calibrated ExPASY - from Gauci et al. Proteomics 2008, 8, 4898 as implemented in pIR
-SetName='Gauci_calib'
+SetName='Gauci'
 
 # Acidic_Amino_Acids
 #             AA    Primary  N-Terminal  C-Terminal
@@ -377,6 +407,18 @@ pKa_sets['ProMoST']={
  'pKa_basic': pKa_basic1,
  'pKa_TerminusIonizableGroup': pKa_TerminusIonizableGroup1
 }
+
+
+### Noncanonical AAs. These values used for all sets of pKa available for standard AAs.  
+# PTM. Not complete... to exdend upon request
+pKa_noncanonical = {'pKa1_phosphate':1.2,
+                    'pKa2_phosphate':6.9,
+                    'dpKa_alkylLys': 0.15, # data from ACD lab: pKa of amine: 10.69. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12, 
+                    'dpKa_dialkylLys': 0.15 - 0.75
+                   } # data from Zhang, Vogel et al.  (ACD lab: pKa of dimethylamine: 9.83 +- 0.28 - error too high. The delta for methylated amine compared to amine.  ### Zhang, Vogel, J. Bio. Chem. 1993, 268, 30, 22420 (Table III, Lys75) pKas of methylated 10.87, dimethylated 10.12, 
+
+
+
 
 
 #Ala	A	Alanine

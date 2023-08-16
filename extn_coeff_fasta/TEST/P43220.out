@@ -1,0 +1,11 @@
+======================================================================================================================================================
+--- Molar absorption coefficient at different wavelength
+mol ID: sp|P43220|GLP1R_HUMAN
+Sequence: MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+e(205 nm) = 2099120 (M*cm)^-1 
+e(214 nm) = 1295516 (M*cm)^-1 
+e(280 nm) = 125852.5 (M*cm)^-1 
+
+Pace, Vajdos, Fee, Grimsley "How to measure and predict the molar absorption coefficient of a protein", Protein Science 1995, 4, 2411-2423
+Kuipers, Gruppen, "Prediction of molar extinction coefficients of proteins and peptides ...", J. Agric. Food Chem. 2007, 55, 5445
+Anthis, Clore, "Sequence-specific determination of protein and peptide concentrations by absorbance at 215 nm", Protein Science 2013, 22, 851

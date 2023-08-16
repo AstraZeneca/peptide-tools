@@ -13,7 +13,7 @@ extn_coeff_fasta
 pI_fasta/
 * v1.4 changes allowing multiple sequnce processing and JSON output formatting
 
-rdkit_pI/
+pIChemiSt/
 * 2022-07-13 Replace Dimorphite_DL by pKaMatcher 
 * 2022-07-13 Removed Dimorphite_DL. Replaced it by pKaMatcher. 
 * 2022-03-23 v3.3 bug fix: the output was incomplete if the extra keys (print_fragmet_pkas, etc.) were switched on.

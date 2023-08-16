@@ -7,6 +7,8 @@ import sys, os
 import argparse
 import json
 from copy import copy
+import csv
+
 #from json import encoder
 #encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 
@@ -58,10 +60,24 @@ class Dict2Class(object):
             setattr(self, key, my_dict[key]) 
 
 
+def read_fasta_file(inputFile):
 
+    filename, ext = os.path.splitext(inputFile)
 
+    # Initialize file reader
+    if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
 
+    from Bio import SeqIO
+    biosuppl = SeqIO.parse(open(inputFile),'fasta')
 
+    mol_supply_json={}
+    mol_unique_ID = 0
+    for biofasta in biosuppl:
+        mol_unique_ID += 1
+        # unique index, mol title, RDkit mol object, mol fasta
+        mol_supply_json[mol_unique_ID] = {'mol_name':biofasta.id, 'mol_obj':None, 'fasta':str(biofasta.seq)}
+        
+    return mol_supply_json
 
 
 def calc_extn_coeff(options={}):
@@ -188,7 +204,7 @@ def calc_extn_coeff_single_sequence(sequence):
     43*nV +
     923*nPepBond )
 
-    e280 = 5500*nW  +  1490*nY  +  125*nC 
+    e280 = 5500*nW  +  1490*nY  + 0.5*125*nC 
 
     return {'fasta':sequence,'e205':e205,'e214':e214,'e280':e280}
 
@@ -198,7 +214,7 @@ def print_stdout(dict_in):
     #for molid_ind in dict_in['molid_ind_list']:
     for molid_ind in dict_in.keys():
         dict_extn_coeff = dict_in[molid_ind]
-        print(dict_extn_coeff.keys())
+        #print(dict_extn_coeff.keys())
         molid = dict_extn_coeff['mol_name']
         print("======================================================================================================================================================")
         print("--- Molar absorption coefficient at different wavelength")
@@ -211,7 +227,7 @@ def print_stdout(dict_in):
         print( "Pace, Vajdos, Fee, Grimsley \"How to measure and predict the molar absorption coefficient of a protein\", Protein Science 1995, 4, 2411-2423")
         print( "Kuipers, Gruppen, \"Prediction of molar extinction coefficients of proteins and peptides ...\", J. Agric. Food Chem. 2007, 55, 5445")
         print( "Anthis, Clore, \"Sequence-specific determination of protein and peptide concentrations by absorbance at 215 nm\", Protein Science 2013, 22, 851")
-        return
+    return
 
 
 
@@ -226,19 +242,50 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="extn_coeff_fasta.py is the program for calculation of peptide extinction coefficient  (molar absorption coefficient) based on FASTA sequernce.\n Usage:          python extn_coeff.py -s GGKGD")
     parser.add_argument("-s", action="store", dest="seq", help="peptide sequence", default='')
     parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
-    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. fasta",default='')
+    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. csv",default='')
     parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Print output as JSON")
     args = parser.parse_args()
 
     #dict_extn_coeff = calc_extn_coeff(args.sequence)
     dict_extn_coeff = calc_extn_coeff(args.__dict__)
 
-    if not args.l_json:
-        print_stdout(dict_extn_coeff)
-    else:
-        print(json.dumps(dict_extn_coeff))
+    ### ----------------------------------------------------------------------
+    # Output 
+    if args.outputFile == '': # output plain text
+        if args.l_json:
+            print(json.dumps(dict_extn_coeff, indent=2))
+        else:
+            print_stdout(dict_extn_coeff)
 
+    else: # output file
 
+        known_out_file_types = ['.csv']
+        filename, out_fext = os.path.splitext(args.outputFile)
+        if out_fext not in known_out_file_types:
+            raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
+            sys.exit(1)
+
+        elif out_fext == '.csv':
+            with open(args.outputFile,'w') as csv_f:
+                csv_w = csv.writer(csv_f)
+                count=0
+                for mi in dict_extn_coeff.keys():
+                    count+=1
+                    if count == 1:
+                        header=['mol_name','fasta','e205','e214','e280']
+                        csv_w.writerow(header)
+
+                    row = []
+                    row += [dict_extn_coeff[mi]['mol_name']] 
+                    row += [dict_extn_coeff[mi]['fasta']] 
+                    row += [dict_extn_coeff[mi]['e205']] 
+                    row += [dict_extn_coeff[mi]['e214']] 
+                    row += [dict_extn_coeff[mi]['e280']] 
+                    csv_w.writerow(row)
+                        
+        # print info 
+        dict_file = {'outputFile':args.outputFile,'outputInfo':'Number of molecules processed:'+str(len(dict_extn_coeff.keys()))}
+        print(json.dumps(dict_file))
     
 
 

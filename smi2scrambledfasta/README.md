@@ -8,14 +8,15 @@ Helper script to generate a scrambled fasta from smiles. Useful for calculating 
 HOW TO RUN
 
     module load rdkit
-    export PYTHONPATH=<your_path>/peptide_tools/rdkit_pI_v3.1:${PYTHONPATH}
+    export PYTHONPATH=<your_path>/peptide_tools/pIChemiSt_v3.1:${PYTHONPATH}
+    cd TEST
     python ../smi2scrambledfasta.py -i FPYVAE.smi -o FPYVAE.fasta
 
 DEPENDENCIES 
 
     python2 or later 
     rdkit/2020.03.1 (tested with)
-    rdkit_pI v3.1 or later
+    pIChemiSt v3.1 or later
 
 PLATFORM
 

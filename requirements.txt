@@ -20,7 +20,7 @@ pI_fasta_v1.4/
     Biopython/1.73 (tested with)
 
 
-rdkit_pI_v3.2/
+pIChemiSt_v3.2/
 
     python3 or later 
     rdkit/2021.03.1 (tested with)
@@ -37,7 +37,7 @@ smi2scrambledfasta_v1.0/
 
     python2 or later 
     rdkit/2020.03.1 (tested with)
-    rdkit_pI v3.1 or later
+    pIChemiSt v3.1 or later
 
 
 

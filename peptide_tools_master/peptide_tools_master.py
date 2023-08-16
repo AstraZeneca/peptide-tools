@@ -12,7 +12,7 @@ from rdkit import Chem
 
 from extn_coeff_fasta import calc_extn_coeff
 from pI_fasta import calc_pI_fasta
-from rdkit_pI import calc_rdkit_pI
+from pIChemiSt import calc_pIChemiSt
 
 import tempfile
 
@@ -44,7 +44,7 @@ def arg_parser():
     ### common input
     parser.add_argument("--input", dest="input", help="input of a molecule structure: Smiles, fasta, database ID, filename (smi, sdf, fasta)", default='',required=True)
 
-    ### rdkit_pI.py keys
+    ### pIChemiSt.py keys
     #parser.add_argument("--print_fragment_pkas", dest="l_print_fragment_pkas", help="Print out fragments with corresponding pKas used in pI calcution", default='')
     #parser.add_argument("--print_pka_set", dest="l_print_pka_set", help="Print out stored pka sets explicitly.", default='')
     parser.add_argument("--print_fragment_pkas",default="no", action='store',dest="l_print_fragment_pkas", help="Print out fragments with corresponding pKas used in pI calcution")
@@ -125,6 +125,7 @@ if __name__ == "__main__":
     args = arg_parser()
     INPUT=args.input
     INPUT=INPUT.strip()
+    INPUT=INPUT.replace('ENDOFLINE','\n')
 
     mol_name = 'none'
     IN_lines = INPUT.split('\n')
@@ -199,12 +200,12 @@ if __name__ == "__main__":
             if file_extension != '.fasta':
                 l_calc_extn_coeff=True
                 l_calc_pI_fasta=False
-                l_calc_rdkit_pI=True
+                l_calc_pIChemiSt=True
                 mol_supply_json = read_structure_file(inputFile)
             else:
                 l_calc_extn_coeff=True
                 l_calc_pI_fasta=True
-                l_calc_rdkit_pI=False
+                l_calc_pIChemiSt=False
                 mol_supply_json = read_fasta_file(inputFile)
 
     elif not INPUT.isalpha():
@@ -218,7 +219,7 @@ if __name__ == "__main__":
         outputFile = ''
         l_calc_extn_coeff=True
         l_calc_pI_fasta=False
-        l_calc_rdkit_pI=True
+        l_calc_pIChemiSt=True
         mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {'mol_name': mol_name, 'mol_obj':mol, 'fasta':get_fasta_from_mol(mol)}
 
@@ -233,7 +234,7 @@ if __name__ == "__main__":
         outputFile = ''
         l_calc_extn_coeff=True
         l_calc_pI_fasta=True
-        l_calc_rdkit_pI=False
+        l_calc_pIChemiSt=False
         mol_supply_json[mol_unique_ID] = {'mol_name': mol_name, 'mol_obj':None, 'fasta':fasta}
 
     elif ( (INPUT[0:2] == 'AZ'  and INPUT[2].isdigit()) or (INPUT[0:2] == 'SN'  and INPUT[2].isdigit())  or (INPUT[0:4] == 'MEDI'  and INPUT[4].isdigit())  ):
@@ -250,7 +251,7 @@ if __name__ == "__main__":
         outputFile = ''
         l_calc_extn_coeff=True
         l_calc_pI_fasta=False
-        l_calc_rdkit_pI=True
+        l_calc_pIChemiSt=True
         mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {'mol_name': mol_name, 'mol_obj':mol, 'fasta':fasta}
 
@@ -307,10 +308,10 @@ if __name__ == "__main__":
 
         dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
 
-    dict_out_rdkit_pI = {}
-    if l_calc_rdkit_pI:
+    dict_out_pIChemiSt = {}
+    if l_calc_pIChemiSt:
 
-        rdkit_pI_options={'smiles':'',
+        pIChemiSt_options={'smiles':'',
                         'inputDict':mol_supply_json,
                         'inputJSON':'',
                         'inputFile':inputFile,
@@ -325,11 +326,11 @@ if __name__ == "__main__":
                         #'use_dimorphite':True,
 
 
-        dict_out_rdkit_pI = calc_rdkit_pI(rdkit_pI_options)
+        dict_out_pIChemiSt = calc_pIChemiSt(pIChemiSt_options)
 
     dict_out_peptide_tools_master = {'output_extn_coeff':dict_out_extn_coeff,
                                     'output_pI_fasta':dict_out_pI_fasta,
-                                    'output_rdkit_pI':dict_out_rdkit_pI
+                                    'output_pIChemiSt':dict_out_pIChemiSt
                                     }
 
     ### ----------------------------------------------------------------------
@@ -345,11 +346,11 @@ if __name__ == "__main__":
             for mi in mol_supply_json.keys():
                     mol = mol_supply_json[mi]['mol_obj']
                     
-                    if l_calc_rdkit_pI:
-                        mol.SetProp('pI mean',"%.2f" % dict_out_rdkit_pI[mi]['pI']['pI mean'])
-                        mol.SetProp('pI std',"%.2f" % dict_out_rdkit_pI[mi]['pI']['std'])
-                        mol.SetProp('pI interval',' - '.join([ "%.2f" % x for x in dict_out_rdkit_pI[mi]['pI_interval'] ] ))
-                        mol.SetProp('pI interval threshold',"%.2f" % dict_out_rdkit_pI[mi]['pI_interval_threshold'])
+                    if l_calc_pIChemiSt:
+                        mol.SetProp('pI mean',"%.2f" % dict_out_pIChemiSt[mi]['pI']['pI mean'])
+                        mol.SetProp('pI std',"%.2f" % dict_out_pIChemiSt[mi]['pI']['std'])
+                        mol.SetProp('pI interval',' - '.join([ "%.2f" % x for x in dict_out_pIChemiSt[mi]['pI_interval'] ] ))
+                        mol.SetProp('pI interval threshold',"%.2f" % dict_out_pIChemiSt[mi]['pI_interval_threshold'])
 
                     if l_calc_extn_coeff:
                         mol.SetProp('mol_name',dict_out_extn_coeff[mi]['mol_name'])

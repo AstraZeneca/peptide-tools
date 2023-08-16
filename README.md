@@ -6,7 +6,7 @@ OVERVIEW
     Set of programs to calcaulte phys-chem properties of synthetic peptides and proteins: isoelectic point and extinction coefficients.
     In total there are 5 scripts/programs there, each can serve as stand alone:
 
-    1) rdkit_pI  
+    1) pIChemiSt  
     program to calcualte isoelectric point of natural and modified peptides. 
 
     2) smi2scrambledfasta  (depends on 1)
