@@ -87,6 +87,49 @@ class PKaMatcher(object):
             acid_pkas.extend(results[PKaType.ACIDIC.value])
         return (base_pkas, acid_pkas, diacid_pkas)
 
+# TODO
+#   def calculate_aminoacid_letter_from_smiles(self, smiles: str):
+#       """Calculates the amino acid letter for a SMILES."""
+#       results = self._aminoacid_letter_from_smiles(smiles)
+#       return {k: [t[0] for t in v]
+#               for k, v in results.items()}
+
+#   def calculate_scrambled_fasta_from_list(self, smiles_list: list):
+#       """Calculates amino acid letters for list of SMILES and unites them into FASTA string."""
+#       aa_list = list()
+#       for smiles in smiles_list:
+#           lmatch=False
+
+#           for smarts,AA in D_cappedAA_smarts.items():
+#               # Middle 
+#               nhits = patmatch(smiles,smarts)
+#               if nhits > 0: 
+#                   aa_list += [AA]*nhits
+#                   lmatch=True
+#                   break
+
+#           for smarts,AA in D_NtermfreeAA_smarts.items():
+#               # N-term 
+#               nhits = patmatch(smiles,smarts)
+#               if nhits > 0: 
+#                   aa_list += [AA]*nhits
+#                   lmatch=True
+#                   break
+#
+#           for smarts,AA in D_CtermfreeAA_smarts.items():
+#               # C-term 
+#               nhits = patmatch(smiles,smarts)
+#               if nhits > 0: 
+#                   aa_list += [AA]*nhits
+#                   lmatch=True
+#                   break
+
+#           if not lmatch:
+#               lmatch=False
+#               aa_list += ['X']
+
+#       return ''.join(aa_list)
+
 
 class PKaMatcherException(Exception):
     def __init__(self):
