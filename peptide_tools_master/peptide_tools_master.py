@@ -12,7 +12,8 @@ from rdkit import Chem
 
 from extn_coeff_fasta import calc_extn_coeff
 from pI_fasta import calc_pI_fasta
-from pIChemiSt import calc_pIChemiSt
+#from pIChemiSt import calc_pIChemiSt
+from pichemist.api import pichemist_from_list
 
 import tempfile
 
