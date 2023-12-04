@@ -20,16 +20,16 @@ class IOException(Exception):
     pass
 
 
-def generate_input(input_format, input):
-    """Produces an input dictionary compatible with the logic."""
+def generate_input(input_format, input_data, fasta=None):
+    """Produces an input dictionary compatible with the API."""
     input_dict = dict()
     if input_format == InputFormat.SMILES_FILE or \
             input_format == InputFormat.SD_FILE:
-        input_dict = read_structure_file(input)
+        input_dict = read_structure_file(input_data)
     if input_format == InputFormat.SMILES_STDIN:
-        input_dict[1] = {InputAttribute.MOL_NAME.value: input,
-                         InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input),
-                         InputAttribute.MOL_FASTA.value: None}
+        input_dict[1] = {InputAttribute.MOL_NAME.value: input_data,
+                         InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input_data),
+                         InputAttribute.MOL_FASTA.value: fasta}
     return input_dict
 
 

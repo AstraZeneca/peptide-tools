@@ -8,7 +8,7 @@ from pichemist.api import pichemist_from_list
 
 def test_pka_matcher_json_1():
     """Example with mixed amino acids using pKaMatcher."""
-    args = {"input": f"{examples_dir}/payload_1.smi",
+    args = {"input_data": f"{examples_dir}/payload_1.smi",
             "input_format": "smiles_file",
             "plot_ph_q_curve": False,
             "print_fragments": False,
@@ -48,7 +48,7 @@ def test_pka_matcher_json_1():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    input_dict = generate_input(args["input_format"], args["input"])
+    input_dict = generate_input(args["input_format"], args["input_data"])
     output = pichemist_from_list(input_dict, args["method"],
                                  args["plot_ph_q_curve"],
                                  args["print_fragments"])
@@ -57,7 +57,7 @@ def test_pka_matcher_json_1():
 
 def test_natural_aa_json_1():
     """Example with only natural amino acids (only FASTA matching)."""
-    args = {"input": f"{examples_dir}/payload_2.smi",
+    args = {"input_data": f"{examples_dir}/payload_2.smi",
             "input_format": "smiles_file",
             "plot_ph_q_curve": False,
             "print_fragments": False,
@@ -97,7 +97,7 @@ def test_natural_aa_json_1():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    input_dict = generate_input(args["input_format"], args["input"])
+    input_dict = generate_input(args["input_format"], args["input_data"])
     output = pichemist_from_list(input_dict, args["method"],
                                  args["plot_ph_q_curve"],
                                  args["print_fragments"])
@@ -107,7 +107,7 @@ def test_natural_aa_json_1():
 @pytest.mark.acd
 def test_acd_json_1():
     """Example with mixed amino acids using ACD."""
-    args = {"input": f"{examples_dir}/payload_1.smi",
+    args = {"input_data": f"{examples_dir}/payload_1.smi",
             "input_format": "smiles_file",
             "plot_ph_q_curve": False,
             "print_fragments": False,
@@ -147,7 +147,7 @@ def test_acd_json_1():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    input_dict = generate_input(args["input_format"], args["input"])
+    input_dict = generate_input(args["input_format"], args["input_data"])
     output = pichemist_from_list(input_dict, args["method"],
                                  args["plot_ph_q_curve"],
                                  args["print_fragments"])
@@ -157,7 +157,7 @@ def test_acd_json_1():
 @pytest.mark.acd
 def test_natural_aa_json_2():
     """Example with only natural amino acids (only FASTA matching)."""
-    args = {"input": f"{examples_dir}/payload_2.smi",
+    args = {"input_data": f"{examples_dir}/payload_2.smi",
             "input_format": "smiles_file",
             "plot_ph_q_curve": False,
             "print_fragments": False,
@@ -197,7 +197,7 @@ def test_natural_aa_json_2():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    input_dict = generate_input(args["input_format"], args["input"])
+    input_dict = generate_input(args["input_format"], args["input_data"])
     output = pichemist_from_list(input_dict, args["method"],
                                  args["plot_ph_q_curve"],
                                  args["print_fragments"])
@@ -212,7 +212,7 @@ def test_natural_aa_json_3():
     """
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
     tmp_filepath = f"{tmp_file_prefix}_1.png"
-    args = {"input": f"{examples_dir}/payload_2.smi",
+    args = {"input_data": f"{examples_dir}/payload_2.smi",
             "input_format": "smiles_file",
             "ph_q_curve_file_prefix": tmp_file_prefix,
             "plot_ph_q_curve": True,
@@ -254,7 +254,7 @@ def test_natural_aa_json_3():
                  "pKa_set": "IPC2_peptide"}
                 }
 
-    input_dict = generate_input(args["input_format"], args["input"])
+    input_dict = generate_input(args["input_format"], args["input_data"])
     output = pichemist_from_list(input_dict, args["method"],
                                  args["ph_q_curve_file_prefix"],
                                  args["plot_ph_q_curve"],

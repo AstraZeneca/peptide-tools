@@ -1,27 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*
-
-import sys, os, re, string, random, time, urllib
-from time import strftime, gmtime
-from operator import itemgetter
+import tempfile
+import sys
+import os
+import re
+import string
+import random
+import time
+import urllib
 import argparse
 import json
 import csv
 
+from time import strftime
+from time import gmtime
+from operator import itemgetter
 from rdkit import Chem
-
 from extn_coeff_fasta import calc_extn_coeff
-from pI_fasta import calc_pI_fasta
-#from pIChemiSt import calc_pIChemiSt
 from pichemist.api import pichemist_from_list
+from pichemist.io import generate_input
+from pI_fasta import calc_pI_fasta
 
-import tempfile
 
-currentdir     = os.getcwd()
+currentdir = os.getcwd()
 
 def get_fasta_from_smiles(smi):
-    from smi2scrambledfasta import get_scrambledfasta_from_smiles
-    fasta = get_scrambledfasta_from_smiles(smi)
+    from smi2scrambledfasta import get_scrambled_fasta_from_smiles
+    fasta = get_scrambled_fasta_from_smiles(smi)
     if len(fasta)==0: 
         raise Exception('ERROR: returned fasta is empry. something is wrong. Exit')
         sys.exit(1)
@@ -29,8 +34,8 @@ def get_fasta_from_smiles(smi):
 
 
 def get_fasta_from_mol(mol):
-    from smi2scrambledfasta import get_scrambledfasta_from_mol
-    fasta = get_scrambledfasta_from_mol(mol)
+    from smi2scrambledfasta import get_scrambled_fasta_from_mol
+    fasta = get_scrambled_fasta_from_mol(mol)
     if len(fasta)==0: 
         raise Exception('ERROR: returned fasta is empry. something is wrong. Exit')
         sys.exit(1)
@@ -311,23 +316,13 @@ if __name__ == "__main__":
 
     dict_out_pIChemiSt = {}
     if l_calc_pIChemiSt:
-
-        pIChemiSt_options={'smiles':'',
-                        'inputDict':mol_supply_json,
-                        'inputJSON':'',
-                        'inputFile':inputFile,
-                        'outputFile':'',
-                        'use_acdlabs':False,
-                        'use_pkamatcher':True,
-                        'l_print_fragments':args.l_print_fragment_pkas,
-                        'l_plot_titration_curve':lPlot,
-                        'l_print_pka_set':args.l_print_pka_set,
-                        'l_json':True
-                         }
-                        #'use_dimorphite':True,
-
-
-        dict_out_pIChemiSt = calc_pIChemiSt(pIChemiSt_options)
+        args = {"plot_ph_q_curve": lPlot,
+                "print_fragments": args.l_print_fragment_pkas,
+                "method": "pkamatcher"}
+        
+        dict_out_pIChemiSt = pichemist_from_list(mol_supply_json, args["method"],
+                                                 args["plot_ph_q_curve"],
+                                                 args["print_fragments"])
 
     dict_out_peptide_tools_master = {'output_extn_coeff':dict_out_extn_coeff,
                                     'output_pI_fasta':dict_out_pI_fasta,

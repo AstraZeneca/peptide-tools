@@ -1,28 +1,14 @@
-from rdkit import Chem
+from pichemist.config import AA_TYPE_KEYS
 from pichemist.config import PKA_SETS_NAMES
+from pichemist.fasta.helpers import pattern_match
 from pichemist.fasta.pka_sets import FASTA_PKA_SETS
 from pichemist.fasta.smarts import AA_SMARTS_SET
-
-
-def _pattern_match_rdkit(smiles, smarts):
-    """RDKit SMARTS matching counter."""
-    mol = Chem.MolFromSmiles(smiles)
-    mol = Chem.AddHs(mol)
-    pat = Chem.MolFromSmarts(smarts)
-    n = 0
-    for _ in mol.GetSubstructMatches(pat):
-        n += 1
-    return n
-
-
-def pattern_match(smiles, smarts):
-    """Interface for SMARTS matching."""
-    return _pattern_match_rdkit(smiles, smarts)
 
 
 class FastaPKaMatcher(object):
     def __init__(self):
         self.pka_sets = PKA_SETS_NAMES
+        self.aa_smarts_set = AA_SMARTS_SET
 
     def _initialise_pka_sets(self, all_pka_sets=FASTA_PKA_SETS,
                              pka_names=PKA_SETS_NAMES):
@@ -118,7 +104,8 @@ class FastaPKaMatcher(object):
 
         # Middle
         CAPPED_IDX = 0
-        CAPPED_SMARTS = AA_SMARTS_SET["d_capped_aa_smarts"]
+        CAPPED_KEY = AA_TYPE_KEYS["capped"]
+        CAPPED_SMARTS = self.aa_smarts_set[CAPPED_KEY]
         for smarts, aa in CAPPED_SMARTS.items():
             nhits = pattern_match(smiles, smarts)
             if nhits > 0:
@@ -136,7 +123,8 @@ class FastaPKaMatcher(object):
         # N-term
         NTERM_FREE_IDX = 1
         NTERM_ION_IDX = 0
-        NTERM_SMARTS = AA_SMARTS_SET["d_nterm_free_aa_smarts"]
+        NTERM_KEY = AA_TYPE_KEYS["nterm"]
+        NTERM_SMARTS = self.aa_smarts_set[NTERM_KEY]
         for smarts, aa in NTERM_SMARTS.items():
             nhits = pattern_match(smiles, smarts)
             if nhits > 0:
@@ -159,7 +147,8 @@ class FastaPKaMatcher(object):
         # C-term
         CTERM_FREE_IDX = 2
         CTERM_ION_IDX = 1
-        CTERM_SMARTS = AA_SMARTS_SET["d_cterm_free_aa_smarts"]
+        CTERM_KEY = AA_TYPE_KEYS["cterm"]
+        CTERM_SMARTS = self.aa_smarts_set[CTERM_KEY]
         for smarts, aa in CTERM_SMARTS.items():
             nhits = pattern_match(smiles, smarts)
             if nhits > 0:

@@ -1,4 +1,3 @@
-import os
 import pichemist
 
 from pichemist.model import ACDPKaFlag
@@ -52,6 +51,11 @@ PKA_LIMITS = {
     "acid_2": 12,
     "base_1": 2,
     "base_2": 15,
+}
+AA_TYPE_KEYS = {
+    "capped": "d_capped_aa_smarts",
+    "nterm": "d_nterm_free_aa_smarts",
+    "cterm": "d_cterm_free_aa_smarts"
 }
 
 # ACD configuration

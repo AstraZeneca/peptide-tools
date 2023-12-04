@@ -3,33 +3,21 @@ import argparse
 
 from rdkit import Chem
 from rdkit.Chem import AllChem, Recap, Descriptors, Draw
-
-#from pka_sets_fasta import *
-# TODO: Fix this import
-#from smarts_matcher_aminoacids import get_scrambled_fasta_from_frags
-# TODO: Fix this import
-#from pIChemiSt import break_amide_bonds_and_cap
-
-#import pka_sets_fasta 
-#from smarts_matcher_aminoacids import *
+from pichemist.molecule import PeptideCutter
+from pichemist.fasta.scrambler import FastaScrambler
 
 
-def get_scrambledfasta_from_smiles(smiles):
-    mol=Chem.MolFromSmiles(smiles)
+def get_scrambled_fasta_from_mol(mol):
     # break amide bonds
-    frags_smi_list = break_amide_bonds_and_cap(mol)
+    frags_smi_list = PeptideCutter().break_amide_bonds_and_cap(mol)
     # get fasta
-    fasta = get_scrambled_fasta_from_frags(frags_smi_list)
+    fasta = FastaScrambler().get_scrambled_fasta_from_list(frags_smi_list)
     return fasta
 
 
-def get_scrambledfasta_from_mol(mol):
-    # break amide bonds
-    frags_smi_list = break_amide_bonds_and_cap(mol)
-    # get fasta
-    fasta = get_scrambled_fasta_from_frags(frags_smi_list)
-    return fasta
-
+def get_scrambled_fasta_from_smiles(smiles):
+    mol = Chem.MolFromSmiles(smiles)
+    return get_scrambled_fasta_from_mol(mol)
 
 
 def run_main():
@@ -67,7 +55,7 @@ def run_main():
     ### Run conversion
     fasta_list = []
     for mol in suppl:
-        fasta = get_scrambledfasta_from_mol(mol)
+        fasta = get_scrambled_fasta_from_mol(mol)
         fasta_list.append(''.join(fasta))
 
 
