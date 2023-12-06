@@ -592,7 +592,7 @@ def calc_pI_fasta(options={"inputFile":"","inputDict":{},"inputJSON":"","outputF
 
 
 
-def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "_", "NTermRes": "_", "IonizableTerminiOfCTermRes": "_", "IonizableTerminiOfNTermRes": "_", "lCyclic": False, "NPhosphateGroups": 0, "NAlkylLysGroups": 0, "NDiAlkylLysGroups": 0, "lPrintpKa": False, "lPlot": False, "lIgnoreC": False,"plot_filename":"OUT_titration_curve.png","l_json":False}):
+def calc_pI_fasta_single_sequence(options={"seq":"", "tol": 0.001, "CTermRes": "_", "NTermRes": "_", "IonizableTerminiOfCTermRes": "_", "IonizableTerminiOfNTermRes": "_", "lCyclic": False, "NPhosphateGroups": 0, "NAlkylLysGroups": 0, "NDiAlkylLysGroups": 0, "lPrintpKa": False, "lPlot": False, "lIgnoreC": False,"plot_filename":"OUT_titration_curve.png","l_json":False,"pka_set_list":''}):
 
     global seq,IonizableTerminiOfNTermRes, NTermRes, MiddleSeq, CTermRes, IonizableTerminiOfCTermRes,  mid_pH,pKa_basic,pKa_acidic,pKa_TerminusIonizableGroup, NPhosphateGroups, NAlkylLysGroups, NDiAlkylLysGroups, na, nb, lCyclic, lPrintpKaSets, lIgnoreC, tolerance, tit, pKa_sets_to_use
 

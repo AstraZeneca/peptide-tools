@@ -115,6 +115,7 @@ def read_structure_file(inputFile):
     mol_unique_ID = 0
     for mol in suppl:
         mol_unique_ID += 1
+        #print(mol_unique_ID)
         # unique index, mol title, fasta
         #fasta = get_fasta_from_smiles(smi)
 
@@ -309,7 +310,8 @@ if __name__ == "__main__":
                          "lPlot": lPlot,
                          "lIgnoreC": False,
                          "plot_filename":"OUT_titration_curve.png",
-                         "l_json":True
+                         "l_json":True,
+                         "pka_set_list":''
                          }
 
         dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
