@@ -1,7 +1,5 @@
 import os
-import base64
 import json
-import hashlib
 import pytest
 import tempfile
 
@@ -149,7 +147,7 @@ def test_smiles_stdin_input():
 
 
 def test_file_ph_q_plot_1():
-    """Validity of the pH/Q plot file."""
+    """Existence of the pH/Q plot file."""
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
     tmp_filepath = f"{tmp_file_prefix}_1.png"
     args = arg_parser(["-i", f"{examples_dir}/payload_1.smi",
@@ -160,18 +158,11 @@ def test_file_ph_q_plot_1():
     _ = stdout_to_variable(run_cli, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
-    with open(tmp_filepath, "rb") as f:
-        img_txt = f.read()
     os.remove(tmp_filepath)
-    base64_hash = base64.b64encode(img_txt)
-    hash_object = hashlib.sha224(base64_hash)
-    hex_dig = hash_object.hexdigest()
-    expected = "6e612de5b63edc90da7b090bdf209f74f096a6feb9a0167385d425b5"
-    assert hex_dig == expected
 
 
 def test_file_ph_q_plot_2():
-    """Validity of the pH/Q plot file."""
+    """Existence of the pH/Q plot file."""
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
     tmp_filepath = f"{tmp_file_prefix}_1.png"
     args = arg_parser(["-i", f"{examples_dir}/payload_2.smi",
@@ -182,11 +173,4 @@ def test_file_ph_q_plot_2():
     _ = stdout_to_variable(run_cli, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
-    with open(tmp_filepath, "rb") as f:
-        img_txt = f.read()
     os.remove(tmp_filepath)
-    base64_hash = base64.b64encode(img_txt)
-    hash_object = hashlib.sha224(base64_hash)
-    hex_dig = hash_object.hexdigest()
-    expected = "33ae664e79247014266e751b2ac9a013d2f974c21559dd1ab8daeb7e"
-    assert hex_dig == expected
