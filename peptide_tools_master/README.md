@@ -14,7 +14,9 @@ HOW TO RUN
     ml rdkit
     ml Biopython
 
+    cd ..
     PEPTIDE_TOOLS_PATH=`echo $PWD`
+    cd peptide_tools_master
 
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/smi2scrambledfasta
     export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/extn_coeff_fasta
