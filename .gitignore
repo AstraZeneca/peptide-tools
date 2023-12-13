@@ -2,6 +2,8 @@
 *.png
 *.swp
 *.pyc
-*.BK
-pIChemiSt/TEST_PKAMATCHER  
-pIChemiSt/TEST_PKAMATCHER_NNAA
+*config.env
+TODO
+pIChemiSt/build
+pIChemiSt/dist
+pIChemiSt/*egg*

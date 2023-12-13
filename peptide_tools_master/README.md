@@ -30,11 +30,11 @@ HOW TO RUN
     ### Example usage
     #----------------
     cd TEST
-    python peptide_tools_master.py --input "${INPUT_SMILES}" # SMILES input
-    python peptide_tools_master.py --input  FPYVAE           # Fasta sequence input
-    python peptide_tools_master.py --input  myfile.smi       # Smiles file input 
-    python peptide_tools_master.py --input  myfile.fasta     # FASTA file input 
-    python peptide_tools_master.py --input  myfile.sdf       # SDF file input 
+    python ../peptide_tools_master.py --input "${INPUT_SMILES}" # SMILES input
+    python ../peptide_tools_master.py --input  FPYVAE           # Fasta sequence input
+    python ../peptide_tools_master.py --input  myfile.smi       # Smiles file input 
+    python ../peptide_tools_master.py --input  myfile.fasta     # FASTA file input 
+    python ../peptide_tools_master.py --input  myfile.sdf       # SDF file input 
 
 
 DEPENDENCIES 
