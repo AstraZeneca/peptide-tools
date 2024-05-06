@@ -7,46 +7,46 @@ The program calculates the isoelectric point of proteins or peptides based on th
 - Clone the repository
 - Ensure that you have Python version >=3.8
 - Enter the package folder `cd peptide-tools/pIChemiSt`
-- Run `pip install dist/pichemist-*` to install the Python library
+- Run `pip install .` to install the Python library
 - Run `sh setup.cli` to configure the CLI (effects take change only when a new terminal is started)
 - (optional) - To use ACD for the prediction of non-natural amino acid pKa, make sure that the command `perceptabat` points to its binary
 
-## Examples of usage
+## Examples of usage (CLI)
 ```bash
 # Run the predictor against a SMILES file using pKaMatcher and output results to console
 pichemist -i test/examples/payload_1.smi --method pkamatcher
 
->>>
+>
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  9.02        
-         err  0.61        
-         std  1.72        
-IPC2_peptide  8.05        
- IPC_peptide  9.81        
-     ProMoST  8.38        
-       Gauci  8.69        
-    Grimsley  8.94        
-   Thurlkill  9.06        
-   Lehninger  9.86        
-    Toseland  9.41        
+     pI mean  9.02
+         err  0.61
+         std  1.72
+IPC2_peptide  8.05
+ IPC_peptide  9.81
+     ProMoST  8.38
+       Gauci  8.69
+    Grimsley  8.94
+   Thurlkill  9.06
+   Lehninger  9.86
+    Toseland  9.41
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  0.73        
-         err  0.24        
-         std  0.67        
-IPC2_peptide  0.63        
- IPC_peptide  0.99        
-     ProMoST  0.26        
-       Gauci  0.55        
-    Grimsley  0.66        
-   Thurlkill  0.8         
-   Lehninger  0.99        
-    Toseland  0.95        
+Q at pH7.4 mean  0.73
+         err  0.24
+         std  0.67
+IPC2_peptide  0.63
+ IPC_peptide  0.99
+     ProMoST  0.26
+       Gauci  0.55
+    Grimsley  0.66
+   Thurlkill  0.8
+   Lehninger  0.99
+    Toseland  0.95
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
@@ -57,6 +57,9 @@ Other flavours of flags and arguments can be configured to feed different inputs
 ```bash
 # Use SMILES string as input
 pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin
+
+# Use SMILES string as input and output JSON to console
+pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin -of json
 
 # Use SDF as input
 pichemist -i test/examples/payload_4.sdf -if sdf
@@ -80,6 +83,31 @@ pichemist -i test/examples/payload_1.smi --print_fragment_pkas
 pichemist -i test/examples/payload_1.smi --method acd
 ```
 
+## Examples of usage (Python API)
+```python
+from pichemist.io import generate_input
+from pichemist.api import pichemist_from_list
+
+smiles = "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O"
+
+args = {
+        "input_data": smiles,
+        "input_format": "smiles_stdin",
+        "plot_ph_q_curve": False,
+        "print_fragments": False,
+        "method": "pkamatcher",
+    }
+
+input_dict = generate_input(args["input_format"], args["input_data"])
+output = pichemist_from_list(
+    input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
+)
+
+print(output)
+>
+{1: {'mol_name': 'C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O', 'pI': {'IPC2_peptide': 8.046875, 'IPC_peptide': 9.8125, 'ProMoST': 8.375, 'Gauci': 8.6875, 'Grimsley': 8.9375, 'Thurlkill': 9.0625, 'Lehninger': 9.859375, 'Toseland': 9.40625, 'pI mean': 9.0234375, 'std': 1.721588565104915, 'err': 0.6086734743994516}, 'QpH7': {'IPC2_peptide': 0.6314906212267486, 'IPC_peptide': 0.9915539516610472, 'ProMoST': 0.26174063515548607, 'Gauci': 0.5540630760817584, 'Grimsley': 0.6645409545014482, 'Thurlkill': 0.797542965316429, 'Lehninger': 0.9932283675959863, 'Toseland': 0.9515959465104951, 'Q at pH7.4 mean': 0.7307195647561748, 'std': 0.6749606913955383, 'err': 0.23863464096007284}, 'pI_interval': (8.624999999999998, 9.362499999999997), 'pI_interval_threshold': 0.2, 'pKa_set': 'IPC2_peptide'}}
+```
+
 ## Contributions
 - Andrey I. Frolov (https://orcid.org/0000-0001-9801-3253)
 - Gian Marco Ghiandoni (https://orcid.org/0000-0002-2592-2939)
@@ -87,7 +115,7 @@ pichemist -i test/examples/payload_1.smi --method acd
 - Johan Ulander - contributed the idea to do SMARTS pattern matching Smiles into Amino Acid single letter code (https://orcid.org/0009-0004-7655-2212)
 
 ## For developers
-- The package can be installed from the wheel in the `dist/` folder. When a new version needs to be released, a new build must be created. That can be done by changing the version of the package inside `setup.py` then calling `python setup.py sdist` which will build the release. Do not use wheels since `bdist_wheel` does not include the required static files in the wheel distribution
+- To create a new build, the package version first needs to be configured inside `setup.py` then the command `python setup.py sdist` will build the distribution. The command `bdist_wheel` should not be used since this mode in `setup.py` skips including the required static files in the wheel distribution
 - The code can be automatically tested using `python setup.py test` which requires `pytest` to be installed
 - Tests can also be run using the `Makefile` in the root of the repository. The file allows granular testing as follows:
   - `make test_core` runs only the `core` tests including pKaMatcher and plots
