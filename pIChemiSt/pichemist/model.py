@@ -1,10 +1,11 @@
-import sys
 import inspect
+import sys
 from enum import Enum
 
 
 class BaseEnum(str, Enum):
     """Base class for models."""
+
     pass
 
 
@@ -32,6 +33,7 @@ class InputAttribute(BaseEnum):
 class InputFormat(BaseEnum):
     SMILES_STDIN = "smiles_stdin"
     SMILES_FILE = "smiles_file"
+    FASTA_STDIN = "fasta_stdin"
     SD_FILE = "sdf"
 
 
@@ -92,14 +94,12 @@ class Models(object):
     @staticmethod
     def _get_values_from_enum(BaseEnum):
         """Generates a list from all values of a class."""
-        return [BaseEnum[x].value
-                for x in BaseEnum._member_names_]
+        return [BaseEnum[x].value for x in BaseEnum._member_names_]
 
     def _get_definitions(self):
         """Builds a dictionary with classes and their values."""
         classes = self._get_subclasses_of_enum()
-        return {c: self._get_values_from_enum(c)
-                for c in classes.values()}
+        return {c: self._get_values_from_enum(c) for c in classes.values()}
 
 
 MODELS = Models().definitions

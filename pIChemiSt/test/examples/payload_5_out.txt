@@ -2,33 +2,33 @@
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  5.34
-         err  0.11
-         std  0.3
-IPC2_peptide  5.49
- IPC_peptide  5.2
-     ProMoST  5.34
-       Gauci  5.33
-    Grimsley  5.44
-   Thurlkill  5.44
-   Lehninger  5.16
-    Toseland  5.34
+     pI mean  5.34        
+         err  0.11        
+         std  0.3         
+IPC2_peptide  5.49        
+ IPC_peptide  5.2         
+     ProMoST  5.34        
+       Gauci  5.33        
+    Grimsley  5.44        
+   Thurlkill  5.44        
+   Lehninger  5.16        
+    Toseland  5.34        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  -3.91
-         err  0.21
-         std  0.6
-IPC2_peptide  -3.82
- IPC_peptide  -3.84
-     ProMoST  -4.25
-       Gauci  -4.29
-    Grimsley  -3.78
-   Thurlkill  -3.71
-   Lehninger  -3.85
-    Toseland  -3.73
+Q at pH7.4 mean  -3.91       
+         err  0.21        
+         std  0.6         
+IPC2_peptide  -3.82       
+ IPC_peptide  -3.84       
+     ProMoST  -4.25       
+       Gauci  -4.29       
+    Grimsley  -3.78       
+   Thurlkill  -3.71       
+   Lehninger  -3.85       
+    Toseland  -3.73       
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -50,33 +50,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  8.83
-         err  0.41
-         std  1.17
-IPC2_peptide  7.99
- IPC_peptide  9.38
-     ProMoST  8.64
-       Gauci  8.7
-    Grimsley  8.92
-   Thurlkill  8.78
-   Lehninger  9.38
-    Toseland  8.88
+     pI mean  8.83        
+         err  0.41        
+         std  1.17        
+IPC2_peptide  7.99        
+ IPC_peptide  9.38        
+     ProMoST  8.64        
+       Gauci  8.7         
+    Grimsley  8.92        
+   Thurlkill  8.78        
+   Lehninger  9.38        
+    Toseland  8.88        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.55
-         err  0.21
-         std  0.58
-IPC2_peptide  1.25
- IPC_peptide  1.8
-     ProMoST  1.36
-       Gauci  1.36
-    Grimsley  1.48
-   Thurlkill  1.6
-   Lehninger  1.8
-    Toseland  1.75
+Q at pH7.4 mean  1.55        
+         err  0.21        
+         std  0.58        
+IPC2_peptide  1.25        
+ IPC_peptide  1.8         
+     ProMoST  1.36        
+       Gauci  1.36        
+    Grimsley  1.48        
+   Thurlkill  1.6         
+   Lehninger  1.8         
+    Toseland  1.75        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -97,33 +97,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  5.85
-         err  0.2
-         std  0.57
-IPC2_peptide  6.02
- IPC_peptide  5.63
-     ProMoST  5.81
-       Gauci  5.62
-    Grimsley  6.13
-   Thurlkill  6.09
-   Lehninger  5.61
-    Toseland  5.9
+     pI mean  5.85        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  6.02        
+ IPC_peptide  5.63        
+     ProMoST  5.81        
+       Gauci  5.62        
+    Grimsley  6.13        
+   Thurlkill  6.09        
+   Lehninger  5.61        
+    Toseland  5.9         
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  -2.89
-         err  0.18
-         std  0.52
-IPC2_peptide  -2.82
- IPC_peptide  -2.84
-     ProMoST  -3.07
-       Gauci  -3.29
-    Grimsley  -2.78
-   Thurlkill  -2.71
-   Lehninger  -2.85
-    Toseland  -2.73
+Q at pH7.4 mean  -2.89       
+         err  0.18        
+         std  0.52        
+IPC2_peptide  -2.82       
+ IPC_peptide  -2.84       
+     ProMoST  -3.07       
+       Gauci  -3.29       
+    Grimsley  -2.78       
+   Thurlkill  -2.71       
+   Lehninger  -2.85       
+    Toseland  -2.73       
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -145,33 +145,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  9.38
-         err  0.48
-         std  1.37
-IPC2_peptide  8.21
- IPC_peptide  9.8
-     ProMoST  9.3
-       Gauci  9.41
-    Grimsley  9.77
-   Thurlkill  9.43
-   Lehninger  9.78
-    Toseland  9.34
+     pI mean  9.38        
+         err  0.48        
+         std  1.37        
+IPC2_peptide  8.21        
+ IPC_peptide  9.8         
+     ProMoST  9.3         
+       Gauci  9.41        
+    Grimsley  9.77        
+   Thurlkill  9.43        
+   Lehninger  9.78        
+    Toseland  9.34        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.73
-         err  0.21
-         std  0.58
-IPC2_peptide  1.43
- IPC_peptide  1.99
-     ProMoST  1.54
-       Gauci  1.55
-    Grimsley  1.66
-   Thurlkill  1.79
-   Lehninger  1.99
-    Toseland  1.93
+Q at pH7.4 mean  1.73        
+         err  0.21        
+         std  0.58        
+IPC2_peptide  1.43        
+ IPC_peptide  1.99        
+     ProMoST  1.54        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.93        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -191,33 +191,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  7.55
-         err  0.35
-         std  0.98
-IPC2_peptide  7.47
- IPC_peptide  8.0
-     ProMoST  7.08
-       Gauci  7.03
-    Grimsley  7.45
-   Thurlkill  7.56
-   Lehninger  8.0
-    Toseland  7.78
+     pI mean  7.55        
+         err  0.35        
+         std  0.98        
+IPC2_peptide  7.47        
+ IPC_peptide  8.0         
+     ProMoST  7.08        
+       Gauci  7.03        
+    Grimsley  7.45        
+   Thurlkill  7.56        
+   Lehninger  8.0         
+    Toseland  7.78        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  0.01
-         err  0.19
-         std  0.55
-IPC2_peptide  0.08
- IPC_peptide  0.11
-     ProMoST  -0.3
-       Gauci  -0.33
-    Grimsley  0.08
-   Thurlkill  0.16
-   Lehninger  0.11
-    Toseland  0.19
+Q at pH7.4 mean  0.01        
+         err  0.19        
+         std  0.55        
+IPC2_peptide  0.08        
+ IPC_peptide  0.11        
+     ProMoST  -0.3        
+       Gauci  -0.33       
+    Grimsley  0.08        
+   Thurlkill  0.16        
+   Lehninger  0.11        
+    Toseland  0.19        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -239,33 +239,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  8.55
-         err  0.64
-         std  1.8
-IPC2_peptide  8.02
- IPC_peptide  9.52
-     ProMoST  8.0
-       Gauci  8.0
-    Grimsley  8.12
-   Thurlkill  8.31
-   Lehninger  9.61
-    Toseland  8.81
+     pI mean  8.55        
+         err  0.64        
+         std  1.8         
+IPC2_peptide  8.02        
+ IPC_peptide  9.52        
+     ProMoST  8.0         
+       Gauci  8.0         
+    Grimsley  8.12        
+   Thurlkill  8.31        
+   Lehninger  9.61        
+    Toseland  8.81        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.37
-         err  0.35
-         std  0.98
-IPC2_peptide  1.23
- IPC_peptide  1.8
-     ProMoST  0.93
-       Gauci  0.93
-    Grimsley  1.15
-   Thurlkill  1.41
-   Lehninger  1.8
-    Toseland  1.72
+Q at pH7.4 mean  1.37        
+         err  0.35        
+         std  0.98        
+IPC2_peptide  1.23        
+ IPC_peptide  1.8         
+     ProMoST  0.93        
+       Gauci  0.93        
+    Grimsley  1.15        
+   Thurlkill  1.41        
+   Lehninger  1.8         
+    Toseland  1.72        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -286,33 +286,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  9.52
-         err  0.52
-         std  1.46
-IPC2_peptide  8.26
- IPC_peptide  9.95
-     ProMoST  9.45
-       Gauci  9.53
-    Grimsley  9.92
-   Thurlkill  9.61
-   Lehninger  9.94
-    Toseland  9.53
+     pI mean  9.52        
+         err  0.52        
+         std  1.46        
+IPC2_peptide  8.26        
+ IPC_peptide  9.95        
+     ProMoST  9.45        
+       Gauci  9.53        
+    Grimsley  9.92        
+   Thurlkill  9.61        
+   Lehninger  9.94        
+    Toseland  9.53        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.74
-         err  0.2
-         std  0.57
-IPC2_peptide  1.45
- IPC_peptide  1.99
-     ProMoST  1.55
-       Gauci  1.55
-    Grimsley  1.66
-   Thurlkill  1.79
-   Lehninger  1.99
-    Toseland  1.94
+Q at pH7.4 mean  1.74        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  1.45        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.94        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -332,33 +332,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  4.58
-         err  0.07
-         std  0.2
-IPC2_peptide  4.68
- IPC_peptide  4.53
-     ProMoST  4.66
-       Gauci  4.66
-    Grimsley  4.5
-   Thurlkill  4.56
-   Lehninger  4.48
-    Toseland  4.55
+     pI mean  4.58        
+         err  0.07        
+         std  0.2         
+IPC2_peptide  4.68        
+ IPC_peptide  4.53        
+     ProMoST  4.66        
+       Gauci  4.66        
+    Grimsley  4.5         
+   Thurlkill  4.56        
+   Lehninger  4.48        
+    Toseland  4.55        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  -2.11
-         err  0.14
-         std  0.41
-IPC2_peptide  -2.12
- IPC_peptide  -1.96
-     ProMoST  -2.2
-       Gauci  -2.4
-    Grimsley  -2.2
-   Thurlkill  -2.08
-   Lehninger  -1.96
-    Toseland  -1.97
+Q at pH7.4 mean  -2.11       
+         err  0.14        
+         std  0.41        
+IPC2_peptide  -2.12       
+ IPC_peptide  -1.96       
+     ProMoST  -2.2        
+       Gauci  -2.4        
+    Grimsley  -2.2        
+   Thurlkill  -2.08       
+   Lehninger  -1.96       
+    Toseland  -1.97       
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -377,33 +377,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  7.3
-         err  0.4
-         std  1.14
-IPC2_peptide  7.19
- IPC_peptide  7.75
-     ProMoST  6.81
-       Gauci  6.75
-    Grimsley  7.16
-   Thurlkill  7.28
-   Lehninger  8.0
-    Toseland  7.5
+     pI mean  7.3         
+         err  0.4         
+         std  1.14        
+IPC2_peptide  7.19        
+ IPC_peptide  7.75        
+     ProMoST  6.81        
+       Gauci  6.75        
+    Grimsley  7.16        
+   Thurlkill  7.28        
+   Lehninger  8.0         
+    Toseland  7.5         
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  -0.14
-         err  0.17
-         std  0.48
-IPC2_peptide  -0.12
- IPC_peptide  0.03
-     ProMoST  -0.4
-       Gauci  -0.4
-    Grimsley  -0.2
-   Thurlkill  -0.08
-   Lehninger  0.03
-    Toseland  0.03
+Q at pH7.4 mean  -0.14       
+         err  0.17        
+         std  0.48        
+IPC2_peptide  -0.12       
+ IPC_peptide  0.03        
+     ProMoST  -0.4        
+       Gauci  -0.4        
+    Grimsley  -0.2        
+   Thurlkill  -0.08       
+   Lehninger  0.03        
+    Toseland  0.03        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -423,33 +423,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  9.74
-         err  0.57
-         std  1.62
-IPC2_peptide  8.31
- IPC_peptide  10.18
-     ProMoST  9.66
-       Gauci  9.7
-    Grimsley  10.12
-   Thurlkill  9.9
-   Lehninger  10.18
-    Toseland  9.88
+     pI mean  9.74        
+         err  0.57        
+         std  1.62        
+IPC2_peptide  8.31        
+ IPC_peptide  10.18       
+     ProMoST  9.66        
+       Gauci  9.7         
+    Grimsley  10.12       
+   Thurlkill  9.9         
+   Lehninger  10.18       
+    Toseland  9.88        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.74
-         err  0.2
-         std  0.57
-IPC2_peptide  1.47
- IPC_peptide  1.99
-     ProMoST  1.55
-       Gauci  1.55
-    Grimsley  1.66
-   Thurlkill  1.79
-   Lehninger  1.99
-    Toseland  1.95
+Q at pH7.4 mean  1.74        
+         err  0.2         
+         std  0.57        
+IPC2_peptide  1.47        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.79        
+   Lehninger  1.99        
+    Toseland  1.95        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -469,33 +469,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  6.29
-         err  0.22
-         std  0.61
-IPC2_peptide  6.42
- IPC_peptide  6.05
-     ProMoST  6.42
-       Gauci  5.98
-    Grimsley  6.55
-   Thurlkill  6.52
-   Lehninger  6.03
-    Toseland  6.34
+     pI mean  6.29        
+         err  0.22        
+         std  0.61        
+IPC2_peptide  6.42        
+ IPC_peptide  6.05        
+     ProMoST  6.42        
+       Gauci  5.98        
+    Grimsley  6.55        
+   Thurlkill  6.52        
+   Lehninger  6.03        
+    Toseland  6.34        
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  -1.04
-         err  0.15
-         std  0.42
-IPC2_peptide  -1.02
- IPC_peptide  -0.93
-     ProMoST  -1.16
-       Gauci  -1.37
-    Grimsley  -1.06
-   Thurlkill  -0.96
-   Lehninger  -0.93
-    Toseland  -0.89
+Q at pH7.4 mean  -1.04       
+         err  0.15        
+         std  0.42        
+IPC2_peptide  -1.02       
+ IPC_peptide  -0.93       
+     ProMoST  -1.16       
+       Gauci  -1.37       
+    Grimsley  -1.06       
+   Thurlkill  -0.96       
+   Lehninger  -0.93       
+    Toseland  -0.89       
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
@@ -515,33 +515,33 @@ smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  9.99
-         err  0.49
-         std  1.4
-IPC2_peptide  8.8
- IPC_peptide  10.41
-     ProMoST  9.81
-       Gauci  10.0
-    Grimsley  10.38
-   Thurlkill  10.11
-   Lehninger  10.39
-    Toseland  10.06
+     pI mean  9.99        
+         err  0.49        
+         std  1.4         
+IPC2_peptide  8.8         
+ IPC_peptide  10.41       
+     ProMoST  9.81        
+       Gauci  10.0        
+    Grimsley  10.38       
+   Thurlkill  10.11       
+   Lehninger  10.39       
+    Toseland  10.06       
 
 
 ======================================================================================================================================================
 Q at pH7.4
 ---------------------------------
-Q at pH7.4 mean  1.76
-         err  0.18
-         std  0.51
-IPC2_peptide  1.62
- IPC_peptide  1.99
-     ProMoST  1.55
-       Gauci  1.55
-    Grimsley  1.66
-   Thurlkill  1.8
-   Lehninger  1.99
-    Toseland  1.95
+Q at pH7.4 mean  1.76        
+         err  0.18        
+         std  0.51        
+IPC2_peptide  1.62        
+ IPC_peptide  1.99        
+     ProMoST  1.55        
+       Gauci  1.55        
+    Grimsley  1.66        
+   Thurlkill  1.8         
+   Lehninger  1.99        
+    Toseland  1.95        
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd

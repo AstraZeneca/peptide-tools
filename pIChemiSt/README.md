@@ -56,10 +56,13 @@ pI interval:  8.6 -  9.4
 Other flavours of flags and arguments can be configured to feed different inputs or produce different outputs:
 ```bash
 # Use SMILES string as input
-pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin
+pichemist -i "N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)O" -if smiles_stdin
 
 # Use SMILES string as input and output JSON to console
 pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin -of json
+
+# Use FASTA as input
+pichemist -i "MNSERSDVTLY" -if fasta_stdin
 
 # Use SDF as input
 pichemist -i test/examples/payload_4.sdf -if sdf
