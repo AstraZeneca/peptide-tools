@@ -81,6 +81,9 @@ pichemist -i test/examples/payload_1.smi --print_fragment_pkas
 
 # Use ACD instead of pKaMatcher
 pichemist -i test/examples/payload_1.smi --method acd
+
+# Use ACD with SMILES string
+pichemist -i "NCCC(=O)N[C@@H](Cc1c[nH]cn1)C(=O)O" --method acd -if smiles_stdin
 ```
 
 ## Examples of usage (Python API)
