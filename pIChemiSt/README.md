@@ -62,6 +62,9 @@ pichemist -i "N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)N[C@@]([H])(CS)C(=O)N
 pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin -of json
 
 # Use FASTA as input
+# Note that FASTA cannot be used to indicate if the N- and C- termini are capped or not.
+# Most of natural peptides have an acid on the C-terminus, however, synthetic peptides
+# may have an amide (not ionizable) at the C-terminus.
 pichemist -i "MNSERSDVTLY" -if fasta_stdin
 
 # Use SDF as input
