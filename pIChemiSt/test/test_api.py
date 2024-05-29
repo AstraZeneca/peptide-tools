@@ -2,7 +2,7 @@ import tempfile
 
 import pytest
 from helpers import examples_dir
-from pichemist.api import pichemist_from_list
+from pichemist.api import pichemist_from_dict
 from pichemist.io import generate_input
 
 
@@ -52,7 +52,7 @@ def test_pka_matcher_json_1_file():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -104,7 +104,7 @@ def test_pka_matcher_json_1_stdin():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -156,7 +156,7 @@ def test_natural_aa_json_1():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -209,7 +209,7 @@ def test_acd_json_1():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -262,7 +262,7 @@ def test_acd_json_2():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -315,7 +315,7 @@ def test_natural_aa_json_2():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
     assert expected == output
@@ -375,7 +375,7 @@ def test_natural_aa_json_3():
     }
 
     input_dict = generate_input(args["input_format"], args["input_data"])
-    output = pichemist_from_list(
+    output = pichemist_from_dict(
         input_dict,
         args["method"],
         args["ph_q_curve_file_prefix"],

@@ -7,7 +7,7 @@ from helpers import examples_dir
 from helpers import stdout_to_variable
 from helpers import TestError
 from pichemist.cli import arg_parser
-from pichemist.cli import run_cli
+from pichemist.cli import run_pichemist
 
 
 def test_parser_creation():
@@ -35,7 +35,7 @@ def test_console_text_output_1():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_1_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -52,7 +52,7 @@ def test_console_text_output_2():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_3_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -70,7 +70,7 @@ def test_console_text_output_3():
             "acd",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_5_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -89,7 +89,7 @@ def test_console_json_output():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     result = json.loads(result)
     with open(f"{examples_dir}/payload_1_out.json", "r") as f:
         expected = json.load(f)
@@ -112,7 +112,7 @@ def test_file_csv_output():
             "pkamatcher",
         ]
     )
-    run_cli(args)
+    run_pichemist(args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(f"{examples_dir}/payload_1_out.csv", "r") as f:
@@ -139,7 +139,7 @@ def test_file_sdf_output_1():
             "pkamatcher",
         ]
     )
-    run_cli(args)
+    run_pichemist(args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(f"{examples_dir}/payload_1_out.sdf", "r") as f:
@@ -166,7 +166,7 @@ def test_file_sdf_output_2():
             "pkamatcher",
         ]
     )
-    run_cli(args)
+    run_pichemist(args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(f"{examples_dir}/payload_3_out.sdf", "r") as f:
@@ -195,7 +195,7 @@ def test_file_sdf_input_output():
             "pkamatcher",
         ]
     )
-    run_cli(args)
+    run_pichemist(args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     with open(f"{examples_dir}/payload_4_out.sdf", "r") as f:
@@ -221,7 +221,7 @@ def test_smiles_stdin_input_1():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_1_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -242,7 +242,7 @@ def test_smiles_stdin_input_2():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_2_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -261,7 +261,7 @@ def test_fasta_stdin_input():
             "pkamatcher",
         ]
     )
-    result = stdout_to_variable(run_cli, args)
+    result = stdout_to_variable(run_pichemist, args)
     with open(f"{examples_dir}/payload_2_out.txt", "r") as f:
         expected = f.read()
     assert result == expected
@@ -285,7 +285,7 @@ def test_file_ph_q_plot_1():
             "pkamatcher",
         ]
     )
-    _ = stdout_to_variable(run_cli, args)
+    _ = stdout_to_variable(run_pichemist, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     os.remove(tmp_filepath)
@@ -309,7 +309,7 @@ def test_file_ph_q_plot_2():
             "pkamatcher",
         ]
     )
-    _ = stdout_to_variable(run_cli, args)
+    _ = stdout_to_variable(run_pichemist, args)
     if not os.path.exists(tmp_filepath):
         raise TestError("File was not created.")
     os.remove(tmp_filepath)

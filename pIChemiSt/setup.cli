@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# sys.path[1:] ignores the current folder (prevents relative imports)
-cli_path=$(python -c "import sys; sys.path = sys.path[1:]; import pichemist; print(pichemist.__path__[0])" 2>&1)/cli.py
-
-# add path to Bash
-echo -e "\n# Configure pIChemiSt\nalias pichemist=\"python $cli_path\"\n" >> ~/.bashrc

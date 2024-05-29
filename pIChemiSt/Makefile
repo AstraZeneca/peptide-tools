@@ -1,6 +1,7 @@
 .PHONY: build install test coverage
 
 build:
+	python setup.py bdist_wheel
 	python setup.py sdist
 
 install:
@@ -15,6 +16,12 @@ test_acd:
 test:
 	make test_core
 	make test_acd
+
+upload_test:
+	twine upload -r testpypi dist/*
+
+upload:
+	twine upload -r pypi dist/*
 
 coverage:
 	pytest --cov=src test/ -vv --cov-report term-missing
