@@ -203,24 +203,26 @@ def split_sequence(sequence):
 	### Assume linear, not branched peptide sequence
 
                 ### If custom 
-                if NTermRes == '_' and CTermRes == '_' and (IonizableTerminiOfNTermRes == '_' or IonizableTerminiOfNTermRes == '') and (IonizableTerminiOfCTermRes == '_' or IonizableTerminiOfCTermRes == ''):
-                	MiddleSeq = sequence[1:-1]
-                else:
-                        print("---NOTE! custom termini residues and/or ionizable termini given. No termini residues would be identified from the given sequence. Custom given residues will be used instead.")
-                        if NTermRes == '_': 
-                            print('---Error! custom termini specified => NTermRes thus must be specified explicitly ')
-                            sys.exit(1)
-                        if CTermRes == '_': 
-                            print('---Error! custom termini specified => CTermRes thus must be specified explicitly ')
-                            sys.exit(1)
-                        if IonizableTerminiOfNTermRes == '_':
-                            print('---Error! custom termini specified => IonizableTerminiOfNTermRes thus must be specified explicitly ')
-                            sys.exit(1)
-                        if IonizableTerminiOfCTermRes == '_': 
-                            print('---Error! custom termini specified => IonizableTerminiOfCTermRes thus must be specified explicitly ')
-                            sys.exit(1)
-                        MiddleSeq = sequence
+#                if NTermRes == '_' and CTermRes == '_' and (IonizableTerminiOfNTermRes == '_' or IonizableTerminiOfNTermRes == '') and (IonizableTerminiOfCTermRes == '_' or IonizableTerminiOfCTermRes == ''):
+#                	MiddleSeq = sequence[1:-1]
+#                else:
+#                        print("---NOTE! custom termini residues and/or ionizable termini given. No termini residues would be identified from the given sequence. Custom given residues will be used instead.")
+#                        if NTermRes == '_': 
+#                            print('---Error! custom termini specified => NTermRes thus must be specified explicitly ')
+#                            sys.exit(1)
+#                       if CTermRes == '_': 
+#                            print('---Error! custom termini specified => CTermRes thus must be specified explicitly ')
+#                            sys.exit(1)
+#                        if IonizableTerminiOfNTermRes == '_':
+#                            print('---Error! custom termini specified => IonizableTerminiOfNTermRes thus must be specified explicitly ')
+#                            sys.exit(1)
+#                        if IonizableTerminiOfCTermRes == '_': 
+#                            print('---Error! custom termini specified => IonizableTerminiOfCTermRes thus must be specified explicitly ')
+#                            sys.exit(1)
+#                        MiddleSeq = sequence
 
+                MiddleSeq = sequence[1:-1]
+                
                 if IonizableTerminiOfNTermRes == '_': IonizableTerminiOfNTermRes = sequence[0]
                 else: 
                     if IonizableTerminiOfNTermRes == '': titAdd+=", capped N-terminus"	
@@ -236,6 +238,7 @@ def split_sequence(sequence):
                 else: 
                     if IonizableTerminiOfCTermRes == '': titAdd+=", capped C-terminus"	
                     else: titAdd+=", custom ionizable termini -COOH: "+IonizableTerminiOfCTermRes	
+
         else:
 	### Assume cyclic peptide: no ionizable termini, no terminal residues 
             MiddleSeq = sequence
