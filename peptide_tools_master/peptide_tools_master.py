@@ -127,6 +127,17 @@ def arg_parser():
     else:
         args.l_print_fragment_pkas = False
 
+#    if args.ionized_Nterm == "yes":
+#        args.ionized_Nterm = True
+#    else:
+#        args.ionized_Nterm = False
+#
+#    if args.ionized_Cterm == "yes":
+#        args.ionized_Cterm = True
+#    else:
+#        args.ionized_Cterm = False
+
+
     return args
 
 
@@ -386,13 +397,13 @@ if __name__ == "__main__":
     if l_calc_pI_fasta:
         # prepare pI_fasta predictor
 
-        if not args.ionized_Cterm:
-            IonizableTerminiOfCTermRes = "''"
+        if args.ionized_Cterm != 'yes':
+            IonizableTerminiOfCTermRes = ""
         else:
             IonizableTerminiOfCTermRes = "_"
 
-        if not args.ionized_Nterm:
-            IonizableTerminiOfNTermRes = "''"
+        if args.ionized_Nterm != 'yes':
+            IonizableTerminiOfNTermRes = ""
         else:
             IonizableTerminiOfNTermRes = "_"
 
