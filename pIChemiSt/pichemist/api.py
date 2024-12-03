@@ -45,19 +45,24 @@ def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
     
     D_pka = dict()
     D_count = dict()
-    for k,v in pkas_fasta.items():
-        for k2,v2 in v:
-            pka = v2[0]
-            AA = v2[1]
-            D_pka[AA].append(pka)
+    for pka_set,list_for_pka_set in pkas_fasta.items():
+        for v in list_for_pka_set:
+            pka = v[0]
+            AA = v[1]
+            if AA in D_pka.keys():
+                D_pka[AA].append(pka)
+            else:
+                D_pka[AA]=list()
             if AA in D_count.keys():
                 D_count[AA]+=1
             else:
                 D_count[AA]=1
     
     frag_pkas_fasta = dict()
+    idx=0
     for k,v in D_pka.items():
-        frag_pkas_fasta[k] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
+        idx+=1
+        frag_pkas_fasta[idx] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
 
     return frag_pkas_fasta
 
@@ -82,10 +87,12 @@ def calc_frags_for_output_calc(ionization_type,pkas_calc):
     #TODO if the index of fragment or alike is stored in pka_calc dictionary. Requires, some code refurbishment. 
     # Solution for now is to do not average out pka of identical fragment and display all with count 1
     frag_pkas_calc = dict()
-    for k,v in pkas_calc.items():
+    frg_idx=0
+    for v in pkas_calc:
+        frg_idx+=1
         pka = v[0]
         smi = v[1]        
-        frag_pkas_calc[smi] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
+        frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
 
     return frag_pkas_calc
 
