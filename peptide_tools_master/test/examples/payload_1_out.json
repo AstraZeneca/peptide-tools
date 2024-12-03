@@ -1,0 +1,49 @@
+{
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "AEYVFP",
+            "e205": 28580,
+            "e214": 18018,
+            "e280": 1490,
+            "mol_name": "none"
+        }
+    },
+    "output_pI_fasta": {},
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 3.75,
+                "IPC_peptide": 3.34375,
+                "ProMoST": 4.125,
+                "Gauci": 4.59375,
+                "Grimsley": 3.75,
+                "Thurlkill": 3.96875,
+                "Lehninger": 3.3125,
+                "Toseland": 3.75,
+                "pI mean": 3.82421875,
+                "std": 1.101257714927573,
+                "err": 0.38935339902964433
+            },
+            "QpH7": {
+                "IPC2_peptide": -1.2370959572269449,
+                "IPC_peptide": -1.0081017452801901,
+                "ProMoST": -1.7348917509283845,
+                "Gauci": -1.4418394775037946,
+                "Grimsley": -1.3344079319254931,
+                "Thurlkill": -1.2034840355851257,
+                "Lehninger": -1.006891883523512,
+                "Toseland": -1.0519819163952528,
+                "Q at pH7.4 mean": -1.2523368372960872,
+                "std": 0.6619374142499742,
+                "err": 0.23403021716862277
+            },
+            "pI_interval": [
+                3.5749999999999993,
+                4.062499999999998
+            ],
+            "pI_interval_threshold": 0.2,
+            "pKa_set": "IPC2_peptide"
+        }
+    }
+}

@@ -48,7 +48,7 @@ def arg_parser(args):
         default=False,
         action="store_true",
         dest="plot_ph_q_curve",
-        help="Generate an image of the " "pH/Q curve into a file",
+        help="Generate an image of the pH/Q curve into a file",
     )
     parser.add_argument(
         "-pp",
@@ -61,13 +61,13 @@ def arg_parser(args):
         default=False,
         action="store_true",
         dest="print_fragment_pkas",
-        help="Print the fragments with corresponding " "pKas used in pI calcution.",
+        help="Print the fragments with corresponding pKas used in pI calcution.",
     )
     parser.add_argument(
         "--method",
         choices=MODELS[PKaMethod],
         default=PKaMethod.PKA_MATCHER,
-        help="Method for the prediction of the " "pKa of unknown fragments",
+        help="Method for the prediction of the pKa of unknown fragments",
     )
     if not args:
         args = ["-h"]
