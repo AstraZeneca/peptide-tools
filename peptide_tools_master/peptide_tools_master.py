@@ -443,8 +443,9 @@ if __name__ == "__main__":
         dict_out_pIChemiSt = pichemist_from_dict(
             mol_supply_json,
             args["method"],
-            args["plot_ph_q_curve"],
-            args["print_fragments"],
+            ph_q_curve_file_prefix="",
+            plot_ph_q_curve=args["plot_ph_q_curve"],
+            print_fragments=args["print_fragments"],
         )
 
     dict_out_peptide_tools_master = {
