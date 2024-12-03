@@ -29,26 +29,6 @@ __prog__ = "Peptide Tools Master"
 __doc__ = """TODO"""
 
 
-def get_fasta_from_smiles(smi):
-    from smi2scrambledfasta import get_scrambled_fasta_from_smiles
-
-    fasta = get_scrambled_fasta_from_smiles(smi)
-    if len(fasta) == 0:
-        raise Exception("ERROR: returned fasta is empry. something is wrong. Exit")
-        sys.exit(1)
-    return fasta
-
-
-def get_fasta_from_mol(mol):
-    from smi2scrambledfasta import get_scrambled_fasta_from_mol
-
-    fasta = get_scrambled_fasta_from_mol(mol)
-    if len(fasta) == 0:
-        raise Exception("ERROR: returned fasta is empry. something is wrong. Exit")
-        sys.exit(1)
-    return fasta
-
-
 def arg_parser():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument(
@@ -145,166 +125,23 @@ def read_fasta_file(inputFile):
     return mol_supply_json
 
 
-def read_structure_file(inputFile):
-
-    filename, ext = os.path.splitext(inputFile)
-
-    # Initialize file reader
-    if ext == ".sdf":
-        suppl = Chem.SDMolSupplier(inputFile)
-    elif ext == ".smi":
-        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
-    else:
-        raise Exception(
-            "!Warning: extension of file is not smi or sdf. Assume it is smi. Continue. "
-        )
-        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
-
-    mol_supply_json = {}
-    mol_unique_ID = 0
-    for mol in suppl:
-        mol_unique_ID += 1
-        # print(mol_unique_ID)
-        # unique index, mol title, fasta
-        # fasta = get_fasta_from_smiles(smi)
-
-        if not mol.HasProp("_Name"):
-            mol.SetProp("_Name", "tmpname" + str(mol_unique_ID))
-
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol.GetProp("_Name"),
-            "mol_obj": mol,
-            "fasta": get_fasta_from_mol(mol),
-        }
-
-    return mol_supply_json
-
-
 if __name__ == "__main__":
-
     args = arg_parser()
     INPUT = args.input
-    INPUT = INPUT.strip()
-    INPUT = INPUT.replace("ENDOFLINE", "\n")
-
-    mol_name = "none"
-
-    known_file_types = [".sdf", ".smi", ".smiles", ".fasta"]
 
     lPlot = True
-    mol_supply_json = {}
+    from peptools.io import generate_input
 
-    if os.path.exists(INPUT):
-        # Assume input is a file.
-
-        lPlot = False
-
-        filename, file_extension = os.path.splitext(INPUT)
-        if file_extension not in known_file_types:
-            raise Exception(
-                "Error! File extention not in supported file types:"
-                + str(known_file_types)
-            )
-            sys.exit(1)
-        else:
-            # smi = ''
-            # mol_name = 'none'
-            inputFile = INPUT
-            if (
-                file_extension == ".smi"
-                or file_extension == ".smiles"
-                or file_extension == ".csv"
-                or file_extension == ".fasta"
-            ):
-                out_fext = ".csv"
-            elif file_extension == ".sdf":
-                out_fext = ".sdf"
-
-            outputFile = filename + "_OUTPUT" + out_fext
-
-            if file_extension != ".fasta":
-                l_calc_extn_coeff = True
-                l_calc_pI_fasta = False
-                l_calc_pIChemiSt = True
-                mol_supply_json = read_structure_file(inputFile)
-            else:
-                l_calc_extn_coeff = True
-                l_calc_pI_fasta = True
-                l_calc_pIChemiSt = False
-                mol_supply_json = read_fasta_file(inputFile)
-
-    elif not INPUT.isalpha():
-        # print("Input recognised as SMILES")
-        # Assume it is smiles, if contains not only letters
-        # print("Input is SMILES")
-        mol_unique_ID = 1
-        smi = INPUT
-        # mol_name = 'none'
-        fasta = get_fasta_from_smiles(smi)
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = False
-        l_calc_pIChemiSt = True
-        mol = Chem.MolFromSmiles(smi)
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
-            "mol_obj": mol,
-            "fasta": get_fasta_from_mol(mol),
-        }
-
-    elif INPUT.isalpha():
-        # Assume it is FASTA, if contains only letters
-        # print("Input is FASTA")
-        mol_unique_ID = 1
-        fasta = INPUT
-
-        smi = ""
-        # mol_name = 'none'
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = True
-        l_calc_pIChemiSt = False
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
-            "mol_obj": None,
-            "fasta": fasta,
-        }
-
-    elif (
-        (INPUT[0:2] == "AZ" and INPUT[2].isdigit())
-        or (INPUT[0:2] == "SN" and INPUT[2].isdigit())
-        or (INPUT[0:4] == "MEDI" and INPUT[4].isdigit())
-    ):
-        # A database ID given
-        # print("Input is a database ID")
-        mol_unique_ID = 1
-        smi = get_smiles_from_dbid(INPUT)
-        if len(smi) == 0:
-            raise Exception(
-                "ERROR: could not convert database ID to smiles. Is it corret ID from supported DBs? Exit."
-            )
-            sys.exit(1)
-        mol_name = INPUT
-        fasta = get_fasta_from_smiles(smi)
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = False
-        l_calc_pIChemiSt = True
-        mol = Chem.MolFromSmiles(smi)
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
-            "mol_obj": mol,
-            "fasta": fasta,
-        }
-
-    else:
-        raise Exception(
-            "ERROR: input not recongnized: not smiles, not fasta, not a known databaase ID. Must be a bug. Contact developer. Exit."
-        )
-        sys.exit(1)
+    (
+        mol_supply_json,
+        inputFile,
+        outputFile,
+        l_calc_extn_coeff,
+        l_calc_pI_fasta,
+        l_calc_pIChemiSt,
+        file_extension,
+        out_fext,
+    ) = generate_input(INPUT)
 
     # print("mol_name: "+mol_name)
     # print("FASTA: "+fasta)
