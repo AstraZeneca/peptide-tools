@@ -41,6 +41,222 @@ def calculated_pkas_from_list(smiles_list, method):
     return base_pkas, acid_pkas, diacid_pkas
 
 
+def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
+    
+    D_pka = dict()
+    D_count = dict()
+    for k,v in pkas_fasta.items():
+        for k2,v2 in v:
+            pka = v2[0]
+            AA = v2[1]
+            D_pka[AA].append(pka)
+            if AA in D_count.keys():
+                D_count[AA]+=1
+            else:
+                D_count[AA]=1
+    
+    frag_pkas_fasta = dict()
+    for k,v in D_pka.items():
+        frag_pkas_fasta[k] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
+
+    return frag_pkas_fasta
+
+def calc_frags_for_output_calc(ionization_type,pkas_calc):
+    
+    # D_pka = dict()
+    # D_count = dict()
+    # for k2,v2 in pkas_calc:
+    #     pka = v2[0]
+    #     smi = v2[1]
+    #     D_pka[smi].append(pka)
+    #     if smi in D_count.keys():
+    #         D_count[smi]+=1
+    #     else:
+    #         D_count[smi]=1
+    
+    # frag_pkas_calc = dict()
+    # for k,v in D_pka.items():
+    #     frag_pkas_calc[k] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
+
+    #TODO need to handle cases with multiple ionization in the same fragment. Apparently could only be done 
+    #TODO if the index of fragment or alike is stored in pka_calc dictionary. Requires, some code refurbishment. 
+    # Solution for now is to do not average out pka of identical fragment and display all with count 1
+    frag_pkas_calc = dict()
+    for k,v in pkas_calc.items():
+        pka = v[0]
+        smi = v[1]        
+        frag_pkas_calc[smi] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
+
+    return frag_pkas_calc
+
+
+
+def compile_frags_pkas_for_output(base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fasta,base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_qs_and_frags):
+    """
+    Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
+    (average between pKa sets in case of known AA)
+
+    """
+    frag_acid_pkas_fasta = calc_frags_for_output_fasta(
+        'acid',acid_pkas_fasta
+    )
+
+    frag_base_pkas_fasta = calc_frags_for_output_fasta(
+        'base',base_pkas_fasta
+    )
+    
+    frag_acid_pkas_calc = calc_frags_for_output_calc(
+        'acid',acid_pkas_calc
+    )
+
+    frag_base_pkas_calc = calc_frags_for_output_calc(
+        'base',base_pkas_calc
+    )
+    
+    frag_Qs_calc = calc_frags_for_output_calc(
+        'constant charge',net_qs_and_frags
+    )
+
+    #TODO diacid dictionaries are not used, they are deprecated and should be removed from the code
+
+    return (
+        frag_acid_pkas_fasta,
+        frag_base_pkas_fasta,
+        frag_acid_pkas_calc,
+        frag_base_pkas_calc,
+        frag_Qs_calc,
+    )
+
+    ### Example of the dictionary to be recompiled
+    # "acid_pkas_fasta": {
+    #     "IPC2_peptide": [
+    #       [
+    #         4.507,
+    #         "E"
+    #       ],
+    #       [
+    #         2.977,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         9.153,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "IPC_peptide": [
+    #       [
+    #         4.317,
+    #         "E"
+    #       ],
+    #       [
+    #         2.383,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         10.071,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "ProMoST": [
+    #       [
+    #         4.75,
+    #         "E"
+    #       ],
+    #       [
+    #         3.5,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         9.84,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "Gauci": [
+    #       [
+    #         4.45,
+    #         "E"
+    #       ],
+    #       [
+    #         4.75,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         10.0,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "Grimsley": [
+    #       [
+    #         4.2,
+    #         "E"
+    #       ],
+    #       [
+    #         3.3,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         10.3,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "Thurlkill": [
+    #       [
+    #         4.25,
+    #         "E"
+    #       ],
+    #       [
+    #         3.67,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         9.84,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "Lehninger": [
+    #       [
+    #         4.25,
+    #         "E"
+    #       ],
+    #       [
+    #         2.34,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         10.0,
+    #         "Y"
+    #       ]
+    #     ],
+    #     "Toseland": [
+    #       [
+    #         4.29,
+    #         "E"
+    #       ],
+    #       [
+    #         3.19,
+    #         "E_C-term"
+    #       ],
+    #       [
+    #         9.61,
+    #         "Y"
+    #       ]
+    #     ]
+    #   },
+    #   "base_pkas_calc": [
+    #     [
+    #       7.9,
+    #       "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
+    #     ],
+    #     [
+    #       10.4,
+    #       "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
+    #     ]
+    #   ],
+    #   "acid_pkas_calc": [],
+    #   "constant_Qs_calc": []
+    # }
+
+
 def pkas_and_charges_from_list(smiles_list, method):
     """
     Produces the pKa values for a list of SMILES by matching them against
@@ -115,6 +331,25 @@ def pichemist_from_dict(
             diacid_pkas_calc,
         )
 
+        # Recomple fragments and pKa for table output
+        (
+            frag_acid_pkas_fasta,
+            frag_base_pkas_fasta,
+            frag_acid_pkas_calc,
+            frag_base_pkas_calc,
+            frag_Qs_calc,
+        ) = compile_frags_pkas_for_output(
+            base_pkas_fasta,
+            acid_pkas_fasta,
+            diacid_pkas_fasta,
+            base_pkas_calc,
+            acid_pkas_calc,
+            diacid_pkas_calc,
+            net_qs_and_frags
+        )
+
+
+
         # Calculate the curves
         pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
             base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
@@ -135,7 +370,8 @@ def pichemist_from_dict(
         }
 
         # Plot pH/Q curve
-        if plot_ph_q_curve and not ph_q_curve_file_prefix:
+        ###AIF###if plot_ph_q_curve and not ph_q_curve_file_prefix:
+        if plot_ph_q_curve and not isinstance(ph_q_curve_file_prefix, str):
             raise ApiException(
                 "A file prefix for the pH/Q curve plots must " "be specified."
             )
@@ -157,6 +393,16 @@ def pichemist_from_dict(
                     OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
                     OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
                     OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
+                }
+            )
+
+            dict_output[mol_idx].update(
+                {
+                    OutputAttribute.FRAG_BASE_PKA_FASTA.value: frag_base_pkas_fasta,
+                    OutputAttribute.FRAG_ACID_PKA_FASTA.value: frag_acid_pkas_fasta,
+                    OutputAttribute.FRAG_BASE_PKA_CALC.value: frag_base_pkas_calc,
+                    OutputAttribute.FRAG_ACID_PKA_CALC.value: frag_acid_pkas_calc,
+                    OutputAttribute.FRAG_CONSTANT_QS.value: frag_Qs_calc,
                 }
             )
     return dict_output
