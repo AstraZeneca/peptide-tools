@@ -2,57 +2,62 @@ import os
 
 from peptools.chem import get_fasta_from_mol
 from peptools.chem import get_fasta_from_smiles
-from peptools.chem import read_structure_file
 from rdkit import Chem
 
 
-def generate_input(input):
-    INPUT = input
-    mol_name = "none"
-    file_extension = None
-    out_fext = None
-    known_file_types = [".sdf", ".smi", ".smiles", ".fasta"]
+class RuntimeParameters:
+    def __init__(self):
+        self.mol_name = "none"
+        self.input_filename = ""  # TODO
+        self.input_file_extension = None
+        self.output_filename = ""  # TODO
+        self.output_file_extension = None
+        self.generate_plots = True
+        self.calc_extn_coeff = False
+        self.calc_pIChemiSt = False
+        self.calc_pI_fasta = False
 
-    mol_supply_json = {}
+
+class FileFormatException(Exception):
+    pass
+
+
+ACCEPTED_FILE_FORMATS = [".sdf", ".smi", ".smiles", ".fasta"]
+
+
+def generate_input(input_data):
+    INPUT = input_data
+    params = RuntimeParameters()
+    mol_supply_json = dict()
 
     if os.path.exists(INPUT):
-        # Assume input is a file.
+        # Validation
+        params.input_filename, params.input_file_extension = os.path.splitext(INPUT)
+        if params.input_file_extension not in ACCEPTED_FILE_FORMATS:
+            raise FileFormatException()
 
-        lPlot = False
+        # Configure output file
+        params.output_file_extension = ".csv"
+        if params.input_file_extension == ".sdf":
+            params.output_file_extension = ".sdf"
+        params.output_filename = (
+            f"{params.input_filename}_OUTPUT{params.output_file_extension}"
+        )
 
-        filename, file_extension = os.path.splitext(INPUT)
-        if file_extension not in known_file_types:
-            raise Exception(
-                "Error! File extention not in supported file types:"
-                + str(known_file_types)
-            )
-            sys.exit(1)
-        else:
-            # smi = ''
-            # mol_name = 'none'
-            inputFile = INPUT
-            if (
-                file_extension == ".smi"
-                or file_extension == ".smiles"
-                or file_extension == ".csv"
-                or file_extension == ".fasta"
-            ):
-                out_fext = ".csv"
-            elif file_extension == ".sdf":
-                out_fext = ".sdf"
+        # Runtime parameters
+        params.generate_plot = False
+        params.calc_extn_coeff = True
+        params.calc_pIChemiSt = True
+        params.calc_pI_fasta = False
+        if params.input_file_extension == ".fasta":
+            params.calc_pI_fasta = True
+            params.calc_pIChemiSt = False
 
-            outputFile = filename + "_OUTPUT" + out_fext
-
-            if file_extension != ".fasta":
-                l_calc_extn_coeff = True
-                l_calc_pI_fasta = False
-                l_calc_pIChemiSt = True
-                mol_supply_json = read_structure_file(inputFile)
-            else:
-                l_calc_extn_coeff = True
-                l_calc_pI_fasta = True
-                l_calc_pIChemiSt = False
-                mol_supply_json = read_fasta_file(inputFile)
+        # Read file
+        if params.input_file_extension in [".sdf", ".smi", ".smiles"]:
+            mol_supply_json = read_structure_file(INPUT)
+        elif params.input_file_extension == ".fasta":
+            mol_supply_json = read_fasta_file(INPUT)
 
     elif not INPUT.isalpha():
         # print("Input recognised as SMILES")
@@ -60,16 +65,13 @@ def generate_input(input):
         # print("Input is SMILES")
         mol_unique_ID = 1
         smi = INPUT
-        # mol_name = 'none'
         fasta = get_fasta_from_smiles(smi)
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = False
-        l_calc_pIChemiSt = True
+        params.calc_extn_coeff = True
+        params.calc_pI_fasta = False
+        params.calc_pIChemiSt = True
         mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
+            "mol_name": params.mol_name,
             "mol_obj": mol,
             "fasta": get_fasta_from_mol(mol),
         }
@@ -80,44 +82,13 @@ def generate_input(input):
         mol_unique_ID = 1
         fasta = INPUT
 
-        smi = ""
-        # mol_name = 'none'
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = True
-        l_calc_pIChemiSt = False
+        # smi = ""
+        params.calc_extn_coeff = True
+        params.calc_pI_fasta = True
+        params.calc_pIChemiSt = False
         mol_supply_json[mol_unique_ID] = {
             "mol_name": mol_name,
             "mol_obj": None,
-            "fasta": fasta,
-        }
-
-    elif (
-        (INPUT[0:2] == "AZ" and INPUT[2].isdigit())
-        or (INPUT[0:2] == "SN" and INPUT[2].isdigit())
-        or (INPUT[0:4] == "MEDI" and INPUT[4].isdigit())
-    ):
-        # A database ID given
-        # print("Input is a database ID")
-        mol_unique_ID = 1
-        smi = get_smiles_from_dbid(INPUT)
-        if len(smi) == 0:
-            raise Exception(
-                "ERROR: could not convert database ID to smiles. Is it corret ID from supported DBs? Exit."
-            )
-            sys.exit(1)
-        mol_name = INPUT
-        fasta = get_fasta_from_smiles(smi)
-        inputFile = ""
-        outputFile = ""
-        l_calc_extn_coeff = True
-        l_calc_pI_fasta = False
-        l_calc_pIChemiSt = True
-        mol = Chem.MolFromSmiles(smi)
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
-            "mol_obj": mol,
             "fasta": fasta,
         }
 
@@ -125,17 +96,47 @@ def generate_input(input):
         raise Exception(
             "ERROR: input not recongnized: not smiles, not fasta, not a known databaase ID. Must be a bug. Contact developer. Exit."
         )
-        sys.exit(1)
-    return (
-        mol_supply_json,
-        inputFile,
-        outputFile,
-        l_calc_extn_coeff,
-        l_calc_pI_fasta,
-        l_calc_pIChemiSt,
-        file_extension,
-        out_fext,
-    )
+    return mol_supply_json, params
+
+
+class FileExtension:
+    SDF = ".sdf"
+    SMI = ".smi"
+
+
+def read_structure_file(inputFile):
+
+    filename, ext = os.path.splitext(inputFile)
+
+    # Initialize file reader
+    if ext == FileExtension.SDF:
+        suppl = Chem.SDMolSupplier(inputFile)
+    elif ext == FileExtension.SMI:
+        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
+    else:
+        raise Exception(
+            "!Warning: extension of file is not smi or sdf. Assume it is smi. Continue. "
+        )
+        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
+
+    mol_supply_json = {}
+    mol_unique_ID = 0
+    for mol in suppl:
+        mol_unique_ID += 1
+        # print(mol_unique_ID)
+        # unique index, mol title, fasta
+        # fasta = get_fasta_from_smiles(smi)
+
+        if not mol.HasProp("_Name"):
+            mol.SetProp("_Name", "tmpname" + str(mol_unique_ID))
+
+        mol_supply_json[mol_unique_ID] = {
+            "mol_name": mol.GetProp("_Name"),
+            "mol_obj": mol,
+            "fasta": get_fasta_from_mol(mol),
+        }
+
+    return mol_supply_json
 
 
 def read_fasta_file(inputFile):
