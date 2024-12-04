@@ -64,7 +64,7 @@ def arg_parser():
     # parser.add_argument("--print_pka_set", dest="l_print_pka_set", help="Print out stored pka sets explicitly.", default='')
     parser.add_argument(
         "--print_fragment_pkas",
-        default="yes",
+        default="no",
         action="store",
         dest="l_print_fragment_pkas",
         help="Print out fragments with corresponding pKas used in pI calcution",
