@@ -1,3 +1,6 @@
+from rdkit import Chem
+from rdkit.Chem import Draw
+
 from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
 from pichemist.core import calculate_isoelectric_interval_and_threshold
@@ -45,7 +48,9 @@ def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
     
     D_pka = dict()
     D_count = dict()
+    pka_sets_cnt = 0
     for pka_set,list_for_pka_set in pkas_fasta.items():
+        pka_sets_cnt += 1
         for v in list_for_pka_set:
             pka = v[0]
             AA = v[1]
@@ -53,10 +58,12 @@ def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
                 D_pka[AA].append(pka)
             else:
                 D_pka[AA]=list()
-            if AA in D_count.keys():
-                D_count[AA]+=1
-            else:
-                D_count[AA]=1
+        
+            if pka_sets_cnt == 1:
+                if AA in D_count.keys():
+                    D_count[AA] += 1
+                else:
+                    D_count[AA] = 1
     
     frag_pkas_fasta = dict()
     idx=0
@@ -65,6 +72,39 @@ def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
         frag_pkas_fasta[idx] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
 
     return frag_pkas_fasta
+
+
+
+def smiles_to_image(smiles, image_path, image_size=(300, 300)):
+    """
+    Convert a SMILES string to a chemical structure image with a specified size.
+
+    Parameters:
+    - smiles (str): The SMILES string representing the molecule.
+    - image_path (str): The file path where the image will be saved.
+    - image_size (tuple): The size of the image (width, height).
+
+    Returns:
+    - None
+    """
+    try:
+        # Convert SMILES to a molecule object
+        molecule = Chem.MolFromSmiles(smiles)
+        
+        # Check if the molecule was successfully created
+        if molecule is None:
+            raise ValueError("Invalid SMILES string.")
+        
+        # Generate the image with the specified size
+        image = Draw.MolToImage(molecule, size=image_size)
+        
+        # Save the image to the specified file path
+        image.save(image_path)
+        #print(f"Image saved successfully to {image_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 
 def calc_frags_for_output_calc(ionization_type,pkas_calc):
     
@@ -92,7 +132,12 @@ def calc_frags_for_output_calc(ionization_type,pkas_calc):
         frg_idx+=1
         pka = v[0]
         smi = v[1]        
-        frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
+        #frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
+
+        image_path = 'fragment_'+str(frg_idx)+'.png'
+        image_size = (500, 500)  # Set the desired image size
+        smiles_to_image(smi, image_path, image_size)
+        frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':image_path, 'count':1, 'pka':pka}
 
     return frag_pkas_calc
 
