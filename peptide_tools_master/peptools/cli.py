@@ -58,12 +58,14 @@ def arg_parser():
     parser.add_argument(
         "--ionized_Cterm",
         dest="ionized_Cterm",
+        action="store_true",
         help="is C-terminus ionized [COO-]?",
         default=True,
     )
     parser.add_argument(
         "--ionized_Nterm",
         dest="ionized_Nterm",
+        action="store_true",
         help="is N-terminus ionized [N+]?",
         default=True,
     )
