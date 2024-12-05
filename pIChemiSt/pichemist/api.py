@@ -1,6 +1,3 @@
-from rdkit import Chem
-from rdkit.Chem import Draw
-
 from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
 from pichemist.core import calculate_isoelectric_interval_and_threshold
@@ -16,6 +13,8 @@ from pichemist.molecule import PeptideCutter
 from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
 from pichemist.plot import output_ph_q_curve
+from rdkit import Chem
+from rdkit.Chem import Draw
 
 
 class ApiException(Exception):
@@ -44,12 +43,12 @@ def calculated_pkas_from_list(smiles_list, method):
     return base_pkas, acid_pkas, diacid_pkas
 
 
-def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
-    
+def calc_frags_for_output_fasta(ionization_type, pkas_fasta):
+
     D_pka = dict()
     D_count = dict()
     pka_sets_cnt = 0
-    for pka_set,list_for_pka_set in pkas_fasta.items():
+    for pka_set, list_for_pka_set in pkas_fasta.items():
         pka_sets_cnt += 1
         for v in list_for_pka_set:
             pka = v[0]
@@ -57,22 +56,26 @@ def calc_frags_for_output_fasta(ionization_type,pkas_fasta):
             if AA in D_pka.keys():
                 D_pka[AA].append(pka)
             else:
-                D_pka[AA]=list()
-        
+                D_pka[AA] = list()
+
             if pka_sets_cnt == 1:
                 if AA in D_count.keys():
                     D_count[AA] += 1
                 else:
                     D_count[AA] = 1
-    
+
     frag_pkas_fasta = dict()
-    idx=0
-    for k,v in D_pka.items():
-        idx+=1
-        frag_pkas_fasta[idx] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
+    idx = 0
+    for k, v in D_pka.items():
+        idx += 1
+        frag_pkas_fasta[idx] = {
+            "type": ionization_type,
+            "frag": k,
+            "count": D_count[k],
+            "pka": sum(v) / len(v),
+        }
 
     return frag_pkas_fasta
-
 
 
 def smiles_to_image(smiles, image_path, image_size=(300, 300)):
@@ -90,24 +93,23 @@ def smiles_to_image(smiles, image_path, image_size=(300, 300)):
     try:
         # Convert SMILES to a molecule object
         molecule = Chem.MolFromSmiles(smiles)
-        
+
         # Check if the molecule was successfully created
         if molecule is None:
             raise ValueError("Invalid SMILES string.")
-        
+
         # Generate the image with the specified size
         image = Draw.MolToImage(molecule, size=image_size)
-        
+
         # Save the image to the specified file path
         image.save(image_path)
-        #print(f"Image saved successfully to {image_path}")
+        # print(f"Image saved successfully to {image_path}")
     except Exception as e:
         print(f"An error occurred: {e}")
 
 
+def calc_frags_for_output_calc(ionization_type, pkas_calc):
 
-def calc_frags_for_output_calc(ionization_type,pkas_calc):
-    
     # D_pka = dict()
     # D_count = dict()
     # for k2,v2 in pkas_calc:
@@ -118,59 +120,61 @@ def calc_frags_for_output_calc(ionization_type,pkas_calc):
     #         D_count[smi]+=1
     #     else:
     #         D_count[smi]=1
-    
+
     # frag_pkas_calc = dict()
     # for k,v in D_pka.items():
     #     frag_pkas_calc[k] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
 
-    #TODO need to handle cases with multiple ionization in the same fragment. Apparently could only be done 
-    #TODO if the index of fragment or alike is stored in pka_calc dictionary. Requires, some code refurbishment. 
+    # TODO need to handle cases with multiple ionization in the same fragment. Apparently could only be done
+    # TODO if the index of fragment or alike is stored in pka_calc dictionary. Requires, some code refurbishment.
     # Solution for now is to do not average out pka of identical fragment and display all with count 1
     frag_pkas_calc = dict()
-    frg_idx=0
+    frg_idx = 0
     for v in pkas_calc:
-        frg_idx+=1
+        frg_idx += 1
         pka = v[0]
-        smi = v[1]        
-        #frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
+        smi = v[1]
+        # frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
 
-        image_path = 'fragment_'+str(frg_idx)+'.png'
+        image_path = "fragment_" + str(frg_idx) + ".png"
         image_size = (500, 500)  # Set the desired image size
         smiles_to_image(smi, image_path, image_size)
-        frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':image_path, 'count':1, 'pka':pka}
+        frag_pkas_calc[frg_idx] = {
+            "type": ionization_type,
+            "frag": image_path,
+            "count": 1,
+            "pka": pka,
+        }
 
     return frag_pkas_calc
 
 
-
-def compile_frags_pkas_for_output(base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fasta,base_pkas_calc,acid_pkas_calc,diacid_pkas_calc,net_qs_and_frags):
+def compile_frags_pkas_for_output(
+    base_pkas_fasta,
+    acid_pkas_fasta,
+    diacid_pkas_fasta,
+    base_pkas_calc,
+    acid_pkas_calc,
+    diacid_pkas_calc,
+    net_qs_and_frags,
+):
     """
     Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
     (average between pKa sets in case of known AA)
 
     """
-    frag_acid_pkas_fasta = calc_frags_for_output_fasta(
-        'acid',acid_pkas_fasta
-    )
+    frag_acid_pkas_fasta = calc_frags_for_output_fasta("acid", acid_pkas_fasta)
 
-    frag_base_pkas_fasta = calc_frags_for_output_fasta(
-        'base',base_pkas_fasta
-    )
-    
-    frag_acid_pkas_calc = calc_frags_for_output_calc(
-        'acid',acid_pkas_calc
-    )
+    frag_base_pkas_fasta = calc_frags_for_output_fasta("base", base_pkas_fasta)
 
-    frag_base_pkas_calc = calc_frags_for_output_calc(
-        'base',base_pkas_calc
-    )
-    
-    frag_Qs_calc = calc_frags_for_output_calc(
-        'constant charge',net_qs_and_frags
-    )
+    frag_acid_pkas_calc = calc_frags_for_output_calc("acid", acid_pkas_calc)
 
-    #TODO diacid dictionaries are not used, they are deprecated and should be removed from the code
+    frag_base_pkas_calc = calc_frags_for_output_calc("base", base_pkas_calc)
 
+    frag_Qs_calc = calc_frags_for_output_calc("constant charge", net_qs_and_frags)
+
+    # TODO: Diacid dictionaries are not used, they are
+    # deprecated and should be removed from the code
     return (
         frag_acid_pkas_fasta,
         frag_base_pkas_fasta,
@@ -178,135 +182,6 @@ def compile_frags_pkas_for_output(base_pkas_fasta,acid_pkas_fasta,diacid_pkas_fa
         frag_base_pkas_calc,
         frag_Qs_calc,
     )
-
-    ### Example of the dictionary to be recompiled
-    # "acid_pkas_fasta": {
-    #     "IPC2_peptide": [
-    #       [
-    #         4.507,
-    #         "E"
-    #       ],
-    #       [
-    #         2.977,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         9.153,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "IPC_peptide": [
-    #       [
-    #         4.317,
-    #         "E"
-    #       ],
-    #       [
-    #         2.383,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         10.071,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "ProMoST": [
-    #       [
-    #         4.75,
-    #         "E"
-    #       ],
-    #       [
-    #         3.5,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         9.84,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "Gauci": [
-    #       [
-    #         4.45,
-    #         "E"
-    #       ],
-    #       [
-    #         4.75,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         10.0,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "Grimsley": [
-    #       [
-    #         4.2,
-    #         "E"
-    #       ],
-    #       [
-    #         3.3,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         10.3,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "Thurlkill": [
-    #       [
-    #         4.25,
-    #         "E"
-    #       ],
-    #       [
-    #         3.67,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         9.84,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "Lehninger": [
-    #       [
-    #         4.25,
-    #         "E"
-    #       ],
-    #       [
-    #         2.34,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         10.0,
-    #         "Y"
-    #       ]
-    #     ],
-    #     "Toseland": [
-    #       [
-    #         4.29,
-    #         "E"
-    #       ],
-    #       [
-    #         3.19,
-    #         "E_C-term"
-    #       ],
-    #       [
-    #         9.61,
-    #         "Y"
-    #       ]
-    #     ]
-    #   },
-    #   "base_pkas_calc": [
-    #     [
-    #       7.9,
-    #       "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
-    #     ],
-    #     [
-    #       10.4,
-    #       "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
-    #     ]
-    #   ],
-    #   "acid_pkas_calc": [],
-    #   "constant_Qs_calc": []
-    # }
 
 
 def pkas_and_charges_from_list(smiles_list, method):
@@ -397,10 +272,8 @@ def pichemist_from_dict(
             base_pkas_calc,
             acid_pkas_calc,
             diacid_pkas_calc,
-            net_qs_and_frags
+            net_qs_and_frags,
         )
-
-
 
         # Calculate the curves
         pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
@@ -438,17 +311,15 @@ def pichemist_from_dict(
         if print_fragments:
             # No need to include diacids pkas as they
             # are included as single apparent ionisations
-
-            # AIF: take away unnecessary output.
-            # dict_output[mol_idx].update(
-            #     {
-            #         OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
-            #         OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
-            #         OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
-            #         OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
-            #         OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
-            #     }
-            # )
+            dict_output[mol_idx].update(
+                {
+                    OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
+                    OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
+                    OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
+                    OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
+                    OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
+                }
+            )
 
             dict_output[mol_idx].update(
                 {
