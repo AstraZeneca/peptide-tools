@@ -43,6 +43,7 @@
                 4.062499999999998
             ],
             "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
             "pKa_set": "IPC2_peptide"
         }
     }

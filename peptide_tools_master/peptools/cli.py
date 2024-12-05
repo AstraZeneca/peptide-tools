@@ -35,23 +35,23 @@ def arg_parser():
         "--input",
         dest="input",
         help="Input filepath (or SMILES string or FASTA)",
-        default=None,
+        required=True,
     )
 
     ### pIChemiSt.py keys
     parser.add_argument(
         "--print_fragment_pkas",
-        default=False,
         action="store_true",
         dest="print_fragment_pkas",
         help="Print the fragments with corresponding pKas used in pI calcution.",
+        default=False,
     )
     parser.add_argument(
         "--print_pka_set",
-        default=False,
         action="store_true",
         dest="print_pka_set",
         help="Print out stored pka sets.",
+        default=False,
     )
 
     ### pI_fasta.py keys
@@ -98,8 +98,8 @@ def arg_parser():
 
 if __name__ == "__main__":
     args = arg_parser()
-    INPUT = args.input
-    mol_supply_json, params = generate_input(INPUT)
+    # Generate input and parameters
+    mol_supply_json, params = generate_input(args.input)
 
     # Run calcs
     dict_out_extn_coeff_fasta = {}
@@ -155,17 +155,16 @@ if __name__ == "__main__":
 
     dict_out_pIChemiSt = {}
     if params.calc_pIChemiSt:
-        args = {
-            "plot_ph_q_curve": params.generate_plots,
-            "print_fragments": args.print_fragment_pkas,
-            "method": "pkamatcher",
-        }
+        plot_filename_prefix = "temp"
+        if params.filepath_prefix:
+            plot_filename_prefix = params.filepath_prefix
 
         dict_out_pIChemiSt = pichemist_from_dict(
             mol_supply_json,
-            args["method"],
-            args["plot_ph_q_curve"],
-            args["print_fragments"],
+            method="pkamatcher",
+            ph_q_curve_file_prefix=plot_filename_prefix,
+            plot_ph_q_curve=params.generate_plots,
+            print_fragments=args.print_fragment_pkas,
         )
 
     dict_out_peptide_tools_master = {

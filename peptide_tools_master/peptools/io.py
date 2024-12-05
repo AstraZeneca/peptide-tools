@@ -8,10 +8,13 @@ from rdkit import Chem
 class RuntimeParameters:
     def __init__(self):
         self.mol_name = "none"
-        self.input_filename = ""  # TODO
+        self.filepath = None
+        self.filepath_prefix = None
+        self.input_filepath = ""  # TODO
         self.input_file_extension = None
         self.output_filename = ""  # TODO
         self.output_file_extension = None
+        self.output_dir = None
         self.generate_plots = True
         self.calc_extn_coeff = False
         self.calc_pIChemiSt = False
@@ -31,17 +34,25 @@ def generate_input(input_data):
     mol_supply_json = dict()
 
     if os.path.exists(INPUT):
+        params.input_filepath = INPUT
+        params.workdir = os.path.dirname(params.input_filepath)
+        params.filename = os.path.splitext(os.path.basename(params.input_filepath))[0]
+
         # Validation
-        params.input_filename, params.input_file_extension = os.path.splitext(INPUT)
+        params.filepath_prefix, params.input_file_extension = os.path.splitext(
+            params.input_filepath
+        )
         if params.input_file_extension not in ACCEPTED_FILE_FORMATS:
-            raise FileFormatException()
+            raise FileFormatException(
+                "Extension not supported: " + params.input_file_extension
+            )
 
         # Configure output file
         params.output_file_extension = ".csv"
         if params.input_file_extension == ".sdf":
             params.output_file_extension = ".sdf"
         params.output_filename = (
-            f"{params.input_filename}_OUTPUT{params.output_file_extension}"
+            f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
         )
 
         # Runtime parameters
