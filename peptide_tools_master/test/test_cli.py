@@ -143,6 +143,7 @@ def test_smiles_stdin_input_multiline_1():
     with open(f"{examples_dir}/payload_4_out.csv", "r") as file:
         expected = file.read()
     assert result == expected
+    # TODO: Check deletion of temporary files
 
 
 def test_fasta_stdin_input_1():

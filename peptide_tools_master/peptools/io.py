@@ -45,15 +45,15 @@ def generate_input(input_data):
     input_data = input_data.encode("utf-8").decode("unicode_escape")
     params = RuntimeParameters()
     mol_supply_json = dict()
-    input_data, input_list = _polish_and_split_input(input_data)
+    input_data = _polish_input(input_data, params)
 
     # Validate input
-    if not input_data or len(input_list) == 0:
+    if not input_data:
         raise IOException("Input data is empty.")
 
     # Multiline input
-    if len(input_list) > 1:
-        input_data = multiline_input_into_filepath(input_data, input_list, params)
+    if is_input_multiline(input_data):
+        input_data = multiline_input_into_filepath(input_data, params)
 
     # Input is a file path
     if os.path.exists(input_data):
@@ -62,13 +62,11 @@ def generate_input(input_data):
     elif not input_data.isalpha():
         # print("Input recognised as SMILES")
         # Assume it is smiles, if contains not only letters
-        if len(input_list) == 1:
-            IN_vals = input_list[0].split()
-        if len(IN_vals) == 1:
-            input_data = IN_vals[0]
-        else:
-            input_data = IN_vals[0]
-            mol_name = IN_vals[1]
+        smiles_elements = input_data.split()
+        input_data = smiles_elements[0]
+        if len(smiles_elements) > 1:
+            input_data = smiles_elements[0]
+            mol_name = smiles_elements[1]
 
         mol_unique_ID = 1
         smi = input_data
@@ -106,47 +104,49 @@ def generate_input(input_data):
     return mol_supply_json, params
 
 
-def _polish_and_split_input(input_data):
+def _polish_input(input_data, params):
     input_data = input_data.strip()
     input_data = input_data.replace("ENDOFLINE", "\n")
+    return input_data
+
+
+def is_input_multiline(input_data):
+    return "\n" in input_data
+
+
+def multiline_input_into_filepath(input_data, params):
     input_list = input_data.split("\n")
-    return input_data, input_list
-
-
-def multiline_input_into_filepath(input_data, input_list, params):
-    if (
-        input_list[0][0] == ">" or input_list[0][0] == ";"
-    ):  # check https://en.wikipedia.org/wiki/FASTA_format
-        # Assuming the multiple rows are the FASTA file input
-        tf = tempfile.NamedTemporaryFile(
-            prefix="tmp_peptide_tools_master", suffix=".fasta", delete=False
-        )
-        input_data = tf.name
-        with open(input_data, "w") as f:
-            for line in input_list:
-                f.write(line + "\n")
-
-    elif "$$$$" in input_data:
-        # Assuming the multiple rows are SDF file
-        tf = tempfile.NamedTemporaryFile(
-            prefix="tmp_peptide_tools_master", suffix=".sdf", delete=False
-        )
-        input_data = tf.name
-        with open(input_data, "w") as f:
-            for line in input_list:
-                f.write(line + "\n")
-
-    else:
-        # Assuming the multiple rows are the smiles
-        tf = tempfile.NamedTemporaryFile(
-            prefix="tmp_peptide_tools_master", suffix=".smi", delete=False
-        )
-        input_data = tf.name
-        with open(input_data, "w") as f:
-            for line in input_list:
-                f.write(line + "\n")
+    suffix = recognize_input_suffix(input_list)
+    tf = tempfile.NamedTemporaryFile(
+        prefix="tmp_peptide_tools_master", suffix=suffix, delete=False
+    )
+    input_data = tf.name
+    with open(input_data, "w") as f:
+        for line in input_list:
+            f.write(line + "\n")
     params.delete_temp_file = True
     return input_data
+
+
+def recognize_input_suffix(input_list):
+    if _is_input_fasta(input_list):
+        suffix = ".fasta"
+    elif _is_input_sdf(input_list):
+        suffix = ".sdf"
+    else:
+        suffix = ".smi"
+    return suffix
+
+
+def _is_input_fasta(input_list):
+    # https://en.wikipedia.org/wiki/FASTA_format
+    if input_list[0][0] == ">" or input_list[0][0] == ";":
+        return True
+    return False
+
+
+def _is_input_sdf(input_data):
+    return "$$$$" in input_data
 
 
 def read_file(input_data, params):
@@ -185,6 +185,10 @@ def read_file(input_data, params):
         mol_supply_json = read_structure_file(input_data)
     elif params.input_file_extension == ".fasta":
         mol_supply_json = read_fasta_file(input_data)
+
+    # Delete if temporary file
+    if params.delete_temp_file:
+        os.remove(params.input_filepath)
     return mol_supply_json
 
 
