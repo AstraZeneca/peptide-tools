@@ -98,7 +98,7 @@ def generate_input(input_data):
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
         mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol_name,
+            "mol_name": params.mol_name,
             "mol_obj": None,
             "fasta": fasta,
         }
