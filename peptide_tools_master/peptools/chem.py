@@ -7,7 +7,6 @@ def get_fasta_from_mol(mol):
     fasta = get_scrambled_fasta_from_mol(mol)
     if len(fasta) == 0:
         raise Exception("ERROR: returned fasta is empry. something is wrong. Exit")
-        sys.exit(1)
     return fasta
 
 
@@ -17,5 +16,4 @@ def get_fasta_from_smiles(smi):
     fasta = get_scrambled_fasta_from_smiles(smi)
     if len(fasta) == 0:
         raise Exception("ERROR: returned fasta is empry. something is wrong. Exit")
-        sys.exit(1)
     return fasta
