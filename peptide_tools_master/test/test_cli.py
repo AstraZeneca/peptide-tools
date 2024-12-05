@@ -3,10 +3,12 @@ import os
 import subprocess
 import textwrap
 
+import pytest
 from helpers import raise_if_file_exists_list
 from helpers import raise_if_file_not_exists_list
 from helpers import remove_file_list
 from helpers import stringify_list
+from peptools.io import IOException
 
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
@@ -130,7 +132,7 @@ def test_smiles_stdin_input_multiline_1():
     subprocess_output = subprocess.run(
         stringify_list(test_args), capture_output=True, text=True
     )
-
+    # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
     assert "outputFile" in result
     results_filepath = result["outputFile"]
@@ -173,3 +175,11 @@ def test_fasta_stdin_input_1():
     with open(f"{examples_dir}/payload_5_out.csv", "r") as file:
         expected = file.read()
     assert result == expected
+
+
+def test_empty_input():
+    test_args = cli_base_args + ["--input", " "]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    assert subprocess_output.returncode == 1

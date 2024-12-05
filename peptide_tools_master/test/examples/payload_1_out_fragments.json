@@ -211,7 +211,38 @@
             },
             "base_pkas_calc": [],
             "acid_pkas_calc": [],
-            "constant_Qs_calc": []
+            "constant_Qs_calc": [],
+            "frag_base_pkas_fasta": {
+                "1": {
+                    "type": "base",
+                    "frag": "F_N-term",
+                    "count": 1,
+                    "pka": 8.303428571428572
+                }
+            },
+            "frag_acid_pkas_fasta": {
+                "1": {
+                    "type": "acid",
+                    "frag": "E",
+                    "count": 1,
+                    "pka": 4.358142857142857
+                },
+                "2": {
+                    "type": "acid",
+                    "frag": "E_C-term",
+                    "count": 1,
+                    "pka": 3.304714285714286
+                },
+                "3": {
+                    "type": "acid",
+                    "frag": "Y",
+                    "count": 1,
+                    "pka": 9.951571428571429
+                }
+            },
+            "frag_base_pkas_calc": {},
+            "frag_acid_pkas_calc": {},
+            "frag_Qs_calc": {}
         }
     }
 }
