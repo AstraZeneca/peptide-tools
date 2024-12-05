@@ -56,6 +56,11 @@ class OutputAttribute(BaseEnum):
     BASE_PKA_CALC = "base_pkas_calc"
     ACID_PKA_CALC = "acid_pkas_calc"
     CONSTANT_QS = "constant_Qs_calc"
+    FRAG_BASE_PKA_FASTA = "frag_base_pkas_fasta"
+    FRAG_ACID_PKA_FASTA = "frag_acid_pkas_fasta"
+    FRAG_BASE_PKA_CALC = "frag_base_pkas_calc"
+    FRAG_ACID_PKA_CALC = "frag_acid_pkas_calc"
+    FRAG_CONSTANT_QS = "frag_Qs_calc"
 
 
 class OutputFormat(BaseEnum):

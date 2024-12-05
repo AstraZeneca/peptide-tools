@@ -66,7 +66,7 @@
             ],
             "Gauci": [
                 [
-                    10.0,
+                    10,
                     "K"
                 ],
                 [
@@ -90,7 +90,7 @@
                     "K"
                 ],
                 [
-                    8.0,
+                    8,
                     "F_N-term"
                 ]
             ],
@@ -177,6 +177,45 @@
                 "CC(=O)N[C@@](C)(CC(=O)O)C(C)=O"
             ]
         ],
-        "constant_Qs_calc": []
+        "constant_Qs_calc": [],
+        "frag_base_pkas_fasta": {
+            "1": {
+                "type": "base",
+                "frag": "K",
+                "count": 1,
+                "pka": 10.309571428571429
+            },
+            "2": {
+                "type": "base",
+                "frag": "F_N-term",
+                "count": 1,
+                "pka": 8.303428571428572
+            }
+        },
+        "frag_acid_pkas_fasta": {
+            "1": {
+                "type": "acid",
+                "frag": "A_C-term",
+                "count": 1,
+                "pka": 3.169
+            }
+        },
+        "frag_base_pkas_calc": {
+            "1": {
+                "type": "base",
+                "frag": "fragment_2.png",
+                "count": 1,
+                "pka": 10.4
+            }
+        },
+        "frag_acid_pkas_calc": {
+            "1": {
+                "type": "acid",
+                "frag": "fragment_1.png",
+                "count": 1,
+                "pka": 3.46
+            }
+        },
+        "frag_Qs_calc": {}
     }
 }
