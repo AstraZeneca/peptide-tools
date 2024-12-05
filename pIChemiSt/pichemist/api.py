@@ -438,15 +438,17 @@ def pichemist_from_dict(
         if print_fragments:
             # No need to include diacids pkas as they
             # are included as single apparent ionisations
-            dict_output[mol_idx].update(
-                {
-                    OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
-                    OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
-                    OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
-                    OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
-                    OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
-                }
-            )
+
+            # AIF: take away unnecessary output.
+            # dict_output[mol_idx].update(
+            #     {
+            #         OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
+            #         OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
+            #         OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
+            #         OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
+            #         OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
+            #     }
+            # )
 
             dict_output[mol_idx].update(
                 {
