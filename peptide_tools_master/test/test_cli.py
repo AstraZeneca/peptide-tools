@@ -99,9 +99,7 @@ def test_smiles_stdin_input_3():
         smiles,
         "--print_fragment_pkas",
         "--ionized_Cterm",
-        "no",
         "--ionized_Nterm",
-        "yes",
         "-p",
         0,
         "-l",
@@ -112,8 +110,48 @@ def test_smiles_stdin_input_3():
     subprocess_output = subprocess.run(
         stringify_list(test_args), capture_output=True, text=True
     )
-    # print(" ".join(stringify_list(test_args)))
+    print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
     with open(f"{examples_dir}/payload_3_out.json", "r") as file:
         expected = json.load(file)
+    assert result == expected
+
+
+def test_smiles_stdin_input_multiline_1():
+    """Validity of CSV file output for multiple SMILES."""
+    multi_smiles = "C[C@@H](C(=O)N[C@@H](CCC(=O)O)C(=O)O)NC(=O)[C@H](C(C)C)NC(=O)[C@H](Cc1ccc(cc1)O)NC(=O)[C@@H]2CCCN2C(=O)[C@H](Cc3ccccc3)N\nC[C@@H](C(=O)N[C@@H](CCC(=O)O)C(=O)O)NC(=O)[C@H](C(C)C)NC(=O)[C@H](Cc1ccc(cc1)O)NC(=O)[C@@H]2CCCN2C(=O)[C@H](Cc3ccccc3)N"  # noqa: E501
+    test_args = cli_base_args + ["--input", multi_smiles]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+
+    result = json.loads(subprocess_output.stdout)
+    assert "outputFile" in result
+    results_filepath = result["outputFile"]
+    raise_if_file_not_exists_list([results_filepath])
+    with open(results_filepath, "r") as file:
+        result = file.read()
+
+    with open(f"{examples_dir}/payload_4_out.csv", "r") as file:
+        expected = file.read()
+    assert result == expected
+
+
+def test_fasta_stdin_input_1():
+    """Validity of CSV file output for multiple SMILES."""
+    fasta = ">sp|P43220|GLP1R_HUMAN Glucagon-like peptide 1 receptor OS=Homo sapiens OX=9606 GN=GLP1R PE=1 SV=2\nMAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDL\nFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPW\nRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIH\nLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAAN\nYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRN\nSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLL\nGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERW\nRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS"  # noqa: E501
+    test_args = cli_base_args + ["--input", fasta]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+
+    result = json.loads(subprocess_output.stdout)
+    assert "outputFile" in result
+    results_filepath = result["outputFile"]
+    raise_if_file_not_exists_list([results_filepath])
+    with open(results_filepath, "r") as file:
+        result = file.read()
+
+    with open(f"{examples_dir}/payload_5_out.csv", "r") as file:
+        expected = file.read()
     assert result == expected

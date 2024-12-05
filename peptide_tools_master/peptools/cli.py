@@ -7,7 +7,6 @@ import random
 import re
 import string
 import sys
-import tempfile
 import time
 import urllib
 from operator import itemgetter
@@ -101,7 +100,8 @@ def arg_parser():
 if __name__ == "__main__":
     args = arg_parser()
     # Generate input and parameters
-    mol_supply_json, params = generate_input(args.input)
+    input_data = args.input
+    mol_supply_json, params = generate_input(input_data)
 
     # Run calcs
     dict_out_extn_coeff_fasta = {}
@@ -121,12 +121,12 @@ if __name__ == "__main__":
         # prepare pI_fasta predictor
 
         if not args.ionized_Cterm:
-            IonizableTerminiOfCTermRes = "''"
+            IonizableTerminiOfCTermRes = ""
         else:
             IonizableTerminiOfCTermRes = "_"
 
         if not args.ionized_Nterm:
-            IonizableTerminiOfNTermRes = "''"
+            IonizableTerminiOfNTermRes = ""
         else:
             IonizableTerminiOfNTermRes = "_"
 
