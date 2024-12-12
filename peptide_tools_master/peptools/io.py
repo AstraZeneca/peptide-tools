@@ -2,7 +2,6 @@ import os
 import tempfile
 
 from peptools.chem import get_fasta_from_mol
-from peptools.chem import get_fasta_from_smiles
 from rdkit import Chem
 
 
@@ -35,10 +34,9 @@ class FileExtension:
     SDF = ".sdf"
     SMI = ".smi"
     FASTA = ".fasta"
-    SMILES = ".smiles"
 
 
-ACCEPTED_FILE_FORMATS = [".sdf", ".smi", ".smiles", ".fasta"]
+ACCEPTED_FILE_FORMATS = [FileExtension.SDF, FileExtension.SMI, FileExtension.FASTA]
 
 
 def generate_input(input_data):
@@ -59,48 +57,15 @@ def generate_input(input_data):
     if os.path.exists(input_data):
         mol_supply_json = read_file(input_data, params)
 
-    elif not input_data.isalpha():
-        # print("Input recognised as SMILES")
-        # Assume it is smiles, if contains not only letters
-        smiles_elements = input_data.split()
-        input_data = smiles_elements[0]
-        if len(smiles_elements) > 1:
-            input_data = smiles_elements[0]
-            mol_name = smiles_elements[1]
+    # Input is FASTA
+    elif _is_input_fasta(input_data):
+        mol_supply_json = configure_fasta_input(input_data, params)
 
-        mol_unique_ID = 1
-        smi = input_data
-        fasta = get_fasta_from_smiles(smi)
-        params.calc_extn_coeff = True
-        params.calc_pI_fasta = False
-        params.calc_pIChemiSt = True
-        mol = Chem.MolFromSmiles(smi)
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": params.mol_name,
-            "mol_obj": mol,
-            "fasta": get_fasta_from_mol(mol),
-        }
-
-    elif input_data.isalpha():
-        # Assume it is FASTA, if contains only letters
-        # print("Input is FASTA")
-        mol_unique_ID = 1
-        fasta = input_data
-
-        # smi = ""
-        params.calc_extn_coeff = True
-        params.calc_pI_fasta = True
-        params.calc_pIChemiSt = False
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": params.mol_name,
-            "mol_obj": None,
-            "fasta": fasta,
-        }
-
+    # Input is SMILES
+    elif _is_input_smi(input_data):
+        mol_supply_json = configure_smi_input(input_data, params)
     else:
-        raise Exception(
-            "ERROR: input not recongnized: not smiles, not fasta, not a known databaase ID. Must be a bug. Contact developer. Exit."
-        )
+        raise FileFormatException()
     return mol_supply_json, params
 
 
@@ -117,9 +82,7 @@ def is_input_multiline(input_data):
 def multiline_input_into_filepath(input_data, params):
     input_list = input_data.split("\n")
     suffix = recognize_input_suffix(input_list)
-    tf = tempfile.NamedTemporaryFile(
-        prefix="tmp_peptide_tools_master", suffix=suffix, delete=False
-    )
+    tf = tempfile.NamedTemporaryFile(prefix="tmp_peptools", suffix=suffix, delete=False)
     input_data = tf.name
     with open(input_data, "w") as f:
         for line in input_list:
@@ -129,24 +92,58 @@ def multiline_input_into_filepath(input_data, params):
 
 
 def recognize_input_suffix(input_list):
-    if _is_input_fasta(input_list):
+    if _is_input_fasta(input_list[0]):
         suffix = ".fasta"
     elif _is_input_sdf(input_list):
         suffix = ".sdf"
-    else:
+    elif _is_input_smi(input_list[0]):
         suffix = ".smi"
     return suffix
 
 
 def _is_input_fasta(input_list):
     # https://en.wikipedia.org/wiki/FASTA_format
-    if input_list[0][0] == ">" or input_list[0][0] == ";":
+    if input_list[0] == ">" or input_list[0] == ";":
         return True
     return False
 
 
 def _is_input_sdf(input_data):
     return "$$$$" in input_data
+
+
+def _is_input_smi(input_data):
+    if Chem.MolFromSmiles(input_data, sanitize=False):
+        return True
+    return False
+
+
+def configure_fasta_input(fasta_str, params):
+    params.calc_extn_coeff = True
+    params.calc_pI_fasta = True
+    params.calc_pIChemiSt = False
+    return {1: {"mol_name": params.mol_name, "mol_obj": None, "fasta": fasta_str}}
+
+
+def configure_smi_input(smiles_str, params):
+    # Extract name if provided
+    smiles_elements = smiles_str.split()
+    smiles_str = smiles_elements[0]
+    if len(smiles_elements) > 1:
+        smiles_str = smiles_elements[0]
+        params.mol_name = smiles_elements[1]
+
+    params.calc_extn_coeff = True
+    params.calc_pI_fasta = False
+    params.calc_pIChemiSt = True
+    mol = Chem.MolFromSmiles(smiles_str)
+    return {
+        1: {
+            "mol_name": params.mol_name,
+            "mol_obj": mol,
+            "fasta": get_fasta_from_mol(mol),
+        }
+    }
 
 
 def read_file(input_data, params):
@@ -202,10 +199,7 @@ def read_structure_file(inputFile):
     elif ext == FileExtension.SMI:
         suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
     else:
-        raise Exception(
-            "!Warning: extension of file is not smi or sdf. Assume it is smi. Continue. "
-        )
-        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
+        raise FileFormatException()
 
     mol_supply_json = {}
     mol_unique_ID = 0
@@ -233,9 +227,7 @@ def read_fasta_file(inputFile):
 
     # Initialize file reader
     if not ext == ".fasta":
-        raise Exception(
-            '!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. '
-        )
+        raise FileFormatException()
 
     from Bio import SeqIO
 

@@ -178,6 +178,29 @@ def test_fasta_stdin_input_1():
     assert result == expected
 
 
+def test_sdf_file_input_1():
+    """Validity of CSV file output."""
+    sdf_file = os.path.join(examples_dir, "payload_5.sdf")
+    temporary_result_file = os.path.join(examples_dir, "payload_5_OUTPUT.sdf")
+    assert not os.path.exists(
+        temporary_result_file
+    ), "Expected output file exist prior creation"
+
+    test_args = cli_base_args + ["--input", sdf_file]
+    _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
+    # print(" ".join(test_args))
+
+    assert os.path.exists(temporary_result_file)
+    with open(temporary_result_file, "r") as file:
+        temp_content = file.read()
+    with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
+        expected_content = file.read()
+    assert (
+        temp_content == expected_content
+    ), "Expected output file content does not match"
+    os.remove(temporary_result_file)
+
+
 def test_empty_input():
     test_args = cli_base_args + ["--input", " "]
     subprocess_output = subprocess.run(
