@@ -3,16 +3,14 @@ import os
 from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.fasta import configure_fasta_input
+from peptools.io.fasta import read_fasta_file
 from peptools.io.file import FileExtension
+from peptools.io.file import FileFormatException
 from peptools.io.multi import is_input_multiline
 from peptools.io.multi import multiline_input_to_filepath
 from peptools.io.structure import _is_input_smi
 from peptools.io.structure import configure_smi_input
 from rdkit import Chem
-
-
-class FileFormatException(Exception):
-    pass
 
 
 class IOException(Exception):
@@ -142,32 +140,6 @@ def read_structure_file(inputFile):
             "mol_name": mol.GetProp("_Name"),
             "mol_obj": mol,
             "fasta": get_fasta_from_mol(mol),
-        }
-
-    return mol_supply_json
-
-
-def read_fasta_file(inputFile):
-
-    filename, ext = os.path.splitext(inputFile)
-
-    # Initialize file reader
-    if not ext == ".fasta":
-        raise FileFormatException()
-
-    from Bio import SeqIO
-
-    biosuppl = SeqIO.parse(open(inputFile), "fasta")
-
-    mol_supply_json = {}
-    mol_unique_ID = 0
-    for biofasta in biosuppl:
-        mol_unique_ID += 1
-        # unique index, mol title, RDkit mol object, mol fasta
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": biofasta.id,
-            "mol_obj": None,
-            "fasta": str(biofasta.seq),
         }
 
     return mol_supply_json
