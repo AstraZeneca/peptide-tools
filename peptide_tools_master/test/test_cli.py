@@ -165,7 +165,7 @@ def test_fasta_stdin_input_1():
     subprocess_output = subprocess.run(
         stringify_list(test_args), capture_output=True, text=True
     )
-
+    # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
     assert "outputFile" in result
     results_filepath = result["outputFile"]

@@ -1,7 +1,13 @@
 import os
-import tempfile
 
 from peptools.chem import get_fasta_from_mol
+from peptools.io.fasta import _is_input_fasta
+from peptools.io.fasta import configure_fasta_input
+from peptools.io.file import FileExtension
+from peptools.io.multi import is_input_multiline
+from peptools.io.multi import multiline_input_to_filepath
+from peptools.io.structure import _is_input_smi
+from peptools.io.structure import configure_smi_input
 from rdkit import Chem
 
 
@@ -30,12 +36,6 @@ class RuntimeParameters:
         self.calc_pI_fasta = False
 
 
-class FileExtension:
-    SDF = ".sdf"
-    SMI = ".smi"
-    FASTA = ".fasta"
-
-
 ACCEPTED_FILE_FORMATS = [FileExtension.SDF, FileExtension.SMI, FileExtension.FASTA]
 
 
@@ -51,7 +51,7 @@ def generate_input(input_data):
 
     # Multiline input
     if is_input_multiline(input_data):
-        input_data = multiline_input_into_filepath(input_data, params)
+        input_data = multiline_input_to_filepath(input_data, params)
 
     # Input is a file path
     if os.path.exists(input_data):
@@ -73,77 +73,6 @@ def _polish_input(input_data, params):
     input_data = input_data.strip()
     input_data = input_data.replace("ENDOFLINE", "\n")
     return input_data
-
-
-def is_input_multiline(input_data):
-    return "\n" in input_data
-
-
-def multiline_input_into_filepath(input_data, params):
-    input_list = input_data.split("\n")
-    suffix = recognize_input_suffix(input_list)
-    tf = tempfile.NamedTemporaryFile(prefix="tmp_peptools", suffix=suffix, delete=False)
-    input_data = tf.name
-    with open(input_data, "w") as f:
-        for line in input_list:
-            f.write(line + "\n")
-    params.delete_temp_file = True
-    return input_data
-
-
-def recognize_input_suffix(input_list):
-    if _is_input_fasta(input_list[0]):
-        suffix = ".fasta"
-    elif _is_input_sdf(input_list):
-        suffix = ".sdf"
-    elif _is_input_smi(input_list[0]):
-        suffix = ".smi"
-    return suffix
-
-
-def _is_input_fasta(input_list):
-    # https://en.wikipedia.org/wiki/FASTA_format
-    if input_list[0] == ">" or input_list[0] == ";":
-        return True
-    return False
-
-
-def _is_input_sdf(input_data):
-    return "$$$$" in input_data
-
-
-def _is_input_smi(input_data):
-    if Chem.MolFromSmiles(input_data, sanitize=False):
-        return True
-    return False
-
-
-def configure_fasta_input(fasta_str, params):
-    params.calc_extn_coeff = True
-    params.calc_pI_fasta = True
-    params.calc_pIChemiSt = False
-    return {1: {"mol_name": params.mol_name, "mol_obj": None, "fasta": fasta_str}}
-
-
-def configure_smi_input(smiles_str, params):
-    # Extract name if provided
-    smiles_elements = smiles_str.split()
-    smiles_str = smiles_elements[0]
-    if len(smiles_elements) > 1:
-        smiles_str = smiles_elements[0]
-        params.mol_name = smiles_elements[1]
-
-    params.calc_extn_coeff = True
-    params.calc_pI_fasta = False
-    params.calc_pIChemiSt = True
-    mol = Chem.MolFromSmiles(smiles_str)
-    return {
-        1: {
-            "mol_name": params.mol_name,
-            "mol_obj": mol,
-            "fasta": get_fasta_from_mol(mol),
-        }
-    }
 
 
 def read_file(input_data, params):
@@ -205,9 +134,6 @@ def read_structure_file(inputFile):
     mol_unique_ID = 0
     for mol in suppl:
         mol_unique_ID += 1
-        # print(mol_unique_ID)
-        # unique index, mol title, fasta
-        # fasta = get_fasta_from_smiles(smi)
 
         if not mol.HasProp("_Name"):
             mol.SetProp("_Name", "tmpname" + str(mol_unique_ID))

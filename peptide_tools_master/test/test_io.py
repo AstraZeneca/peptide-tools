@@ -1,6 +1,6 @@
 import textwrap
 
-from peptools.io import _is_input_fasta
+from peptools.io.fasta import _is_input_fasta
 
 
 def test_is_fasta():
