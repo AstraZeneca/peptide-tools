@@ -1,7 +1,7 @@
 import tempfile
 
 from peptools.io.fasta import _is_input_fasta
-from peptools.io.file import FileExtension
+from peptools.io.file import InputFileExtension
 from peptools.io.structure import _is_input_sdf
 from peptools.io.structure import _is_input_smi
 
@@ -24,9 +24,9 @@ def multiline_input_to_filepath(input_data, params):
 
 def recognize_input_suffix(input_list):
     if _is_input_fasta(input_list[0]):
-        suffix = FileExtension.FASTA
+        suffix = InputFileExtension.FASTA
     elif _is_input_sdf(input_list):
-        suffix = FileExtension.SDF
+        suffix = InputFileExtension.SDF
     elif _is_input_smi(input_list[0]):
-        suffix = FileExtension.SMI
+        suffix = InputFileExtension.SMI
     return suffix

@@ -4,12 +4,13 @@ from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file
-from peptools.io.file import FileExtension
 from peptools.io.file import FileFormatException
+from peptools.io.file import InputFileExtension
 from peptools.io.multi import is_input_multiline
 from peptools.io.multi import multiline_input_to_filepath
 from peptools.io.structure import _is_input_smi
 from peptools.io.structure import configure_smi_input
+from peptools.io.structure import read_structure_file
 from rdkit import Chem
 
 
@@ -34,7 +35,11 @@ class RuntimeParameters:
         self.calc_pI_fasta = False
 
 
-ACCEPTED_FILE_FORMATS = [FileExtension.SDF, FileExtension.SMI, FileExtension.FASTA]
+ACCEPTED_FILE_FORMATS = [
+    InputFileExtension.SDF,
+    InputFileExtension.SMI,
+    InputFileExtension.FASTA,
+]
 
 
 def generate_input(input_data):
@@ -89,7 +94,7 @@ def read_file(input_data, params):
 
     # Configure output file
     params.output_file_extension = ".csv"
-    if params.input_file_extension == ".sdf":
+    if params.input_file_extension == InputFileExtension.SDF:
         params.output_file_extension = ".sdf"
     params.output_filename = (
         f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
@@ -100,46 +105,17 @@ def read_file(input_data, params):
     params.calc_extn_coeff = True
     params.calc_pIChemiSt = True
     params.calc_pI_fasta = False
-    if params.input_file_extension == ".fasta":
+    if params.input_file_extension == InputFileExtension.FASTA:
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
 
     # Read file
-    if params.input_file_extension in [".sdf", ".smi", ".smiles"]:
+    if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
         mol_supply_json = read_structure_file(input_data)
-    elif params.input_file_extension == ".fasta":
+    elif params.input_file_extension == InputFileExtension.FASTA:
         mol_supply_json = read_fasta_file(input_data)
 
     # Delete if temporary file
     if params.delete_temp_file:
         os.remove(params.input_filepath)
-    return mol_supply_json
-
-
-def read_structure_file(inputFile):
-
-    filename, ext = os.path.splitext(inputFile)
-
-    # Initialize file reader
-    if ext == FileExtension.SDF:
-        suppl = Chem.SDMolSupplier(inputFile)
-    elif ext == FileExtension.SMI:
-        suppl = Chem.SmilesMolSupplier(inputFile, titleLine=False)
-    else:
-        raise FileFormatException()
-
-    mol_supply_json = {}
-    mol_unique_ID = 0
-    for mol in suppl:
-        mol_unique_ID += 1
-
-        if not mol.HasProp("_Name"):
-            mol.SetProp("_Name", "tmpname" + str(mol_unique_ID))
-
-        mol_supply_json[mol_unique_ID] = {
-            "mol_name": mol.GetProp("_Name"),
-            "mol_obj": mol,
-            "fasta": get_fasta_from_mol(mol),
-        }
-
     return mol_supply_json

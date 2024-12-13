@@ -1,4 +1,4 @@
-class FileExtension:
+class InputFileExtension:
     SDF = ".sdf"
     SMI = ".smi"
     FASTA = ".fasta"
