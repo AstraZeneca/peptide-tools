@@ -1,10 +1,9 @@
 import os
 
 from peptools.chem import get_fasta_from_mol
-from peptools.io.file import FileFormatException
 from peptools.io.file import InputFileExtension
-from peptools.io.model import InputAttribute
-from peptools.io.model import InputFactory
+from peptools.io.input import InputAttribute
+from peptools.io.input import InputFactory
 from rdkit import Chem
 
 
@@ -42,8 +41,6 @@ def read_structure_file(input_filepath):
         suppl = Chem.SDMolSupplier(input_filepath)
     elif ext == InputFileExtension.SMI:
         suppl = Chem.SmilesMolSupplier(input_filepath, titleLine=False)
-    else:
-        raise FileFormatException()
 
     # Populate input
     mol_supply_json = dict()

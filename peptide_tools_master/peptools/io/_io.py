@@ -4,6 +4,7 @@ from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file
+from peptools.io.file import ACCEPTED_FILE_FORMATS
 from peptools.io.file import FileFormatException
 from peptools.io.file import InputFileExtension
 from peptools.io.multi import is_input_multiline
@@ -23,9 +24,9 @@ class RuntimeParameters:
         self.mol_name = "none"
         self.filepath = None
         self.filepath_prefix = None
-        self.input_filepath = ""  # TODO
+        self.input_filepath = None
         self.input_file_extension = None
-        self.output_filename = ""  # TODO
+        self.output_filename = None
         self.output_file_extension = None
         self.output_dir = None
         self.delete_temp_file = False
@@ -35,11 +36,20 @@ class RuntimeParameters:
         self.calc_pI_fasta = False
 
 
-ACCEPTED_FILE_FORMATS = [
-    InputFileExtension.SDF,
-    InputFileExtension.SMI,
-    InputFileExtension.FASTA,
-]
+class ChemicalParameters:
+    def __init__(
+        self,
+        ionized_Cterm,
+        ionized_Nterm,
+        NPhosphateGroups,
+        NAlkylLysGroups,
+        NDiAlkylLysGroups,
+    ):
+        self.ionized_Cterm = ionized_Cterm
+        self.ionized_Nterm = ionized_Nterm
+        self.NPhosphateGroups = NPhosphateGroups
+        self.NAlkylLysGroups = NAlkylLysGroups
+        self.NDiAlkylLysGroups = NDiAlkylLysGroups
 
 
 def generate_input(input_data):
@@ -101,6 +111,23 @@ def read_file(input_data, params):
     )
 
     # Runtime parameters
+    _configure_runtime_parameters(params)
+
+    # Read file
+    if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
+        mol_supply_json = read_structure_file(input_data)
+    elif params.input_file_extension == InputFileExtension.FASTA:
+        mol_supply_json = read_fasta_file(input_data)
+    else:
+        raise FileFormatException()
+
+    # Delete if temporary file
+    if params.delete_temp_file:
+        os.remove(params.input_filepath)
+    return mol_supply_json
+
+
+def _configure_runtime_parameters(params):
     params.generate_plot = False
     params.calc_extn_coeff = True
     params.calc_pIChemiSt = True
@@ -109,13 +136,12 @@ def read_file(input_data, params):
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
 
-    # Read file
-    if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
-        mol_supply_json = read_structure_file(input_data)
-    elif params.input_file_extension == InputFileExtension.FASTA:
-        mol_supply_json = read_fasta_file(input_data)
 
-    # Delete if temporary file
-    if params.delete_temp_file:
-        os.remove(params.input_filepath)
-    return mol_supply_json
+def configure_chemical_parameters(args):
+    return ChemicalParameters(
+        args.ionized_Cterm,
+        args.ionized_Nterm,
+        args.NPhosphateGroups,
+        args.NAlkylLysGroups,
+        args.NDiAlkylLysGroups,
+    )

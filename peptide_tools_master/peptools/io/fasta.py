@@ -3,8 +3,8 @@ import os
 from Bio import SeqIO
 from peptools.io.file import FileFormatException
 from peptools.io.file import InputFileExtension
-from peptools.io.model import InputAttribute
-from peptools.io.model import InputFactory
+from peptools.io.input import InputAttribute
+from peptools.io.input import InputFactory
 
 
 def _is_input_fasta(input_data):

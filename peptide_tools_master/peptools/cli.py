@@ -13,15 +13,13 @@ from operator import itemgetter
 from time import gmtime
 from time import strftime
 
+from peptools.io import configure_chemical_parameters
 from peptools.io import generate_input
+from peptools.wrapper.ec import calculate_extinction_coefficient
+from peptools.wrapper.fasta import calculate_pI_from_fasta
 from pichemist.api import pichemist_from_dict
 from rdkit import Chem
 
-from extn_coeff_fasta import calc_extn_coeff
-from pI_fasta import calc_pI_fasta
-
-
-currentdir = os.getcwd()
 
 __prog__ = "Peptide Tools Master"
 __doc__ = """TODO"""
@@ -97,63 +95,18 @@ def arg_parser():
     return args
 
 
+# def main(input_data):
+
+
 if __name__ == "__main__":
     args = arg_parser()
     # Generate input and parameters
-    input_data = args.input
-    mol_supply_json, params = generate_input(input_data)
+    mol_supply_json, params = generate_input(args.input)
+    chem_params = configure_chemical_parameters(args)
 
     # Run calcs
-    dict_out_extn_coeff_fasta = {}
-    if params.calc_extn_coeff:
-        extn_coeff_options = {
-            "seq": "",
-            "inputDict": mol_supply_json,
-            "inputJSON": "",
-            "inputFile": "",
-            "outputFile": "",
-            "l_json": True,
-        }
-        dict_out_extn_coeff = calc_extn_coeff(extn_coeff_options)
-
-    dict_out_pI_fasta = {}
-    if params.calc_pI_fasta:
-        # prepare pI_fasta predictor
-
-        if not args.ionized_Cterm:
-            IonizableTerminiOfCTermRes = ""
-        else:
-            IonizableTerminiOfCTermRes = "_"
-
-        if not args.ionized_Nterm:
-            IonizableTerminiOfNTermRes = ""
-        else:
-            IonizableTerminiOfNTermRes = "_"
-
-        pI_fasta_options = {
-            "seq": "",
-            "inputDict": mol_supply_json,
-            "inputJSON": "",
-            "inputFile": "",
-            "outputFile": "",
-            "tol": 0.001,
-            "CTermRes": "_",
-            "NTermRes": "_",
-            "IonizableTerminiOfCTermRes": IonizableTerminiOfCTermRes,
-            "IonizableTerminiOfNTermRes": IonizableTerminiOfNTermRes,
-            "lCyclic": False,
-            "NPhosphateGroups": args.NPhosphateGroups,
-            "NAlkylLysGroups": args.NAlkylLysGroups,
-            "NDiAlkylLysGroups": args.NDiAlkylLysGroups,
-            "lPrintpKa": False,
-            "lPlot": params.generate_plots,
-            "lIgnoreC": False,
-            "plot_filename": "OUT_titration_curve.png",
-            "l_json": True,
-            "pka_set_list": "",
-        }
-
-        dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
+    dict_out_extn_coeff = calculate_extinction_coefficient(mol_supply_json, params)
+    dict_out_pI_fasta = calculate_pI_from_fasta(mol_supply_json, params, chem_params)
 
     dict_out_pIChemiSt = {}
     if params.calc_pIChemiSt:
@@ -177,7 +130,7 @@ if __name__ == "__main__":
 
     ### ----------------------------------------------------------------------
     # Output
-    if params.output_filename == "":  # output JSON
+    if params.output_filename == None:  # output JSON
         print(json.dumps(dict_out_peptide_tools_master, indent=2))
 
     else:  # output file
