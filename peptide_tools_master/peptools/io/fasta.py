@@ -2,9 +2,9 @@ import os
 
 from Bio import SeqIO
 from peptools.io.file import FileFormatException
-from peptools.io.file import InputFileExtension
 from peptools.io.input import InputAttribute
 from peptools.io.input import InputFactory
+from peptools.io.input import InputFileExtension
 
 
 def _is_input_fasta(input_data):
@@ -15,9 +15,6 @@ def _is_input_fasta(input_data):
 
 
 def configure_fasta_input(fasta_str, params):
-    params.calc_extn_coeff = True
-    params.calc_pI_fasta = True
-    params.calc_pIChemiSt = False
     return {1: InputFactory.new(None, params.mol_name, fasta_str)}
 
 

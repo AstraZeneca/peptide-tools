@@ -4,9 +4,9 @@ from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file
-from peptools.io.file import ACCEPTED_FILE_FORMATS
 from peptools.io.file import FileFormatException
-from peptools.io.file import InputFileExtension
+from peptools.io.input import ACCEPTED_FILE_FORMATS
+from peptools.io.input import InputFileExtension
 from peptools.io.multi import is_input_multiline
 from peptools.io.multi import multiline_input_to_filepath
 from peptools.io.structure import _is_input_smi
@@ -110,9 +110,6 @@ def read_file(input_data, params):
         f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
     )
 
-    # Runtime parameters
-    _configure_runtime_parameters(params)
-
     # Read file
     if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
         mol_supply_json = read_structure_file(input_data)
@@ -127,12 +124,14 @@ def read_file(input_data, params):
     return mol_supply_json
 
 
-def _configure_runtime_parameters(params):
+def configure_runtime_parameters(params):
     params.generate_plot = False
-    params.calc_extn_coeff = True
-    params.calc_pIChemiSt = True
-    params.calc_pI_fasta = False
-    if params.input_file_extension == InputFileExtension.FASTA:
+    if params.input_file_extension in [InputFileExtension.SMI, InputFileExtension.SDF]:
+        params.calc_extn_coeff = True
+        params.calc_pIChemiSt = True
+        params.calc_pI_fasta = False
+    elif params.input_file_extension == InputFileExtension.FASTA:
+        params.calc_extn_coeff = True
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
 

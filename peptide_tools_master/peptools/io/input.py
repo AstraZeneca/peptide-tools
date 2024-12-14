@@ -1,6 +1,19 @@
 from peptools.chem import get_fasta_from_mol
 
 
+class InputFileExtension:
+    SDF = ".sdf"
+    SMI = ".smi"
+    FASTA = ".fasta"
+
+
+ACCEPTED_FILE_FORMATS = [
+    InputFileExtension.SDF,
+    InputFileExtension.SMI,
+    InputFileExtension.FASTA,
+]
+
+
 class InputAttribute:
     MOL_NAME = "mol_name"
     MOL_OBJECT = "mol_obj"

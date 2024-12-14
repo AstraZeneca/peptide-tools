@@ -1,7 +1,7 @@
 import tempfile
 
 from peptools.io.fasta import _is_input_fasta
-from peptools.io.file import InputFileExtension
+from peptools.io.input import InputFileExtension
 from peptools.io.structure import _is_input_sdf
 from peptools.io.structure import _is_input_smi
 

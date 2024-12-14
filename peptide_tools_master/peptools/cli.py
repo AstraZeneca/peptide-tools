@@ -14,10 +14,11 @@ from time import gmtime
 from time import strftime
 
 from peptools.io import configure_chemical_parameters
+from peptools.io import configure_runtime_parameters
 from peptools.io import generate_input
 from peptools.wrapper.ec import calculate_extinction_coefficient
-from peptools.wrapper.fasta import calculate_pI_from_fasta
-from pichemist.api import pichemist_from_dict
+from peptools.wrapper.pi import calculate_pichemist
+from peptools.wrapper.pi import calculate_pifasta
 from rdkit import Chem
 
 
@@ -102,26 +103,15 @@ if __name__ == "__main__":
     args = arg_parser()
     # Generate input and parameters
     mol_supply_json, params = generate_input(args.input)
+    configure_runtime_parameters(params)
     chem_params = configure_chemical_parameters(args)
 
     # Run calcs
     dict_out_extn_coeff = calculate_extinction_coefficient(mol_supply_json, params)
-    dict_out_pI_fasta = calculate_pI_from_fasta(mol_supply_json, params, chem_params)
-
-    dict_out_pIChemiSt = {}
-    if params.calc_pIChemiSt:
-        plot_filename_prefix = "temp"
-        if params.filepath_prefix:
-            plot_filename_prefix = params.filepath_prefix
-
-        dict_out_pIChemiSt = pichemist_from_dict(
-            mol_supply_json,
-            method="pkamatcher",
-            ph_q_curve_file_prefix=plot_filename_prefix,
-            plot_ph_q_curve=params.generate_plots,
-            print_fragments=args.print_fragment_pkas,
-        )
-
+    dict_out_pI_fasta = calculate_pifasta(mol_supply_json, params, chem_params)
+    dict_out_pIChemiSt = calculate_pichemist(
+        mol_supply_json, params, args.print_fragment_pkas
+    )
     dict_out_peptide_tools_master = {
         "output_extn_coeff": dict_out_extn_coeff,
         "output_pI_fasta": dict_out_pI_fasta,

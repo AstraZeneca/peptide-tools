@@ -54,44 +54,45 @@ def test_smiles_file_input_1():
     temporary_result_file = os.path.join(examples_dir, "payload_1_OUTPUT.csv")
     temporary_plot_file = os.path.join(examples_dir, "payload_1_1.png")
     temporary_file_list = [temporary_result_file, temporary_plot_file]
-    raise_if_file_exists_list(temporary_file_list)
+    try:
+        raise_if_file_exists_list(temporary_file_list)
 
-    # Validation
-    test_args = cli_base_args + ["--input", smiles_file]
-    _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
-    # print(" ".join(test_args))
-    raise_if_file_not_exists_list(temporary_file_list)
-    with open(temporary_result_file, "r") as file:
-        temp_content = file.read()
-    with open(f"{examples_dir}/payload_1_out.csv", "r") as file:
-        expected_content = file.read()
-    assert (
-        temp_content == expected_content
-    ), "Expected output file content does not match"
-    remove_file_list(temporary_file_list)
+        # Validation
+        test_args = cli_base_args + ["--input", smiles_file]
+        _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
+        # print(" ".join(test_args))
+        raise_if_file_not_exists_list(temporary_file_list)
+        with open(temporary_result_file, "r") as file:
+            temp_content = file.read()
+        with open(f"{examples_dir}/payload_1_out.csv", "r") as file:
+            expected_content = file.read()
+        assert (
+            temp_content == expected_content
+        ), "Expected output file content does not match"
+    finally:
+        remove_file_list(temporary_file_list)
 
 
 def test_fasta_file_input_1():
     """Validity of CSV file output."""
     fasta_file = os.path.join(examples_dir, "payload_2.fasta")
     temporary_result_file = os.path.join(examples_dir, "payload_2_OUTPUT.csv")
-    assert not os.path.exists(
-        temporary_result_file
-    ), "Expected output file exist prior creation"
+    try:
+        raise_if_file_exists_list([temporary_result_file])
+        test_args = cli_base_args + ["--input", fasta_file]
+        _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
+        # print(" ".join(test_args))
 
-    test_args = cli_base_args + ["--input", fasta_file]
-    _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
-    # print(" ".join(test_args))
-
-    assert os.path.exists(temporary_result_file)
-    with open(temporary_result_file, "r") as file:
-        temp_content = file.read()
-    with open(f"{examples_dir}/payload_2_out.csv", "r") as file:
-        expected_content = file.read()
-    assert (
-        temp_content == expected_content
-    ), "Expected output file content does not match"
-    os.remove(temporary_result_file)
+        assert os.path.exists(temporary_result_file)
+        with open(temporary_result_file, "r") as file:
+            temp_content = file.read()
+        with open(f"{examples_dir}/payload_2_out.csv", "r") as file:
+            expected_content = file.read()
+        assert (
+            temp_content == expected_content
+        ), "Expected output file content does not match"
+    finally:
+        os.remove(temporary_result_file)
 
 
 def test_smiles_stdin_input_3():
@@ -184,21 +185,23 @@ def test_sdf_file_input_1():
     temporary_result_file = os.path.join(examples_dir, "payload_5_OUTPUT.sdf")
     temporary_plot_file = os.path.join(examples_dir, "payload_5_1.png")
     temporary_file_list = [temporary_result_file, temporary_plot_file]
-    raise_if_file_exists_list(temporary_file_list)
+    try:
+        raise_if_file_exists_list(temporary_file_list)
 
-    test_args = cli_base_args + ["--input", sdf_file]
-    _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
-    # print(" ".join(test_args))
+        test_args = cli_base_args + ["--input", sdf_file]
+        _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
+        # print(" ".join(test_args))
 
-    raise_if_file_not_exists_list(temporary_file_list)
-    with open(temporary_result_file, "r") as file:
-        temp_content = file.read()
-    with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
-        expected_content = file.read()
-    assert (
-        temp_content == expected_content
-    ), "Expected output file content does not match"
-    remove_file_list(temporary_file_list)
+        raise_if_file_not_exists_list(temporary_file_list)
+        with open(temporary_result_file, "r") as file:
+            temp_content = file.read()
+        with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
+            expected_content = file.read()
+        assert (
+            temp_content == expected_content
+        ), "Expected output file content does not match"
+    finally:
+        remove_file_list(temporary_file_list)
 
 
 def test_empty_input():

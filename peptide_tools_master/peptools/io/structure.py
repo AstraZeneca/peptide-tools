@@ -1,9 +1,9 @@
 import os
 
 from peptools.chem import get_fasta_from_mol
-from peptools.io.file import InputFileExtension
 from peptools.io.input import InputAttribute
 from peptools.io.input import InputFactory
+from peptools.io.input import InputFileExtension
 from rdkit import Chem
 
 
