@@ -1,3 +1,5 @@
+import csv
+import json
 import os
 
 from peptools.chem import get_fasta_from_mol
@@ -170,3 +172,105 @@ def generate_parameter_set(args, io_params):
     run_params = configure_runtime_parameters(args, input_file_extension)
     chem_params = configure_chemical_parameters(args)
     return ParameterSet(io_params, run_params, chem_params)
+
+
+def generate_output(mol_supply_json, dict_out_peptide_tools_master, params):
+    dict_out_pIChemiSt = dict_out_peptide_tools_master["output_pIChemiSt"]
+    dict_out_extn_coeff = dict_out_peptide_tools_master["output_extn_coeff"]
+    dict_out_pI_fasta = dict_out_peptide_tools_master["output_pI_fasta"]
+    if params.io.output_filename == None:  # output JSON
+        print(json.dumps(dict_out_peptide_tools_master, indent=2))
+        exit()
+
+    if params.io.input_file_extension != ".fasta":
+        mol_list = []
+        for mi in mol_supply_json.keys():
+            mol = mol_supply_json[mi]["mol_obj"]
+
+            if params.run.calc_pIChemiSt:
+                mol.SetProp("pI mean", "%.2f" % dict_out_pIChemiSt[mi]["pI"]["pI mean"])
+                mol.SetProp("pI std", "%.2f" % dict_out_pIChemiSt[mi]["pI"]["std"])
+                mol.SetProp(
+                    "pI interval",
+                    " - ".join(
+                        ["%.2f" % x for x in dict_out_pIChemiSt[mi]["pI_interval"]]
+                    ),
+                )
+                mol.SetProp(
+                    "pI interval threshold",
+                    "%.2f" % dict_out_pIChemiSt[mi]["pI_interval_threshold"],
+                )
+
+            if params.run.calc_extn_coeff:
+                mol.SetProp("mol_name", dict_out_extn_coeff[mi]["mol_name"])
+                mol.SetProp("Sequence(FASTA)", dict_out_extn_coeff[mi]["fasta"])
+                mol.SetProp("e205(nm)", "%i" % dict_out_extn_coeff[mi]["e205"])
+                mol.SetProp("e214(nm)", "%i" % dict_out_extn_coeff[mi]["e214"])
+                mol.SetProp("e280(nm)", "%i" % dict_out_extn_coeff[mi]["e280"])
+
+            mol_list.append(mol)
+
+        if params.io.output_file_extension == ".sdf":
+            with Chem.SDWriter(params.io.output_filename) as sdf_w:
+                for mol in mol_list:
+                    sdf_w.write(mol)
+
+        elif params.io.output_file_extension == ".csv":
+            with open(params.io.output_filename, "w") as csv_f:
+                csv_w = csv.writer(csv_f)
+                count = 0
+                for mol in mol_list:
+                    props = mol.GetPropsAsDict()
+
+                    count += 1
+                    if count == 1:
+                        header = ["SMILES"] + list(props.keys())
+                        csv_w.writerow(header)
+
+                    row = [Chem.MolToSmiles(mol)]
+                    for p in header[1:]:
+                        row += [props[p]]
+                    csv_w.writerow(row)
+
+    if params.io.input_file_extension == ".fasta":
+        dict_list = []
+        for mi in mol_supply_json.keys():
+            fasta = mol_supply_json[mi]["fasta"]
+
+            D = {}
+
+            if params.run.calc_pI_fasta:
+                D["pI mean"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["pI mean"]
+                D["pI std"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["std"]
+
+            if params.run.calc_extn_coeff:
+                D["mol_name"] = dict_out_extn_coeff[mi]["mol_name"]
+                D["Sequence(FASTA)"] = dict_out_extn_coeff[mi]["fasta"]
+                D["e205(nm)"] = "%i" % dict_out_extn_coeff[mi]["e205"]
+                D["e214(nm)"] = "%i" % dict_out_extn_coeff[mi]["e214"]
+                D["e280(nm)"] = "%i" % dict_out_extn_coeff[mi]["e280"]
+
+            dict_list.append(D)
+
+        if params.io.output_file_extension == ".csv":
+            with open(params.io.output_filename, "w") as csv_f:
+                csv_w = csv.writer(csv_f)
+                count = 0
+                for props in dict_list:
+
+                    count += 1
+                    if count == 1:
+                        header = list(props.keys())
+                        csv_w.writerow(header)
+
+                    row = []
+                    for p in header:
+                        row += [props[p]]
+                    csv_w.writerow(row)
+
+    dict_file = {
+        "outputFile": params.io.output_filename,
+        "outputInfo": "Number of molecules processed:"
+        + str(len(mol_supply_json.keys())),
+    }
+    print(json.dumps(dict_file))
