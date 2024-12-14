@@ -19,6 +19,13 @@ class IOException(Exception):
     pass
 
 
+class ParameterSet:
+    def __init__(self, io_params, run_params, chem_params):
+        self.io = io_params
+        self.run = run_params
+        self.chem = chem_params
+
+
 class IOParameters:
     def __init__(self):
         self.mol_name = "none"
@@ -129,11 +136,11 @@ def read_file(input_data, params):
     return mol_supply_json
 
 
-def configure_runtime_parameters(args, io_params):
+def configure_runtime_parameters(args, input_file_extension):
     params = RuntimeParameters()
     params.generate_plot = False
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
-    if io_params.input_file_extension in [
+    if input_file_extension in [
         None,
         InputFileExtension.SMI,
         InputFileExtension.SDF,
@@ -141,7 +148,7 @@ def configure_runtime_parameters(args, io_params):
         params.calc_extn_coeff = True
         params.calc_pIChemiSt = True
         params.calc_pI_fasta = False
-    elif io_params.input_file_extension == InputFileExtension.FASTA:
+    elif input_file_extension == InputFileExtension.FASTA:
         params.calc_extn_coeff = True
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
@@ -156,3 +163,10 @@ def configure_chemical_parameters(args):
         args.NAlkylLysGroups,
         args.NDiAlkylLysGroups,
     )
+
+
+def generate_parameter_set(args, io_params):
+    input_file_extension = io_params.input_file_extension
+    run_params = configure_runtime_parameters(args, input_file_extension)
+    chem_params = configure_chemical_parameters(args)
+    return ParameterSet(io_params, run_params, chem_params)
