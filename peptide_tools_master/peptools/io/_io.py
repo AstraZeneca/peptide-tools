@@ -10,6 +10,10 @@ from peptools.io.input import ACCEPTED_FILE_FORMATS
 from peptools.io.input import InputFileExtension
 from peptools.io.multi import is_input_multiline
 from peptools.io.multi import multiline_input_to_filepath
+from peptools.io.params import ChemicalParameters
+from peptools.io.params import IOParameters
+from peptools.io.params import ParameterSet
+from peptools.io.params import RuntimeParameters
 from peptools.io.structure import _is_input_smi
 from peptools.io.structure import configure_smi_input
 from peptools.io.structure import read_structure_file
@@ -18,51 +22,6 @@ from rdkit import Chem
 
 class IOException(Exception):
     pass
-
-
-class ParameterSet:
-    def __init__(self, io_params, run_params, chem_params):
-        self.io = io_params
-        self.run = run_params
-        self.chem = chem_params
-
-
-class IOParameters:
-    def __init__(self):
-        self.mol_name = "none"
-        self.filepath = None
-        self.filepath_prefix = None
-        self.input_filepath = None
-        self.input_file_extension = None
-        self.output_filename = None
-        self.output_file_extension = None
-        self.output_dir = None
-        self.delete_temp_file = False
-
-
-class RuntimeParameters:
-    def __init__(self):
-        self.generate_plots = True
-        self.print_fragment_pkas = False
-        self.calc_extn_coeff = False
-        self.calc_pIChemiSt = False
-        self.calc_pI_fasta = False
-
-
-class ChemicalParameters:
-    def __init__(
-        self,
-        ionized_Cterm,
-        ionized_Nterm,
-        NPhosphateGroups,
-        NAlkylLysGroups,
-        NDiAlkylLysGroups,
-    ):
-        self.ionized_Cterm = ionized_Cterm
-        self.ionized_Nterm = ionized_Nterm
-        self.NPhosphateGroups = NPhosphateGroups
-        self.NAlkylLysGroups = NAlkylLysGroups
-        self.NDiAlkylLysGroups = NDiAlkylLysGroups
 
 
 def generate_input(input_data):
@@ -115,13 +74,8 @@ def read_file(input_data, params):
             "Extension not supported: " + params.input_file_extension
         )
 
-    # Configure output file
-    params.output_file_extension = ".csv"
-    if params.input_file_extension == InputFileExtension.SDF:
-        params.output_file_extension = ".sdf"
-    params.output_filename = (
-        f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
-    )
+    # Configure output
+    _configure_output_file(params)
 
     # Read file
     if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
@@ -135,6 +89,15 @@ def read_file(input_data, params):
     if params.delete_temp_file:
         os.remove(params.input_filepath)
     return mol_supply_json
+
+
+def _configure_output_file(params):
+    params.output_file_extension = ".csv"
+    if params.input_file_extension == InputFileExtension.SDF:
+        params.output_file_extension = ".sdf"
+    params.output_filename = (
+        f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
+    )
 
 
 def configure_runtime_parameters(args, input_file_extension):
@@ -173,13 +136,12 @@ def generate_parameter_set(args, io_params):
     return ParameterSet(io_params, run_params, chem_params)
 
 
-def generate_output(mol_supply_json, dict_out_peptide_tools_master, params):
-    dict_out_pIChemiSt = dict_out_peptide_tools_master["output_pIChemiSt"]
-    dict_out_extn_coeff = dict_out_peptide_tools_master["output_extn_coeff"]
-    dict_out_pI_fasta = dict_out_peptide_tools_master["output_pI_fasta"]
-    if params.io.output_filename == None:  # output JSON
-        print(json.dumps(dict_out_peptide_tools_master, indent=2))
-        exit()
+def generate_output(mol_supply_json, dict_out, params):
+    dict_out_pIChemiSt = dict_out["output_pIChemiSt"]
+    dict_out_extn_coeff = dict_out["output_extn_coeff"]
+    dict_out_pI_fasta = dict_out["output_pI_fasta"]
+    if not params.io.output_filename:
+        _print_to_console_and_exit(dict_out)
 
     if params.io.input_file_extension != ".fasta":
         mol_list = []
@@ -273,3 +235,8 @@ def generate_output(mol_supply_json, dict_out_peptide_tools_master, params):
         + str(len(mol_supply_json.keys())),
     }
     print(json.dumps(dict_file))
+
+
+def _print_to_console_and_exit(dict_out):
+    print(json.dumps(dict_out, indent=2))
+    exit()

@@ -28,7 +28,7 @@ def test_smiles_stdin_input_1():
     )
     # print(" ".join(test_args))
     result = json.loads(subprocess_output.stdout)
-    with open(f"{examples_dir}/payload_1_out.json", "r") as file:
+    with open(f"{examples_dir}/payload_1_out.json.stdout", "r") as file:
         expected = json.load(file)
     assert result == expected
 
@@ -42,7 +42,7 @@ def test_smiles_stdin_input_1_fragments():
     )
     # print(" ".join(test_args))
     result = json.loads(subprocess_output.stdout)
-    with open(f"{examples_dir}/payload_1_out_fragments.json", "r") as file:
+    with open(f"{examples_dir}/payload_1_out_fragments.json.stdout", "r") as file:
         expected = json.load(file)
     assert result == expected
 
@@ -116,7 +116,7 @@ def test_smiles_stdin_input_3():
     )
     # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
-    with open(f"{examples_dir}/payload_3_out.json", "r") as file:
+    with open(f"{examples_dir}/payload_3_out.json.stdout", "r") as file:
         expected = json.load(file)
     assert result == expected
 
