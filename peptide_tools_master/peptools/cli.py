@@ -1,8 +1,6 @@
 #!/usr/bin/python
 import argparse
 
-from peptools.io import configure_chemical_parameters
-from peptools.io import configure_runtime_parameters
 from peptools.io import generate_input
 from peptools.io import generate_output
 from peptools.io import generate_parameter_set
@@ -19,7 +17,7 @@ def arg_parser():
         "-i",
         "--input",
         dest="input",
-        help="Input filepath (or SMILES string or FASTA)",
+        help="Input filepath (or SMILES string or FASTA).",
         required=True,
     )
 
@@ -58,7 +56,7 @@ def arg_parser():
         "-p",
         action="store",
         dest="NPhosphateGroups",
-        help="Number of phosphorilated residues. Phosphorilated residues must be denoted as X in the sequence. default = 0",
+        help="Number of phosphorilated residues. These should be denoted as X in the sequence.",
         default=0,
         type=int,
     )
@@ -66,7 +64,7 @@ def arg_parser():
         "-l",
         action="store",
         dest="NAlkylLysGroups",
-        help="Number of monoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
+        help="Number of monoalkylated Lys residues. These should be denoted as X in the sequence.",
         default=0,
         type=int,
     )
@@ -74,21 +72,21 @@ def arg_parser():
         "-d",
         action="store",
         dest="NDiAlkylLysGroups",
-        help="Number of dinoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
+        help="Number of dinoalkylated Lys residues. These should be denoted as X in the sequence.",
         default=0,
         type=int,
     )
-
     args = parser.parse_args()
     return args
 
 
-# def main(input_data):
+def main(args):
+    mol_supply_json, io_params = generate_input(args.input)
+    params = generate_parameter_set(args, io_params)
+    dict_out = run_peptide_master(mol_supply_json, params)
+    generate_output(mol_supply_json, dict_out, params)
 
 
 if __name__ == "__main__":
     args = arg_parser()
-    mol_supply_json, io_params = generate_input(args.input)
-    params = generate_parameter_set(args, io_params)
-    dict_out_peptide_tools_master = run_peptide_master(mol_supply_json, params)
-    generate_output(mol_supply_json, dict_out_peptide_tools_master, params)
+    main(args)

@@ -4,12 +4,12 @@ from peptools.wrapper.pi import calculate_pifasta
 
 
 def run_peptide_master(mol_supply_json, params):
-    dict_out_extn_coeff = calculate_extinction_coefficient(mol_supply_json, params.run)
-    dict_out_pI_fasta = calculate_pifasta(mol_supply_json, params.run, params.chem)
-    dict_out_pIChemiSt = calculate_pichemist(mol_supply_json, params.run, params.io)
-    dict_out_peptide_tools_master = {
-        "output_extn_coeff": dict_out_extn_coeff,
-        "output_pI_fasta": dict_out_pI_fasta,
-        "output_pIChemiSt": dict_out_pIChemiSt,
+    ext_coeff_dict = calculate_extinction_coefficient(mol_supply_json, params.run)
+    pifasta_dict = calculate_pifasta(mol_supply_json, params.run, params.chem)
+    pichemist_dict = calculate_pichemist(mol_supply_json, params.run, params.io)
+    dict_out = {
+        "output_extn_coeff": ext_coeff_dict,
+        "output_pI_fasta": pifasta_dict,
+        "output_pIChemiSt": pichemist_dict,
     }
-    return dict_out_peptide_tools_master
+    return dict_out

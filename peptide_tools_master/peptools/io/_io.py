@@ -10,6 +10,7 @@ from peptools.io.input import ACCEPTED_FILE_FORMATS
 from peptools.io.input import InputFileExtension
 from peptools.io.multi import is_input_multiline
 from peptools.io.multi import multiline_input_to_filepath
+from peptools.io.output import OutputFileExtension
 from peptools.io.params import ChemicalParameters
 from peptools.io.params import IOParameters
 from peptools.io.params import ParameterSet
@@ -92,11 +93,12 @@ def read_file(input_data, params):
 
 
 def _configure_output_file(params):
-    params.output_file_extension = ".csv"
+    OUTPUT_SUFFIX = "_OUTPUT"
+    params.output_file_extension = OutputFileExtension.CSV
     if params.input_file_extension == InputFileExtension.SDF:
-        params.output_file_extension = ".sdf"
+        params.output_file_extension = OutputFileExtension.SDF
     params.output_filename = (
-        f"{params.filepath_prefix}_OUTPUT{params.output_file_extension}"
+        f"{params.filepath_prefix}{OUTPUT_SUFFIX}{params.output_file_extension}"
     )
 
 
@@ -138,8 +140,8 @@ def generate_parameter_set(args, io_params):
 
 def generate_output(mol_supply_json, dict_out, params):
     dict_out_pIChemiSt = dict_out["output_pIChemiSt"]
-    dict_out_extn_coeff = dict_out["output_extn_coeff"]
-    dict_out_pI_fasta = dict_out["output_pI_fasta"]
+    ext_coeff_dict = dict_out["output_extn_coeff"]
+    pifasta_dict = dict_out["output_pI_fasta"]
     if not params.io.output_filename:
         _print_to_console_and_exit(dict_out)
 
@@ -163,11 +165,11 @@ def generate_output(mol_supply_json, dict_out, params):
                 )
 
             if params.run.calc_extn_coeff:
-                mol.SetProp("mol_name", dict_out_extn_coeff[mi]["mol_name"])
-                mol.SetProp("Sequence(FASTA)", dict_out_extn_coeff[mi]["fasta"])
-                mol.SetProp("e205(nm)", "%i" % dict_out_extn_coeff[mi]["e205"])
-                mol.SetProp("e214(nm)", "%i" % dict_out_extn_coeff[mi]["e214"])
-                mol.SetProp("e280(nm)", "%i" % dict_out_extn_coeff[mi]["e280"])
+                mol.SetProp("mol_name", ext_coeff_dict[mi]["mol_name"])
+                mol.SetProp("Sequence(FASTA)", ext_coeff_dict[mi]["fasta"])
+                mol.SetProp("e205(nm)", "%i" % ext_coeff_dict[mi]["e205"])
+                mol.SetProp("e214(nm)", "%i" % ext_coeff_dict[mi]["e214"])
+                mol.SetProp("e280(nm)", "%i" % ext_coeff_dict[mi]["e280"])
 
             mol_list.append(mol)
 
@@ -194,40 +196,10 @@ def generate_output(mol_supply_json, dict_out, params):
                     csv_w.writerow(row)
 
     if params.io.input_file_extension == ".fasta":
-        dict_list = []
-        for mi in mol_supply_json.keys():
-            fasta = mol_supply_json[mi]["fasta"]
-
-            D = {}
-
-            if params.run.calc_pI_fasta:
-                D["pI mean"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["pI mean"]
-                D["pI std"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["std"]
-
-            if params.run.calc_extn_coeff:
-                D["mol_name"] = dict_out_extn_coeff[mi]["mol_name"]
-                D["Sequence(FASTA)"] = dict_out_extn_coeff[mi]["fasta"]
-                D["e205(nm)"] = "%i" % dict_out_extn_coeff[mi]["e205"]
-                D["e214(nm)"] = "%i" % dict_out_extn_coeff[mi]["e214"]
-                D["e280(nm)"] = "%i" % dict_out_extn_coeff[mi]["e280"]
-
-            dict_list.append(D)
-
-        if params.io.output_file_extension == ".csv":
-            with open(params.io.output_filename, "w") as csv_f:
-                csv_w = csv.writer(csv_f)
-                count = 0
-                for props in dict_list:
-
-                    count += 1
-                    if count == 1:
-                        header = list(props.keys())
-                        csv_w.writerow(header)
-
-                    row = []
-                    for p in header:
-                        row += [props[p]]
-                    csv_w.writerow(row)
+        if not params.io.output_file_extension == ".csv":
+            raise FileFormatException("Only CSV output is supported for FASTA input.")
+        dict_list = _generate_fasta_output(mol_supply_json, dict_out, params)
+        dict_list_to_file(dict_list, params.io.output_filename)
 
     dict_file = {
         "outputFile": params.io.output_filename,
@@ -240,3 +212,42 @@ def generate_output(mol_supply_json, dict_out, params):
 def _print_to_console_and_exit(dict_out):
     print(json.dumps(dict_out, indent=2))
     exit()
+
+
+def _generate_fasta_output(mol_supply_json, dict_out, params):
+    ext_coeff_dict = dict_out["output_extn_coeff"]
+    pifasta_dict = dict_out["output_pI_fasta"]
+
+    dict_list = list()
+    for mi in mol_supply_json.keys():
+        res = dict()
+        fasta = mol_supply_json[mi]["fasta"]
+
+        if params.run.calc_pI_fasta:
+            res["pI mean"] = "%.2f" % pifasta_dict[mi]["pI"]["pI mean"]
+            res["pI std"] = "%.2f" % pifasta_dict[mi]["pI"]["std"]
+
+        if params.run.calc_extn_coeff:
+            res["mol_name"] = ext_coeff_dict[mi]["mol_name"]
+            res["Sequence(FASTA)"] = ext_coeff_dict[mi]["fasta"]
+            res["e205(nm)"] = "%i" % ext_coeff_dict[mi]["e205"]
+            res["e214(nm)"] = "%i" % ext_coeff_dict[mi]["e214"]
+            res["e280(nm)"] = "%i" % ext_coeff_dict[mi]["e280"]
+        dict_list.append(res)
+    return dict_list
+
+
+def dict_list_to_file(dict_list, filename):
+    with open(filename, "w") as file:
+        count = 0
+        writer = csv.writer(file)
+        for attributes in dict_list:
+            count += 1
+            if count == 1:
+                header = list(attributes.keys())
+                writer.writerow(header)
+
+            row = []
+            for h in header:
+                row += [attributes[h]]
+            writer.writerow(row)
