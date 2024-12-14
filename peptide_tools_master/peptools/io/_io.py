@@ -19,7 +19,7 @@ class IOException(Exception):
     pass
 
 
-class RuntimeParameters:
+class IOParameters:
     def __init__(self):
         self.mol_name = "none"
         self.filepath = None
@@ -30,7 +30,12 @@ class RuntimeParameters:
         self.output_file_extension = None
         self.output_dir = None
         self.delete_temp_file = False
+
+
+class RuntimeParameters:
+    def __init__(self):
         self.generate_plots = True
+        self.print_fragment_pkas = False
         self.calc_extn_coeff = False
         self.calc_pIChemiSt = False
         self.calc_pI_fasta = False
@@ -54,7 +59,7 @@ class ChemicalParameters:
 
 def generate_input(input_data):
     input_data = input_data.encode("utf-8").decode("unicode_escape")
-    params = RuntimeParameters()
+    params = IOParameters()
     mol_supply_json = dict()
     input_data = _polish_input(input_data, params)
 
@@ -124,16 +129,23 @@ def read_file(input_data, params):
     return mol_supply_json
 
 
-def configure_runtime_parameters(params):
+def configure_runtime_parameters(args, io_params):
+    params = RuntimeParameters()
     params.generate_plot = False
-    if params.input_file_extension in [InputFileExtension.SMI, InputFileExtension.SDF]:
+    params.print_fragment_pkas = bool(args.print_fragment_pkas)
+    if io_params.input_file_extension in [
+        None,
+        InputFileExtension.SMI,
+        InputFileExtension.SDF,
+    ]:  # sic - None is assumed to be SMI from STDIN
         params.calc_extn_coeff = True
         params.calc_pIChemiSt = True
         params.calc_pI_fasta = False
-    elif params.input_file_extension == InputFileExtension.FASTA:
+    elif io_params.input_file_extension == InputFileExtension.FASTA:
         params.calc_extn_coeff = True
         params.calc_pI_fasta = True
         params.calc_pIChemiSt = False
+    return params
 
 
 def configure_chemical_parameters(args):
