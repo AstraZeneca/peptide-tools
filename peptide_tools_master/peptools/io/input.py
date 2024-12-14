@@ -1,4 +1,4 @@
-from peptools.chem import get_fasta_from_mol
+from smi2scrambledfasta import get_scrambled_fasta_from_mol
 
 
 class InputFileExtension:
@@ -38,5 +38,5 @@ class InputFactory:
         if fasta is not None:
             input_data[InputAttribute.FASTA] = fasta
         else:
-            input_data[InputAttribute.FASTA] = get_fasta_from_mol(mol)
+            input_data[InputAttribute.FASTA] = get_scrambled_fasta_from_mol(mol)
         return input_data

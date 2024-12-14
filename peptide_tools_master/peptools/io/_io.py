@@ -2,7 +2,6 @@ import csv
 import json
 import os
 
-from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file

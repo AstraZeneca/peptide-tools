@@ -1,6 +1,5 @@
 import textwrap
 
-from peptools.chem import get_fasta_from_mol
 from peptools.io.fasta import _is_input_fasta
 from peptools.io.input import InputAttribute
 from peptools.io.input import InputFactory
