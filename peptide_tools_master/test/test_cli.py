@@ -20,7 +20,7 @@ cli_base_args = ["python", f"{peptide_tools_dir}/peptide_tools_master.py"]
 
 
 def test_smiles_stdin_input_1():
-    """Validity of console JSON output."""
+    """Validity of console JSON output for SMI input."""
     smiles = "C[C@@H](C(=O)N[C@@H](CCC(=O)O)C(=O)O)NC(=O)[C@H](C(C)C)NC(=O)[C@H](Cc1ccc(cc1)O)NC(=O)[C@@H]2CCCN2C(=O)[C@H](Cc3ccccc3)N"  # noqa: E501
     test_args = cli_base_args + ["--input", smiles]
     subprocess_output = subprocess.run(
@@ -148,7 +148,7 @@ def test_smiles_stdin_input_multiline_1():
 
 
 def test_fasta_stdin_input_1():
-    """Validity of CSV file output for multiple SMILES."""
+    """Validity of CSV file output for FASTA format."""
     fasta = textwrap.dedent(
         """\
         >sp|P43220|GLP1R_HUMAN Glucagon-like peptide 1 receptor OS=Homo sapiens OX=9606 GN=GLP1R PE=1 SV=2
@@ -202,6 +202,19 @@ def test_sdf_file_input_1():
         ), "Expected output file content does not match"
     finally:
         remove_file_list(temporary_file_list)
+
+
+def test_fasta_stdin_input_2():
+    """Validity of console JSON output for FASTA input."""
+    test_args = cli_base_args + ["--input", "MAGAP"]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    with open(f"{examples_dir}/payload_6_out.json.stdout", "r") as file:
+        expected = json.load(file)
+    assert result == expected
 
 
 def test_empty_input():

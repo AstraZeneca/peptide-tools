@@ -2,7 +2,7 @@ import csv
 import json
 import os
 
-from peptools.io.fasta import _is_input_fasta
+from peptools.io.fasta import _is_input_fasta_sequence
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file
 from peptools.io.file import FileFormatException
@@ -43,8 +43,8 @@ def generate_input(input_data):
     if os.path.exists(input_data):
         mol_supply_json = read_file(input_data, params)
 
-    # Input is FASTA
-    elif _is_input_fasta(input_data):
+    # Input is FASTA sequence
+    elif _is_input_fasta_sequence(input_data):
         mol_supply_json = configure_fasta_input(input_data, params)
 
     # Input is SMILES
@@ -107,10 +107,9 @@ def configure_runtime_parameters(args, input_file_extension):
     params.generate_plot = False
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
     if input_file_extension in [
-        None,
         InputFileExtension.SMI,
         InputFileExtension.SDF,
-    ]:  # sic - None is assumed to be SMI from STDIN
+    ]:
         params.calc_extn_coeff = True
         params.calc_pIChemiSt = True
         params.calc_pI_fasta = False

@@ -24,9 +24,7 @@ def configure_smi_input(smiles_str, params):
         smiles_str = smiles_elements[0]
         params.mol_name = smiles_elements[1]
 
-    params.calc_extn_coeff = True
-    params.calc_pI_fasta = False
-    params.calc_pIChemiSt = True
+    params.input_file_extension = InputFileExtension.SMI
     mol = Chem.MolFromSmiles(smiles_str)
     return {1: InputFactory.new(mol, params.mol_name)}
 

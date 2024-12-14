@@ -14,7 +14,13 @@ def _is_input_fasta(input_data):
     return False
 
 
+def _is_input_fasta_sequence(input_data):
+    # if only alpha characters are present, it's a sequence
+    return input_data.isalpha()
+
+
 def configure_fasta_input(fasta_str, params):
+    params.input_file_extension = InputFileExtension.FASTA
     return {1: InputFactory.new(None, params.mol_name, fasta_str)}
 
 
