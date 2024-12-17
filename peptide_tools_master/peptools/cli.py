@@ -17,9 +17,11 @@ from peptools.io import generate_input
 from pichemist.api import pichemist_from_dict
 from rdkit import Chem
 
+from molecular_descriptors import calc_molecular_descriptors_from_dict
 from extn_coeff_fasta import calc_extn_coeff
-from pI_fasta import calc_pI_fasta
+#from pI_fasta import calc_pI_fasta
 
+from liabilities import calc_liabilities_from_dict
 
 currentdir = os.getcwd()
 
@@ -37,7 +39,6 @@ def arg_parser():
         required=True,
     )
 
-    ### pIChemiSt.py keys
     parser.add_argument(
         "--print_fragment_pkas",
         action="store_true",
@@ -53,45 +54,45 @@ def arg_parser():
         default=False,
     )
 
-    ### pI_fasta.py keys
+    ### keys for fasta input
     parser.add_argument(
-        "--ionized_Cterm",
-        dest="ionized_Cterm",
+        "--ionizable_cterm",
+        dest="ionizable_cterm",
         action="store_true",
-        help="is C-terminus ionized [COO-]?",
-        default=True,
+        help="is C-terminus ionizable [COO-]?",
+        default=False,
     )
     parser.add_argument(
-        "--ionized_Nterm",
-        dest="ionized_Nterm",
+        "--ionizable_nterm",
+        dest="ionizable_nterm",
         action="store_true",
-        help="is N-terminus ionized [N+]?",
-        default=True,
+        help="is N-terminus ionizable [N+]?",
+        default=False,
     )
-    parser.add_argument(
-        "-p",
-        action="store",
-        dest="NPhosphateGroups",
-        help="Number of phosphorilated residues. Phosphorilated residues must be denoted as X in the sequence. default = 0",
-        default=0,
-        type=int,
-    )
-    parser.add_argument(
-        "-l",
-        action="store",
-        dest="NAlkylLysGroups",
-        help="Number of monoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
-        default=0,
-        type=int,
-    )
-    parser.add_argument(
-        "-d",
-        action="store",
-        dest="NDiAlkylLysGroups",
-        help="Number of dinoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
-        default=0,
-        type=int,
-    )
+    # parser.add_argument(
+    #     "-p",
+    #     action="store",
+    #     dest="NPhosphateGroups",
+    #     help="Number of phosphorilated residues. Phosphorilated residues must be denoted as X in the sequence. default = 0",
+    #     default=0,
+    #     type=int,
+    # )
+    # parser.add_argument(
+    #     "-l",
+    #     action="store",
+    #     dest="NAlkylLysGroups",
+    #     help="Number of monoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
+    #     default=0,
+    #     type=int,
+    # )
+    # parser.add_argument(
+    #     "-d",
+    #     action="store",
+    #     dest="NDiAlkylLysGroups",
+    #     help="Number of dinoalkylated Lys residues. These residues should be denoted as X in the sequence. default = 0",
+    #     default=0,
+    #     type=int,
+    # )
 
     args = parser.parse_args()
     return args
@@ -104,6 +105,17 @@ if __name__ == "__main__":
     mol_supply_json, params = generate_input(input_data)
 
     # Run calcs
+
+    dict_out_molecular_descriptors = calc_molecular_descriptors_from_dict(
+        mol_supply_json,
+        input_type=params.input_type,        
+    )
+
+    dict_out_liabilities = calc_liabilities_from_dict(
+        mol_supply_json,
+        input_type=params.input_type,        
+    )
+
     dict_out_extn_coeff_fasta = {}
     if params.calc_extn_coeff:
         extn_coeff_options = {
@@ -116,44 +128,44 @@ if __name__ == "__main__":
         }
         dict_out_extn_coeff = calc_extn_coeff(extn_coeff_options)
 
-    dict_out_pI_fasta = {}
-    if params.calc_pI_fasta:
-        # prepare pI_fasta predictor
+    # dict_out_pI_fasta = {}
+    # if params.calc_pI_fasta:
+    #     # prepare pI_fasta predictor
 
-        if not args.ionized_Cterm:
-            IonizableTerminiOfCTermRes = ""
-        else:
-            IonizableTerminiOfCTermRes = "_"
+    #     if not args.ionized_Cterm:
+    #         IonizableTerminiOfCTermRes = ""
+    #     else:
+    #         IonizableTerminiOfCTermRes = "_"
 
-        if not args.ionized_Nterm:
-            IonizableTerminiOfNTermRes = ""
-        else:
-            IonizableTerminiOfNTermRes = "_"
+    #     if not args.ionized_Nterm:
+    #         IonizableTerminiOfNTermRes = ""
+    #     else:
+    #         IonizableTerminiOfNTermRes = "_"
 
-        pI_fasta_options = {
-            "seq": "",
-            "inputDict": mol_supply_json,
-            "inputJSON": "",
-            "inputFile": "",
-            "outputFile": "",
-            "tol": 0.001,
-            "CTermRes": "_",
-            "NTermRes": "_",
-            "IonizableTerminiOfCTermRes": IonizableTerminiOfCTermRes,
-            "IonizableTerminiOfNTermRes": IonizableTerminiOfNTermRes,
-            "lCyclic": False,
-            "NPhosphateGroups": args.NPhosphateGroups,
-            "NAlkylLysGroups": args.NAlkylLysGroups,
-            "NDiAlkylLysGroups": args.NDiAlkylLysGroups,
-            "lPrintpKa": False,
-            "lPlot": params.generate_plots,
-            "lIgnoreC": False,
-            "plot_filename": "OUT_titration_curve.png",
-            "l_json": True,
-            "pka_set_list": "",
-        }
+    #     pI_fasta_options = {
+    #         "seq": "",
+    #         "inputDict": mol_supply_json,
+    #         "inputJSON": "",
+    #         "inputFile": "",
+    #         "outputFile": "",
+    #         "tol": 0.001,
+    #         "CTermRes": "_",
+    #         "NTermRes": "_",
+    #         "IonizableTerminiOfCTermRes": IonizableTerminiOfCTermRes,
+    #         "IonizableTerminiOfNTermRes": IonizableTerminiOfNTermRes,
+    #         "lCyclic": False,
+    #         "NPhosphateGroups": args.NPhosphateGroups,
+    #         "NAlkylLysGroups": args.NAlkylLysGroups,
+    #         "NDiAlkylLysGroups": args.NDiAlkylLysGroups,
+    #         "lPrintpKa": False,
+    #         "lPlot": params.generate_plots,
+    #         "lIgnoreC": False,
+    #         "plot_filename": "OUT_titration_curve.png",
+    #         "l_json": True,
+    #         "pka_set_list": "",
+    #     }
 
-        dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
+    #     dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
 
     dict_out_pIChemiSt = {}
     if params.calc_pIChemiSt:
@@ -167,12 +179,17 @@ if __name__ == "__main__":
             ph_q_curve_file_prefix=plot_filename_prefix,
             plot_ph_q_curve=params.generate_plots,
             print_fragments=args.print_fragment_pkas,
+            input_type=params.input_type,
+            ionizable_nterm=args.ionizable_nterm,
+            ionizable_cterm=args.ionizable_cterm,
         )
 
     dict_out_peptide_tools_master = {
+        "output_molecular_descriptors":dict_out_molecular_descriptors,
         "output_extn_coeff": dict_out_extn_coeff,
-        "output_pI_fasta": dict_out_pI_fasta,
+        #"output_pI_fasta": dict_out_pI_fasta,
         "output_pIChemiSt": dict_out_pIChemiSt,
+        "output_liabilities":dict_out_liabilities,
     }
 
     ### ----------------------------------------------------------------------
@@ -241,9 +258,13 @@ if __name__ == "__main__":
 
                 D = {}
 
-                if params.calc_pI_fasta:
-                    D["pI mean"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["pI mean"]
-                    D["pI std"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["std"]
+                # if params.calc_pI_fasta:
+                #     D["pI mean"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["pI mean"]
+                #     D["pI std"] = "%.2f" % dict_out_pI_fasta[mi]["pI"]["std"]
+
+                if params.calc_pIChemiSt:
+                    D["pI mean"] = "%.2f" % dict_out_pIChemiSt[mi]["pI"]["pI mean"]
+                    D["pI std"] = "%.2f" % dict_out_pIChemiSt[mi]["pI"]["std"]
 
                 if params.calc_extn_coeff:
                     D["mol_name"] = dict_out_extn_coeff[mi]["mol_name"]

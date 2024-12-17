@@ -37,6 +37,8 @@ def generate_input(input_format, input_data, fasta=None):
             InputAttribute.MOL_OBJECT.value: Chem.MolFromFASTA(input_data),
             InputAttribute.MOL_FASTA.value: fasta,
         }
+    if input_format == InputFormat.FASTA_FILE:
+        input_dict = read_fasta_file(input_data)
     return input_dict
 
 
@@ -79,6 +81,38 @@ def read_structure_file(input_filepath):
         uuid += 1
     return dict_input
 
+
+def read_fasta_file(input_filepath):
+    """
+    Reads a file containing FASTA entries using BioPython.
+
+    """
+    #filename, ext = os.path.splitext(inputFile)
+    _, ext = os.path.splitext(input_filepath)
+
+    # Initialize file reader
+    if not ext == ".fasta":
+        raise Exception(
+            '!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. '
+        )
+
+    # use BioPython
+    from Bio import SeqIO
+
+    biosuppl = SeqIO.parse(open(input_filepath), "fasta")
+
+    # Populate input and assign properties
+    dict_input = dict()
+    uuid = 1
+    for biofasta in biosuppl:
+        dict_input[uuid] = {
+            InputAttribute.MOL_NAME.value: biofasta.id,
+            InputAttribute.MOL_OBJECT.value: None,
+            InputAttribute.MOL_FASTA.value: str(biofasta.seq),
+        }
+        uuid += 1
+
+    return dict_input
 
 def _format_results_for_console_output(prop_dict, prop):
     """Prints a formatted output for a dictionary of results."""

@@ -19,7 +19,10 @@ class RuntimeParameters:
         self.generate_plots = True
         self.calc_extn_coeff = False
         self.calc_pIChemiSt = False
-        self.calc_pI_fasta = False
+        self.input_type = "none"
+        self.ionizable_nterm = True
+        self.ionizable_cterm = False
+        #self.calc_pI_fasta = False
 
 
 class FileFormatException(Exception):
@@ -124,16 +127,18 @@ def generate_input(input_data):
         params.generate_plot = False
         params.calc_extn_coeff = True
         params.calc_pIChemiSt = True
-        params.calc_pI_fasta = False
-        if params.input_file_extension == ".fasta":
-            params.calc_pI_fasta = True
-            params.calc_pIChemiSt = False
+        #params.calc_pI_fasta = False
+        #if params.input_file_extension == ".fasta":
+            #params.calc_pI_fasta = True
+        #    params.calc_pIChemiSt = False
 
         # Read file
         if params.input_file_extension in [".sdf", ".smi", ".smiles"]:
             mol_supply_json = read_structure_file(input_data)
+            params.input_type = "structure"
         elif params.input_file_extension == ".fasta":
             mol_supply_json = read_fasta_file(input_data)
+            params.input_type = "fasta"
 
     elif not input_data.isalpha():
         # print("Input recognised as SMILES")
@@ -143,8 +148,9 @@ def generate_input(input_data):
         smi = input_data
         fasta = get_fasta_from_smiles(smi)
         params.calc_extn_coeff = True
-        params.calc_pI_fasta = False
+        #params.calc_pI_fasta = False
         params.calc_pIChemiSt = True
+        params.input_type = "structure"
         mol = Chem.MolFromSmiles(smi)
         mol_supply_json[mol_unique_ID] = {
             "mol_name": params.mol_name,
@@ -160,8 +166,9 @@ def generate_input(input_data):
 
         # smi = ""
         params.calc_extn_coeff = True
-        params.calc_pI_fasta = True
-        params.calc_pIChemiSt = False
+        #params.calc_pI_fasta = True
+        params.calc_pIChemiSt = True
+        params.input_type = "fasta"
         mol_supply_json[mol_unique_ID] = {
             "mol_name": params.mol_name,
             "mol_obj": None,

@@ -1,8 +1,0 @@
-# Dummy fasta file with multiple entries
-
->test1
-PEPTIDE
->test2
-PICHEMIST
->test3
-AAAAAAAAAAA
