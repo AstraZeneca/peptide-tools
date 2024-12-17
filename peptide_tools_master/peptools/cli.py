@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import argparse
+import sys
 
 from peptools.io import generate_input
 from peptools.io import generate_output
@@ -11,8 +12,8 @@ __prog__ = "Peptide Tools Master"
 __doc__ = """TODO"""
 
 
-def arg_parser():
-    parser = argparse.ArgumentParser(description="")
+def arg_parser(args):
+    parser = argparse.ArgumentParser(prog=__prog__, description=__doc__)
     parser.add_argument(
         "-i",
         "--input",
@@ -76,11 +77,14 @@ def arg_parser():
         default=0,
         type=int,
     )
-    args = parser.parse_args()
-    return args
+    if not args:
+        args = ["-h"]
+    return parser.parse_args()
 
 
-def main(args):
+def main():
+    """Entry point for the CLI."""
+    args = arg_parser(sys.argv[1:])
     mol_supply_json, io_params = generate_input(args.input)
     params = generate_parameter_set(args, io_params)
     dict_out = run_peptide_master(mol_supply_json, params)
@@ -88,5 +92,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    args = arg_parser()
-    main(args)
+    main()
