@@ -150,11 +150,10 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
         )
 
         int_tr = dict_mol[OutputAttribute.PI_INTERVAL_THRESHOLD.value]
-        pka_set = dict_mol[OutputAttribute.PKA_SET.value]
 
         print(
             "\npH interval with charge between %4.1f and %4.1f and "
-            "prediction tool: %s" % (-int_tr, int_tr, method)
+            "prediction tool: %s" % (-int_tr, int_tr, method.value)
         )
         print(
             "pI interval: %4.1f - %4.1f"
@@ -165,47 +164,30 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
         )
 
         if print_fragments:
-            base_pkas_fasta = dict_mol[OutputAttribute.BASE_PKA_FASTA.value]
-            acid_pkas_fasta = dict_mol[OutputAttribute.ACID_PKA_FASTA.value]
-            base_pkas_calc = dict_mol[OutputAttribute.BASE_PKA_CALC.value]
-            acid_pkas_calc = dict_mol[OutputAttribute.ACID_PKA_CALC.value]
-            constant_Qs_calc = dict_mol[OutputAttribute.CONSTANT_QS.value]
-
-            # Merge fasta and calculated pKas
-            base_pkas = base_pkas_fasta[pka_set] + base_pkas_calc
-            acid_pkas = acid_pkas_fasta[pka_set] + acid_pkas_calc
-            all_base_pkas = list()
-            acid_pkas = list()
-
-            # NOTE: Diacids prints disabled
-            # diacid_pkas_fasta = dict_mol["diacid_pkas_fasta"]
-            # diacid_pkas_calc = dict_mol["diacid_pkas_calc"]
-            # diacid_pkas = diacid_pkas_fasta[pka_set] + diacid_pkas_calc
-            # diacid_pkas = list()
-
-            # Zip values and structures
-            all_base_pkas, all_base_pkas_smi = list(), list()
-            acid_pkas, all_acid_pkas_smi = list(), list()
-            if len(base_pkas) != 0:
-                all_base_pkas, all_base_pkas_smi = zip(*base_pkas)
-            if len(acid_pkas) != 0:
-                acid_pkas, all_acid_pkas_smi = zip(*acid_pkas)
+            frag_base_pkas_fasta = dict_mol[OutputAttribute.FRAG_BASE_PKA_FASTA.value]
+            frag_acid_pkas_fasta = dict_mol[OutputAttribute.FRAG_ACID_PKA_FASTA.value]
+            frag_base_pkas_calc = dict_mol[OutputAttribute.FRAG_BASE_PKA_CALC.value]
+            frag_acid_pkas_calc = dict_mol[OutputAttribute.FRAG_ACID_PKA_CALC.value]
+            frag_constant_Qs_calc = dict_mol[OutputAttribute.FRAG_CONSTANT_QS.value]
 
             # Print the results
-            print("\nList of calculated BASE pKa values with their fragments")
-            for pkas, smi in zip(all_base_pkas, all_base_pkas_smi):
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles or AA, base pKa : %-15s %s" % (smi, " ".join(s_pkas)))
-            print("\nList of calculated ACID pKa values with their fragments")
-            for pkas, smi in zip(acid_pkas, all_acid_pkas_smi):
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles or AA, acid pKa : %-15s %s" % (smi, " ".join(s_pkas)))
-            print("\nList of constantly ionized fragments")
-            for v in constant_Qs_calc:
-                pkas = v[0]
-                smi = v[1]
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles, charge : %-15s %s" % (smi, " ".join(s_pkas)))
+            print("\nList of calculated pKa values or contant charges")
+            print("{:15s} {:5s}  {:16s}  {:s}".format("Type", "Count", "pKa_or_contant_Q","Fragment"))
+
+            for _, frag in frag_base_pkas_fasta.items():
+                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+
+            for _, frag in frag_base_pkas_calc.items():
+                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+
+            for _, frag in frag_acid_pkas_fasta.items():
+                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+
+            for _, frag in frag_acid_pkas_calc.items():
+                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+
+            for _, frag in frag_constant_Qs_calc.items():
+                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
 
 
 def output_results(

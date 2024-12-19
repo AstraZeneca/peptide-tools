@@ -64,6 +64,13 @@ def arg_parser(args):
         help="Print the fragments with corresponding " "pKas used in pI calcution.",
     )
     parser.add_argument(
+        "--generate_fragment_base64_images",
+        default=False,
+        action="store_true",
+        dest="generate_fragment_base64_images",
+        help="Generate 2D depiction of the frgament smiles in base64 format.",
+    )
+    parser.add_argument(
         "--ionizable_nterm",
         default=True,
         action="store_true",
@@ -109,6 +116,7 @@ def run_pichemist(args):
         input_type=input_format,
         ionizable_nterm=args.ionizable_nterm,
         ionizable_cterm=args.ionizable_cterm,
+        generate_fragment_base64_images=args.generate_fragment_base64_images
     )
     output_results(
         input_dict,

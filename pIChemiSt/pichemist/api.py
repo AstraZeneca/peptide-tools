@@ -80,6 +80,7 @@ def calc_frags_for_output_fasta(ionization_type, pkas_fasta):
             "frag": k,
             "count": D_count[k],
             "pka": sum(v) / len(v),
+            "base64_image": ""
         }
 
     return frag_pkas_fasta
@@ -146,22 +147,7 @@ def smiles_to_base64(smiles):
     return base64_image
 
 
-def calc_frags_for_output_calc(ionization_type, pkas_calc):
-
-    # D_pka = dict()
-    # D_count = dict()
-    # for k2,v2 in pkas_calc:
-    #     pka = v2[0]
-    #     smi = v2[1]
-    #     D_pka[smi].append(pka)
-    #     if smi in D_count.keys():
-    #         D_count[smi]+=1
-    #     else:
-    #         D_count[smi]=1
-
-    # frag_pkas_calc = dict()
-    # for k,v in D_pka.items():
-    #     frag_pkas_calc[k] = {'type':ionization_type,'frag':k, 'count':D_count[k], 'pka':sum(v) / len(v)}
+def calc_frags_for_output_calc(ionization_type, pkas_calc, generate_fragment_base64_images=False):
 
     # TODO need to handle cases with multiple ionization in the same fragment. Apparently could only be done
     # TODO if the index of fragment or alike is stored in pka_calc dictionary. Requires, some code refurbishment.
@@ -172,18 +158,24 @@ def calc_frags_for_output_calc(ionization_type, pkas_calc):
         frg_idx += 1
         pka = v[0]
         smi = v[1]
-        # frag_pkas_calc[frg_idx] = {'type':ionization_type,'frag':smi, 'count':1, 'pka':pka}
-
+        
+        # Smiles to image - not in use
         #image_path = "fragment_" + ionization_type + "_" + str(frg_idx) + ".png"
         #image_size = (500, 500)  # Set the desired image size
         #smiles_to_image(smi, image_path, image_size)
-        base64_image = smiles_to_base64(smi)
+        
+        # base64 image
+        if generate_fragment_base64_images:
+            base64_image = smiles_to_base64(smi)
+        else:
+            base64_image = ""
 
         frag_pkas_calc[frg_idx] = {
             "type": ionization_type,
-            "frag": base64_image,
+            "frag": smi,
             "count": 1,
             "pka": pka,
+            "base64_image": base64_image
         }
 
     return frag_pkas_calc
@@ -197,6 +189,7 @@ def compile_frags_pkas_for_output(
     acid_pkas_calc,
     diacid_pkas_calc,
     net_qs_and_frags,
+    generate_fragment_base64_images=False,
     ):
     """
     Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
@@ -205,9 +198,9 @@ def compile_frags_pkas_for_output(
     """
     frag_acid_pkas_fasta = calc_frags_for_output_fasta("acid", acid_pkas_fasta)
     frag_base_pkas_fasta = calc_frags_for_output_fasta("base", base_pkas_fasta)
-    frag_acid_pkas_calc = calc_frags_for_output_calc("acid", acid_pkas_calc)
-    frag_base_pkas_calc = calc_frags_for_output_calc("base", base_pkas_calc)
-    frag_Qs_calc = calc_frags_for_output_calc("constant charge", net_qs_and_frags)
+    frag_acid_pkas_calc = calc_frags_for_output_calc("acid", acid_pkas_calc, generate_fragment_base64_images=generate_fragment_base64_images)
+    frag_base_pkas_calc = calc_frags_for_output_calc("base", base_pkas_calc, generate_fragment_base64_images=generate_fragment_base64_images)
+    frag_Qs_calc = calc_frags_for_output_calc("constant charge", net_qs_and_frags, generate_fragment_base64_images=generate_fragment_base64_images)
 
     # TODO: Diacid dictionaries are not used, they are
     # deprecated and should be removed from the code
@@ -294,6 +287,7 @@ def pichemist_from_dict(
     input_type="structure",
     ionizable_nterm=True,
     ionizable_cterm=False,
+    generate_fragment_base64_images=False,
 ):
     """Runs the full logic for a given input dictionary."""
     dict_output = dict()
@@ -349,6 +343,7 @@ def pichemist_from_dict(
             acid_pkas_calc,
             diacid_pkas_calc,
             net_qs_and_frags,
+            generate_fragment_base64_images=generate_fragment_base64_images,
         )
 
         # Calculate the curves
@@ -454,6 +449,7 @@ def pichemist_from_dict(
             acid_pkas_calc,
             diacid_pkas_calc,
             net_qs_and_frags,
+            generate_fragment_base64_images=generate_fragment_base64_images,
         )
 
         # Calculate the curves

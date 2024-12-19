@@ -46,6 +46,15 @@ def arg_parser():
         help="Print the fragments with corresponding pKas used in pI calcution.",
         default=False,
     )
+
+    parser.add_argument(
+        "--generate_fragment_base64_images",
+        default=False,
+        action="store_true",
+        dest="generate_fragment_base64_images",
+        help="Generate 2D depiction of the frgament smiles in base64 format.",
+    )
+
     parser.add_argument(
         "--print_pka_set",
         action="store_true",
@@ -103,6 +112,9 @@ if __name__ == "__main__":
     # Generate input and parameters
     input_data = args.input
     mol_supply_json, params = generate_input(input_data)
+
+    # TODO: need to introduce logic. if the output is a file then 
+    # disable --print_fragment_pkas, --generate_fragment_base64_images
 
     # Run calcs
 
@@ -182,6 +194,7 @@ if __name__ == "__main__":
             input_type=params.input_type,
             ionizable_nterm=args.ionizable_nterm,
             ionizable_cterm=args.ionizable_cterm,
+            generate_fragment_base64_images=args.generate_fragment_base64_images,
         )
 
     dict_out_peptide_tools_master = {
