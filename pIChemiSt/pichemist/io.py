@@ -20,7 +20,7 @@ class IOException(Exception):
     pass
 
 
-def generate_input(input_format, input_data, fasta=None):
+def generate_input(input_format, input_data):
     """Produces an input dictionary compatible with the API."""
     input_dict = dict()
     if input_format == InputFormat.SMILES_FILE or input_format == InputFormat.SD_FILE:
@@ -29,13 +29,13 @@ def generate_input(input_format, input_data, fasta=None):
         input_dict[1] = {
             InputAttribute.MOL_NAME.value: input_data,
             InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input_data),
-            InputAttribute.MOL_FASTA.value: fasta,
+            InputAttribute.MOL_FASTA.value: None,
         }
     if input_format == InputFormat.FASTA_STDIN:
         input_dict[1] = {
             InputAttribute.MOL_NAME.value: input_data,
             InputAttribute.MOL_OBJECT.value: Chem.MolFromFASTA(input_data),
-            InputAttribute.MOL_FASTA.value: fasta,
+            InputAttribute.MOL_FASTA.value: input_data,
         }
     if input_format == InputFormat.FASTA_FILE:
         input_dict = read_fasta_file(input_data)
@@ -87,7 +87,7 @@ def read_fasta_file(input_filepath):
     Reads a file containing FASTA entries using BioPython.
 
     """
-    #filename, ext = os.path.splitext(inputFile)
+    # filename, ext = os.path.splitext(inputFile)
     _, ext = os.path.splitext(input_filepath)
 
     # Initialize file reader
@@ -113,6 +113,7 @@ def read_fasta_file(input_filepath):
         uuid += 1
 
     return dict_input
+
 
 def _format_results_for_console_output(prop_dict, prop):
     """Prints a formatted output for a dictionary of results."""
@@ -153,7 +154,7 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
 
         print(
             "\npH interval with charge between %4.1f and %4.1f and "
-            "prediction tool: %s" % (-int_tr, int_tr, method.value)
+            "prediction tool: %s" % (-int_tr, int_tr, method)
         )
         print(
             "pI interval: %4.1f - %4.1f"
@@ -171,23 +172,47 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
             frag_constant_Qs_calc = dict_mol[OutputAttribute.FRAG_CONSTANT_QS.value]
 
             # Print the results
-            print("\nList of calculated pKa values or contant charges")
-            print("{:15s} {:5s}  {:16s}  {:s}".format("Type", "Count", "pKa_or_contant_Q","Fragment"))
+            print("\nList of calculated pKa values or constant charges")
+            format_header = "{:15s} {:5s}  {:17s}  {:s}"
+            format_results = "{:15s} {:5d}  {:17.1f}  {:s}"
+            print(
+                format_header.format("Type", "Count", "pKa_or_constant_Q", "Fragment")
+            )
 
             for _, frag in frag_base_pkas_fasta.items():
-                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
             for _, frag in frag_base_pkas_calc.items():
-                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
             for _, frag in frag_acid_pkas_fasta.items():
-                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
             for _, frag in frag_acid_pkas_calc.items():
-                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
             for _, frag in frag_constant_Qs_calc.items():
-                print("{:15s} {:5d}  {:16.1f}  {:s}".format(frag['type'], frag['count'], frag['pka'], frag['frag']))
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
 
 def output_results(

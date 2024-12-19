@@ -33,151 +33,6 @@
         ],
         "pI_interval_threshold": 0.2,
         "pKa_set": "IPC2_peptide",
-        "base_pkas_fasta": {
-            "IPC2_peptide": [
-                [
-                    8.165,
-                    "K"
-                ],
-                [
-                    7.947,
-                    "F_N-term"
-                ]
-            ],
-            "IPC_peptide": [
-                [
-                    10.517,
-                    "K"
-                ],
-                [
-                    9.564,
-                    "F_N-term"
-                ]
-            ],
-            "ProMoST": [
-                [
-                    9.8,
-                    "K"
-                ],
-                [
-                    6.96,
-                    "F_N-term"
-                ]
-            ],
-            "Gauci": [
-                [
-                    10,
-                    "K"
-                ],
-                [
-                    7.5,
-                    "F_N-term"
-                ]
-            ],
-            "Grimsley": [
-                [
-                    10.5,
-                    "K"
-                ],
-                [
-                    7.7,
-                    "F_N-term"
-                ]
-            ],
-            "Thurlkill": [
-                [
-                    10.4,
-                    "K"
-                ],
-                [
-                    8,
-                    "F_N-term"
-                ]
-            ],
-            "Lehninger": [
-                [
-                    10.5,
-                    "K"
-                ],
-                [
-                    9.69,
-                    "F_N-term"
-                ]
-            ],
-            "Toseland": [
-                [
-                    10.45,
-                    "K"
-                ],
-                [
-                    8.71,
-                    "F_N-term"
-                ]
-            ]
-        },
-        "acid_pkas_fasta": {
-            "IPC2_peptide": [
-                [
-                    2.977,
-                    "A_C-term"
-                ]
-            ],
-            "IPC_peptide": [
-                [
-                    2.383,
-                    "A_C-term"
-                ]
-            ],
-            "ProMoST": [
-                [
-                    3.75,
-                    "A_C-term"
-                ]
-            ],
-            "Gauci": [
-                [
-                    3.55,
-                    "A_C-term"
-                ]
-            ],
-            "Grimsley": [
-                [
-                    3.3,
-                    "A_C-term"
-                ]
-            ],
-            "Thurlkill": [
-                [
-                    3.67,
-                    "A_C-term"
-                ]
-            ],
-            "Lehninger": [
-                [
-                    2.34,
-                    "A_C-term"
-                ]
-            ],
-            "Toseland": [
-                [
-                    3.19,
-                    "A_C-term"
-                ]
-            ]
-        },
-        "base_pkas_calc": [
-            [
-                10.4,
-                "CC(=O)N[C@@H](CCCN)C(C)=O"
-            ]
-        ],
-        "acid_pkas_calc": [
-            [
-                3.46,
-                "CC(=O)N[C@@](C)(CC(=O)O)C(C)=O"
-            ]
-        ],
-        "constant_Qs_calc": [],
         "frag_base_pkas_fasta": {
             "1": {
                 "type": "base",
@@ -203,7 +58,7 @@
         "frag_base_pkas_calc": {
             "1": {
                 "type": "base",
-                "frag": "fragment_2.png",
+                "frag": "CC(=O)N[C@@H](CCCN)C(C)=O",
                 "count": 1,
                 "pka": 10.4
             }
@@ -211,7 +66,7 @@
         "frag_acid_pkas_calc": {
             "1": {
                 "type": "acid",
-                "frag": "fragment_1.png",
+                "frag": "CC(=O)N[C@@](C)(CC(=O)O)C(C)=O",
                 "count": 1,
                 "pka": 3.46
             }

@@ -33,7 +33,7 @@ def arg_parser(args):
         dest="input_format",
         help="Format of the input",
         choices=MODELS[InputFormat],
-        default=InputFormat.SMILES_FILE,
+        default=InputFormat.SMILES_FILE.value,
     )
     parser.add_argument("-o", dest="output_file", help="Output filepath", default=None)
     parser.add_argument(
@@ -41,7 +41,7 @@ def arg_parser(args):
         dest="output_format",
         help="Format of the output",
         choices=MODELS[OutputFormat],
-        default=OutputFormat.CONSOLE,
+        default=OutputFormat.CONSOLE.value,
     )
     parser.add_argument(
         "--plot_ph_q_curve",
@@ -82,13 +82,13 @@ def arg_parser(args):
         default=True,
         action="store_true",
         dest="ionizable_cterm",
-        help="For FASTA input only. Set if the C-terminus is not capped (free caroxylic acid)",
+        help="For FASTA input only. Set if the C-terminus is not capped (free carboxylic acid)",
     )
     parser.add_argument(
         "--method",
         choices=MODELS[PKaMethod],
-        default=PKaMethod.PKA_MATCHER,
-        help="Method for the prediction of the " "pKa of unknown fragments",
+        default=PKaMethod.PKA_MATCHER.value,
+        help="Method for the prediction of the pKa of unknown fragments",
     )
     if not args:
         args = ["-h"]
@@ -99,13 +99,17 @@ def run_pichemist(args):
     """High-level wrapper of pIChemiSt."""
     input_dict = generate_input(args.input_format, args.input)
 
-    if args.input_format == "smiles_stdin" or args.input_format == "smiles_file" or args.input_format == "sdf":
-        input_format = "structure" 
+    if (
+        args.input_format == "smiles_stdin"
+        or args.input_format == "smiles_file"
+        or args.input_format == "sdf"
+    ):
+        input_format = "structure"
     elif args.input_format == "fasta_stdin" or args.input_format == "fasta_file":
         input_format = "fasta"
     else:
         input_format = "unknown"
-        raise ValueError("input_format is not known in run_pichemist") 
+        raise ValueError("input_format is not known in run_pichemist")
 
     output_dict = pichemist_from_dict(
         input_dict,
@@ -116,7 +120,7 @@ def run_pichemist(args):
         input_type=input_format,
         ionizable_nterm=args.ionizable_nterm,
         ionizable_cterm=args.ionizable_cterm,
-        generate_fragment_base64_images=args.generate_fragment_base64_images
+        generate_fragment_base64_images=args.generate_fragment_base64_images,
     )
     output_results(
         input_dict,
