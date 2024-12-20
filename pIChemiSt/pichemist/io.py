@@ -87,6 +87,7 @@ def read_fasta_file(input_filepath):
     Reads a file containing FASTA entries using BioPython.
 
     """
+    # TODO: Move into utils
     # filename, ext = os.path.splitext(inputFile)
     _, ext = os.path.splitext(input_filepath)
 
@@ -264,10 +265,6 @@ def _prepare_output_list(input_dict, output_dict):
             "pI mean", "%.2f" % output_dict[mi][OutputAttribute.PI.value]["pI mean"]
         )
         mol.SetProp("pI std", "%.2f" % output_dict[mi][OutputAttribute.PI.value]["std"])
-        # NOTE: String interval is disabled
-        # print(output_dict[mi][PI_INTERVAL.value])
-        # mol.SetProp("pI interval", " - ".join(
-        #     ["%.2f" % x for x in output_dict[mi][PI_INTERVAL.value]]))
         mol.SetProp(
             "pI interval lower bound",
             "%.2f" % output_dict[mi][OutputAttribute.PI_INTERVAL.value][0],

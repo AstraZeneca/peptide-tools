@@ -8,6 +8,7 @@ from pichemist.core import calculate_pI_pH_and_charge_dicts
 from pichemist.core import merge_matched_and_calculated_pkas
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.model import InputAttribute
+from pichemist.model import InputFormat
 from pichemist.model import MODELS
 from pichemist.model import OutputAttribute
 from pichemist.model import PKaMethod
@@ -19,8 +20,6 @@ from pichemist.plot import output_ph_q_curve
 from rdkit import Chem
 from rdkit.Chem import Draw
 from rdkit.Chem import rdDepictor
-
-# from rdkit.Chem.Draw import rdMolDescriptors
 
 
 class ApiException(Exception):
@@ -89,54 +88,18 @@ def calc_frags_for_output_fasta(ionization_type, pkas_fasta):
     return frag_pkas_fasta
 
 
-# def smiles_to_image(smiles, image_path, image_size=(300, 300)):
-#     """
-#     Convert a SMILES string to a chemical structure image with a specified size.
-
-#     Parameters:
-#     - smiles (str): The SMILES string representing the molecule.
-#     - image_path (str): The file path where the image will be saved.
-#     - image_size (tuple): The size of the image (width, height).
-
-#     Returns:
-#     - None
-#     """
-#     try:
-#         # Convert SMILES to a molecule object
-#         molecule = Chem.MolFromSmiles(smiles)
-
-#         # Check if the molecule was successfully created
-#         if molecule is None:
-#             raise ValueError("Invalid SMILES string.")
-
-#         # Generate the image with the specified size
-#         image = Draw.MolToImage(molecule, size=image_size)
-
-#         # Save the image to the specified file path
-#         image.save(image_path)
-#         # print(f"Image saved successfully to {image_path}")
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-
-
 def smiles_to_base64(smiles):
     # Generate a molecule from the SMILES string
     mol = Chem.MolFromSmiles(smiles)
 
     # Generate 2D coordinates
     rdDepictor.Compute2DCoords(mol)
-
-    # Minimize the empty space by adjusting the molecule's bounding box and padding
     img = Draw.MolToImage(mol, kekulize=True)
 
     # Save the image to a BytesIO buffer (in-memory file)
     buffered = BytesIO()
     img.save(buffered, format="PNG")
-
-    # Get the byte data of the image
     img_byte_data = buffered.getvalue()
-
-    # Encode the byte data to base64
     base64_image = base64.b64encode(img_byte_data).decode("utf-8")
     return base64_image
 
@@ -151,17 +114,17 @@ def calc_frags_for_output_calc(
         pka = v[0]
         smi = v[1]
 
-        # generate image
-        base64_image = None
-        if generate_fragment_base64_images:
-            base64_image = smiles_to_base64(smi)
-
         frag_pkas_calc[frg_idx] = {
             "type": ionization_type,
             "frag": smi,
             "count": 1,
             "pka": pka,
         }
+
+        # Generate image
+        base64_image = None
+        if generate_fragment_base64_images:
+            base64_image = smiles_to_base64(smi)
 
         if base64_image:
             frag_pkas_calc[frg_idx]["base64_image"] = base64_image
@@ -200,9 +163,6 @@ def compile_frags_pkas_for_output(
         net_qs_and_frags,
         generate_fragment_base64_images=generate_fragment_base64_images,
     )
-
-    # TODO: Diacid dictionaries are not used, they are
-    # deprecated and should be removed from the code
     return (
         frag_acid_pkas_fasta,
         frag_base_pkas_fasta,
@@ -224,6 +184,8 @@ def pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm):
     ) = fasta_pkas_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
 
     # Keep these empty dict in output for consistency
+    # TODO: Diacid dictionaries are not used, they are
+    # deprecated and should be removed from the code
     base_pkas_calc = dict()
     acid_pkas_calc = dict()
     diacid_pkas_calc = dict()
@@ -280,21 +242,46 @@ def pichemist_from_dict(
     ph_q_curve_file_prefix=None,
     plot_ph_q_curve=False,
     print_fragments=False,
-    input_type="structure",
+    # input_format=,
     ionizable_nterm=True,
     ionizable_cterm=False,
     generate_fragment_base64_images=False,
 ):
     """Runs the full logic for a given input dictionary."""
     dict_output = dict()
+    for mol_idx in input_dict.keys():
+        # Prepare molecule and break into fragments
+        mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
 
-    # if the input is structure(s)
-    if input_type == "structure":
+        # FASTA overrides molecule objects
+        if input_dict[mol_idx][InputAttribute.MOL_FASTA.value]:
+            fasta = input_dict[mol_idx][InputAttribute.MOL_FASTA.value]
+            aa_list = [char for char in fasta]
 
-        for mol_idx in input_dict.keys():
+            # Calculate pKas and charges
+            (
+                base_pkas_fasta,
+                acid_pkas_fasta,
+                diacid_pkas_fasta,
+                base_pkas_calc,
+                acid_pkas_calc,
+                diacid_pkas_calc,
+                net_qs_and_frags,
+            ) = pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
+            (
+                base_pkas_dict,
+                acid_pkas_dict,
+                diacid_pkas_dict,
+            ) = merge_matched_and_calculated_pkas(
+                base_pkas_fasta,
+                base_pkas_calc,
+                acid_pkas_fasta,
+                acid_pkas_calc,
+                diacid_pkas_fasta,
+                diacid_pkas_calc,
+            )
 
-            # Prepare molecule and break into fragments
-            mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
+        elif input_dict[mol_idx][InputAttribute.MOL_OBJECT.value]:
             mol = input_dict[mol_idx][InputAttribute.MOL_OBJECT.value]
             mol = MolStandardiser().standardise_molecule(mol)
             smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
@@ -309,113 +296,6 @@ def pichemist_from_dict(
                 diacid_pkas_calc,
                 net_qs_and_frags,
             ) = pkas_and_charges_from_list(smiles_list, method)
-            (
-                base_pkas_dict,
-                acid_pkas_dict,
-                diacid_pkas_dict,
-            ) = merge_matched_and_calculated_pkas(
-                base_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_fasta,
-                acid_pkas_calc,
-                diacid_pkas_fasta,
-                diacid_pkas_calc,
-            )
-
-            # Recomple fragments and pKa for table output
-            (
-                frag_acid_pkas_fasta,
-                frag_base_pkas_fasta,
-                frag_acid_pkas_calc,
-                frag_base_pkas_calc,
-                frag_Qs_calc,
-            ) = compile_frags_pkas_for_output(
-                base_pkas_fasta,
-                acid_pkas_fasta,
-                diacid_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_calc,
-                diacid_pkas_calc,
-                net_qs_and_frags,
-                generate_fragment_base64_images=generate_fragment_base64_images,
-            )
-
-            # Calculate the curves
-            pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
-                base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
-            )
-
-            # Calculate isoelectric interval
-            interval, interval_threshold = calculate_isoelectric_interval_and_threshold(
-                pH_q_dict
-            )
-
-            # Output for given molecule
-            dict_output[mol_idx] = {
-                OutputAttribute.MOL_NAME.value: mol_name,
-                OutputAttribute.PI.value: pI_dict,
-                OutputAttribute.Q_PH7.value: q_dict,
-                OutputAttribute.PI_INTERVAL.value: interval,
-                OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold,
-            }
-
-            # Plot pH/Q curve
-            ###AIF###if plot_ph_q_curve and not ph_q_curve_file_prefix:
-            if plot_ph_q_curve and not isinstance(ph_q_curve_file_prefix, str):
-                raise ApiException(
-                    "A file prefix for the pH/Q curve plots must " "be specified."
-                )
-            if plot_ph_q_curve:
-                fig_filename = f"{ph_q_curve_file_prefix}_{mol_idx}.png"
-                output_ph_q_curve(pH_q_dict, fig_filename)
-                dict_output[mol_idx][OutputAttribute.PLOT_FILENAME.value] = fig_filename
-
-            # Define set for reporting pKa of individual amino acids and fragments
-            dict_output[mol_idx].update(
-                {OutputAttribute.PKA_SET.value: REFERENCE_PKA_SET}
-            )
-
-            if print_fragments:
-                # No need to include diacids pkas as they
-                # are included as single apparent ionisations
-                # dict_output[mol_idx].update(
-                #     {
-                #         OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
-                #         OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
-                #         OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
-                #         OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
-                #         OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
-                #     }
-                # )
-
-                dict_output[mol_idx].update(
-                    {
-                        OutputAttribute.FRAG_BASE_PKA_FASTA.value: frag_base_pkas_fasta,
-                        OutputAttribute.FRAG_ACID_PKA_FASTA.value: frag_acid_pkas_fasta,
-                        OutputAttribute.FRAG_BASE_PKA_CALC.value: frag_base_pkas_calc,
-                        OutputAttribute.FRAG_ACID_PKA_CALC.value: frag_acid_pkas_calc,
-                        OutputAttribute.FRAG_CONSTANT_QS.value: frag_Qs_calc,
-                    }
-                )
-
-    # if the input is fasta sequence(s)
-    elif input_type == "fasta":
-        for mol_idx in input_dict.keys():
-            # Prepare molecule and break into fragments
-            mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
-            fasta = input_dict[mol_idx][InputAttribute.MOL_FASTA.value]
-            aa_list = [char for char in fasta]
-
-            # Calculate pKas and charges
-            (
-                base_pkas_fasta,
-                acid_pkas_fasta,
-                diacid_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_calc,
-                diacid_pkas_calc,
-                net_qs_and_frags,
-            ) = pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
 
             (
                 base_pkas_dict,
@@ -430,83 +310,69 @@ def pichemist_from_dict(
                 diacid_pkas_calc,
             )
 
-            # Recomple fragments and pKa for table output
-            (
-                frag_acid_pkas_fasta,
-                frag_base_pkas_fasta,
-                frag_acid_pkas_calc,
-                frag_base_pkas_calc,
-                frag_Qs_calc,
-            ) = compile_frags_pkas_for_output(
-                base_pkas_fasta,
-                acid_pkas_fasta,
-                diacid_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_calc,
-                diacid_pkas_calc,
-                net_qs_and_frags,
-                generate_fragment_base64_images=generate_fragment_base64_images,
+        else:
+            raise ApiException(
+                "Invalid input format. Neither a structure not a FASTA were provided."
             )
 
-            # Calculate the curves
-            pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
-                base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
+        # Recomple fragments and pKa for table output
+        (
+            frag_acid_pkas_fasta,
+            frag_base_pkas_fasta,
+            frag_acid_pkas_calc,
+            frag_base_pkas_calc,
+            frag_Qs_calc,
+        ) = compile_frags_pkas_for_output(
+            base_pkas_fasta,
+            acid_pkas_fasta,
+            diacid_pkas_fasta,
+            base_pkas_calc,
+            acid_pkas_calc,
+            diacid_pkas_calc,
+            net_qs_and_frags,
+            generate_fragment_base64_images=generate_fragment_base64_images,
+        )
+
+        # Calculate the curves
+        pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
+            base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
+        )
+
+        # Calculate isoelectric interval
+        interval, interval_threshold = calculate_isoelectric_interval_and_threshold(
+            pH_q_dict
+        )
+
+        # Output for given molecule
+        dict_output[mol_idx] = {
+            OutputAttribute.MOL_NAME.value: mol_name,
+            OutputAttribute.PI.value: pI_dict,
+            OutputAttribute.Q_PH7.value: q_dict,
+            OutputAttribute.PI_INTERVAL.value: interval,
+            OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold,
+        }
+
+        # Plot pH/Q curve
+        if plot_ph_q_curve and not isinstance(ph_q_curve_file_prefix, str):
+            raise ApiException(
+                "A file prefix for the pH/Q curve plots must " "be specified."
             )
+        if plot_ph_q_curve:
+            fig_filename = f"{ph_q_curve_file_prefix}_{mol_idx}.png"
+            output_ph_q_curve(pH_q_dict, fig_filename)
+            dict_output[mol_idx][OutputAttribute.PLOT_FILENAME.value] = fig_filename
 
-            # Calculate isoelectric interval
-            interval, interval_threshold = calculate_isoelectric_interval_and_threshold(
-                pH_q_dict
-            )
+        # Define set for reporting pKa of individual amino acids and fragments
+        dict_output[mol_idx].update({OutputAttribute.PKA_SET.value: REFERENCE_PKA_SET})
 
-            # Output for given molecule
-            dict_output[mol_idx] = {
-                OutputAttribute.MOL_NAME.value: mol_name,
-                OutputAttribute.PI.value: pI_dict,
-                OutputAttribute.Q_PH7.value: q_dict,
-                OutputAttribute.PI_INTERVAL.value: interval,
-                OutputAttribute.PI_INTERVAL_THRESHOLD.value: interval_threshold,
-            }
-
-            # Plot pH/Q curve
-            ###AIF###if plot_ph_q_curve and not ph_q_curve_file_prefix:
-            if plot_ph_q_curve and not isinstance(ph_q_curve_file_prefix, str):
-                raise ApiException(
-                    "A file prefix for the pH/Q curve plots must " "be specified."
-                )
-            if plot_ph_q_curve:
-                fig_filename = f"{ph_q_curve_file_prefix}_{mol_idx}.png"
-                output_ph_q_curve(pH_q_dict, fig_filename)
-                dict_output[mol_idx][OutputAttribute.PLOT_FILENAME.value] = fig_filename
-
-            # Define set for reporting pKa of individual amino acids and fragments
+        if print_fragments:
             dict_output[mol_idx].update(
-                {OutputAttribute.PKA_SET.value: REFERENCE_PKA_SET}
+                {
+                    OutputAttribute.FRAG_BASE_PKA_FASTA.value: frag_base_pkas_fasta,
+                    OutputAttribute.FRAG_ACID_PKA_FASTA.value: frag_acid_pkas_fasta,
+                    OutputAttribute.FRAG_BASE_PKA_CALC.value: frag_base_pkas_calc,
+                    OutputAttribute.FRAG_ACID_PKA_CALC.value: frag_acid_pkas_calc,
+                    OutputAttribute.FRAG_CONSTANT_QS.value: frag_Qs_calc,
+                }
             )
-
-            if print_fragments:
-                # No need to include diacids pkas as they
-                # are included as single apparent ionisations
-                # dict_output[mol_idx].update(
-                #     {
-                #         OutputAttribute.BASE_PKA_FASTA.value: base_pkas_fasta,
-                #         OutputAttribute.ACID_PKA_FASTA.value: acid_pkas_fasta,
-                #         OutputAttribute.BASE_PKA_CALC.value: base_pkas_calc,
-                #         OutputAttribute.ACID_PKA_CALC.value: acid_pkas_calc,
-                #         OutputAttribute.CONSTANT_QS.value: net_qs_and_frags,
-                #     }
-                # )
-
-                dict_output[mol_idx].update(
-                    {
-                        OutputAttribute.FRAG_BASE_PKA_FASTA.value: frag_base_pkas_fasta,
-                        OutputAttribute.FRAG_ACID_PKA_FASTA.value: frag_acid_pkas_fasta,
-                        OutputAttribute.FRAG_BASE_PKA_CALC.value: frag_base_pkas_calc,
-                        OutputAttribute.FRAG_ACID_PKA_CALC.value: frag_acid_pkas_calc,
-                        OutputAttribute.FRAG_CONSTANT_QS.value: frag_Qs_calc,
-                    }
-                )
-
-    else:
-        raise ValueError("input_type for pichemist_fron_dict is not known")
-
     return dict_output

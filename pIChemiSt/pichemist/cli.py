@@ -98,26 +98,12 @@ def arg_parser(args):
 def run_pichemist(args):
     """High-level wrapper of pIChemiSt."""
     input_dict = generate_input(args.input_format, args.input)
-
-    if (
-        args.input_format == "smiles_stdin"
-        or args.input_format == "smiles_file"
-        or args.input_format == "sdf"
-    ):
-        input_format = "structure"
-    elif args.input_format == "fasta_stdin" or args.input_format == "fasta_file":
-        input_format = "fasta"
-    else:
-        input_format = "unknown"
-        raise ValueError("input_format is not known in run_pichemist")
-
     output_dict = pichemist_from_dict(
         input_dict,
         args.method,
         ph_q_curve_file_prefix=args.ph_q_curve_file_prefix,
         plot_ph_q_curve=args.plot_ph_q_curve,
         print_fragments=args.print_fragment_pkas,
-        input_type=input_format,
         ionizable_nterm=args.ionizable_nterm,
         ionizable_cterm=args.ionizable_cterm,
         generate_fragment_base64_images=args.generate_fragment_base64_images,
