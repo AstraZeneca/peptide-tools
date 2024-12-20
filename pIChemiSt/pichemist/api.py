@@ -1,5 +1,7 @@
 from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
+from pichemist.core import calculate_frags_for_output_calc
+from pichemist.core import calculate_frags_for_output_fasta
 from pichemist.core import calculate_isoelectric_interval_and_threshold
 from pichemist.core import calculate_pI_pH_and_charge_dicts
 from pichemist.core import merge_matched_and_calculated_pkas
@@ -11,7 +13,6 @@ from pichemist.model import OutputAttribute
 from pichemist.model import PKaMethod
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
-from pichemist.molecule import smiles_to_image
 from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
 from pichemist.plot import output_ph_q_curve
@@ -50,66 +51,6 @@ def calculated_pkas_from_list(smiles_list, method):
     return base_pkas, acid_pkas, diacid_pkas
 
 
-def calc_frags_for_output_fasta(ionization_type, pkas_fasta):
-    D_pka = dict()
-    D_count = dict()
-    pka_sets_cnt = 0
-    for pka_set, list_for_pka_set in pkas_fasta.items():
-        pka_sets_cnt += 1
-        for v in list_for_pka_set:
-            pka = v[0]
-            AA = v[1]
-            if AA in D_pka.keys():
-                D_pka[AA].append(pka)
-            else:
-                D_pka[AA] = list()
-
-            if pka_sets_cnt == 1:
-                if AA in D_count.keys():
-                    D_count[AA] += 1
-                else:
-                    D_count[AA] = 1
-
-    frag_pkas_fasta = dict()
-    idx = 0
-    for k, v in D_pka.items():
-        idx += 1
-        frag_pkas_fasta[idx] = {
-            "type": ionization_type,
-            "frag": k,
-            "count": D_count[k],
-            "pka": sum(v) / len(v),
-        }
-    return frag_pkas_fasta
-
-
-def calc_frags_for_output_calc(
-    ionization_type, pkas_calc, generate_fragment_base64_images=False
-):
-    frag_pkas_calc = dict()
-    frg_idx = 0
-    for v in pkas_calc:
-        frg_idx += 1
-        pka = v[0]
-        smi = v[1]
-
-        frag_pkas_calc[frg_idx] = {
-            "type": ionization_type,
-            "frag": smi,
-            "count": 1,
-            "pka": pka,
-        }
-
-        # Generate image
-        base64_image = None
-        if generate_fragment_base64_images:
-            base64_image = smiles_to_image(smi)
-
-        if base64_image:
-            frag_pkas_calc[frg_idx]["base64_image"] = base64_image
-    return frag_pkas_calc
-
-
 def compile_frags_pkas_for_output(
     base_pkas_fasta,
     acid_pkas_fasta,
@@ -118,29 +59,29 @@ def compile_frags_pkas_for_output(
     acid_pkas_calc,
     diacid_pkas_calc,
     net_qs_and_frags,
-    generate_fragment_base64_images=False,
+    generate_fragment_images=False,
 ):
     """
     Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
     (average between pKa sets in case of known AA)
 
     """
-    frag_acid_pkas_fasta = calc_frags_for_output_fasta("acid", acid_pkas_fasta)
-    frag_base_pkas_fasta = calc_frags_for_output_fasta("base", base_pkas_fasta)
-    frag_acid_pkas_calc = calc_frags_for_output_calc(
+    frag_acid_pkas_fasta = calculate_frags_for_output_fasta("acid", acid_pkas_fasta)
+    frag_base_pkas_fasta = calculate_frags_for_output_fasta("base", base_pkas_fasta)
+    frag_acid_pkas_calc = calculate_frags_for_output_calc(
         "acid",
         acid_pkas_calc,
-        generate_fragment_base64_images=generate_fragment_base64_images,
+        generate_fragment_images=generate_fragment_images,
     )
-    frag_base_pkas_calc = calc_frags_for_output_calc(
+    frag_base_pkas_calc = calculate_frags_for_output_calc(
         "base",
         base_pkas_calc,
-        generate_fragment_base64_images=generate_fragment_base64_images,
+        generate_fragment_images=generate_fragment_images,
     )
-    frag_Qs_calc = calc_frags_for_output_calc(
+    frag_Qs_calc = calculate_frags_for_output_calc(
         "constant charge",
         net_qs_and_frags,
-        generate_fragment_base64_images=generate_fragment_base64_images,
+        generate_fragment_images=generate_fragment_images,
     )
     return (
         frag_acid_pkas_fasta,
@@ -223,7 +164,7 @@ def pichemist_from_dict(
     print_fragments=False,
     ionizable_nterm=True,
     ionizable_cterm=False,
-    generate_fragment_base64_images=False,
+    generate_fragment_images=False,
 ):
     """Runs the full logic for a given input dictionary."""
     dict_output = dict()
@@ -308,7 +249,7 @@ def pichemist_from_dict(
             acid_pkas_calc,
             diacid_pkas_calc,
             net_qs_and_frags,
-            generate_fragment_base64_images=generate_fragment_base64_images,
+            generate_fragment_images=generate_fragment_images,
         )
 
         # Calculate the curves

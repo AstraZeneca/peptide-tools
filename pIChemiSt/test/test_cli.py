@@ -105,7 +105,7 @@ def test_console_json_output_images():
             "-of",
             "json",
             "--print_fragment_pkas",
-            "--generate_fragment_base64_images",
+            "--generate_fragment_images",
             "--method",
             "pkamatcher",
         ]
