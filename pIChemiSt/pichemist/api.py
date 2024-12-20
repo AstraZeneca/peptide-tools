@@ -1,6 +1,3 @@
-import base64
-from io import BytesIO
-
 from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
 from pichemist.core import calculate_isoelectric_interval_and_threshold
@@ -14,12 +11,10 @@ from pichemist.model import OutputAttribute
 from pichemist.model import PKaMethod
 from pichemist.molecule import MolStandardiser
 from pichemist.molecule import PeptideCutter
+from pichemist.molecule import smiles_to_image
 from pichemist.pka.acd import ACDPKaCalculator
 from pichemist.pka.pkamatcher import PKaMatcher
 from pichemist.plot import output_ph_q_curve
-from rdkit import Chem
-from rdkit.Chem import Draw
-from rdkit.Chem import rdDepictor
 
 
 class ApiException(Exception):
@@ -88,22 +83,6 @@ def calc_frags_for_output_fasta(ionization_type, pkas_fasta):
     return frag_pkas_fasta
 
 
-def smiles_to_base64(smiles):
-    # Generate a molecule from the SMILES string
-    mol = Chem.MolFromSmiles(smiles)
-
-    # Generate 2D coordinates
-    rdDepictor.Compute2DCoords(mol)
-    img = Draw.MolToImage(mol, kekulize=True)
-
-    # Save the image to a BytesIO buffer (in-memory file)
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_byte_data = buffered.getvalue()
-    base64_image = base64.b64encode(img_byte_data).decode("utf-8")
-    return base64_image
-
-
 def calc_frags_for_output_calc(
     ionization_type, pkas_calc, generate_fragment_base64_images=False
 ):
@@ -124,7 +103,7 @@ def calc_frags_for_output_calc(
         # Generate image
         base64_image = None
         if generate_fragment_base64_images:
-            base64_image = smiles_to_base64(smi)
+            base64_image = smiles_to_image(smi)
 
         if base64_image:
             frag_pkas_calc[frg_idx]["base64_image"] = base64_image
@@ -242,7 +221,6 @@ def pichemist_from_dict(
     ph_q_curve_file_prefix=None,
     plot_ph_q_curve=False,
     print_fragments=False,
-    # input_format=,
     ionizable_nterm=True,
     ionizable_cterm=False,
     generate_fragment_base64_images=False,
