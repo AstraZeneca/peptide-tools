@@ -59,6 +59,14 @@ class OutputAttribute(BaseEnum):
     FRAG_CONSTANT_QS = "frag_Qs_calc"
 
 
+class OutputFragAttribute(BaseEnum):
+    TYPE = "type"
+    COUNT = "count"
+    PKA = "pka"
+    FRAGMENT = "frag"
+    IMAGE = "base64_image"
+
+
 class OutputFormat(BaseEnum):
     JSON = "json"
     SD_FILE = "sdf"

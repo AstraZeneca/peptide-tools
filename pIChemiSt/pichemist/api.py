@@ -1,9 +1,8 @@
 from pichemist.charges import SmartsChargeCalculator
 from pichemist.config import REFERENCE_PKA_SET
-from pichemist.core import calculate_frags_for_output_calc
-from pichemist.core import calculate_frags_for_output_fasta
 from pichemist.core import calculate_isoelectric_interval_and_threshold
 from pichemist.core import calculate_pI_pH_and_charge_dicts
+from pichemist.core import compile_frags_pkas_for_output
 from pichemist.core import merge_matched_and_calculated_pkas
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.model import InputAttribute
@@ -49,47 +48,6 @@ def calculated_pkas_from_list(smiles_list, method):
             smiles_list
         )
     return base_pkas, acid_pkas, diacid_pkas
-
-
-def compile_frags_pkas_for_output(
-    base_pkas_fasta,
-    acid_pkas_fasta,
-    diacid_pkas_fasta,
-    base_pkas_calc,
-    acid_pkas_calc,
-    diacid_pkas_calc,
-    net_qs_and_frags,
-    generate_fragment_images=False,
-):
-    """
-    Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
-    (average between pKa sets in case of known AA)
-
-    """
-    frag_acid_pkas_fasta = calculate_frags_for_output_fasta("acid", acid_pkas_fasta)
-    frag_base_pkas_fasta = calculate_frags_for_output_fasta("base", base_pkas_fasta)
-    frag_acid_pkas_calc = calculate_frags_for_output_calc(
-        "acid",
-        acid_pkas_calc,
-        generate_fragment_images=generate_fragment_images,
-    )
-    frag_base_pkas_calc = calculate_frags_for_output_calc(
-        "base",
-        base_pkas_calc,
-        generate_fragment_images=generate_fragment_images,
-    )
-    frag_Qs_calc = calculate_frags_for_output_calc(
-        "constant charge",
-        net_qs_and_frags,
-        generate_fragment_images=generate_fragment_images,
-    )
-    return (
-        frag_acid_pkas_fasta,
-        frag_base_pkas_fasta,
-        frag_acid_pkas_calc,
-        frag_base_pkas_calc,
-        frag_Qs_calc,
-    )
 
 
 def pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm):
