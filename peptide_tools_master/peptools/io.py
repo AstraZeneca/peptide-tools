@@ -146,7 +146,7 @@ def generate_input(input_data):
         # print("Input is SMILES")
         mol_unique_ID = 1
         smi = input_data
-        fasta = get_fasta_from_smiles(smi)
+        #fasta = get_fasta_from_smiles(smi)
         params.calc_extn_coeff = True
         #params.calc_pI_fasta = False
         params.calc_pIChemiSt = True
