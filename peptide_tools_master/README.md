@@ -1,8 +1,26 @@
-![Maturity level-0](https://img.shields.io/badge/Maturity%20Level-ML--0-red)
+# peptide_tools_master
 
-peptide_tools_mater.py
+## Description
+Wrapper CLI of all peptide tools. TODO... The interface accepts different types of inputs including SMILES, SMILES files, SDF, FASTA, FASTA sequences, and FASTA files. Some logic for the recognition of the input type is implemented. This was done to facilitate the integrate the CLI with a front end, removing the need for users to specify their input types.
 
-Wrapper script to run all peptide tools programs in one go. 
+## How to set up a temporary environment to run the tool
+- Ensure that you have Python version >=3.8
+- Clone the repository and access the folder `peptide_tools_master`
+```bash
+pip install rdkit biopython
+> Succesfully installed rdkit==2023.3.2 biopython==1.81
+
+pwd
+> /../peptide-tools/peptide_tools_master
+PEPTIDE_TOOLS_PATH=`cd .. && echo $PWD`
+export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/smi2scrambledfasta
+export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/extn_coeff_fasta
+export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pI_fasta
+export PYTHONPATH=${PYTHONPATH}:${PEPTIDE_TOOLS_PATH}/pIChemiSt
+
+python peptide_tools_master.py --input FPYVAE
+> 
+```
 
 
 HOW TO RUN

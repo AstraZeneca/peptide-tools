@@ -1,0 +1,50 @@
+{
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "MAGAP",
+            "e205": 12950,
+            "e214": 7432,
+            "e280": 0,
+            "mol_name": "none"
+        }
+    },
+    "output_pI_fasta": {
+        "1": {
+            "sequence": "MAGAP",
+            "pI": {
+                "IPC2_peptide": 5.5,
+                "IPC_peptide": 6,
+                "ProMoST": 5.1875,
+                "Gauci": 5.28125,
+                "Grimsley": 5.5,
+                "Thurlkill": 5.8125,
+                "Lehninger": 6,
+                "Toseland": 6,
+                "pI mean": 5.66015625,
+                "std": 0.8876732885400461,
+                "err": 0.3138399009024147
+            },
+            "QpH7": {
+                "IPC2_peptide": -0.22101980206722793,
+                "IPC_peptide": -0.0067985967372582445,
+                "ProMoST": -0.7244382528415361,
+                "Gauci": -0.7151115172445417,
+                "Grimsley": -0.3337811489024779,
+                "Thurlkill": -0.20057383486666525,
+                "Lehninger": -0.005093735807939481,
+                "Toseland": -0.04662939735438543,
+                "Q at pH7.4 mean": -0.281680785727754,
+                "std": 0.7772893175334228,
+                "err": 0.2748132736858734
+            },
+            "pI_interval": [
+                3.5999999999999988,
+                7.299999999999999
+            ],
+            "plot_filename": "OUT_titration_curve.png",
+            "plot_title_info": "sequence: MAGAP",
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {}
+}
