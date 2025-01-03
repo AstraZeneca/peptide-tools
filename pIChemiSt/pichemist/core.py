@@ -49,26 +49,16 @@ def get_low_and_high_from_interval_lists(interval_low_list, interval_high_list):
 
 
 def merge_matched_and_calculated_pkas(
-    base_pkas_fasta,
-    base_pkas_calc,
-    acid_pkas_fasta,
-    acid_pkas_calc,
-    diacid_pkas_fasta,
-    diacid_pkas_calc,
+    base_pkas_fasta, base_pkas_calc, acid_pkas_fasta, acid_pkas_calc
 ):
     """Merge FASTA-matched and calculated pKas."""
     base_pkas_list = [base_pkas_fasta, base_pkas_calc]
     acid_pkas_list = [acid_pkas_fasta, acid_pkas_calc]
-    diacid_pkas_list = [diacid_pkas_fasta, diacid_pkas_calc]
-    base_pkas_dict, acid_pkas_dict, diacid_pkas_dict = merge_pkas_lists(
-        base_pkas_list, acid_pkas_list, diacid_pkas_list
-    )
-    return base_pkas_dict, acid_pkas_dict, diacid_pkas_dict
+    base_pkas_dict, acid_pkas_dict = merge_pkas_lists(base_pkas_list, acid_pkas_list)
+    return base_pkas_dict, acid_pkas_dict
 
 
-def calculate_pI_pH_and_charge_dicts(
-    base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
-):
+def calculate_pI_pH_and_charge_dicts(base_pkas_dict, acid_pkas_dict, net_qs_and_frags):
     """Calculates the isoelectric point, charges, and pH charges."""
     pI_dict = dict()
     q_dict = dict()
@@ -79,19 +69,18 @@ def calculate_pI_pH_and_charge_dicts(
         # Merge fasta and calculated pkas
         base_pkas = base_pkas_dict[pka_set]
         acid_pkas = acid_pkas_dict[pka_set]
-        diacid_pkas = diacid_pkas_dict[pka_set]
 
         # Calculate isoelectric point
         net_qs = get_net_qs_from_qs_and_frags(net_qs_and_frags)
         constant_q = PKaChargeCalculator().calculate_constant_charge(net_qs)
         q = PKaChargeCalculator().calculate_charge(
-            base_pkas, acid_pkas, diacid_pkas, pH=7.4, constant_q=constant_q
+            base_pkas, acid_pkas, pH=7.4, constant_q=constant_q
         )
         pI = IsoelectricCalculator().calculate_pI(
-            base_pkas, acid_pkas, diacid_pkas, constant_q=constant_q
+            base_pkas, acid_pkas, constant_q=constant_q
         )
         pH_q = CurveCalculator().calculate_charged_curve(
-            base_pkas, acid_pkas, diacid_pkas, constant_q=constant_q
+            base_pkas, acid_pkas, constant_q=constant_q
         )
         pI_dict[pka_set] = pI
         q_dict[pka_set] = q
@@ -130,10 +119,8 @@ def calculate_isoelectric_interval_and_threshold(pH_q_dict):
 def compile_frags_pkas_for_output(
     base_pkas_fasta,
     acid_pkas_fasta,
-    diacid_pkas_fasta,
     base_pkas_calc,
     acid_pkas_calc,
-    diacid_pkas_calc,
     net_qs_and_frags,
     generate_fragment_images=False,
 ):

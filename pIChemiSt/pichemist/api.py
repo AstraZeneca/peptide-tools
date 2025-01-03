@@ -40,14 +40,10 @@ def calculated_pkas_from_list(smiles_list, method):
             "Invalid method. Only the formats " f"{MODELS[PKaMethod]} are accepted"
         )
     if method == PKaMethod.ACD.value:
-        base_pkas, acid_pkas, diacid_pkas = ACDPKaCalculator().calculate_pka_from_list(
-            smiles_list
-        )
+        base_pkas, acid_pkas = ACDPKaCalculator().calculate_pka_from_list(smiles_list)
     if method == PKaMethod.PKA_MATCHER.value:
-        base_pkas, acid_pkas, diacid_pkas = PKaMatcher().calculate_pka_from_list(
-            smiles_list
-        )
-    return base_pkas, acid_pkas, diacid_pkas
+        base_pkas, acid_pkas = PKaMatcher().calculate_pka_from_list(smiles_list)
+    return base_pkas, acid_pkas
 
 
 def pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm):
@@ -61,7 +57,7 @@ def pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm):
         diacid_pkas_fasta,
     ) = fasta_pkas_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
 
-    # Keep these empty dict in output for consistency
+    # sic - Keeping these empty dict in output for consistency
     # TODO: Diacid dictionaries are not used, they are
     # deprecated and should be removed from the code
     base_pkas_calc = dict()
@@ -95,7 +91,7 @@ def pkas_and_charges_from_list(smiles_list, method):
     ) = fasta_pkas_from_list(smiles_list)
 
     # Unknown fragment calculation
-    base_pkas_calc, acid_pkas_calc, diacid_pkas_calc = calculated_pkas_from_list(
+    base_pkas_calc, acid_pkas_calc = calculated_pkas_from_list(
         unknown_frags, method=method
     )
 
@@ -109,7 +105,6 @@ def pkas_and_charges_from_list(smiles_list, method):
         diacid_pkas_fasta,
         base_pkas_calc,
         acid_pkas_calc,
-        diacid_pkas_calc,
         net_qs_and_frags,
     )
 
@@ -129,13 +124,18 @@ def pichemist_from_dict(
     for mol_idx in input_dict.keys():
         # Prepare molecule and break into fragments
         mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
+        fasta = input_dict[mol_idx].get(InputAttribute.MOL_FASTA.value)
+        mol = input_dict[mol_idx].get(InputAttribute.MOL_OBJECT.value)
+
+        # Check input validity
+        if not any([mol, fasta]):
+            raise ApiException(
+                "Invalid input format. Neither a structure not a FASTA were provided."
+            )
 
         # FASTA overrides molecule objects
-        if input_dict[mol_idx][InputAttribute.MOL_FASTA.value]:
-            fasta = input_dict[mol_idx][InputAttribute.MOL_FASTA.value]
+        if fasta:
             aa_list = [char for char in fasta]
-
-            # Calculate pKas and charges
             (
                 base_pkas_fasta,
                 acid_pkas_fasta,
@@ -145,52 +145,23 @@ def pichemist_from_dict(
                 diacid_pkas_calc,
                 net_qs_and_frags,
             ) = pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
-            (
-                base_pkas_dict,
-                acid_pkas_dict,
-                diacid_pkas_dict,
-            ) = merge_matched_and_calculated_pkas(
-                base_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_fasta,
-                acid_pkas_calc,
-                diacid_pkas_fasta,
-                diacid_pkas_calc,
-            )
 
-        elif input_dict[mol_idx][InputAttribute.MOL_OBJECT.value]:
-            mol = input_dict[mol_idx][InputAttribute.MOL_OBJECT.value]
+        elif mol:
             mol = MolStandardiser().standardise_molecule(mol)
             smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
-
-            # Calculate pKas and charges
             (
                 base_pkas_fasta,
                 acid_pkas_fasta,
                 diacid_pkas_fasta,
                 base_pkas_calc,
                 acid_pkas_calc,
-                diacid_pkas_calc,
                 net_qs_and_frags,
             ) = pkas_and_charges_from_list(smiles_list, method)
 
-            (
-                base_pkas_dict,
-                acid_pkas_dict,
-                diacid_pkas_dict,
-            ) = merge_matched_and_calculated_pkas(
-                base_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_fasta,
-                acid_pkas_calc,
-                diacid_pkas_fasta,
-                diacid_pkas_calc,
-            )
-
-        else:
-            raise ApiException(
-                "Invalid input format. Neither a structure not a FASTA were provided."
-            )
+        # Merge pKas
+        (base_pkas_dict, acid_pkas_dict,) = merge_matched_and_calculated_pkas(
+            base_pkas_fasta, base_pkas_calc, acid_pkas_fasta, acid_pkas_calc
+        )
 
         # Recomple fragments and pKa for table output
         (
@@ -202,17 +173,15 @@ def pichemist_from_dict(
         ) = compile_frags_pkas_for_output(
             base_pkas_fasta,
             acid_pkas_fasta,
-            diacid_pkas_fasta,
             base_pkas_calc,
             acid_pkas_calc,
-            diacid_pkas_calc,
             net_qs_and_frags,
             generate_fragment_images=generate_fragment_images,
         )
 
         # Calculate the curves
         pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
-            base_pkas_dict, acid_pkas_dict, diacid_pkas_dict, net_qs_and_frags
+            base_pkas_dict, acid_pkas_dict, net_qs_and_frags
         )
 
         # Calculate isoelectric interval
