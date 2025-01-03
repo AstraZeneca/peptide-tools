@@ -1,17 +1,5 @@
 from pichemist.api import pichemist_from_dict
 
-from pI_fasta import calc_pI_fasta
-
-
-def calculate_pifasta(mol_supply_json, runtime_params, chem_params):
-    dict_out_pI_fasta = dict()
-    if runtime_params.calc_pI_fasta:
-        pI_fasta_options = _configure_options(
-            mol_supply_json, runtime_params, chem_params
-        )
-        dict_out_pI_fasta = calc_pI_fasta(pI_fasta_options)
-    return dict_out_pI_fasta
-
 
 def _configure_options(mol_supply_json, runtime_params, chem_params):
     pI_fasta_options = {

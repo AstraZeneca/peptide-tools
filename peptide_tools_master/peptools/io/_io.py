@@ -106,24 +106,23 @@ def configure_runtime_parameters(args, input_file_extension):
     params = RuntimeParameters()
     params.generate_plot = False
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
+    # TODO: Merge logic since pIfasta has been removed
     if input_file_extension in [
         InputFileExtension.SMI,
         InputFileExtension.SDF,
     ]:
         params.calc_extn_coeff = True
         params.calc_pIChemiSt = True
-        params.calc_pI_fasta = False
     elif input_file_extension == InputFileExtension.FASTA:
         params.calc_extn_coeff = True
-        params.calc_pI_fasta = True
-        params.calc_pIChemiSt = False
+        params.calc_pIChemiSt = True
     return params
 
 
 def configure_chemical_parameters(args):
     return ChemicalParameters(
-        args.ionized_Cterm,
-        args.ionized_Nterm,
+        args.ionizable_cterm,
+        args.ionizable_nterm,
         args.NPhosphateGroups,
         args.NAlkylLysGroups,
         args.NDiAlkylLysGroups,
@@ -138,9 +137,8 @@ def generate_parameter_set(args, io_params):
 
 
 def generate_output(mol_supply_json, dict_out, params):
-    dict_out_pIChemiSt = dict_out["output_pIChemiSt"]
+    pichemist_dict = dict_out["output_pIChemiSt"]
     ext_coeff_dict = dict_out["output_extn_coeff"]
-    pifasta_dict = dict_out["output_pI_fasta"]
     if not params.io.output_filename:
         _print_to_console_and_exit(dict_out)
 
@@ -150,17 +148,15 @@ def generate_output(mol_supply_json, dict_out, params):
             mol = mol_supply_json[mi]["mol_obj"]
 
             if params.run.calc_pIChemiSt:
-                mol.SetProp("pI mean", "%.2f" % dict_out_pIChemiSt[mi]["pI"]["pI mean"])
-                mol.SetProp("pI std", "%.2f" % dict_out_pIChemiSt[mi]["pI"]["std"])
+                mol.SetProp("pI mean", "%.2f" % pichemist_dict[mi]["pI"]["pI mean"])
+                mol.SetProp("pI std", "%.2f" % pichemist_dict[mi]["pI"]["std"])
                 mol.SetProp(
                     "pI interval",
-                    " - ".join(
-                        ["%.2f" % x for x in dict_out_pIChemiSt[mi]["pI_interval"]]
-                    ),
+                    " - ".join(["%.2f" % x for x in pichemist_dict[mi]["pI_interval"]]),
                 )
                 mol.SetProp(
                     "pI interval threshold",
-                    "%.2f" % dict_out_pIChemiSt[mi]["pI_interval_threshold"],
+                    "%.2f" % pichemist_dict[mi]["pI_interval_threshold"],
                 )
 
             if params.run.calc_extn_coeff:
@@ -215,16 +211,16 @@ def _print_to_console_and_exit(dict_out):
 
 def _generate_fasta_output(mol_supply_json, dict_out, params):
     ext_coeff_dict = dict_out["output_extn_coeff"]
-    pifasta_dict = dict_out["output_pI_fasta"]
+    pichemist_dict = dict_out["output_pIChemiSt"]
 
     dict_list = list()
     for mi in mol_supply_json.keys():
         res = dict()
         fasta = mol_supply_json[mi]["fasta"]
 
-        if params.run.calc_pI_fasta:
-            res["pI mean"] = "%.2f" % pifasta_dict[mi]["pI"]["pI mean"]
-            res["pI std"] = "%.2f" % pifasta_dict[mi]["pI"]["std"]
+        if params.run.calc_pIChemiSt:
+            res["pI mean"] = "%.2f" % pichemist_dict[mi]["pI"]["pI mean"]
+            res["pI std"] = "%.2f" % pichemist_dict[mi]["pI"]["std"]
 
         if params.run.calc_extn_coeff:
             res["mol_name"] = ext_coeff_dict[mi]["mol_name"]

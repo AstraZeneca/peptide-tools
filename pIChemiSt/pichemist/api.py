@@ -133,20 +133,8 @@ def pichemist_from_dict(
                 "Invalid input format. Neither a structure not a FASTA were provided."
             )
 
-        # FASTA overrides molecule objects
-        if fasta:
-            aa_list = [char for char in fasta]
-            (
-                base_pkas_fasta,
-                acid_pkas_fasta,
-                diacid_pkas_fasta,
-                base_pkas_calc,
-                acid_pkas_calc,
-                diacid_pkas_calc,
-                net_qs_and_frags,
-            ) = pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
-
-        elif mol:
+        # MOL overrides FASTA
+        if mol:
             mol = MolStandardiser().standardise_molecule(mol)
             smiles_list = PeptideCutter().break_amide_bonds_and_cap(mol)
             (
@@ -157,6 +145,18 @@ def pichemist_from_dict(
                 acid_pkas_calc,
                 net_qs_and_frags,
             ) = pkas_and_charges_from_list(smiles_list, method)
+
+        elif fasta:
+            aa_list = [char for char in fasta]
+            (
+                base_pkas_fasta,
+                acid_pkas_fasta,
+                diacid_pkas_fasta,
+                base_pkas_calc,
+                acid_pkas_calc,
+                diacid_pkas_calc,
+                net_qs_and_frags,
+            ) = pkas_and_charges_from_aa_list(aa_list, ionizable_nterm, ionizable_cterm)
 
         # Merge pKas
         (base_pkas_dict, acid_pkas_dict,) = merge_matched_and_calculated_pkas(
