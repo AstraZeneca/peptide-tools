@@ -116,7 +116,7 @@ def pichemist_from_dict(
     plot_ph_q_curve=False,
     print_fragments=False,
     ionizable_nterm=True,
-    ionizable_cterm=False,
+    ionizable_cterm=True,
     generate_fragment_images=False,
 ):
     """Runs the full logic for a given input dictionary."""

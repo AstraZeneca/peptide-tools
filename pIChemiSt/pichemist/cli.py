@@ -10,6 +10,7 @@ from pichemist.model import MODELS
 from pichemist.model import OutputFormat
 from pichemist.model import PKaMethod
 from pichemist.utils import get_logger
+from pichemist.utils import str2bool
 from rdkit import RDLogger
 
 # Configure logging
@@ -72,15 +73,17 @@ def arg_parser(args):
     )
     parser.add_argument(
         "--ionizable_nterm",
+        type=str2bool,
         default=True,
-        action="store_true",
         dest="ionizable_nterm",
-        help="For FASTA input only. Set if the N-terminus is not capped (free amine)",
+        help="Applies to FASTA input only. "
+        "If set to 'false' the N-terminus is capped. "
+        "If set to 'true' the N-terminus is free amine. ",
     )
     parser.add_argument(
         "--ionizable_cterm",
+        type=str2bool,
         default=True,
-        action="store_true",
         dest="ionizable_cterm",
         help="For FASTA input only. Set if the C-terminus is not capped (free carboxylic acid)",
     )

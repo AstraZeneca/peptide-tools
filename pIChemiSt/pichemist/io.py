@@ -34,7 +34,7 @@ def generate_input(input_format, input_data):
     if input_format == InputFormat.FASTA_STDIN:
         input_dict[1] = {
             InputAttribute.MOL_NAME.value: input_data,
-            InputAttribute.MOL_OBJECT.value: Chem.MolFromFASTA(input_data),
+            InputAttribute.MOL_OBJECT.value: None,
             InputAttribute.MOL_FASTA.value: input_data,
         }
     if input_format == InputFormat.FASTA_FILE:
