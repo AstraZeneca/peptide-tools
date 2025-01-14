@@ -1,6 +1,6 @@
+from pichemist.molecule import MolStandardiser
 from rdkit import Chem
 from rdkit import RDLogger
-from pichemist.molecule import MolStandardiser
 
 RDLogger.DisableLog("rdApp.info")
 
@@ -18,8 +18,7 @@ class SmartsChargeCalculator(object):
 
     def _prepare_patterns(self):
         """Converts SMARTS strings into objects."""
-        return {name: Chem.MolFromSmarts(s)
-                for name, s in self.smarts.items()}
+        return {name: Chem.MolFromSmarts(s) for name, s in self.smarts.items()}
 
     def _get_mol_from_smiles(self, smiles):
         """Get mol object from SMILES."""
@@ -57,36 +56,34 @@ class SmartsChargeCalculator(object):
 
 class PKaChargeCalculator(object):
     """Calculate the molecule charge given its pKas."""
+
     def __init__(self):
         pass
 
     def _calculate_basic_charge(self, pH, pKa):
         """Calculate charge contribution by basic pKas."""
-        return 1 / (1 + 10**(pH - pKa))
+        return 1 / (1 + 10 ** (pH - pKa))
 
     def _calculate_acidic_charge(self, pH, pKa):
         """Calculate charge contribution by acidic pKas."""
-        return -1 / (1 + 10**(pKa - pH))
+        return -1 / (1 + 10 ** (pKa - pH))
 
     def _calculate_diacidic_charge(self, pH, pKa1, pKa2):
         """Calculate charge contribution by diacidic pKas."""
-        Ka1 = 10**(-pKa1)
-        Ka2 = 10**(-pKa2)
-        H = 10**(-pH)
-        f1 = (H*Ka1) / (H**2 + H*Ka1 + Ka1*Ka2)  # fraction of [AH-]
-        f2 = f1 * Ka2 / H                        # fraction of [A2-]
-        return -2*f2 + (-1)*f1                   # average charge of phosphate
+        Ka1 = 10 ** (-pKa1)
+        Ka2 = 10 ** (-pKa2)
+        H = 10 ** (-pH)
+        f1 = (H * Ka1) / (H**2 + H * Ka1 + Ka1 * Ka2)  # fraction of [AH-]
+        f2 = f1 * Ka2 / H  # fraction of [A2-]
+        return -2 * f2 + (-1) * f1  # average charge of phosphate
 
-    def calculate_charge(self, base_pkas, acid_pkas, diacid_pkas,
-                         pH, constant_q=0):
+    def calculate_charge(self, base_pkas, acid_pkas, pH, constant_q=0):
         """Calculate the molecule charge from all contributions."""
         charge = constant_q
         for pka in base_pkas:
             charge += self._calculate_basic_charge(pH, pka)
         for pka in acid_pkas:
             charge += self._calculate_acidic_charge(pH, pka)
-        for pkas in diacid_pkas:
-            charge += self._calculate_diacidic_charge(pH, pkas)
         return charge
 
     def calculate_constant_charge(self, net_qs):

@@ -24,20 +24,20 @@ class RuntimeParameters:
         self.print_fragment_pkas = False
         self.calc_extn_coeff = False
         self.calc_pIChemiSt = False
-        self.calc_pI_fasta = False
 
 
+# TODO: Remove sic params
 class ChemicalParameters:
     def __init__(
         self,
-        ionized_Cterm,
-        ionized_Nterm,
+        ionizable_cterm,
+        ionizable_nterm,
         NPhosphateGroups,  # sic
         NAlkylLysGroups,  # sic
         NDiAlkylLysGroups,  # sic
     ):
-        self.ionized_Cterm = ionized_Cterm
-        self.ionized_Nterm = ionized_Nterm
+        self.ionizable_cterm = ionizable_cterm
+        self.ionizable_nterm = ionizable_nterm
         self.NPhosphateGroups = NPhosphateGroups  # sic
         self.NAlkylLysGroups = NAlkylLysGroups  # sic
         self.NDiAlkylLysGroups = NDiAlkylLysGroups  # sic

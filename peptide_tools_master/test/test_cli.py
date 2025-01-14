@@ -98,19 +98,7 @@ def test_fasta_file_input_1():
 def test_smiles_stdin_input_3():
     """Validity of console text output."""
     smiles = "C[C@@H](C(=O)N[C@@H](CCC(=O)O)C(=O)O)NC(=O)[C@H](C(C)C)NC(=O)[C@H](Cc1ccc(cc1)O)NC(=O)[C@@H]2CCCN2C(=O)[C@H](Cc3ccccc3)NCCCCN"  # noqa: E501
-    test_args = cli_base_args + [
-        "--input",
-        smiles,
-        "--print_fragment_pkas",
-        "--ionized_Cterm",
-        "--ionized_Nterm",
-        "-p",
-        0,
-        "-l",
-        0,
-        "-l",
-        0,
-    ]
+    test_args = cli_base_args + ["--input", smiles, "--print_fragment_pkas"]
     subprocess_output = subprocess.run(
         stringify_list(test_args), capture_output=True, text=True
     )
@@ -213,6 +201,40 @@ def test_fasta_stdin_input_2():
     # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
     with open(f"{examples_dir}/payload_6_out.json.stdout", "r") as file:
+        expected = json.load(file)
+    assert result == expected
+
+
+def test_fasta_stdin_input_3():
+    """Validity of console JSON output for FASTA input."""
+    test_args = cli_base_args + ["--input", "FPYVAE", "--print_fragment_pkas"]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    with open(f"{examples_dir}/payload_7_out.json.stdout", "r") as file:
+        expected = json.load(file)
+    assert result == expected
+
+
+def test_fasta_stdin_all_capped_input_3():
+    """Validity of console JSON output for FASTA input."""
+    test_args = cli_base_args + [
+        "--input",
+        "FPYVAE",
+        "--print_fragment_pkas",
+        "--ionizable_nterm",
+        "false",
+        "--ionizable_cterm",
+        "false",
+    ]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    with open(f"{examples_dir}/payload_8_out.json.stdout", "r") as file:
         expected = json.load(file)
     assert result == expected
 

@@ -1,7 +1,12 @@
+import base64
 from enum import Enum
-from rdkit import Chem
-from rdkit.Chem.MolStandardize import rdMolStandardize
+from io import BytesIO
+
 from pichemist.utils import get_logger
+from rdkit import Chem
+from rdkit.Chem import Draw
+from rdkit.Chem import rdDepictor
+from rdkit.Chem.MolStandardize import rdMolStandardize
 
 log = get_logger(__name__)
 
@@ -25,8 +30,9 @@ class MolStandardiser(object):
         https://www.rdkit.org/docs/Cookbook.html
 
         """
-        ION_SMARTS = "[+1!h0!$([*]~[-1,-2,-3,-4])" \
-                     ",-1!$([*]~[+1,+2,+3,+4])]"
+        ION_SMARTS = (
+            "[+1!h0!$([*]~[-1,-2,-3,-4]),-1!$([*]~[+1,+2,+3,+4])]"  # noqa: E501
+        )
 
         pattern = Chem.MolFromSmarts(ION_SMARTS)
         at_matches = mol.GetSubstructMatches(pattern)
@@ -100,7 +106,7 @@ class PeptideCutter(object):
 
         """
         # Secondary and tertiary amide bonds
-        AMIDE_SMARTS = '[NX3,NX4;H0,H1][CX3](=[OX1])'
+        AMIDE_SMARTS = "[NX3,NX4;H0,H1][CX3](=[OX1])"
         amide_pattern = Chem.MolFromSmarts(AMIDE_SMARTS)
 
         amide_atoms = list()
@@ -116,3 +122,15 @@ class PeptideCutter(object):
         smiles_list = smiles.split(".")
         log.debug(f"Obtained {len(smiles_list)} fragments")
         return smiles_list
+
+
+def smiles_to_image(smiles, b64encode=True):
+    mol = Chem.MolFromSmiles(smiles)
+    rdDepictor.Compute2DCoords(mol)
+    img = Draw.MolToImage(mol, kekulize=True)
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    img_byte_data = buffered.getvalue()
+    if b64encode:
+        base64_image = base64.b64encode(img_byte_data).decode("utf-8")
+    return base64_image

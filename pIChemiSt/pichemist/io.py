@@ -20,7 +20,7 @@ class IOException(Exception):
     pass
 
 
-def generate_input(input_format, input_data, fasta=None):
+def generate_input(input_format, input_data):
     """Produces an input dictionary compatible with the API."""
     input_dict = dict()
     if input_format == InputFormat.SMILES_FILE or input_format == InputFormat.SD_FILE:
@@ -29,14 +29,16 @@ def generate_input(input_format, input_data, fasta=None):
         input_dict[1] = {
             InputAttribute.MOL_NAME.value: input_data,
             InputAttribute.MOL_OBJECT.value: Chem.MolFromSmiles(input_data),
-            InputAttribute.MOL_FASTA.value: fasta,
+            InputAttribute.MOL_FASTA.value: None,
         }
     if input_format == InputFormat.FASTA_STDIN:
         input_dict[1] = {
             InputAttribute.MOL_NAME.value: input_data,
-            InputAttribute.MOL_OBJECT.value: Chem.MolFromFASTA(input_data),
-            InputAttribute.MOL_FASTA.value: fasta,
+            InputAttribute.MOL_OBJECT.value: None,
+            InputAttribute.MOL_FASTA.value: input_data,
         }
+    if input_format == InputFormat.FASTA_FILE:
+        input_dict = read_fasta_file(input_data)
     return input_dict
 
 
@@ -80,6 +82,40 @@ def read_structure_file(input_filepath):
     return dict_input
 
 
+def read_fasta_file(input_filepath):
+    """
+    Reads a file containing FASTA entries using BioPython.
+
+    """
+    # TODO: Move into utils
+    # filename, ext = os.path.splitext(inputFile)
+    _, ext = os.path.splitext(input_filepath)
+
+    # Initialize file reader
+    if not ext == ".fasta":
+        raise Exception(
+            '!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. '
+        )
+
+    # use BioPython
+    from Bio import SeqIO
+
+    biosuppl = SeqIO.parse(open(input_filepath), "fasta")
+
+    # Populate input and assign properties
+    dict_input = dict()
+    uuid = 1
+    for biofasta in biosuppl:
+        dict_input[uuid] = {
+            InputAttribute.MOL_NAME.value: biofasta.id,
+            InputAttribute.MOL_OBJECT.value: None,
+            InputAttribute.MOL_FASTA.value: str(biofasta.seq),
+        }
+        uuid += 1
+
+    return dict_input
+
+
 def _format_results_for_console_output(prop_dict, prop):
     """Prints a formatted output for a dictionary of results."""
     lj = 12
@@ -116,7 +152,6 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
         )
 
         int_tr = dict_mol[OutputAttribute.PI_INTERVAL_THRESHOLD.value]
-        pka_set = dict_mol[OutputAttribute.PKA_SET.value]
 
         print(
             "\npH interval with charge between %4.1f and %4.1f and "
@@ -131,47 +166,54 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
         )
 
         if print_fragments:
-            base_pkas_fasta = dict_mol[OutputAttribute.BASE_PKA_FASTA.value]
-            acid_pkas_fasta = dict_mol[OutputAttribute.ACID_PKA_FASTA.value]
-            base_pkas_calc = dict_mol[OutputAttribute.BASE_PKA_CALC.value]
-            acid_pkas_calc = dict_mol[OutputAttribute.ACID_PKA_CALC.value]
-            constant_Qs_calc = dict_mol[OutputAttribute.CONSTANT_QS.value]
-
-            # Merge fasta and calculated pKas
-            base_pkas = base_pkas_fasta[pka_set] + base_pkas_calc
-            acid_pkas = acid_pkas_fasta[pka_set] + acid_pkas_calc
-            all_base_pkas = list()
-            acid_pkas = list()
-
-            # NOTE: Diacids prints disabled
-            # diacid_pkas_fasta = dict_mol["diacid_pkas_fasta"]
-            # diacid_pkas_calc = dict_mol["diacid_pkas_calc"]
-            # diacid_pkas = diacid_pkas_fasta[pka_set] + diacid_pkas_calc
-            # diacid_pkas = list()
-
-            # Zip values and structures
-            all_base_pkas, all_base_pkas_smi = list(), list()
-            acid_pkas, all_acid_pkas_smi = list(), list()
-            if len(base_pkas) != 0:
-                all_base_pkas, all_base_pkas_smi = zip(*base_pkas)
-            if len(acid_pkas) != 0:
-                acid_pkas, all_acid_pkas_smi = zip(*acid_pkas)
+            frag_base_pkas_fasta = dict_mol[OutputAttribute.FRAG_BASE_PKA_FASTA.value]
+            frag_acid_pkas_fasta = dict_mol[OutputAttribute.FRAG_ACID_PKA_FASTA.value]
+            frag_base_pkas_calc = dict_mol[OutputAttribute.FRAG_BASE_PKA_CALC.value]
+            frag_acid_pkas_calc = dict_mol[OutputAttribute.FRAG_ACID_PKA_CALC.value]
+            frag_constant_Qs_calc = dict_mol[OutputAttribute.FRAG_CONSTANT_QS.value]
 
             # Print the results
-            print("\nList of calculated BASE pKa values with their fragments")
-            for pkas, smi in zip(all_base_pkas, all_base_pkas_smi):
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles or AA, base pKa : %-15s %s" % (smi, " ".join(s_pkas)))
-            print("\nList of calculated ACID pKa values with their fragments")
-            for pkas, smi in zip(acid_pkas, all_acid_pkas_smi):
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles or AA, acid pKa : %-15s %s" % (smi, " ".join(s_pkas)))
-            print("\nList of constantly ionized fragments")
-            for v in constant_Qs_calc:
-                pkas = v[0]
-                smi = v[1]
-                s_pkas = ["%4.1f" % (pkas)]
-                print("smiles, charge : %-15s %s" % (smi, " ".join(s_pkas)))
+            print("\nList of calculated pKa values or constant charges")
+            format_header = "{:15s} {:5s}  {:17s}  {:s}"
+            format_results = "{:15s} {:5d}  {:17.1f}  {:s}"
+            print(
+                format_header.format("Type", "Count", "pKa_or_constant_Q", "Fragment")
+            )
+
+            for _, frag in frag_base_pkas_fasta.items():
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
+
+            for _, frag in frag_base_pkas_calc.items():
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
+
+            for _, frag in frag_acid_pkas_fasta.items():
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
+
+            for _, frag in frag_acid_pkas_calc.items():
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
+
+            for _, frag in frag_constant_Qs_calc.items():
+                print(
+                    format_results.format(
+                        frag["type"], frag["count"], frag["pka"], frag["frag"]
+                    )
+                )
 
 
 def output_results(
@@ -223,10 +265,6 @@ def _prepare_output_list(input_dict, output_dict):
             "pI mean", "%.2f" % output_dict[mi][OutputAttribute.PI.value]["pI mean"]
         )
         mol.SetProp("pI std", "%.2f" % output_dict[mi][OutputAttribute.PI.value]["std"])
-        # NOTE: String interval is disabled
-        # print(output_dict[mi][PI_INTERVAL.value])
-        # mol.SetProp("pI interval", " - ".join(
-        #     ["%.2f" % x for x in output_dict[mi][PI_INTERVAL.value]]))
         mol.SetProp(
             "pI interval lower bound",
             "%.2f" % output_dict[mi][OutputAttribute.PI_INTERVAL.value][0],

@@ -96,6 +96,27 @@ def test_console_json_output():
     assert result == expected
 
 
+def test_console_json_output_images():
+    """Validity of console JSON output."""
+    args = arg_parser(
+        [
+            "-i",
+            f"{examples_dir}/payload_1.smi",
+            "-of",
+            "json",
+            "--print_fragment_pkas",
+            "--generate_fragment_images",
+            "--method",
+            "pkamatcher",
+        ]
+    )
+    result = stdout_to_variable(run_pichemist, args)
+    result = json.loads(result)
+    with open(f"{examples_dir}/payload_1_out_images.json", "r") as f:
+        expected = json.load(f)
+    assert result == expected
+
+
 def test_file_csv_output():
     """Validity of CSV file output."""
     tmp_filepath = tempfile.NamedTemporaryFile(suffix=".csv").name
@@ -232,9 +253,7 @@ def test_smiles_stdin_input_2():
     args = arg_parser(
         [
             "-i",
-            "N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)"
-            "C(=O)N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC"
-            "(=O)N)C(=O)O",
+            "N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)O",  # noqa: E501
             "-if",
             "smiles_stdin",
             "--print_fragment_pkas",
@@ -243,7 +262,7 @@ def test_smiles_stdin_input_2():
         ]
     )
     result = stdout_to_variable(run_pichemist, args)
-    with open(f"{examples_dir}/payload_2_out.txt", "r") as f:
+    with open(f"{examples_dir}/payload_2_out_smiles.txt", "r") as f:
         expected = f.read()
     assert result == expected
 
@@ -262,7 +281,72 @@ def test_fasta_stdin_input():
         ]
     )
     result = stdout_to_variable(run_pichemist, args)
-    with open(f"{examples_dir}/payload_2_out.txt", "r") as f:
+    with open(f"{examples_dir}/payload_2_out_fasta.txt", "r") as f:
+        expected = f.read()
+    assert result == expected
+
+
+def test_fasta_stdin_capped_cterm_input():
+    """Validity of FASTA stdin input and text output."""
+    args = arg_parser(
+        [
+            "-i",
+            "CNCN",
+            "-if",
+            "fasta_stdin",
+            "--print_fragment_pkas",
+            "--method",
+            "pkamatcher",
+            "--ionizable_cterm",
+            "false",
+        ]
+    )
+    result = stdout_to_variable(run_pichemist, args)
+    with open(f"{examples_dir}/payload_2_out_fasta_capped_cterm.txt", "r") as f:
+        expected = f.read()
+    assert result == expected
+
+
+def test_fasta_stdin_capped_nterm_input():
+    """Validity of FASTA stdin input and text output."""
+    args = arg_parser(
+        [
+            "-i",
+            "CNCN",
+            "-if",
+            "fasta_stdin",
+            "--print_fragment_pkas",
+            "--method",
+            "pkamatcher",
+            "--ionizable_nterm",
+            "false",
+        ]
+    )
+    result = stdout_to_variable(run_pichemist, args)
+    with open(f"{examples_dir}/payload_2_out_fasta_capped_nterm.txt", "r") as f:
+        expected = f.read()
+    assert result == expected
+
+
+def test_fasta_stdin_all_capped_input():
+    """Validity of FASTA stdin input and text output."""
+    args = arg_parser(
+        [
+            "-i",
+            "CNCN",
+            "-if",
+            "fasta_stdin",
+            "--print_fragment_pkas",
+            "--method",
+            "pkamatcher",
+            "--ionizable_nterm",
+            "false",
+            "--ionizable_cterm",
+            "false",
+        ]
+    )
+    result = stdout_to_variable(run_pichemist, args)
+    with open(f"{examples_dir}/payload_2_out_fasta_all_capped.txt", "r") as f:
         expected = f.read()
     assert result == expected
 

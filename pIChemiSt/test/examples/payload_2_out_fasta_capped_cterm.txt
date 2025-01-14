@@ -1,0 +1,40 @@
+
+======================================================================================================================================================
+pI
+---------------------------------
+     pI mean  7.76        
+         err  0.62        
+         std  1.77        
+IPC2_peptide  8.52        
+ IPC_peptide  8.25        
+     ProMoST  7.83        
+       Gauci  7.56        
+    Grimsley  6.72        
+   Thurlkill  8.05        
+   Lehninger  8.3         
+    Toseland  6.86        
+
+
+======================================================================================================================================================
+Q at pH7.4
+---------------------------------
+Q at pH7.4 mean  0.26        
+         err  0.63        
+         std  1.79        
+IPC2_peptide  0.76        
+ IPC_peptide  0.77        
+     ProMoST  0.52        
+       Gauci  0.06        
+    Grimsley  -0.93       
+   Thurlkill  0.67        
+   Lehninger  0.78        
+    Toseland  -0.59       
+
+
+pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
+pI interval:  7.6 -  7.9
+
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.3  C_N-term
+acid                2                8.1  C

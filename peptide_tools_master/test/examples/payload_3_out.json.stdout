@@ -8,7 +8,6 @@
             "mol_name": "none"
         }
     },
-    "output_pI_fasta": {},
     "output_pIChemiSt": {
         "1": {
             "mol_name": "none",
@@ -45,142 +44,6 @@
             "pI_interval_threshold": 0.2,
             "plot_filename": "temp_1.png",
             "pKa_set": "IPC2_peptide",
-            "base_pkas_fasta": {
-                "IPC2_peptide": [],
-                "IPC_peptide": [],
-                "ProMoST": [],
-                "Gauci": [],
-                "Grimsley": [],
-                "Thurlkill": [],
-                "Lehninger": [],
-                "Toseland": []
-            },
-            "acid_pkas_fasta": {
-                "IPC2_peptide": [
-                    [
-                        4.507,
-                        "E"
-                    ],
-                    [
-                        2.977,
-                        "E_C-term"
-                    ],
-                    [
-                        9.153,
-                        "Y"
-                    ]
-                ],
-                "IPC_peptide": [
-                    [
-                        4.317,
-                        "E"
-                    ],
-                    [
-                        2.383,
-                        "E_C-term"
-                    ],
-                    [
-                        10.071,
-                        "Y"
-                    ]
-                ],
-                "ProMoST": [
-                    [
-                        4.75,
-                        "E"
-                    ],
-                    [
-                        3.5,
-                        "E_C-term"
-                    ],
-                    [
-                        9.84,
-                        "Y"
-                    ]
-                ],
-                "Gauci": [
-                    [
-                        4.45,
-                        "E"
-                    ],
-                    [
-                        4.75,
-                        "E_C-term"
-                    ],
-                    [
-                        10,
-                        "Y"
-                    ]
-                ],
-                "Grimsley": [
-                    [
-                        4.2,
-                        "E"
-                    ],
-                    [
-                        3.3,
-                        "E_C-term"
-                    ],
-                    [
-                        10.3,
-                        "Y"
-                    ]
-                ],
-                "Thurlkill": [
-                    [
-                        4.25,
-                        "E"
-                    ],
-                    [
-                        3.67,
-                        "E_C-term"
-                    ],
-                    [
-                        9.84,
-                        "Y"
-                    ]
-                ],
-                "Lehninger": [
-                    [
-                        4.25,
-                        "E"
-                    ],
-                    [
-                        2.34,
-                        "E_C-term"
-                    ],
-                    [
-                        10,
-                        "Y"
-                    ]
-                ],
-                "Toseland": [
-                    [
-                        4.29,
-                        "E"
-                    ],
-                    [
-                        3.19,
-                        "E_C-term"
-                    ],
-                    [
-                        9.61,
-                        "Y"
-                    ]
-                ]
-            },
-            "base_pkas_calc": [
-                [
-                    7.9,
-                    "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
-                ],
-                [
-                    10.4,
-                    "CC(=O)[C@H](Cc1ccccc1)NCCCCN"
-                ]
-            ],
-            "acid_pkas_calc": [],
-            "constant_Qs_calc": [],
             "frag_base_pkas_fasta": {},
             "frag_acid_pkas_fasta": {
                 "1": {
@@ -205,13 +68,13 @@
             "frag_base_pkas_calc": {
                 "1": {
                     "type": "base",
-                    "frag": "fragment_1.png",
+                    "frag": "CC(=O)[C@H](Cc1ccccc1)NCCCCN",
                     "count": 1,
                     "pka": 7.9
                 },
                 "2": {
                     "type": "base",
-                    "frag": "fragment_2.png",
+                    "frag": "CC(=O)[C@H](Cc1ccccc1)NCCCCN",
                     "count": 1,
                     "pka": 10.4
                 }

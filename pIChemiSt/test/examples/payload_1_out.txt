@@ -34,11 +34,10 @@ IPC2_peptide  0.63
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  8.6 -  9.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : F_N-term         7.9
-smiles or AA, base pKa : CC(=O)N[C@@H](CCCN)C(C)=O 10.4
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1               10.3  K
+base                1                8.3  F_N-term
+base                1               10.4  CC(=O)N[C@@H](CCCN)C(C)=O
+acid                1                3.2  A_C-term
+acid                1                3.5  CC(=O)N[C@@](C)(CC(=O)O)C(C)=O
