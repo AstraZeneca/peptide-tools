@@ -1,0 +1,67 @@
+{
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "FPYVAE",
+            "e205": 28580,
+            "e214": 18018,
+            "e280": 1490,
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 3.5625,
+                "IPC_peptide": 3.375,
+                "ProMoST": 3.75,
+                "Gauci": 3.5,
+                "Grimsley": 3.25,
+                "Thurlkill": 3.25,
+                "Lehninger": 3.25,
+                "Toseland": 3.375,
+                "pI mean": 3.4140625,
+                "std": 0.47547262670946683,
+                "err": 0.16810495930742198
+            },
+            "QpH7": {
+                "IPC2_peptide": -1.016076155159717,
+                "IPC_peptide": -1.0013031485429318,
+                "ProMoST": -1.0013839252088195,
+                "Gauci": -1.0013848317274412,
+                "Grimsley": -1.0006267830230153,
+                "Thurlkill": -1.0029102007184603,
+                "Lehninger": -1.0017981477155729,
+                "Toseland": -1.0053525190408676,
+                "Q at pH7.4 mean": -1.0038544638921034,
+                "std": 0.013633185762927715,
+                "err": 0.004820059051071041
+            },
+            "pI_interval": [
+                -1,
+                3.7249999999999983
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide",
+            "frag_base_pkas_fasta": {},
+            "frag_acid_pkas_fasta": {
+                "1": {
+                    "type": "acid",
+                    "frag": "Y",
+                    "count": 1,
+                    "pka": 9.951571428571429
+                },
+                "2": {
+                    "type": "acid",
+                    "frag": "E",
+                    "count": 1,
+                    "pka": 4.358142857142857
+                }
+            },
+            "frag_base_pkas_calc": {},
+            "frag_acid_pkas_calc": {},
+            "frag_Qs_calc": {}
+        }
+    }
+}

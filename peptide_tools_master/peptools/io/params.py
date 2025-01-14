@@ -26,6 +26,7 @@ class RuntimeParameters:
         self.calc_pIChemiSt = False
 
 
+# TODO: Remove sic params
 class ChemicalParameters:
     def __init__(
         self,

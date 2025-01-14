@@ -85,7 +85,9 @@ def arg_parser(args):
         type=str2bool,
         default=True,
         dest="ionizable_cterm",
-        help="For FASTA input only. Set if the C-terminus is not capped (free carboxylic acid)",
+        help="Applies to FASTA input only. "
+        "If set to 'false' the C-terminus is capped. "
+        "If set to 'true' the C-terminus is free amine. ",
     )
     parser.add_argument(
         "--method",

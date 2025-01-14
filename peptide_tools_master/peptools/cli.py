@@ -5,6 +5,7 @@ import sys
 from peptools.io import generate_input
 from peptools.io import generate_output
 from peptools.io import generate_parameter_set
+from peptools.utils import str2bool
 from peptools.wrapper import run_peptide_master
 
 
@@ -48,18 +49,22 @@ def arg_parser(args):
 
     ### keys for fasta input
     parser.add_argument(
-        "--ionizable_cterm",
-        dest="ionizable_cterm",
-        action="store_true",
-        help="is C-terminus ionizable [COO-]?",
-        default=False,
+        "--ionizable_nterm",
+        type=str2bool,
+        default=True,
+        dest="ionizable_nterm",
+        help="Applies to FASTA input only. "
+        "If set to 'false' the N-terminus is capped. "
+        "If set to 'true' the N-terminus is free amine. ",
     )
     parser.add_argument(
-        "--ionizable_nterm",
-        dest="ionizable_nterm",
-        action="store_true",
-        help="is N-terminus ionized [N+]?",
+        "--ionizable_cterm",
+        type=str2bool,
         default=True,
+        dest="ionizable_cterm",
+        help="Applies to FASTA input only. "
+        "If set to 'false' the C-terminus is capped. "
+        "If set to 'true' the C-terminus is free amine. ",
     )
     parser.add_argument(
         "-p",
@@ -95,7 +100,14 @@ def main():
     args = arg_parser(sys.argv[1:])
     mol_supply_json, io_params = generate_input(args.input)
     params = generate_parameter_set(args, io_params)
+    # print(args)
+    # exit()
+    # print(mol_supply_json)
+    # print(params.__dict__)
+    # exit()
     dict_out = run_peptide_master(mol_supply_json, params)
+    # print(dict_out)
+    # exit()
     generate_output(mol_supply_json, dict_out, params)
 
 
