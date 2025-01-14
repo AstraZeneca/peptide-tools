@@ -328,6 +328,29 @@ def test_fasta_stdin_capped_nterm_input():
     assert result == expected
 
 
+def test_fasta_stdin_all_capped_input():
+    """Validity of FASTA stdin input and text output."""
+    args = arg_parser(
+        [
+            "-i",
+            "CNCN",
+            "-if",
+            "fasta_stdin",
+            "--print_fragment_pkas",
+            "--method",
+            "pkamatcher",
+            "--ionizable_nterm",
+            "false",
+            "--ionizable_cterm",
+            "false",
+        ]
+    )
+    result = stdout_to_variable(run_pichemist, args)
+    with open(f"{examples_dir}/payload_2_out_fasta_all_capped.txt", "r") as f:
+        expected = f.read()
+    assert result == expected
+
+
 def test_file_ph_q_plot_1():
     """Existence of the pH/Q plot file."""
     tmp_file_prefix = tempfile.NamedTemporaryFile().name
