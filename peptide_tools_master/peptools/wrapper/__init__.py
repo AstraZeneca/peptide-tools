@@ -1,4 +1,6 @@
+from peptools.wrapper.descriptors import calculate_descriptors
 from peptools.wrapper.ec import calculate_extinction_coefficient
+from peptools.wrapper.liabilities import calculate_liabilities
 from peptools.wrapper.pi import calculate_pichemist
 
 

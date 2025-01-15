@@ -66,6 +66,7 @@ def arg_parser(args):
         "If set to 'false' the C-terminus is capped. "
         "If set to 'true' the C-terminus is free amine. ",
     )
+    # TODO: Remove these parameters
     parser.add_argument(
         "-p",
         action="store",
@@ -100,14 +101,7 @@ def main():
     args = arg_parser(sys.argv[1:])
     mol_supply_json, io_params = generate_input(args.input)
     params = generate_parameter_set(args, io_params)
-    # print(args)
-    # exit()
-    # print(mol_supply_json)
-    # print(params.__dict__)
-    # exit()
     dict_out = run_peptide_master(mol_supply_json, params)
-    # print(dict_out)
-    # exit()
     generate_output(mol_supply_json, dict_out, params)
 
 
