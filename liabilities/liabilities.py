@@ -221,10 +221,12 @@ def calc_liabilities_from_dict(input_dict, input_type="structure"):
     dict_output (dict): A dictionary with liabilities for each molecule or peptide.
     """
     dict_output = dict()
+    for mol_idx, mol_data in input_dict.items():
+        fasta = input_dict[mol_idx].get("fasta")
+        mol = input_dict[mol_idx].get("mol_obj")
 
-    if input_type == "structure":
-        # If the input is a structure (RDKit Molecule)
-        for mol_idx, mol_data in input_dict.items():
+        # MOL overrides FASTA
+        if mol:
             mol_name = mol_data.get("mol_name", "Unnamed Molecule")
             mol_object = mol_data.get("mol_obj")
 
@@ -240,9 +242,7 @@ def calc_liabilities_from_dict(input_dict, input_type="structure"):
                 "liabilities": liabilities
             }
     
-    elif input_type == "fasta":
-        # If the input is a fasta sequence (peptide sequence)
-        for mol_idx, mol_data in input_dict.items():
+        elif fasta:
             mol_name = mol_data.get("mol_name", "Unnamed Sequence")
             fasta = mol_data.get("fasta")
             
@@ -257,9 +257,5 @@ def calc_liabilities_from_dict(input_dict, input_type="structure"):
                 "mol_name": mol_name,
                 "liabilities": liabilities
             }
-    
-    else:
-        raise ValueError("Unknown input_type. It must be either 'structure' or 'fasta'.")
-    
     return dict_output
 

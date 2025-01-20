@@ -1,4 +1,14 @@
 {
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 795.935,
+            "seq_length": 6,
+            "logp": 0.43,
+            "fasta": "AEYVPX",
+            "smiles": "CC(C)[C@H](NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@@H]1CCCN1C(=O)[C@H](Cc1ccccc1)NCCCCN)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(=O)O)C(=O)O"
+        }
+    },
     "output_extn_coeff": {
         "1": {
             "fasta": "AEYVPX",

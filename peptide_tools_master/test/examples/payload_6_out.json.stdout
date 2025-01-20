@@ -1,4 +1,14 @@
 {
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 445.534,
+            "seq_length": 5,
+            "logp": -1.732,
+            "fasta": "MAGAP",
+            "smiles": "CSCC[C@H](N)C(=O)N[C@@H](C)C(=O)NCC(=O)N[C@@H](C)C(=O)N1CCC[C@H]1C(=O)O"
+        }
+    },
     "output_extn_coeff": {
         "1": {
             "fasta": "MAGAP",

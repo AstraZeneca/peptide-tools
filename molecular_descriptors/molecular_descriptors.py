@@ -1,12 +1,11 @@
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from Bio.SeqUtils import molecular_weight
-# from Bio.SeqUtils import gravy
 from rdkit.Chem import Crippen
+from smi2scrambledfasta import get_scrambled_fasta_from_mol
 
 def calc_molecular_descriptors_from_dict(
-    input_dict,
-    input_type="structure",
+    input_dict
 ):
     """
     Calculates the molecular weight and length of molecules (or peptides) from the input dictionary.
@@ -19,44 +18,35 @@ def calc_molecular_descriptors_from_dict(
     dict_output (dict): A dictionary with molecular weights and lengths for each molecule or peptide.
     """
     dict_output = dict()
+    for mol_idx, mol_data in input_dict.items():
+        fasta = input_dict[mol_idx].get("fasta")
+        mol = input_dict[mol_idx].get("mol_obj")
+        mol_name = input_dict[mol_idx].get("mol_name", "unnamed molecule")
 
-    if input_type == "structure":
-        # If the input is a structure (SMILES or RDKit molecule)
-        for mol_idx in input_dict.keys():
-            mol_name = input_dict[mol_idx].get("mol_name", "Unnamed Molecule")
-            mol_object = input_dict[mol_idx].get("mol_obj")
-            fasta = input_dict[mol_idx].get("fasta")
-
-            if mol_object is None:
-                raise ValueError(f"Molecule object for {mol_name} is missing.")
+        # MOL overrides FASTA
+        if mol:
+            fasta = get_scrambled_fasta_from_mol(mol)
             
             # Calculate the molecular weight using RDKit
-            mol_weight = Descriptors.MolWt(mol_object)
-
-            # Calculate the GRAVY score
-            # gravy_score = gravy(fasta)
+            mol_weight = round(Descriptors.MolWt(mol), 3)
 
             # Calculate ClogP (logP)
-            logp = Crippen.MolLogP(mol_object)
+            logp = round(Crippen.MolLogP(mol), 3)
 
             # Generate SMILES from RDKit mol object
-            smiles = Chem.MolToSmiles(mol_object)
+            smiles = Chem.MolToSmiles(mol)
 
             # Store the result in the output dictionary
             dict_output[mol_idx] = {
                 "mol_name": mol_name,
                 "molecular_weight": mol_weight,
                 "seq_length": len(fasta),  # Length of the molecule fasta
-                # "gravy_score": gravy_score,  # GRAVY score
                 "logp":logp,
                 "fasta":fasta,
                 "smiles":smiles                           
             }
     
-    elif input_type == "fasta":
-        # If the input is a fasta sequence (protein or peptide sequence)
-        for mol_idx in input_dict.keys():
-            mol_name = input_dict[mol_idx].get("mol_name", "Unnamed Sequence")
+        elif fasta:
             fasta = input_dict[mol_idx].get("fasta")
             
             if fasta is None:
@@ -72,17 +62,12 @@ def calc_molecular_descriptors_from_dict(
                 raise ValueError(f"FASTA sequence for {mol_name} contains unknown letters. Please replace with known amio-acids.")
                 #fasta = fasta.replace("X","")
 
-
-
             # Calculate molecular weight for the peptide sequence
-            mol_weight = molecular_weight(fasta, seq_type='protein')
+            mol_weight = round(molecular_weight(fasta, seq_type='protein'), 3)
             seq_length = len(fasta)  # Length of the peptide sequence
-            
-            # Calculate the GRAVY score
-            # gravy_score = gravy(fasta)
 
             mol_from_fasta = Chem.MolFromSequence(fasta)
-            logp = Crippen.MolLogP(mol_from_fasta)
+            logp = round(Crippen.MolLogP(mol_from_fasta), 3)
 
             # Generate SMILES from RDKit mol object
             smiles = Chem.MolToSmiles(mol_from_fasta)
@@ -92,14 +77,10 @@ def calc_molecular_descriptors_from_dict(
                 "mol_name": mol_name,
                 "molecular_weight": mol_weight,
                 "seq_length": seq_length,  # Length of the peptide sequence
-                # "gravy_score": gravy_score,  # GRAVY score
                 "logp":logp,
                 "fasta":fasta,
                 "smiles":smiles      
             }
-    
-    else:
-        raise ValueError("Unknown input_type. It must be either 'structure' or 'fasta'.")
     
     return dict_output
 
