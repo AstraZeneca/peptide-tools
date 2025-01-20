@@ -85,7 +85,7 @@ def test_fasta_file_input_1():
     fasta_file = os.path.join(examples_dir, "payload_2.fasta")
     temporary_result_file = os.path.join(examples_dir, "payload_2_OUTPUT.csv")
     temporary_plot_file = os.path.join(examples_dir, "payload_2_1.png")
-    temporary_file_list = [temporary_result_file, temporary_plot_file]    
+    temporary_file_list = [temporary_result_file, temporary_plot_file]
     try:
         raise_if_file_exists_list(temporary_file_list)
         test_args = cli_base_args + ["--input", fasta_file]

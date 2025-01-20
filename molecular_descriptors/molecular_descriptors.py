@@ -1,19 +1,19 @@
-from rdkit import Chem
-from rdkit.Chem import Descriptors
 from Bio.SeqUtils import molecular_weight
+from rdkit import Chem
 from rdkit.Chem import Crippen
+from rdkit.Chem import Descriptors
+
 from smi2scrambledfasta import get_scrambled_fasta_from_mol
 
-def calc_molecular_descriptors_from_dict(
-    input_dict
-):
+
+def calc_molecular_descriptors_from_dict(input_dict):
     """
     Calculates the molecular weight and length of molecules (or peptides) from the input dictionary.
-    
+
     Parameters:
     input_dict (dict): A dictionary containing molecular data.
     input_type (str): Defines the input type, either "structure" (RDKit Molecule) or "fasta" (Amino Acid Sequence).
-    
+
     Returns:
     dict_output (dict): A dictionary with molecular weights and lengths for each molecule or peptide.
     """
@@ -26,7 +26,7 @@ def calc_molecular_descriptors_from_dict(
         # MOL overrides FASTA
         if mol:
             fasta = get_scrambled_fasta_from_mol(mol)
-            
+
             # Calculate the molecular weight using RDKit
             mol_weight = round(Descriptors.MolWt(mol), 3)
 
@@ -41,29 +41,33 @@ def calc_molecular_descriptors_from_dict(
                 "mol_name": mol_name,
                 "molecular_weight": mol_weight,
                 "seq_length": len(fasta),  # Length of the molecule fasta
-                "logp":logp,
-                "fasta":fasta,
-                "smiles":smiles                           
+                "logp": logp,
+                "fasta": fasta,
+                "smiles": smiles,
             }
-    
+
         elif fasta:
             fasta = input_dict[mol_idx].get("fasta")
-            
+
             if fasta is None:
                 raise ValueError(f"FASTA sequence for {mol_name} is missing.")
-            
-            # if nonnatural is given in fasta - skip it to allow further calcualtions. 
-            if "X" in fasta:
-                raise ValueError(f"FASTA sequence for {mol_name} contains X. Please skip it or replace by similar amio-acid.")
-                #fasta = fasta.replace("X","")
 
-            # if nonnatural is given in fasta - skip it to allow further calcualtions. 
+            # if nonnatural is given in fasta - skip it to allow further calcualtions.
+            if "X" in fasta:
+                raise ValueError(
+                    f"FASTA sequence for {mol_name} contains X. Please skip it or replace by similar amio-acid."
+                )
+                # fasta = fasta.replace("X","")
+
+            # if nonnatural is given in fasta - skip it to allow further calcualtions.
             if not fasta.isalpha():
-                raise ValueError(f"FASTA sequence for {mol_name} contains unknown letters. Please replace with known amio-acids.")
-                #fasta = fasta.replace("X","")
+                raise ValueError(
+                    f"FASTA sequence for {mol_name} contains unknown letters. Please replace with known amio-acids."
+                )
+                # fasta = fasta.replace("X","")
 
             # Calculate molecular weight for the peptide sequence
-            mol_weight = round(molecular_weight(fasta, seq_type='protein'), 3)
+            mol_weight = round(molecular_weight(fasta, seq_type="protein"), 3)
             seq_length = len(fasta)  # Length of the peptide sequence
 
             mol_from_fasta = Chem.MolFromSequence(fasta)
@@ -77,21 +81,21 @@ def calc_molecular_descriptors_from_dict(
                 "mol_name": mol_name,
                 "molecular_weight": mol_weight,
                 "seq_length": seq_length,  # Length of the peptide sequence
-                "logp":logp,
-                "fasta":fasta,
-                "smiles":smiles      
+                "logp": logp,
+                "fasta": fasta,
+                "smiles": smiles,
             }
-    
+
     return dict_output
 
 
 # def calculate_peptide_molecular_weight(fasta_sequence):
 #     """
 #     Calculates the molecular weight of a peptide sequence.
-    
+
 #     Parameters:
 #     fasta_sequence (str): The peptide sequence in FASTA format (e.g., "ACDEFG").
-    
+
 #     Returns:
 #     mol_weight (float): The molecular weight of the peptide.
 #     """
@@ -118,12 +122,12 @@ def calc_molecular_descriptors_from_dict(
 #         'W': 186.21, # Tryptophan
 #         'Y': 163.18, # Tyrosine
 #     }
-    
+
 #     mol_weight = 0.0
 #     for aa in fasta_sequence:
 #         if aa in amino_acid_weights:
 #             mol_weight += amino_acid_weights[aa]
 #         else:
 #             raise ValueError(f"Invalid amino acid: {aa}")
-    
+
 #     return mol_weight

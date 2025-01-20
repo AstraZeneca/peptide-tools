@@ -13,6 +13,6 @@ def run_peptide_master(mol_supply_json, params):
         "output_descriptors": descriptors_dict,
         "output_extn_coeff": ext_coeff_dict,
         "output_pIChemiSt": pichemist_dict,
-        "output_liabilities": liabilities_dict
+        "output_liabilities": liabilities_dict,
     }
     return dict_out
