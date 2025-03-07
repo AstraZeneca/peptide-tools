@@ -22,6 +22,7 @@ class RuntimeParameters:
     def __init__(self):
         self.generate_plots = True
         self.print_fragment_pkas = False
+        self.generate_fragment_images = False
         self.calc_extn_coeff = False
         self.calc_pIChemiSt = False
 

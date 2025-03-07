@@ -33,9 +33,11 @@ def arg_parser(args):
 
     parser.add_argument(
         "--generate_fragment_images",
+#        "--generate_plots",
         default=False,
         action="store_true",
         dest="generate_fragment_images",
+#        dest="generate_plots",
         help="Generate 2D depiction of the frgament smiles in base64 format.",
     )
 

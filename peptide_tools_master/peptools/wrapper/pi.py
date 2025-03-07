@@ -16,5 +16,6 @@ def calculate_pichemist(mol_supply_json, params):
             print_fragments=params.run.print_fragment_pkas,
             ionizable_nterm=params.chem.ionizable_nterm,
             ionizable_cterm=params.chem.ionizable_cterm,
+            generate_fragment_images=params.run.generate_fragment_images,
         )
     return dict_out_pIChemiSt

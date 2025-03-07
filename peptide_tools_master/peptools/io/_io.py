@@ -106,6 +106,7 @@ def configure_runtime_parameters(args, input_file_extension):
     params = RuntimeParameters()
     params.generate_plot = False
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
+    params.generate_fragment_images = bool(args.generate_fragment_images)
     # TODO: Merge logic since pIfasta has been removed
     if input_file_extension in [
         InputFileExtension.SMI,
