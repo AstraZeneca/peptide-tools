@@ -41,6 +41,7 @@ class InputFormat(BaseEnum):
 class InputFileExtension(BaseEnum):
     SDF = "sdf"
     SMILES = "smi"
+    FASTA = "fasta"
 
 
 class OutputAttribute(BaseEnum):

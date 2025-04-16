@@ -24,7 +24,7 @@ setup(
     author="Gian Marco Ghiandoni",
     author_email="ghiandoni.g@gmail.com",
     license="Apache 2.0",
-    install_requires=["matplotlib", "rdkit"],
+    install_requires=["matplotlib", "rdkit", "biopython"],
     setup_requires=["pytest-runner", "flake8"],
     tests_require=["pytest==7.1.2"],
     test_suite="test",

@@ -49,11 +49,8 @@ def read_structure_file(input_filepath):
     of the file.
 
     """
-    _, ext = os.path.splitext(input_filepath)
-    if not ext:
-        raise FileFormatError("Something is wrong with the file " f"{input_filepath}")
-
     # Initialize file reader
+    ext = _get_input_extension(input_filepath)
     try:
         if ext[1:] == InputFileExtension.SDF.value:
             suppl = Chem.SDMolSupplier(input_filepath)
@@ -87,33 +84,39 @@ def read_fasta_file(input_filepath):
     Reads a file containing FASTA entries using BioPython.
 
     """
-    # TODO: Move into utils
-    # filename, ext = os.path.splitext(inputFile)
-    _, ext = os.path.splitext(input_filepath)
+    from Bio import SeqIO  # conditional import
 
     # Initialize file reader
-    if not ext == ".fasta":
-        raise Exception(
-            '!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. '
-        )
-
-    # use BioPython
-    from Bio import SeqIO
-
-    biosuppl = SeqIO.parse(open(input_filepath), "fasta")
+    ext = _get_input_extension(input_filepath)
+    try:
+        if ext[1:] == InputFileExtension.FASTA.value:
+            suppl = SeqIO.parse(open(input_filepath), "fasta")
+        else:
+            raise FileFormatError(
+                "Invalid format. Only the formats "
+                f"{MODELS[InputFileExtension]} are accepted"
+            )
+    except OSError:
+        raise OSError(f"File error: Does the file exist? {input_filepath}")
 
     # Populate input and assign properties
     dict_input = dict()
     uuid = 1
-    for biofasta in biosuppl:
+    for fasta in suppl:
         dict_input[uuid] = {
-            InputAttribute.MOL_NAME.value: biofasta.id,
+            InputAttribute.MOL_NAME.value: fasta.id,
             InputAttribute.MOL_OBJECT.value: None,
-            InputAttribute.MOL_FASTA.value: str(biofasta.seq),
+            InputAttribute.MOL_FASTA.value: str(fasta.seq),
         }
         uuid += 1
-
     return dict_input
+
+
+def _get_input_extension(input_filepath):
+    _, ext = os.path.splitext(input_filepath)
+    if not ext:
+        raise FileFormatError("Something is wrong with the file " f"{input_filepath}")
+    return ext
 
 
 def _format_results_for_console_output(prop_dict, prop):
