@@ -33,11 +33,9 @@ def arg_parser(args):
 
     parser.add_argument(
         "--generate_fragment_images",
-#        "--generate_plots",
         default=False,
         action="store_true",
         dest="generate_fragment_images",
-#        dest="generate_plots",
         help="Generate 2D depiction of the frgament smiles in base64 format.",
     )
 
@@ -67,31 +65,6 @@ def arg_parser(args):
         help="Applies to FASTA input only. "
         "If set to 'false' the C-terminus is capped. "
         "If set to 'true' the C-terminus is free amine. ",
-    )
-    # TODO: Remove these parameters
-    parser.add_argument(
-        "-p",
-        action="store",
-        dest="NPhosphateGroups",
-        help="Number of phosphorilated residues. These should be denoted as X in the sequence.",
-        default=0,
-        type=int,
-    )
-    parser.add_argument(
-        "-l",
-        action="store",
-        dest="NAlkylLysGroups",
-        help="Number of monoalkylated Lys residues. These should be denoted as X in the sequence.",
-        default=0,
-        type=int,
-    )
-    parser.add_argument(
-        "-d",
-        action="store",
-        dest="NDiAlkylLysGroups",
-        help="Number of dinoalkylated Lys residues. These should be denoted as X in the sequence.",
-        default=0,
-        type=int,
     )
     if not args:
         args = ["-h"]

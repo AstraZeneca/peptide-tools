@@ -29,7 +29,7 @@ def generate_input(input_data):
     input_data = input_data.encode("utf-8").decode("unicode_escape")
     params = IOParameters()
     mol_supply_json = dict()
-    input_data = _polish_input(input_data, params)
+    input_data = _polish_input(input_data)
 
     # Validate input
     if not input_data:
@@ -55,7 +55,7 @@ def generate_input(input_data):
     return mol_supply_json, params
 
 
-def _polish_input(input_data, params):
+def _polish_input(input_data):
     input_data = input_data.strip()
     input_data = input_data.replace("ENDOFLINE", "\n")
     return input_data
@@ -107,27 +107,13 @@ def configure_runtime_parameters(args, input_file_extension):
     params.generate_plot = False
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
     params.generate_fragment_images = bool(args.generate_fragment_images)
-    # TODO: Merge logic since pIfasta has been removed
-    if input_file_extension in [
-        InputFileExtension.SMI,
-        InputFileExtension.SDF,
-    ]:
-        params.calc_extn_coeff = True
-        params.calc_pIChemiSt = True
-    elif input_file_extension == InputFileExtension.FASTA:
-        params.calc_extn_coeff = True
-        params.calc_pIChemiSt = True
+    params.calc_extn_coeff = True
+    params.calc_pIChemiSt = True
     return params
 
 
 def configure_chemical_parameters(args):
-    return ChemicalParameters(
-        args.ionizable_cterm,
-        args.ionizable_nterm,
-        args.NPhosphateGroups,
-        args.NAlkylLysGroups,
-        args.NDiAlkylLysGroups,
-    )
+    return ChemicalParameters(args.ionizable_cterm, args.ionizable_nterm)
 
 
 def generate_parameter_set(args, io_params):

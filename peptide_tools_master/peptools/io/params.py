@@ -27,18 +27,7 @@ class RuntimeParameters:
         self.calc_pIChemiSt = False
 
 
-# TODO: Remove sic params
 class ChemicalParameters:
-    def __init__(
-        self,
-        ionizable_cterm,
-        ionizable_nterm,
-        NPhosphateGroups,  # sic
-        NAlkylLysGroups,  # sic
-        NDiAlkylLysGroups,  # sic
-    ):
+    def __init__(self, ionizable_cterm, ionizable_nterm):
         self.ionizable_cterm = ionizable_cterm
         self.ionizable_nterm = ionizable_nterm
-        self.NPhosphateGroups = NPhosphateGroups  # sic
-        self.NAlkylLysGroups = NAlkylLysGroups  # sic
-        self.NDiAlkylLysGroups = NDiAlkylLysGroups  # sic

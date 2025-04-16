@@ -138,6 +138,7 @@ def test_smiles_stdin_input_multiline_1():
     raise_if_file_not_exists_list([results_filepath])
     with open(results_filepath, "r") as file:
         result = file.read()
+        remove_file_list([results_filepath])
 
     with open(f"{examples_dir}/payload_4_out.csv", "r") as file:
         expected = file.read()
@@ -171,6 +172,7 @@ def test_fasta_stdin_input_1():
     raise_if_file_not_exists_list([results_filepath])
     with open(results_filepath, "r") as file:
         result = file.read()
+        remove_file_list([results_filepath])
 
     with open(f"{examples_dir}/payload_5_out.csv", "r") as file:
         expected = file.read()
@@ -200,6 +202,28 @@ def test_sdf_file_input_1():
         ), "Expected output file content does not match"
     finally:
         remove_file_list(temporary_file_list)
+
+
+def test_sdf_stdin_input_1():
+    """Validity of SDF file output for SDF format."""
+    with open(f"{examples_dir}/payload_5.sdf", "r") as file:
+        sdf = file.read()
+    test_args = cli_base_args + ["--input", sdf]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    assert "outputFile" in result
+    results_filepath = result["outputFile"]
+    raise_if_file_not_exists_list([results_filepath])
+    with open(results_filepath, "r") as file:
+        result = file.read()
+        remove_file_list([results_filepath])
+
+    with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
+        expected = file.read()
+    assert result == expected
 
 
 def test_fasta_stdin_input_2():
