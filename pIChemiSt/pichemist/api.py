@@ -6,7 +6,6 @@ from pichemist.core import compile_frags_pkas_for_output
 from pichemist.core import merge_matched_and_calculated_pkas
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.model import InputAttribute
-from pichemist.model import InputFormat
 from pichemist.model import MODELS
 from pichemist.model import OutputAttribute
 from pichemist.model import PKaMethod
@@ -124,9 +123,10 @@ def pichemist_from_dict(
     dict_output = dict()
     for mol_idx in input_dict.keys():
         # Prepare molecule and break into fragments
-        mol_name = input_dict[mol_idx][InputAttribute.MOL_NAME.value]
-        fasta = input_dict[mol_idx].get(InputAttribute.MOL_FASTA.value)
-        mol = input_dict[mol_idx].get(InputAttribute.MOL_OBJECT.value)
+        dct = input_dict[mol_idx]
+        mol_name = dct[InputAttribute.MOL_NAME.value]
+        fasta = dct.get(InputAttribute.MOL_FASTA.value)
+        mol = dct.get(InputAttribute.MOL_OBJECT.value)
 
         # Check input validity
         if not any([mol, fasta]):

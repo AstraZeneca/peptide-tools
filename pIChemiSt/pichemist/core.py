@@ -125,8 +125,9 @@ def compile_frags_pkas_for_output(
     generate_fragment_images=False,
 ):
     """
-    Produces dictionary with fragmets (known AA or smiles fragment), their occurences in the molecule, corresponding pKa
-    (average between pKa sets in case of known AA)
+    Produces dictionary with fragments (known AA or SMILES fragment),
+    their occurences in the molecule, and corresponding pKa
+    (average between pKa sets in the case of known AA).
 
     """
     frag_acid_pkas_fasta = calculate_frags_for_output_fasta("acid", acid_pkas_fasta)
@@ -177,7 +178,6 @@ def calculate_frags_for_output_calc(
             OutputFragAttribute.PKA: pka,
         }
 
-        base64_image = None
         if generate_fragment_images:
             frag_pkas_calc[frg_idx][OutputFragAttribute.IMAGE] = smiles_to_image(smi)
     return frag_pkas_calc

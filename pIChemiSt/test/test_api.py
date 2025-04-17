@@ -61,7 +61,7 @@ def test_pka_matcher_json_1_file():
 def test_pka_matcher_json_1_stdin():
     """Example with mixed amino acids using pKaMatcher."""
     args = {
-        "input_data": "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O",  # ignore
+        "input_data": "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O",  # noqa
         "input_format": "smiles_stdin",
         "plot_ph_q_curve": False,
         "print_fragments": False,
@@ -70,7 +70,7 @@ def test_pka_matcher_json_1_stdin():
 
     expected = {
         1: {
-            "mol_name": "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O",  # ignore
+            "mol_name": "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O",  # noqa
             "pI": {
                 "IPC2_peptide": 8.046875,
                 "IPC_peptide": 9.8125,

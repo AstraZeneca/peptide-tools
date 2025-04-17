@@ -1,4 +1,8 @@
 [flake8]
 max-line-length = 95
 exclude =
-    legacy
+    legacy  # pIChemiSt data dirs
+    extn_coeff_fasta
+    liabilities
+    molecular_descriptors
+    smi2scrambledfasta
