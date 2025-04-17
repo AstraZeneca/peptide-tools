@@ -47,7 +47,7 @@ def arg_parser(args):
         default=False,
     )
 
-    ### keys for fasta input
+    # only for FASTA input
     parser.add_argument(
         "--ionizable_nterm",
         type=str2bool,

@@ -3,12 +3,10 @@ import os
 import subprocess
 import textwrap
 
-import pytest
 from helpers import raise_if_file_exists_list
 from helpers import raise_if_file_not_exists_list
 from helpers import remove_file_list
 from helpers import stringify_list
-from peptools.io import IOException
 
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
@@ -159,7 +157,7 @@ def test_fasta_stdin_input_1():
         SNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLL
         GTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERW
         RLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
-    """
+    """  # noqa
     )
     test_args = cli_base_args + ["--input", fasta]
     subprocess_output = subprocess.run(

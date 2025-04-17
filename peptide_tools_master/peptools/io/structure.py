@@ -1,6 +1,5 @@
 import os
 
-from peptools.io.input import InputAttribute
 from peptools.io.input import InputFactory
 from peptools.io.input import InputFileExtension
 from rdkit import Chem

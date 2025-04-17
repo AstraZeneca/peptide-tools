@@ -2,7 +2,6 @@ import os
 
 from Bio import SeqIO
 from peptools.io.file import FileFormatException
-from peptools.io.input import InputAttribute
 from peptools.io.input import InputFactory
 from peptools.io.input import InputFileExtension
 
