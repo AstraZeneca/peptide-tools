@@ -10,7 +10,10 @@ from peptools.wrapper import run_peptide_master
 
 
 __prog__ = "Peptide Tools Master"
-__doc__ = """TODO"""
+__doc__ = """CLI layer for accessing multiple tools with a single command.
+The tools include pIChemiSt, the prediction of the extinction coefficient,
+the identification of chemical liabilities, and the calculation of
+molecular descriptors."""
 
 
 def arg_parser(args):

@@ -138,4 +138,4 @@ print(output)
   - `make test_core` runs only the `core` tests including pKaMatcher and plots
   - `make test_acd` only runs `acd` tests (which require an ACD license)
   - `make test` runs both `core` and `acd` tests
-- Before committing new code, please always check that the formatting is consistent using `flake8`
+- We strongly recommend using `pre-commit` when contributing to this repo. The root folder of peptide-tools contains a `.pre-commit-config.yaml` which can be used to set a `pre-commit` hook and automatically run a series of validations. 
