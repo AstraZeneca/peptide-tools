@@ -2,6 +2,8 @@ import csv
 import json
 import os
 
+from peptools.io.adapters import ec
+from peptools.io.adapters import pi
 from peptools.io.fasta import _is_input_fasta_sequence
 from peptools.io.fasta import configure_fasta_input
 from peptools.io.fasta import read_fasta_file
@@ -64,7 +66,8 @@ def _polish_input(input_data):
 def read_file(input_data, params):
     params.input_filepath = input_data
     params.workdir = os.path.dirname(params.input_filepath)
-    params.filename = os.path.splitext(os.path.basename(params.input_filepath))[0]
+    full_filename = os.path.basename(params.input_filepath)
+    params.filename = os.path.splitext(full_filename)[0]
 
     # Validation
     params.filepath_prefix, params.input_file_extension = os.path.splitext(
@@ -124,71 +127,36 @@ def generate_parameter_set(args, io_params):
 
 
 def generate_output(mol_supply_json, dict_out, params):
-    pichemist_dict = dict_out["output_pIChemiSt"]
-    ext_coeff_dict = dict_out["output_extn_coeff"]
+    # Print to console if no output file
     if not params.io.output_filename:
         _print_to_console_and_exit(dict_out)
 
-    if params.io.input_file_extension != ".fasta":
-        mol_list = []
-        for mi in mol_supply_json.keys():
-            mol = mol_supply_json[mi]["mol_obj"]
+    # If output file, and input file is FASTA
+    elif params.io.input_file_extension == InputFileExtension.FASTA:
+        if not params.io.output_file_extension == OutputFileExtension.CSV:
+            raise FileFormatException("Only CSV output is supported for FASTA input.")
+        dict_list = _generate_fasta_output(mol_supply_json, dict_out, params)
+        dict_list_to_csv(dict_list, params.io.output_filename)
+        dict_out = _output_summary_to_dict(params.io.output_filename, mol_supply_json)
+        _print_to_console_and_exit(dict_out)
 
-            if params.run.calc_pIChemiSt:
-                mol.SetProp("pI mean", "%.2f" % pichemist_dict[mi]["pI"]["pI mean"])
-                mol.SetProp("pI std", "%.2f" % pichemist_dict[mi]["pI"]["std"])
-                mol.SetProp(
-                    "pI interval",
-                    " - ".join(["%.2f" % x for x in pichemist_dict[mi]["pI_interval"]]),
-                )
-                mol.SetProp(
-                    "pI interval threshold",
-                    "%.2f" % pichemist_dict[mi]["pI_interval_threshold"],
-                )
+    # If output file, an input file is SDF/SMI
+    elif params.io.input_file_extension in (
+        InputFileExtension.SDF,
+        InputFileExtension.SMI,
+    ):
+        mol_list = _generate_mol_output(mol_supply_json, dict_out, params)
 
-            if params.run.calc_extn_coeff:
-                mol.SetProp("mol_name", ext_coeff_dict[mi]["mol_name"])
-                mol.SetProp("Sequence(FASTA)", ext_coeff_dict[mi]["fasta"])
-                mol.SetProp("e205(nm)", "%i" % ext_coeff_dict[mi]["e205"])
-                mol.SetProp("e214(nm)", "%i" % ext_coeff_dict[mi]["e214"])
-                mol.SetProp("e280(nm)", "%i" % ext_coeff_dict[mi]["e280"])
-
-            mol_list.append(mol)
-
-        if params.io.output_file_extension == ".sdf":
+        if params.io.output_file_extension == OutputFileExtension.SDF:
             with Chem.SDWriter(params.io.output_filename) as sdf_w:
                 for mol in mol_list:
                     sdf_w.write(mol)
 
-        elif params.io.output_file_extension == ".csv":
-            with open(params.io.output_filename, "w") as csv_f:
-                csv_w = csv.writer(csv_f)
-                count = 0
-                for mol in mol_list:
-                    props = mol.GetPropsAsDict()
+        if params.io.output_file_extension == OutputFileExtension.CSV:
+            mol_data_to_csv(params.io.output_filename, mol_list)
 
-                    count += 1
-                    if count == 1:
-                        header = ["SMILES"] + list(props.keys())
-                        csv_w.writerow(header)
-
-                    row = [Chem.MolToSmiles(mol)]
-                    for p in header[1:]:
-                        row += [props[p]]
-                    csv_w.writerow(row)
-
-    if params.io.input_file_extension == ".fasta":
-        if not params.io.output_file_extension == ".csv":
-            raise FileFormatException("Only CSV output is supported for FASTA input.")
-        dict_list = _generate_fasta_output(mol_supply_json, dict_out, params)
-        dict_list_to_file(dict_list, params.io.output_filename)
-
-    dict_file = {
-        "outputFile": params.io.output_filename,
-        "outputInfo": "Number of molecules processed:"
-        + str(len(mol_supply_json.keys())),
-    }
-    print(json.dumps(dict_file))
+        dict_out = _output_summary_to_dict(params.io.output_filename, mol_supply_json)
+        _print_to_console_and_exit(dict_out)
 
 
 def _print_to_console_and_exit(dict_out):
@@ -199,27 +167,47 @@ def _print_to_console_and_exit(dict_out):
 def _generate_fasta_output(mol_supply_json, dict_out, params):
     ext_coeff_dict = dict_out["output_extn_coeff"]
     pichemist_dict = dict_out["output_pIChemiSt"]
-
     dict_list = list()
-    for mi in mol_supply_json.keys():
-        res = dict()
-        fasta = mol_supply_json[mi]["fasta"]
+    for idx in mol_supply_json.keys():
+        dct = dict()
 
         if params.run.calc_pIChemiSt:
-            res["pI mean"] = "%.2f" % pichemist_dict[mi]["pI"]["pI mean"]
-            res["pI std"] = "%.2f" % pichemist_dict[mi]["pI"]["std"]
+            pichemist_res = pichemist_dict[idx]
+            pi._append_pichemist_props_to_dict(dct, pichemist_res)
 
         if params.run.calc_extn_coeff:
-            res["mol_name"] = ext_coeff_dict[mi]["mol_name"]
-            res["Sequence(FASTA)"] = ext_coeff_dict[mi]["fasta"]
-            res["e205(nm)"] = "%i" % ext_coeff_dict[mi]["e205"]
-            res["e214(nm)"] = "%i" % ext_coeff_dict[mi]["e214"]
-            res["e280(nm)"] = "%i" % ext_coeff_dict[mi]["e280"]
-        dict_list.append(res)
+            ext_coeff_res = ext_coeff_dict[idx]
+            ec._append_ext_coeff_props_to_dict(dct, ext_coeff_res)
+        dict_list.append(dct)
     return dict_list
 
 
-def dict_list_to_file(dict_list, filename):
+def _generate_mol_output(mol_supply_json, dict_out, params):
+    pichemist_dict = dict_out["output_pIChemiSt"]
+    ext_coeff_dict = dict_out["output_extn_coeff"]
+    mol_list = []
+    for idx in mol_supply_json.keys():
+        mol = mol_supply_json[idx]["mol_obj"]
+
+        if params.run.calc_pIChemiSt:
+            pichemist_res = pichemist_dict[idx]
+            pi._append_pichemist_props_to_mol(mol, pichemist_res)
+
+        if params.run.calc_extn_coeff:
+            ext_coeff_res = ext_coeff_dict[idx]
+            ec._append_ext_coeff_props_to_mol(mol, ext_coeff_res)
+        mol_list.append(mol)
+    return mol_list
+
+
+def _output_summary_to_dict(output_filename, output_dict):
+    return {
+        "outputFile": output_filename,
+        "outputInfo": f"Number of molecules processed: {len(output_dict.keys())}",
+    }
+
+
+def dict_list_to_csv(dict_list, filename):
     with open(filename, "w") as file:
         count = 0
         writer = csv.writer(file)
@@ -232,4 +220,22 @@ def dict_list_to_file(dict_list, filename):
             row = []
             for h in header:
                 row += [attributes[h]]
+            writer.writerow(row)
+
+
+def mol_data_to_csv(output_filename, mol_list):
+    with open(output_filename, "w") as file:
+        writer = csv.writer(file)
+        count = 0
+        for mol in mol_list:
+            props = mol.GetPropsAsDict()
+            count += 1
+            # Write header (can only be done once started the loop)
+            if count == 1:
+                header = ["SMILES"] + list(props.keys())
+                writer.writerow(header)
+            # Write contents
+            row = [Chem.MolToSmiles(mol)]
+            for p in header[1:]:
+                row += [props[p]]
             writer.writerow(row)
