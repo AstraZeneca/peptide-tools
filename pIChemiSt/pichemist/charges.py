@@ -28,10 +28,9 @@ class SmartsChargeCalculator(object):
         """Produces a list of charges and matching SMILES."""
         net_qs = list()
         for smiles in smiles_list:
-            # sic - Appends one charge and the SMILES for each match
             mol = self._get_mol_from_smiles(smiles)
-            # TODO: Remove redundant standardisation after refactoring
             mol = MolStandardiser().standardise_molecule(mol)
+            # sic - Appends charge 1 and the SMILES for each match
             for _ in self._get_net_qs_matches_from_mol(mol):
                 net_qs.append((1, smiles))
         return net_qs
@@ -48,10 +47,11 @@ class SmartsChargeCalculator(object):
 
     def calculate_net_qs_from_smiles(self, smiles):
         """Returns the number of charges for a given SMILES."""
-        # sic - The charges corresponds to the number of matches
         mol = self._get_mol_from_smiles(smiles)
         mol = MolStandardiser().standardise_molecule(mol)
-        return len(self._get_net_qs_matches_from_mol(mol))
+        # sic - The charges corresponds to the number of matches
+        number_of_charges = len(self._get_net_qs_matches_from_mol(mol))
+        return number_of_charges
 
 
 class PKaChargeCalculator(object):

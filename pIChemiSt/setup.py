@@ -17,7 +17,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name="pichemist",
     packages=find_packages(),
-    version="0.1.0",
+    version="0.2.0",
     description=__doc__,
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -30,7 +30,7 @@ setup(
     test_suite="test",
     package_dir={"pichemist": "pichemist"},
     include_package_data=True,
-    url="https://github.com/AstraZeneca/peptide-tools/blob/" "master/pIChemiSt",
+    url="https://github.com/AstraZeneca/peptide-tools/tree/master/pIChemiSt",
     entry_points={
         "console_scripts": ["pichemist=pichemist.cli:main"],
     },

@@ -66,10 +66,14 @@ pichemist -i "N[C@@]([H])(CS)C(=O)N[C@@]([H])(CC(=O)N)C(=O)N[C@@]([H])(CS)C(=O)N
 pichemist -i "C([C@@H](C(=O)O)N)SSC[C@@H](C(=O)O)N" -if smiles_stdin -of json
 
 # Use FASTA as input
-# Note that FASTA cannot be used to indicate if the N- and C- termini are capped or not.
-# Most of natural peptides have an acid on the C-terminus, however, synthetic peptides
-# may have an amide (not ionizable) at the C-terminus.
+# Note that FASTA assumes that C- and N- termini are ionisable by default
 pichemist -i "MNSERSDVTLY" -if fasta_stdin
+
+# Use FASTA with capped termini, i.e., non-ionisable, for both C- and N-.
+# These can be configured as preferred by removing the corresponding flags.
+# This configuration can also be used as a 'trick' for feeding cyclic peptides
+# as linear FASTA sequences as their termini will be assumed to be non ionisable.
+pichemist -i "MNSERSDVTLY" -if fasta_stdin --ionizable_nterm false --ionizable_cterm false
 
 # Use SDF as input
 pichemist -i test/examples/payload_4.sdf -if sdf
