@@ -1,6 +1,7 @@
 from pichemist.charges import PKaChargeCalculator
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.isoelectric import CurveCalculator
+from math import nan as math_nan
 from pichemist.isoelectric import IsoelectricCalculator
 from pichemist.model import OutputFragAttribute
 from pichemist.molecule import smiles_to_image
@@ -37,14 +38,15 @@ def get_low_and_high_from_interval_lists(interval_low_list, interval_high_list):
     not defined and NaN are provided instead.
 
     """
+    
     if len(interval_low_list) > 0:
         interval_low = mean(interval_low_list)
     else:
-        interval_low = float("NaN")
+        interval_low = math_nan
     if len(interval_high_list) > 0:
         interval_high = mean(interval_high_list)
     else:
-        interval_high = float("NaN")
+        interval_high = math_nan
     return interval_low, interval_high
 
 
@@ -108,6 +110,13 @@ def calculate_isoelectric_interval_and_threshold(pH_q_dict):
         if len(pH_int) > 1:
             interval_low_list.append(pH_int[0])
             interval_high_list.append(pH_int[-1])
+        elif len(pH_int) == 1:
+            interval_low_list.append(pH_int[0])
+            interval_high_list.append(pH_int[0])
+        else:
+            interval_low_list.append(math_nan)
+            interval_high_list.append(math_nan)
+
 
     # Average and return results
     interval_low, interval_high = get_low_and_high_from_interval_lists(
