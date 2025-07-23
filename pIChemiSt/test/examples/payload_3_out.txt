@@ -571,7 +571,7 @@ IPC2_peptide  -2.22
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  4.2
+pI interval:  4.2 -  4.2
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -886,7 +886,7 @@ IPC2_peptide  1.43
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  9.4 -  9.5
+pI interval:  9.3 -  9.4
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -977,7 +977,7 @@ IPC2_peptide  1.17
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  8.5 -  8.7
+pI interval:  8.4 -  8.6
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
