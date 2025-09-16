@@ -1,7 +1,9 @@
+from math import nan as math_nan
+
 from pichemist.charges import PKaChargeCalculator
+from pichemist.config import ROUNDING_DIGITS
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.isoelectric import CurveCalculator
-from math import nan as math_nan
 from pichemist.isoelectric import IsoelectricCalculator
 from pichemist.model import OutputFragAttribute
 from pichemist.molecule import smiles_to_image
@@ -25,9 +27,9 @@ def generate_stats_on_dict(input_dict, mean_title="mean"):
     value_list = list()
     for k in input_dict.keys():
         value_list += [input_dict[k]]
-    input_dict[mean_title] = mean(value_list)
-    input_dict["std"] = stddev(value_list)
-    input_dict["err"] = stderr(value_list)
+    input_dict[mean_title] = round(mean(value_list), ROUNDING_DIGITS)
+    input_dict["std"] = round(stddev(value_list), ROUNDING_DIGITS)
+    input_dict["err"] = round(stderr(value_list), ROUNDING_DIGITS)
     return input_dict
 
 
@@ -38,7 +40,7 @@ def get_low_and_high_from_interval_lists(interval_low_list, interval_high_list):
     not defined and NaN are provided instead.
 
     """
-    
+
     if len(interval_low_list) > 0:
         interval_low = mean(interval_low_list)
     else:
@@ -117,11 +119,14 @@ def calculate_isoelectric_interval_and_threshold(pH_q_dict):
             interval_low_list.append(math_nan)
             interval_high_list.append(math_nan)
 
-
     # Average and return results
     interval_low, interval_high = get_low_and_high_from_interval_lists(
         interval_low_list, interval_high_list
     )
+
+    # Round results for stability
+    interval_low = round(interval_low, ROUNDING_DIGITS)
+    interval_high = round(interval_high, ROUNDING_DIGITS)
     return (interval_low, interval_high), threshold
 
 

@@ -2,6 +2,7 @@ import tempfile
 
 import pytest
 from helpers import examples_dir
+from helpers import jsonify_output
 from pichemist.api import pichemist_from_dict
 from pichemist.io import generate_input
 
@@ -17,7 +18,7 @@ def test_pka_matcher_json_1_file():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Phe-Ornithine-aMeAsp-Lys-dAla",
             "pI": {
                 "IPC2_peptide": 8.046875,
@@ -28,24 +29,24 @@ def test_pka_matcher_json_1_file():
                 "Thurlkill": 9.0625,
                 "Lehninger": 9.859375,
                 "Toseland": 9.40625,
-                "pI mean": 9.0234375,
-                "std": 1.721588565104915,
-                "err": 0.6086734743994516,
+                "pI mean": 9.0234,
+                "std": 1.7216,
+                "err": 0.6087,
             },
             "QpH7": {
-                "IPC2_peptide": 0.6314906212267486,
-                "IPC_peptide": 0.9915539516610472,
-                "ProMoST": 0.26174063515548607,
-                "Gauci": 0.5540630760817584,
-                "Grimsley": 0.6645409545014482,
-                "Thurlkill": 0.797542965316429,
-                "Lehninger": 0.9932283675959863,
-                "Toseland": 0.9515959465104951,
-                "Q at pH7.4 mean": 0.7307195647561748,
-                "std": 0.6749606913955384,
-                "err": 0.2386346409600729,
+                "IPC2_peptide": 0.6315,
+                "IPC_peptide": 0.9916,
+                "ProMoST": 0.2617,
+                "Gauci": 0.5541,
+                "Grimsley": 0.6645,
+                "Thurlkill": 0.7975,
+                "Lehninger": 0.9932,
+                "Toseland": 0.9516,
+                "Q at pH7.4 mean": 0.7307,
+                "std": 0.675,
+                "err": 0.2386,
             },
-            "pI_interval": (8.624999999999998, 9.362499999999997),
+            "pI_interval": [8.625, 9.3625],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -55,7 +56,7 @@ def test_pka_matcher_json_1_file():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 def test_pka_matcher_json_1_stdin():
@@ -69,7 +70,7 @@ def test_pka_matcher_json_1_stdin():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O",  # noqa
             "pI": {
                 "IPC2_peptide": 8.046875,
@@ -80,24 +81,24 @@ def test_pka_matcher_json_1_stdin():
                 "Thurlkill": 9.0625,
                 "Lehninger": 9.859375,
                 "Toseland": 9.40625,
-                "pI mean": 9.0234375,
-                "std": 1.721588565104915,
-                "err": 0.6086734743994516,
+                "pI mean": 9.0234,
+                "std": 1.7216,
+                "err": 0.6087,
             },
             "QpH7": {
-                "IPC2_peptide": 0.6314906212267486,
-                "IPC_peptide": 0.9915539516610472,
-                "ProMoST": 0.26174063515548607,
-                "Gauci": 0.5540630760817584,
-                "Grimsley": 0.6645409545014482,
-                "Thurlkill": 0.797542965316429,
-                "Lehninger": 0.9932283675959863,
-                "Toseland": 0.9515959465104951,
-                "Q at pH7.4 mean": 0.7307195647561748,
-                "std": 0.6749606913955384,
-                "err": 0.2386346409600729,
+                "IPC2_peptide": 0.6315,
+                "IPC_peptide": 0.9916,
+                "ProMoST": 0.2617,
+                "Gauci": 0.5541,
+                "Grimsley": 0.6645,
+                "Thurlkill": 0.7975,
+                "Lehninger": 0.9932,
+                "Toseland": 0.9516,
+                "Q at pH7.4 mean": 0.7307,
+                "std": 0.675,
+                "err": 0.2386,
             },
-            "pI_interval": (8.624999999999998, 9.362499999999997),
+            "pI_interval": [8.625, 9.3625],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -107,7 +108,7 @@ def test_pka_matcher_json_1_stdin():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 def test_natural_aa_json_1():
@@ -121,7 +122,7 @@ def test_natural_aa_json_1():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Cys-Asn-Cys-Asn",
             "pI": {
                 "IPC2_peptide": 5.0,
@@ -132,24 +133,24 @@ def test_natural_aa_json_1():
                 "Thurlkill": 5.5,
                 "Lehninger": 5.0,
                 "Toseland": 4.875,
-                "pI mean": 5.09375,
-                "std": 0.6789237807000135,
-                "err": 0.240035804620894,
+                "pI mean": 5.0938,
+                "std": 0.6789,
+                "err": 0.24,
             },
             "QpH7": {
-                "IPC2_peptide": -0.23913646012640216,
-                "IPC_peptide": -0.23180587970079417,
-                "ProMoST": -0.47710727633330485,
-                "Gauci": -0.9370497315178979,
-                "Grimsley": -1.9322611310762747,
-                "Thurlkill": -0.33280195754105635,
-                "Lehninger": -0.21536815651977892,
-                "Toseland": -1.5908867442915533,
-                "Q at pH7.4 mean": -0.7445521671383828,
-                "std": 1.7898169252151255,
-                "err": 0.6327958424510355,
+                "IPC2_peptide": -0.2391,
+                "IPC_peptide": -0.2318,
+                "ProMoST": -0.4771,
+                "Gauci": -0.937,
+                "Grimsley": -1.9323,
+                "Thurlkill": -0.3328,
+                "Lehninger": -0.2154,
+                "Toseland": -1.5909,
+                "Q at pH7.4 mean": -0.7446,
+                "std": 1.7898,
+                "err": 0.6328,
             },
-            "pI_interval": (3.7624999999999984, 6.687499999999999),
+            "pI_interval": [3.7625, 6.6875],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -159,7 +160,7 @@ def test_natural_aa_json_1():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 @pytest.mark.acd
@@ -174,7 +175,7 @@ def test_acd_json_1():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Phe-Ornithine-aMeAsp-Lys-dAla",
             "pI": {
                 "IPC2_peptide": 8.046875,
@@ -185,24 +186,24 @@ def test_acd_json_1():
                 "Thurlkill": 9.0,
                 "Lehninger": 9.796875,
                 "Toseland": 9.34375,
-                "pI mean": 8.96875,
-                "std": 1.686776465258512,
-                "err": 0.5963655384650843,
+                "pI mean": 8.9688,
+                "std": 1.6868,
+                "err": 0.5964,
             },
             "QpH7": {
-                "IPC2_peptide": 0.6313327301392769,
-                "IPC_peptide": 0.9913960605735755,
-                "ProMoST": 0.2615827440680144,
-                "Gauci": 0.5539051849942872,
-                "Grimsley": 0.6643830634139766,
-                "Thurlkill": 0.7973850742289573,
-                "Lehninger": 0.9930704765085147,
-                "Toseland": 0.9514380554230234,
-                "Q at pH7.4 mean": 0.7305616736687033,
-                "std": 0.6749606913955383,
-                "err": 0.23863464096007284,
+                "IPC2_peptide": 0.6313,
+                "IPC_peptide": 0.9914,
+                "ProMoST": 0.2616,
+                "Gauci": 0.5539,
+                "Grimsley": 0.6644,
+                "Thurlkill": 0.7974,
+                "Lehninger": 0.9931,
+                "Toseland": 0.9514,
+                "Q at pH7.4 mean": 0.7306,
+                "std": 0.675,
+                "err": 0.2386,
             },
-            "pI_interval": (8.612499999999997, 9.312499999999996),
+            "pI_interval": [8.6125, 9.3125],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -212,7 +213,7 @@ def test_acd_json_1():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 @pytest.mark.acd
@@ -227,7 +228,7 @@ def test_acd_json_2():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Galas789",
             "pI": {
                 "IPC2_peptide": 7.875,
@@ -238,24 +239,24 @@ def test_acd_json_2():
                 "Thurlkill": 8.0,
                 "Lehninger": 7.75,
                 "Toseland": 7.875,
-                "pI mean": 7.890625,
-                "std": 0.37238672774415577,
-                "err": 0.13165859020588058,
+                "pI mean": 7.8906,
+                "std": 0.3724,
+                "err": 0.1317,
             },
             "QpH7": {
-                "IPC2_peptide": 0.08874508270557702,
-                "IPC_peptide": 0.029950764546196496,
-                "ProMoST": 0.22623319165452238,
-                "Gauci": 0.02686668488169408,
-                "Grimsley": 0.12698532501860005,
-                "Thurlkill": 0.11158023273557527,
-                "Lehninger": 0.028394223343287228,
-                "Toseland": 0.06859834054253844,
-                "Q at pH7.4 mean": 0.08841923067849887,
-                "std": 0.1794985133244505,
-                "err": 0.0634623079923114,
+                "IPC2_peptide": 0.0887,
+                "IPC_peptide": 0.03,
+                "ProMoST": 0.2262,
+                "Gauci": 0.0269,
+                "Grimsley": 0.127,
+                "Thurlkill": 0.1116,
+                "Lehninger": 0.0284,
+                "Toseland": 0.0686,
+                "Q at pH7.4 mean": 0.0884,
+                "std": 0.1794,
+                "err": 0.0634,
             },
-            "pI_interval": (6.987499999999999, 8.799999999999997),
+            "pI_interval": [6.9875, 8.8],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -265,7 +266,7 @@ def test_acd_json_2():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 @pytest.mark.acd
@@ -280,35 +281,35 @@ def test_natural_aa_json_2():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Cys-Asn-Cys-Asn",
             "pI": {
-                "IPC2_peptide": 5,
-                "IPC_peptide": 5,
+                "IPC2_peptide": 5.0,
+                "IPC_peptide": 5.0,
                 "ProMoST": 5.5,
-                "Gauci": 5,
+                "Gauci": 5.0,
                 "Grimsley": 4.875,
                 "Thurlkill": 5.5,
-                "Lehninger": 5,
+                "Lehninger": 5.0,
                 "Toseland": 4.875,
-                "pI mean": 5.09375,
-                "std": 0.6789237807000135,
-                "err": 0.240035804620894,
+                "pI mean": 5.0938,
+                "std": 0.6789,
+                "err": 0.24,
             },
             "QpH7": {
-                "IPC2_peptide": -0.23913646012640216,
-                "IPC_peptide": -0.23180587970079417,
-                "ProMoST": -0.47710727633330485,
-                "Gauci": -0.9370497315178979,
-                "Grimsley": -1.9322611310762747,
-                "Thurlkill": -0.33280195754105635,
-                "Lehninger": -0.21536815651977892,
-                "Toseland": -1.5908867442915533,
-                "Q at pH7.4 mean": -0.7445521671383828,
-                "std": 1.7898169252151255,
-                "err": 0.6327958424510355,
+                "IPC2_peptide": -0.2391,
+                "IPC_peptide": -0.2318,
+                "ProMoST": -0.4771,
+                "Gauci": -0.937,
+                "Grimsley": -1.9323,
+                "Thurlkill": -0.3328,
+                "Lehninger": -0.2154,
+                "Toseland": -1.5909,
+                "Q at pH7.4 mean": -0.7446,
+                "std": 1.7898,
+                "err": 0.6328,
             },
-            "pI_interval": (3.7624999999999984, 6.687499999999999),
+            "pI_interval": [3.7625, 6.6875],
             "pI_interval_threshold": 0.2,
             "pKa_set": "IPC2_peptide",
         }
@@ -318,7 +319,7 @@ def test_natural_aa_json_2():
     output = pichemist_from_dict(
         input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
     )
-    assert expected == output
+    assert expected == jsonify_output(output)
 
 
 def test_natural_aa_json_3():
@@ -339,7 +340,7 @@ def test_natural_aa_json_3():
     }
 
     expected = {
-        1: {
+        "1": {
             "mol_name": "Cys-Asn-Cys-Asn",
             "pI": {
                 "IPC2_peptide": 5.0,
@@ -350,24 +351,24 @@ def test_natural_aa_json_3():
                 "Thurlkill": 5.5,
                 "Lehninger": 5.0,
                 "Toseland": 4.875,
-                "pI mean": 5.09375,
-                "std": 0.6789237807000135,
-                "err": 0.240035804620894,
+                "pI mean": 5.0938,
+                "std": 0.6789,
+                "err": 0.24,
             },
             "QpH7": {
-                "IPC2_peptide": -0.23913646012640216,
-                "IPC_peptide": -0.23180587970079417,
-                "ProMoST": -0.47710727633330485,
-                "Gauci": -0.9370497315178979,
-                "Grimsley": -1.9322611310762747,
-                "Thurlkill": -0.33280195754105635,
-                "Lehninger": -0.21536815651977892,
-                "Toseland": -1.5908867442915533,
-                "Q at pH7.4 mean": -0.7445521671383828,
-                "std": 1.7898169252151255,
-                "err": 0.6327958424510355,
+                "IPC2_peptide": -0.2391,
+                "IPC_peptide": -0.2318,
+                "ProMoST": -0.4771,
+                "Gauci": -0.937,
+                "Grimsley": -1.9323,
+                "Thurlkill": -0.3328,
+                "Lehninger": -0.2154,
+                "Toseland": -1.5909,
+                "Q at pH7.4 mean": -0.7446,
+                "std": 1.7898,
+                "err": 0.6328,
             },
-            "pI_interval": (3.7624999999999984, 6.687499999999999),
+            "pI_interval": [3.7625, 6.6875],
             "pI_interval_threshold": 0.2,
             "plot_filename": tmp_filepath,
             "pKa_set": "IPC2_peptide",
@@ -382,4 +383,4 @@ def test_natural_aa_json_3():
         args["plot_ph_q_curve"],
         args["print_fragments"],
     )
-    assert expected == output
+    assert expected == jsonify_output(output)

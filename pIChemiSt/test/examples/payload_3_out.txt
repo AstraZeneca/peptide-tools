@@ -278,7 +278,7 @@ IPC2_peptide  -0.48
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  6.9
+pI interval:  4.2 -  6.9
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -360,7 +360,7 @@ IPC2_peptide  -0.48
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  6.9
+pI interval:  4.2 -  6.9
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -659,7 +659,7 @@ IPC2_peptide  -4.06
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.9 -  5.0
+pI interval:  5.0 -  5.0
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -863,7 +863,7 @@ IPC2_peptide  8.21
  IPC_peptide  9.8         
      ProMoST  9.3         
        Gauci  9.41        
-    Grimsley  9.77        
+    Grimsley  9.78        
    Thurlkill  9.43        
    Lehninger  9.78        
     Toseland  9.34        
@@ -901,16 +901,16 @@ constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  7.56        
-         err  0.37        
-         std  1.05        
+     pI mean  7.55        
+         err  0.35        
+         std  0.98        
 IPC2_peptide  7.47        
  IPC_peptide  8.0         
      ProMoST  7.08        
        Gauci  7.03        
     Grimsley  7.45        
    Thurlkill  7.56        
-   Lehninger  8.12        
+   Lehninger  8.0         
     Toseland  7.78        
 
 
@@ -1061,7 +1061,7 @@ IPC2_peptide  -2.12
  IPC_peptide  -1.96       
      ProMoST  -2.2        
        Gauci  -2.4        
-    Grimsley  -2.2        
+    Grimsley  -2.19       
    Thurlkill  -2.08       
    Lehninger  -1.96       
     Toseland  -1.97       

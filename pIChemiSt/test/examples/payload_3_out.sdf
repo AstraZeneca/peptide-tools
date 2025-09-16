@@ -198,7 +198,7 @@ M  END
 3.77
 
 >  <pI interval upper bound>  (2) 
-7.52
+7.53
 
 >  <pI interval threshold>  (2) 
 0.20
@@ -408,7 +408,7 @@ M  END
 3.77
 
 >  <pI interval upper bound>  (4) 
-7.52
+7.53
 
 >  <pI interval threshold>  (4) 
 0.20
@@ -464,7 +464,7 @@ M  END
 0.53
 
 >  <pI interval lower bound>  (5) 
-4.32
+4.33
 
 >  <pI interval upper bound>  (5) 
 5.71
@@ -654,7 +654,7 @@ M  END
 4.50
 
 >  <pI interval upper bound>  (8) 
-7.32
+7.33
 
 >  <pI interval threshold>  (8) 
 0.20
@@ -978,7 +978,7 @@ M  END
 10.45
 
 >  <pI interval upper bound>  (11) 
-11.52
+11.53
 
 >  <pI interval threshold>  (11) 
 0.20
@@ -2763,7 +2763,7 @@ M  END
 1.20
 
 >  <pI interval lower bound>  (19) 
-8.67
+8.68
 
 >  <pI interval upper bound>  (19) 
 8.90
@@ -3014,7 +3014,7 @@ M  END
 0.57
 
 >  <pI interval lower bound>  (20) 
-5.82
+5.83
 
 >  <pI interval upper bound>  (20) 
 5.91
@@ -3241,7 +3241,7 @@ M  END
 9.34
 
 >  <pI interval upper bound>  (21) 
-9.42
+9.43
 
 >  <pI interval threshold>  (21) 
 0.20
@@ -3448,10 +3448,10 @@ $$$$
 M  CHG  2  10   1  93  -1
 M  END
 >  <pI mean>  (22) 
-7.56
+7.55
 
 >  <pI std>  (22) 
-1.05
+0.98
 
 >  <pI interval lower bound>  (22) 
 7.21
@@ -3650,7 +3650,7 @@ M  END
 8.45
 
 >  <pI interval upper bound>  (23) 
-8.60
+8.59
 
 >  <pI interval threshold>  (23) 
 0.20
@@ -4016,7 +4016,7 @@ M  END
 0.19
 
 >  <pI interval lower bound>  (25) 
-4.57
+4.58
 
 >  <pI interval upper bound>  (25) 
 4.71

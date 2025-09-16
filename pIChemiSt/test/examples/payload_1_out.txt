@@ -20,7 +20,7 @@ Q at pH7.4
 ---------------------------------
 Q at pH7.4 mean  0.73        
          err  0.24        
-         std  0.67        
+         std  0.68        
 IPC2_peptide  0.63        
  IPC_peptide  0.99        
      ProMoST  0.26        

@@ -47,7 +47,7 @@ constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  8.83        
+     pI mean  8.84        
          err  0.41        
          std  1.17        
 IPC2_peptide  7.99        
@@ -77,7 +77,7 @@ IPC2_peptide  1.25
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
-pI interval:  8.8 -  9.0
+pI interval:  8.7 -  8.9
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -124,7 +124,7 @@ IPC2_peptide  -2.82
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
-pI interval:  5.9 -  6.0
+pI interval:  5.8 -  5.9
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -146,7 +146,7 @@ IPC2_peptide  8.21
  IPC_peptide  9.8         
      ProMoST  9.3         
        Gauci  9.41        
-    Grimsley  9.77        
+    Grimsley  9.78        
    Thurlkill  9.43        
    Lehninger  9.78        
     Toseland  9.34        
@@ -169,7 +169,7 @@ IPC2_peptide  1.43
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
-pI interval:  9.4 -  9.5
+pI interval:  9.3 -  9.4
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment
@@ -351,7 +351,7 @@ IPC2_peptide  -2.12
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: acd
-pI interval:  4.5 -  4.6
+pI interval:  4.5 -  4.7
 
 List of calculated pKa values or constant charges
 Type            Count  pKa_or_constant_Q  Fragment

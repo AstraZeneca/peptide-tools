@@ -1,3 +1,4 @@
+from pichemist.config import ROUNDING_DIGITS
 from pichemist.molecule import MolStandardiser
 from rdkit import Chem
 from rdkit import RDLogger
@@ -84,7 +85,7 @@ class PKaChargeCalculator(object):
             charge += self._calculate_basic_charge(pH, pka)
         for pka in acid_pkas:
             charge += self._calculate_acidic_charge(pH, pka)
-        return charge
+        return round(charge, ROUNDING_DIGITS)
 
     def calculate_constant_charge(self, net_qs):
         """Calculates the constant charge from the net charges."""

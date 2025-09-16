@@ -1,5 +1,6 @@
 import numpy as np
 from pichemist.charges import PKaChargeCalculator
+from pichemist.config import ROUNDING_DIGITS
 from pichemist.utils import get_logger
 
 log = get_logger(__name__)
@@ -38,7 +39,7 @@ class CurveCalculator(object):
             charge = PKaChargeCalculator().calculate_charge(
                 base_pkas, acid_pkas, self.pH_range[i], constant_q=constant_q
             )
-            self.q_range[i] = charge
+            self.q_range[i] = round(charge, ROUNDING_DIGITS)
         return np.vstack((self.pH_range, self.q_range)).T
 
 

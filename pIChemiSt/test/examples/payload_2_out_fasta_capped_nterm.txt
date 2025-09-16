@@ -22,7 +22,7 @@ Q at pH7.4 mean  -1.51
          err  0.62        
          std  1.75        
 IPC2_peptide  -1.02       
- IPC_peptide  -1.22       
+ IPC_peptide  -1.23       
      ProMoST  -1.32       
        Gauci  -1.05       
     Grimsley  -2.6        
