@@ -1,6 +1,6 @@
 import numpy as np
-
 from pichemist.charges import PKaChargeCalculator
+from pichemist.config import ROUNDING_DIGITS
 from pichemist.utils import get_logger
 
 log = get_logger(__name__)
@@ -23,7 +23,7 @@ class CurveCalculator(object):
 
     def _define_charge_range(self):
         """Sets the charge range (Y axis)."""
-        return self.pH_range*0.0
+        return self.pH_range * 0.0
 
     def get_pH_span(self):
         """
@@ -33,14 +33,13 @@ class CurveCalculator(object):
         """
         return [self.pH_lower_bound, self.pH_upper_bound]
 
-    def calculate_charged_curve(self, base_pkas, acid_pkas,
-                                diacid_pkas, constant_q=0):
+    def calculate_charged_curve(self, base_pkas, acid_pkas, constant_q=0):
         """Calculates the pH/Q curve."""
         for i in range(len(self.pH_range)):
             charge = PKaChargeCalculator().calculate_charge(
-                base_pkas, acid_pkas, diacid_pkas,
-                self.pH_range[i], constant_q=constant_q)
-            self.q_range[i] = charge
+                base_pkas, acid_pkas, self.pH_range[i], constant_q=constant_q
+            )
+            self.q_range[i] = round(charge, ROUNDING_DIGITS)
         return np.vstack((self.pH_range, self.q_range)).T
 
 
@@ -55,8 +54,7 @@ class IsoelectricCalculator(object):
         self.lower_pH = self.pH_limit[0]
         self.higher_pH = self.pH_limit[1]
 
-    def calculate_pI(self, base_pkas, acid_pkas,
-                     diacid_pkas, constant_q=0):
+    def calculate_pI(self, base_pkas, acid_pkas, constant_q=0):
         """
         Uses the pKas and charge to iteratively calculate
         the isoelectric point of a molecule.
@@ -65,22 +63,27 @@ class IsoelectricCalculator(object):
         while True:
             self.middle_pH = 0.5 * (self.higher_pH + self.lower_pH)
             charge = PKaChargeCalculator().calculate_charge(
-                base_pkas, acid_pkas, diacid_pkas,
-                self.middle_pH, constant_q=constant_q)
-            na = len(acid_pkas) + len(diacid_pkas)
+                base_pkas, acid_pkas, self.middle_pH, constant_q=constant_q
+            )
+            na = len(acid_pkas)
             nb = len(base_pkas)
 
             if na == 0 and nb != 0:
-                log.debug("Warning: no acidic ionizable groups, "
-                          "only basic groups present in the "
-                          "sequence. pI is not defined and thus "
-                          "won't be calculated""")
+                log.debug(
+                    "Warning: no acidic ionizable groups, "
+                    "only basic groups present in the "
+                    "sequence. pI is not defined and thus "
+                    "won't be calculated"
+                    ""
+                )
                 reference_charge = self.charge_tolerance * nb
             elif nb == 0 and na != 0:
-                log.debug("Warning: no basic ionizable groups, "
-                          "only acidic groups present in the "
-                          "sequence. pI is not defined and thus "
-                          "won't be calculated""")
+                log.debug(
+                    "Warning: no basic ionizable groups, "
+                    "only acidic groups present in the "
+                    "sequence. pI is not defined and thus "
+                    "won't be calculated"
+                )
                 reference_charge = -self.charge_tolerance * na
             else:
                 reference_charge = 0.0
@@ -105,5 +108,4 @@ class IsoelectricCalculator(object):
         """Calculates the isoelectric interval."""
         q = pH_q[:, 1]
         pH = pH_q[:, 0]
-        return (pH[(q > -self.interval_threshold)
-                   & (q < self.interval_threshold)])
+        return pH[(q > -self.interval_threshold) & (q < self.interval_threshold)]

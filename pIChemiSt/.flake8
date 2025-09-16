@@ -1,4 +1,5 @@
 [flake8]
 max-line-length = 95
+# pIChemiSt has got its own flake8 file for granular control
 exclude =
     legacy

@@ -1,0 +1,209 @@
+[
+    {
+        "liability": "Deamidation of Asn",
+        "smarts": "N[CH1]([CH2][CH0](=[OH0])[NH2])C(=[OH0])",
+        "fasta_pattern": "N",
+        "factors_favoring_stability": "pH 3-6",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "comments": "Deamidation rate strongly depends on the i+1 residue: very high risk for NG; high risk for NH, NS, NT, NA; lower risk for bulky and hydrophobic residues (e.g. NI, NV, NL, NW, NP, etc.)",
+        "references": "N. e. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
+    },
+    {
+        "liability": "Deamidation of Gln",
+        "smarts": "N[CH1]([CH2][CH2][CH0](=[OH0])[NH2])C(=[OH0])",
+        "fasta_pattern": "Q",
+        "factors_favoring_stability": "pH 3-6",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "comments": "Deamidation rate strongly depends on the i+1 residue: high risk for QG; medium risk for QC; low risk for bulky and acidic residues (e.g. QW, QF, QD, QE, QP, etc.)",
+        "references": "N. e. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
+    },
+    {
+        "liability": "β-isomerization of Asp",
+        "smarts": "N[CH1]([CH2][CH0](=[OH0])[OH,O-])C(=[OH0])",
+        "fasta_pattern": "D",
+        "factors_favoring_stability": "pH 6-8, addition of electrolyte",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, addition of glycerol, sucrose",
+        "comments": "High risk",
+        "references": "Geiger and Clarke 1987; Wakankar and Borchardt 2006"
+    },
+    {
+        "liability": "Racemization of Ser",
+        "smarts": "N[CH1]([CH2][OH1])C(=[OH0])",
+        "fasta_pattern": "S",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+        "comments": "-",
+        "references": "Cloos and Christgau 2002"
+    },
+    {
+        "liability": "Racemization of Ala",
+        "smarts": "N[CH1]([CH3])C(=[OH0])",
+        "fasta_pattern": "A",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+        "comments": "-",
+        "references": "Cloos and Christgau 2002"
+    },
+    {
+        "liability": "Backbone hydrolysis near Asp",
+        "smarts": "N[CH1]([CH2][CH0](=[OH0])[OH,O-])C(=[OH0])",
+        "fasta_pattern": "D",
+        "factors_favoring_stability": "pH >5",
+        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, high solvent accessibility",
+        "comments": "Hydrolysis rate of DP motif is 8-10 times higher than the rest.",
+        "references": "Lauer et al. 2016; Vlasak and Ionescu 2011"
+    },
+    {
+        "liability": "Backbone hydrolysis near Ser & racemization of Ser",
+        "smarts": "N[CH1]([CH2][OH1])C(=[OH0])",
+        "fasta_pattern": "S",
+        "factors_favoring_stability": "Transition metals",
+        "factors_disfavoring_stability": "-",
+        "comments": "-",
+        "references": "Lyons, Jamie, and Truscott 2011, 2014; Wezynfeld, Frączyk, and Bal 2016"
+    },
+    {
+        "liability": "Backbone hydrolysis near Thr",
+        "smarts": "N[CH1]([CH]([CH3])[OH])C(=[OH0])",
+        "fasta_pattern": "T",
+        "factors_favoring_stability": "Transition metals",
+        "factors_disfavoring_stability": "-",
+        "comments": "-",
+        "references": "Lyons, Jamie, and Truscott 2011, 2014; Wezynfeld, Frączyk, and Bal 2016"
+    },
+    {
+        "liability": "Backbone hydrolysis between sequence positions 2 and 3 via diketopiperazine formation",
+        "smarts": "[NH2,NH3+]C[CH0](=[OH0])[NH0]1[CH2][CH2][CH2][CH1]1[CH0](=[OH0])[NH1][CH2]C(=[OH0])",
+        "fasta_pattern": "XPG",
+        "factors_favoring_stability": "pH < ~5",
+        "factors_disfavoring_stability": "Polar or charged amino acids in the 1st position, alkylammonium carboxylates",
+        "comments": "Low risk",
+        "references": "Capasso and Mazzarella 1999; Goolcharran and Borchardt 1998; Zhang, Hales, and Clemmer 2022"
+    },
+    {
+        "liability": "Cyclization of N-terminal Gln (pGlu formation)",
+        "smarts": "[NH2,NH3+][CH1]([CH2][CH2][CH0](=[OH0])[NH2])C(=[OH0])",
+        "fasta_pattern": "Q",
+        "factors_favoring_stability": "pH 5.5 – 6.5",
+        "factors_disfavoring_stability": "-",
+        "comments": "-",
+        "references": "Bersin, Patel, and Topp 2021; Chelius et al. 2006"
+    },
+    {
+        "liability": "Oxidation (carbonylation) of Lys",
+        "smarts": "N[CH1]([CH2][CH2][CH2][CH2][NH2,NH3+])C(=[OH0])",
+        "fasta_pattern": "K",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "comments": "-",
+        "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+    },
+    {
+        "liability": "Oxidation (carbonylation) of Arg",
+        "smarts": "N[CH1]([CH2][CH2][CH2][NH][CH0](=[NH1,NH2+])[NH2])C(=[OH0])",
+        "fasta_pattern": "R",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "comments": "-",
+        "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+    },
+    {
+        "liability": "Oxidation (carbonylation) of Arg (alternative tautomer)",
+        "smarts": "N[CH1]([CH2][CH2][CH2][NH0,NH1+]=[CH0]([NH2])[NH2])C(=[OH0])",
+        "fasta_pattern": "R",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "comments": "-",
+        "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+    },
+    {
+        "liability": "Oxidation (carbonylation) of Pro",
+        "smarts": "N1[CH2][CH2][CH2][CH1]1C(=[OH0])",
+        "fasta_pattern": "P",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "comments": "-",
+        "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+    },
+    {
+        "liability": "Oxidation (carbonylation) of Thr",
+        "smarts": "N[CH1]([CH]([CH3])[OH])C(=[OH0])",
+        "fasta_pattern": "T",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "comments": "-",
+        "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+    },
+    {
+        "liability": "Oxidation of Phe",
+        "smarts": "N[CH1]([CH2][cH0]1[cH1][cH1][cH1][cH1][cH1]1)C(=[OH0])",
+        "fasta_pattern": "F",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Light",
+        "comments": "-",
+        "references": "Kerwin and Remmele 2007"
+    },
+    {
+        "liability": "Oxidation of His",
+        "smarts": "N[CH1]([CH2][cH0]1[nH0,nH1,nH1+][cH1][nH0,nH1,nH1+][cH1]1)C(=[OH0])",
+        "fasta_pattern": "H",
+        "factors_favoring_stability": "pH significantly lower than the apparent pKa of His (ca. 6.0)",
+        "factors_disfavoring_stability": "Transition metal ions, light, oxygen",
+        "comments": "Low risk",
+        "references": "Li, Schöneich, and Borchardt 1995; Sluyterman 1962"
+    },
+    {
+        "liability": "Oxidation of Trp",
+        "smarts": "N[CH1]([CH2][cH0]1[cH1][nH1][cH0]2[cH1][cH1][cH1][cH1][cH0]12)C(=[OH0])",
+        "fasta_pattern": "W",
+        "factors_favoring_stability": "Weak pH dependence",
+        "factors_disfavoring_stability": "light, oxygen, transition metal ions",
+        "comments": "Low risk",
+        "references": "Li, Schöneich, and Borchardt 1995; Sluyterman 1962"
+    },
+    {
+        "liability": "Oxidation of Tyr",
+        "smarts": "N[CH1]([CH2][cH0]1[cH1][cH1][cH1]([OH1,OH0-])[cH1][cH1]1)C(=[OH0])",
+        "fasta_pattern": "Y",
+        "factors_favoring_stability": "pH significantly lower than apparent pKa of Tyr (ca. 10.0)",
+        "factors_disfavoring_stability": "Transition metal ions, light, oxygen",
+        "comments": "High risk",
+        "references": "Li, Schöneich, and Borchardt 1995"
+    },
+    {
+        "liability": "Oxidation of Cys & thiols",
+        "smarts": "C[CH2][SX2H1,S-X1H0]",
+        "fasta_pattern": "C",
+        "factors_favoring_stability": "pH significantly lower than apparent pKa of Cys (ca. 8.3)",
+        "factors_disfavoring_stability": "Proximity to other Cys, lower thiol’s pKa, transition metal ions, light, oxygen",
+        "comments": "High risk",
+        "references": "Li, Schöneich, and Borchardt 1995"
+    },
+    {
+        "liability": "Oxidation of Cys-Cys disulfide bonds",
+        "smarts": "C[CH2][SX2][SX2][CH2]C",
+        "fasta_pattern": "C",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Oxygen",
+        "comments": "High risk",
+        "references": "Karimi et al. 2016"
+    },
+    {
+        "liability": "Oxidation of Met",
+        "smarts": "C[CH2][SX2][CH3]",
+        "fasta_pattern": "M",
+        "factors_favoring_stability": "Weak/no pH dependence",
+        "factors_disfavoring_stability": "Oxygen, solvent exposure & degree of hydration, metal ions",
+        "comments": "High risk",
+        "references": "Chu et al. 2004; Sluyterman 1962; Thakkar et al. 2023"
+    },
+    {
+        "liability": "Cys-Cys disulfide bond scrambling & ß-elimination",
+        "smarts": "C[CH2][SX2][SX2][CH2]C",
+        "fasta_pattern": "C",
+        "factors_favoring_stability": "-",
+        "factors_disfavoring_stability": "Proximity to and accessibility by thiols (e.g. Cys), alkaline pH",
+        "comments": "High risk",
+        "references": "Kolšek, Aponte-Santamaría, and Gräter 2017; Sung et al. 2016"
+    }
+]

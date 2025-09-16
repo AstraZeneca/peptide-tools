@@ -1,0 +1,77 @@
+{
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 724.8,
+            "seq_length": 6,
+            "logp": 0.06,
+            "fasta": "FPYVAE",
+            "smiles": "CC(C)[C@H](NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@@H]1CCCN1C(=O)[C@@H](N)Cc1ccccc1)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(=O)O)C(=O)O"
+        }
+    },
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "FPYVAE",
+            "e205": 28580,
+            "e214": 18018,
+            "e280": 1490.0,
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 3.5625,
+                "IPC_peptide": 3.375,
+                "ProMoST": 3.75,
+                "Gauci": 3.5,
+                "Grimsley": 3.25,
+                "Thurlkill": 3.25,
+                "Lehninger": 3.25,
+                "Toseland": 3.375,
+                "pI mean": 3.4141,
+                "std": 0.4755,
+                "err": 0.1681
+            },
+            "QpH7": {
+                "IPC2_peptide": -1.0161,
+                "IPC_peptide": -1.0013,
+                "ProMoST": -1.0014,
+                "Gauci": -1.0014,
+                "Grimsley": -1.0006,
+                "Thurlkill": -1.0029,
+                "Lehninger": -1.0018,
+                "Toseland": -1.0054,
+                "Q at pH7.4 mean": -1.0039,
+                "std": 0.0137,
+                "err": 0.0048
+            },
+            "pI_interval": [
+                -1.0,
+                3.725
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide",
+            "frag_base_pkas_fasta": {},
+            "frag_acid_pkas_fasta": {
+                "1": {
+                    "type": "acid",
+                    "frag": "Y",
+                    "count": 1,
+                    "pka": 9.951571428571429
+                },
+                "2": {
+                    "type": "acid",
+                    "frag": "E",
+                    "count": 1,
+                    "pka": 4.358142857142857
+                }
+            },
+            "frag_base_pkas_calc": {},
+            "frag_acid_pkas_calc": {},
+            "frag_Qs_calc": {}
+        }
+    }
+}

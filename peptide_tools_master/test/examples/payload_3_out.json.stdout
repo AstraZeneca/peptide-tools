@@ -1,0 +1,96 @@
+{
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 795.935,
+            "seq_length": 6,
+            "logp": 0.43,
+            "fasta": "AEYVPX",
+            "smiles": "CC(C)[C@H](NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@@H]1CCCN1C(=O)[C@H](Cc1ccccc1)NCCCCN)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(=O)O)C(=O)O"
+        }
+    },
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "AEYVPX",
+            "e205": 19980,
+            "e214": 12818,
+            "e280": 1490.0,
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 6.25,
+                "IPC_peptide": 6.0,
+                "ProMoST": 6.375,
+                "Gauci": 6.375,
+                "Grimsley": 6.0,
+                "Thurlkill": 6.0,
+                "Lehninger": 6.0,
+                "Toseland": 6.0,
+                "pI mean": 6.125,
+                "std": 0.4677,
+                "err": 0.1654
+            },
+            "QpH7": {
+                "IPC2_peptide": -0.2573,
+                "IPC_peptide": -0.2425,
+                "ProMoST": -0.2425,
+                "Gauci": -0.2404,
+                "Grimsley": -0.2418,
+                "Thurlkill": -0.244,
+                "Lehninger": -0.243,
+                "Toseland": -0.2465,
+                "Q at pH7.4 mean": -0.2447,
+                "std": 0.0142,
+                "err": 0.005
+            },
+            "pI_interval": [
+                5.125,
+                7.2125
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide",
+            "frag_base_pkas_fasta": {},
+            "frag_acid_pkas_fasta": {
+                "1": {
+                    "type": "acid",
+                    "frag": "E",
+                    "count": 1,
+                    "pka": 4.358142857142857
+                },
+                "2": {
+                    "type": "acid",
+                    "frag": "E_C-term",
+                    "count": 1,
+                    "pka": 3.3047142857142857
+                },
+                "3": {
+                    "type": "acid",
+                    "frag": "Y",
+                    "count": 1,
+                    "pka": 9.951571428571429
+                }
+            },
+            "frag_base_pkas_calc": {
+                "1": {
+                    "type": "base",
+                    "frag": "CC(=O)[C@H](Cc1ccccc1)NCCCCN",
+                    "count": 1,
+                    "pka": 7.9
+                },
+                "2": {
+                    "type": "base",
+                    "frag": "CC(=O)[C@H](Cc1ccccc1)NCCCCN",
+                    "count": 1,
+                    "pka": 10.4
+                }
+            },
+            "frag_acid_pkas_calc": {},
+            "frag_Qs_calc": {}
+        }
+    }
+}

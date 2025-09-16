@@ -1,6 +1,6 @@
 import os
-import tempfile
 import subprocess
+import tempfile
 
 from pichemist.config import ACD_METHOD
 from pichemist.config import PKA_LIMITS
@@ -12,6 +12,7 @@ class ACDPKaException(Exception):
 
 class ACDPKaCalculator(object):
     """Uses ACD perceptabat to calculate pKa values."""
+
     def __init__(self):
         self.input_filepath = self._get_temp_filepath(".smi")
         self.output_filepath = self._get_temp_filepath(".out")
@@ -22,8 +23,7 @@ class ACDPKaCalculator(object):
 
     def _get_temp_filepath(self, suffix):
         """Gets a temporary filepath and closes the file."""
-        file = tempfile.NamedTemporaryFile(
-            suffix=suffix)
+        file = tempfile.NamedTemporaryFile(suffix=suffix)
         path = file.name
         file.close()
         return path
@@ -38,19 +38,20 @@ class ACDPKaCalculator(object):
 
     def _get_temp_output_filepath(self):
         """Gets a temporary filepath and closes the file."""
-        file = tempfile.NamedTemporaryFile(
-            suffix=".out")
+        file = tempfile.NamedTemporaryFile(suffix=".out")
         path = file.name
         file.close()
         return path
 
     def _build_command(self):
         """Builds the perceptabat command to run pKa prediction."""
-        return ["perceptabat",
-                f"-TFNAME{self.output_filepath}",
-                self.pka_flag,
-                "-TPKA",
-                self.input_filepath]
+        return [
+            "perceptabat",
+            f"-TFNAME{self.output_filepath}",
+            self.pka_flag,
+            "-TPKA",
+            self.input_filepath,
+        ]
 
     def _get_status_output(self, *args, **kwargs):
         p = subprocess.Popen(*args, **kwargs)
@@ -58,16 +59,17 @@ class ACDPKaCalculator(object):
         return p.returncode, stdout, stderr
 
     def _run_acd_exe(self, cmd):
-        status, stdout, stderr = \
-            self._get_status_output(cmd,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT)
+        status, stdout, stderr = self._get_status_output(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        )
         if status != 0:
-            raise ACDPKaException(f"""Error while running the ACD subprocess:
+            raise ACDPKaException(
+                f"""Error while running the ACD subprocess:
                                   status: {status}
                                   command: {cmd}
                                   stdout: {stdout}
-                                  stderr: {stderr}""")
+                                  stderr: {stderr}"""
+            )
 
     def _check_existence_output(self):
         if not os.path.isfile(self.output_filepath):
@@ -84,28 +86,20 @@ class ACDPKaCalculator(object):
         with open(self.output_filepath, "r") as f:
             base_pkas = list()
             acid_pkas = list()
-            diacid_pkas = list()
-            D = {}        # sic - global variable unused
             f.readline()  # skip first line
             for line in f.readlines():
                 ln = line.split()
                 mol_idx = int(ln[0])
-                if mol_idx not in D.keys():
-                    D[mol_idx] = {}  # sic - global variable unused
                 if "ACD_pKa_Apparent" in ln[1]:
                     pka = float(ln[2])
                 if "ACD_pKa_DissType_Apparent" in ln[1]:
                     if ln[2] in ["MB", "B"]:
-                        if pka > PKA_LIMITS["base_1"] and \
-                                pka < PKA_LIMITS["base_2"]:
-                            base_pkas.append(
-                                    (pka, smi_list[mol_idx-1]))
+                        if pka > PKA_LIMITS["base_1"] and pka < PKA_LIMITS["base_2"]:
+                            base_pkas.append((pka, smi_list[mol_idx - 1]))
                     if ln[2] in ["MA", "A"]:
-                        if pka > PKA_LIMITS["acid_1"] and \
-                                pka < PKA_LIMITS["acid_2"]:
-                            acid_pkas.append(
-                                (pka, smi_list[mol_idx-1]))
-        return (base_pkas, acid_pkas, diacid_pkas)
+                        if pka > PKA_LIMITS["acid_1"] and pka < PKA_LIMITS["acid_2"]:
+                            acid_pkas.append((pka, smi_list[mol_idx - 1]))
+        return (base_pkas, acid_pkas)
 
     def calculate_pka_from_list(self, smi_list):
         """Calculates the pKa values of a list of SMILES."""

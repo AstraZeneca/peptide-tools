@@ -1,0 +1,174 @@
+{
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 3728.092,
+            "seq_length": 32,
+            "logp": -13.058,
+            "fasta": "XGGGXAAADDDLLEEEQRRSSSSWYFFVTTHX",
+            "smiles": "CCCCCCCCCCCCCCCC(=O)N[C@@H](CCC(=O)NCCCC[C@H](NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H](NC(=O)CNC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CO)NC(=O)[C@@H](N)Cc1c[nH]cn1)[C@@H](C)O)[C@@H](C)O)C(=O)N[C@@H](CO)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CC(=O)O)C(=O)N[C@@H](CO)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](CCCNC(=N)N)C(=O)N[C@@H](C)C(=O)N[C@@H](CCCNC(=N)N)C(=O)N[C@@H](CC(=O)O)C(=O)N[C@@H](Cc1ccccc1)C(=O)N[C@H](C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](C)C(=O)NCC(=O)NCC(=O)O)C(C)C)C(=O)O"
+        }
+    },
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "XGGGXAAADDDLLEEEQRRSSSSWYFFVTTHX",
+            "e205": 138160,
+            "e214": 79827,
+            "e280": 6990.0,
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 4.01171875,
+                "IPC_peptide": 3.8828125,
+                "ProMoST": 4.06640625,
+                "Gauci": 4.0703125,
+                "Grimsley": 3.72265625,
+                "Thurlkill": 3.85546875,
+                "Lehninger": 3.84375,
+                "Toseland": 3.78125,
+                "pI mean": 3.9043,
+                "std": 0.3464,
+                "err": 0.1225
+            },
+            "QpH7": {
+                "IPC2_peptide": -5.1349,
+                "IPC_peptide": -4.9656,
+                "ProMoST": -5.6195,
+                "Gauci": -5.4037,
+                "Grimsley": -5.1959,
+                "Thurlkill": -5.0802,
+                "Lehninger": -4.9662,
+                "Toseland": -4.9715,
+                "Q at pH7.4 mean": -5.1672,
+                "std": 0.6239,
+                "err": 0.2206
+            },
+            "pI_interval": [
+                3.9125,
+                3.9125
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide"
+        }
+    },
+    "output_liabilities": {
+        "1": {
+            "mol_name": "none",
+            "liabilities": {
+                "Deamidation of Gln": {
+                    "liability": "Deamidation of Gln",
+                    "fasta_pattern": "Q",
+                    "match_count": 1,
+                    "factors_favoring_stability": "pH 3-6",
+                    "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+                    "comments": "Deamidation rate strongly depends on the i+1 residue: high risk for QG; medium risk for QC; low risk for bulky and acidic residues (e.g. QW, QF, QD, QE, QP, etc.)",
+                    "references": "N. e. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
+                },
+                "\u03b2-isomerization of Asp": {
+                    "liability": "\u03b2-isomerization of Asp",
+                    "fasta_pattern": "D",
+                    "match_count": 3,
+                    "factors_favoring_stability": "pH 6-8, addition of electrolyte",
+                    "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, addition of glycerol, sucrose",
+                    "comments": "High risk",
+                    "references": "Geiger and Clarke 1987; Wakankar and Borchardt 2006"
+                },
+                "Racemization of Ser": {
+                    "liability": "Racemization of Ser",
+                    "fasta_pattern": "S",
+                    "match_count": 4,
+                    "factors_favoring_stability": "-",
+                    "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+                    "comments": "-",
+                    "references": "Cloos and Christgau 2002"
+                },
+                "Racemization of Ala": {
+                    "liability": "Racemization of Ala",
+                    "fasta_pattern": "A",
+                    "match_count": 3,
+                    "factors_favoring_stability": "-",
+                    "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+                    "comments": "-",
+                    "references": "Cloos and Christgau 2002"
+                },
+                "Backbone hydrolysis near Asp": {
+                    "liability": "Backbone hydrolysis near Asp",
+                    "fasta_pattern": "D",
+                    "match_count": 3,
+                    "factors_favoring_stability": "pH >5",
+                    "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, high solvent accessibility",
+                    "comments": "Hydrolysis rate of DP motif is 8-10 times higher than the rest.",
+                    "references": "Lauer et al. 2016; Vlasak and Ionescu 2011"
+                },
+                "Backbone hydrolysis near Ser & racemization of Ser": {
+                    "liability": "Backbone hydrolysis near Ser & racemization of Ser",
+                    "fasta_pattern": "S",
+                    "match_count": 4,
+                    "factors_favoring_stability": "Transition metals",
+                    "factors_disfavoring_stability": "-",
+                    "comments": "-",
+                    "references": "Lyons, Jamie, and Truscott 2011, 2014; Wezynfeld, Fr\u0105czyk, and Bal 2016"
+                },
+                "Backbone hydrolysis near Thr": {
+                    "liability": "Backbone hydrolysis near Thr",
+                    "fasta_pattern": "T",
+                    "match_count": 2,
+                    "factors_favoring_stability": "Transition metals",
+                    "factors_disfavoring_stability": "-",
+                    "comments": "-",
+                    "references": "Lyons, Jamie, and Truscott 2011, 2014; Wezynfeld, Fr\u0105czyk, and Bal 2016"
+                },
+                "Oxidation (carbonylation) of Arg": {
+                    "liability": "Oxidation (carbonylation) of Arg",
+                    "fasta_pattern": "R",
+                    "match_count": 2,
+                    "factors_favoring_stability": "-",
+                    "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+                    "comments": "-",
+                    "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+                },
+                "Oxidation (carbonylation) of Thr": {
+                    "liability": "Oxidation (carbonylation) of Thr",
+                    "fasta_pattern": "T",
+                    "match_count": 2,
+                    "factors_favoring_stability": "-",
+                    "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+                    "comments": "-",
+                    "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
+                },
+                "Oxidation of Phe": {
+                    "liability": "Oxidation of Phe",
+                    "fasta_pattern": "F",
+                    "match_count": 2,
+                    "factors_favoring_stability": "-",
+                    "factors_disfavoring_stability": "Light",
+                    "comments": "-",
+                    "references": "Kerwin and Remmele 2007"
+                },
+                "Oxidation of His": {
+                    "liability": "Oxidation of His",
+                    "fasta_pattern": "H",
+                    "match_count": 1,
+                    "factors_favoring_stability": "pH significantly lower than the apparent pKa of His (ca. 6.0)",
+                    "factors_disfavoring_stability": "Transition metal ions, light, oxygen",
+                    "comments": "Low risk",
+                    "references": "Li, Sch\u00f6neich, and Borchardt 1995; Sluyterman 1962"
+                },
+                "Oxidation of Trp": {
+                    "liability": "Oxidation of Trp",
+                    "fasta_pattern": "W",
+                    "match_count": 1,
+                    "factors_favoring_stability": "Weak pH dependence",
+                    "factors_disfavoring_stability": "light, oxygen, transition metal ions",
+                    "comments": "Low risk",
+                    "references": "Li, Sch\u00f6neich, and Borchardt 1995; Sluyterman 1962"
+                }
+            }
+        }
+    }
+}

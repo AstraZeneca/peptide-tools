@@ -34,12 +34,14 @@ class InputFormat(BaseEnum):
     SMILES_STDIN = "smiles_stdin"
     SMILES_FILE = "smiles_file"
     FASTA_STDIN = "fasta_stdin"
+    FASTA_FILE = "fasta_file"
     SD_FILE = "sdf"
 
 
 class InputFileExtension(BaseEnum):
     SDF = "sdf"
     SMILES = "smi"
+    FASTA = "fasta"
 
 
 class OutputAttribute(BaseEnum):
@@ -51,16 +53,19 @@ class OutputAttribute(BaseEnum):
     PI_INTERVAL_THRESHOLD = "pI_interval_threshold"
     PLOT_FILENAME = "plot_filename"
     PKA_SET = "pKa_set"
-    BASE_PKA_FASTA = "base_pkas_fasta"
-    ACID_PKA_FASTA = "acid_pkas_fasta"
-    BASE_PKA_CALC = "base_pkas_calc"
-    ACID_PKA_CALC = "acid_pkas_calc"
-    CONSTANT_QS = "constant_Qs_calc"
     FRAG_BASE_PKA_FASTA = "frag_base_pkas_fasta"
     FRAG_ACID_PKA_FASTA = "frag_acid_pkas_fasta"
     FRAG_BASE_PKA_CALC = "frag_base_pkas_calc"
     FRAG_ACID_PKA_CALC = "frag_acid_pkas_calc"
     FRAG_CONSTANT_QS = "frag_Qs_calc"
+
+
+class OutputFragAttribute(BaseEnum):
+    TYPE = "type"
+    COUNT = "count"
+    PKA = "pka"
+    FRAGMENT = "frag"
+    IMAGE = "base64_image"
 
 
 class OutputFormat(BaseEnum):

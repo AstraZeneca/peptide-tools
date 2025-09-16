@@ -1,6 +1,6 @@
+import json
 import os
 import sys
-
 from io import StringIO
 
 
@@ -10,6 +10,7 @@ examples_dir = os.path.join(script_dir, "examples")
 
 class TestError(Exception):
     """Raised when need to break the tests."""
+
     __test__ = False
 
 
@@ -24,3 +25,7 @@ def stdout_to_variable(func, *args, **kwargs):
     func(*args, **kwargs)
     sys.stdout = tmp_stdout
     return result.getvalue()
+
+
+def jsonify_output(output):
+    return json.loads(json.dumps(output))

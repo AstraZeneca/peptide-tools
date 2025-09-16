@@ -1,0 +1,59 @@
+{
+    "output_descriptors": {
+        "1": {
+            "mol_name": "none",
+            "molecular_weight": 445.534,
+            "seq_length": 5,
+            "logp": -1.732,
+            "fasta": "MAGAP",
+            "smiles": "CSCC[C@H](N)C(=O)N[C@@H](C)C(=O)NCC(=O)N[C@@H](C)C(=O)N1CCC[C@H]1C(=O)O"
+        }
+    },
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "MAGAP",
+            "e205": 12950,
+            "e214": 7432,
+            "e280": 0.0,
+            "mol_name": "none"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "none",
+            "pI": {
+                "IPC2_peptide": 5.0,
+                "IPC_peptide": 7.0,
+                "ProMoST": 5.25,
+                "Gauci": 5.25,
+                "Grimsley": 5.5,
+                "Thurlkill": 6.0,
+                "Lehninger": 7.0,
+                "Toseland": 6.0,
+                "pI mean": 5.875,
+                "std": 2.0616,
+                "err": 0.7289
+            },
+            "QpH7": {
+                "IPC2_peptide": -0.221,
+                "IPC_peptide": -0.0068,
+                "ProMoST": -0.7244,
+                "Gauci": -0.7151,
+                "Grimsley": -0.3338,
+                "Thurlkill": -0.2006,
+                "Lehninger": -0.0051,
+                "Toseland": -0.0466,
+                "Q at pH7.4 mean": -0.2817,
+                "std": 0.7773,
+                "err": 0.2748
+            },
+            "pI_interval": [
+                3.7375,
+                7.5375
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide"
+        }
+    }
+}

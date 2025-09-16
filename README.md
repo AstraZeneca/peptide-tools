@@ -1,32 +1,24 @@
-![Maturity level-0](https://img.shields.io/badge/Maturity%20Level-ML--0-red)
+# peptide-tools
 
-peptide-tools-refactor
+## Overview
+This repository serves as a meta-repo containing multiple sub-tools for computing physicochemical properties of synthetic peptides and proteins. Each tool can be used independently or through a master wrapper script.
 
-OVERVIEW
-    Set of programs to calcaulte phys-chem properties of synthetic peptides and proteins: isoelectic point and extinction coefficients.
-    In total there are 5 scripts/programs there, each can serve as stand alone:
+## Tools
+![Maturity level-1](https://img.shields.io/badge/Maturity%20Level-ML--1-yellow)
+1. **pIChemiSt**  
+   Calculates the isoelectric point of natural and modified peptides.
 
-    1) pIChemiSt  
-    program to calcualte isoelectric point of natural and modified peptides. 
+2. **smi2scrambledfasta**  
+   Generates scrambled FASTA sequences from SMILES input.
 
-    2) smi2scrambledfasta  (depends on 1)
-    program to generate the scrambled FASTA sequence from Smiles.
+3. **extn_coeff_fasta**  
+   Computes peptide extinction coefficients.
 
-    3) pI_fasta  (depends on 2)
-    program to calcualte isoelecric point using FASTA sequence as an input.
+4. **molecular_descriptors**  
+   Extracts a set of molecular descriptors for peptides.
 
-    4) extn_coeff_fasta  (depends on 2)
-    program to calculate extinction coefficients.
+5. **liabilities**  
+   Identifies chemical liabilities in sequences using SMARTS or FASTA.
 
-    5) peptide_tools_master  (depends on 1,2,3,4)
-    wrapper script for all the programs above. Can run for one compound and for batch submissions.
-
-
-HOW TO RUN & DEPENDENCIES 
-
-    Check the documentaion for each script. 
-
-PLATFORM
-
-    Tested on linux CentOS
-
+6. **peptide_tools_master**  
+   Wrapper for running all tools on single compounds or batch submissions.

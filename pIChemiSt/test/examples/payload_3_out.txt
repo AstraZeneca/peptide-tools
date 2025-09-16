@@ -34,12 +34,10 @@ IPC2_peptide  0.76
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  8.6 -  9.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : Y_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.3  Y_N-term
+acid                1                9.9  Y
 
 ======================================================================================================================================================
 pI
@@ -76,12 +74,11 @@ IPC2_peptide  -0.24
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  3.8 -  7.5
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : Y_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.3  Y_N-term
+acid                1                9.9  Y
+acid                1                3.2  M_C-term
 
 ======================================================================================================================================================
 pI
@@ -118,12 +115,10 @@ IPC2_peptide  0.76
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  8.6 -  9.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : Y_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.3  Y_N-term
+acid                1                9.9  Y
 
 ======================================================================================================================================================
 pI
@@ -160,12 +155,11 @@ IPC2_peptide  -0.24
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  3.8 -  7.5
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : Y_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.3  Y_N-term
+acid                1                9.9  Y
+acid                1                3.2  M_C-term
 
 ======================================================================================================================================================
 pI
@@ -202,13 +196,12 @@ IPC2_peptide  -1.14
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.3 -  5.7
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)C[C@H](N)C(=O)O  7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                6.3  H
+base                1                7.9  CC(=O)C[C@H](N)C(=O)O
+acid                1                3.1  H_C-term
+acid                1                3.5  CC(=O)C[C@H](N)C(=O)O
 
 ======================================================================================================================================================
 pI
@@ -245,13 +238,12 @@ IPC2_peptide  -1.12
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.5 -  5.7
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : D_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                6.3  H
+base                1                8.4  D_N-term
+acid                1                3.1  H_C-term
+acid                1                3.7  D
 
 ======================================================================================================================================================
 pI
@@ -286,15 +278,13 @@ IPC2_peptide  -0.48
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  6.9
+pI interval:  4.2 -  6.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
-smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                7.9  CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O
+base                1                7.9  CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O
+acid                2                3.1  G_C-term
 
 ======================================================================================================================================================
 pI
@@ -331,13 +321,11 @@ IPC2_peptide  -0.44
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.5 -  7.3
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : G_N-term         7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                2                8.4  G_N-term
+acid                1                3.5  CC(=O)N[C@@H](CSSC[C@H](NC(C)=O)C(=O)O)C(=O)O
+acid                1                3.5  CC(=O)N[C@@H](CSSC[C@H](NC(C)=O)C(=O)O)C(=O)O
 
 ======================================================================================================================================================
 pI
@@ -372,15 +360,13 @@ IPC2_peptide  -0.48
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  6.9
+pI interval:  4.2 -  6.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
-smiles or AA, base pKa : CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O  7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                7.9  CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O
+base                1                7.9  CC(=O)[C@@H](N)CSSC[C@H](N)C(C)=O
+acid                2                3.1  G_C-term
 
 ======================================================================================================================================================
 pI
@@ -417,13 +403,12 @@ IPC2_peptide  -0.48
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.5 -  6.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O  7.9
-smiles or AA, base pKa : N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O  7.9
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                7.9  N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O
+base                1                7.9  N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O
+acid                1                3.5  N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O
+acid                1                3.5  N[C@@H](CSSC[C@H](N)C(=O)O)C(=O)O
 
 ======================================================================================================================================================
 pI
@@ -460,13 +445,11 @@ IPC2_peptide  1.08
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval: 10.4 - 11.5
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : H                6.4
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1               12.2  R
+base                1                6.2  H
+acid                1               10.0  Y
 
 ======================================================================================================================================================
 pI
@@ -503,13 +486,12 @@ IPC2_peptide  0.08
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  6.9 -  9.2
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : H                6.4
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1               12.2  R
+base                1                6.2  H
+acid                1                3.2  G_C-term
+acid                1               10.0  Y
 
 ======================================================================================================================================================
 pI
@@ -546,15 +528,15 @@ IPC2_peptide  -1.22
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.3 -  4.5
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1               12.1  R
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                2                3.8  D
+acid                1                3.1  R_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -589,16 +571,16 @@ IPC2_peptide  -2.22
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.1 -  4.2
+pI interval:  4.2 -  4.2
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                2                4.3  E
+acid                1                3.3  E_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -635,14 +617,14 @@ IPC2_peptide  -3.22
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  3.7 -  3.8
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                3                3.8  D
+acid                1                3.3  D_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -677,20 +659,18 @@ IPC2_peptide  -4.06
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  4.9 -  5.0
+pI interval:  5.0 -  5.0
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1               10.3  K
+base                3                6.2  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                5                4.3  E
+acid                1                3.3  E_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -727,23 +707,14 @@ IPC2_peptide  0.67
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  7.6 -  8.1
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                9                6.3  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                3.1  H_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -780,18 +751,15 @@ IPC2_peptide  -3.82
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  5.3 -  5.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                4                6.2  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                4                4.3  E
+acid                1                3.3  E_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -828,17 +796,17 @@ IPC2_peptide  1.2
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  8.7 -  8.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : CC(=O)NCCCC[C@H](N)C(C)=O  7.9
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                2               10.2  K
+base                1                7.9  CC(=O)NCCCC[C@H](N)C(C)=O
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                4.3  E
+acid                3                9.9  Y
+acid                1                3.1  Y_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -875,18 +843,15 @@ IPC2_peptide  -2.82
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  5.8 -  5.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                4                6.3  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                3                4.3  E
+acid                1                3.1  H_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -898,7 +863,7 @@ IPC2_peptide  8.21
  IPC_peptide  9.8         
      ProMoST  9.3         
        Gauci  9.41        
-    Grimsley  9.77        
+    Grimsley  9.78        
    Thurlkill  9.43        
    Lehninger  9.78        
     Toseland  9.34        
@@ -921,32 +886,31 @@ IPC2_peptide  1.43
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  9.4 -  9.5
+pI interval:  9.3 -  9.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                2               10.2  K
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                3.1  K_C-term
+acid                3                9.9  Y
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
 ---------------------------------
-     pI mean  7.56        
-         err  0.37        
-         std  1.05        
+     pI mean  7.55        
+         err  0.35        
+         std  0.98        
 IPC2_peptide  7.47        
  IPC_peptide  8.0         
      ProMoST  7.08        
        Gauci  7.03        
     Grimsley  7.45        
    Thurlkill  7.56        
-   Lehninger  8.12        
+   Lehninger  8.0         
     Toseland  7.78        
 
 
@@ -969,18 +933,16 @@ IPC2_peptide  0.08
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  7.2 -  7.9
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1               12.1  R
+base                3                6.2  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                4.3  E
+acid                1                3.1  R_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1015,19 +977,18 @@ IPC2_peptide  1.17
 
 
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
-pI interval:  8.5 -  8.7
+pI interval:  8.4 -  8.6
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : CC(=O)NCCCC[C@H](N)C(C)=O  7.9
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                2                8.4  G_N-term
+base                1               10.3  K
+base                1                7.9  CC(=O)NCCCC[C@H](N)C(C)=O
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                4.4  E
+acid                1                3.3  E_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1064,16 +1025,15 @@ IPC2_peptide  1.45
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  9.5 -  9.6
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                2               10.2  K
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                3.1  K_C-term
+acid                2                9.9  Y
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1101,7 +1061,7 @@ IPC2_peptide  -2.12
  IPC_peptide  -1.96       
      ProMoST  -2.2        
        Gauci  -2.4        
-    Grimsley  -2.2        
+    Grimsley  -2.19       
    Thurlkill  -2.08       
    Lehninger  -1.96       
     Toseland  -1.97       
@@ -1110,15 +1070,15 @@ IPC2_peptide  -2.12
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  4.6 -  4.7
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1                6.3  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                2                4.3  E
+acid                1                3.1  H_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1155,16 +1115,16 @@ IPC2_peptide  -0.12
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  6.8 -  7.8
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1               12.1  R
+base                1                6.2  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                4.3  E
+acid                1                3.1  R_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1201,16 +1161,15 @@ IPC2_peptide  1.47
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  9.7 -  9.8
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                2               10.2  K
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                3.1  K_C-term
+acid                1               10.0  Y
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1247,16 +1206,15 @@ IPC2_peptide  -1.02
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  6.2 -  6.4
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : H                6.4
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                2                6.3  H
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                4.3  E
+acid                1                3.1  H_C-term
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
 
 ======================================================================================================================================================
 pI
@@ -1293,13 +1251,13 @@ IPC2_peptide  1.62
 pH interval with charge between -0.2 and  0.2 and prediction tool: pkamatcher
 pI interval:  9.9 - 10.1
 
-List of calculated BASE pKa values with their fragments
-smiles or AA, base pKa : G_N-term         7.9
-smiles or AA, base pKa : K                8.2
-smiles or AA, base pKa : R               11.5
-smiles or AA, base pKa : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  4.2
-
-List of calculated ACID pKa values with their fragments
-
-List of constantly ionized fragments
-smiles, charge : CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1  1.0
+List of calculated pKa values or constant charges
+Type            Count  pKa_or_constant_Q  Fragment
+base                1                8.4  G_N-term
+base                1               10.3  K
+base                1               12.1  R
+base                1                4.2  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+acid                1                3.1  R_C-term
+acid                1               10.0  Y
+acid                1                3.5  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1
+constant charge     1                1.0  CC(=O)Nc1ccc(-c2c3ccc(=[N+](C)C)cc-3oc3cc(N(C)C)ccc23)c(C(=O)O)c1

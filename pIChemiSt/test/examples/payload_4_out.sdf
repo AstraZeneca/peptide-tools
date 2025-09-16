@@ -258,7 +258,7 @@ Bohner Lang et al.
 3.77
 
 >  <pI interval upper bound>  (2) 
-7.52
+7.53
 
 >  <pI interval threshold>  (2) 
 0.20
@@ -528,7 +528,7 @@ Bohner Lang et al.
 3.77
 
 >  <pI interval upper bound>  (4) 
-7.52
+7.53
 
 >  <pI interval threshold>  (4) 
 0.20
@@ -614,7 +614,7 @@ Greenstein & Klemperer
 0.53
 
 >  <pI interval lower bound>  (5) 
-4.32
+4.33
 
 >  <pI interval upper bound>  (5) 
 5.71
@@ -894,7 +894,7 @@ Greenstein et al.
 4.50
 
 >  <pI interval upper bound>  (8) 
-7.32
+7.33
 
 >  <pI interval threshold>  (8) 
 0.20
@@ -1308,7 +1308,7 @@ Heit et al.
 10.45
 
 >  <pI interval upper bound>  (11) 
-11.52
+11.53
 
 >  <pI interval threshold>  (11) 
 0.20
@@ -1907,10 +1907,10 @@ CN(C)c(cc1)cc(c12)oc3c(ccc(c3)=[N+](C)C)c2-c4c(C([O-])=O)cc(cc4)NC(=O)CSC[C@H](N
 0.38
 
 >  <pI interval lower bound>  (14) 
-4.12
+4.16
 
 >  <pI interval upper bound>  (14) 
-4.22
+4.24
 
 >  <pI interval threshold>  (14) 
 0.20
@@ -2098,10 +2098,10 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)N[C@@H](CC
 0.47
 
 >  <pI interval lower bound>  (15) 
-3.70
+3.74
 
 >  <pI interval upper bound>  (15) 
-3.80
+3.77
 
 >  <pI interval threshold>  (15) 
 0.20
@@ -2412,7 +2412,7 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)N[C@@H](CC
 0.27
 
 >  <pI interval lower bound>  (16) 
-4.90
+4.95
 
 >  <pI interval upper bound>  (16) 
 5.00
@@ -3333,7 +3333,7 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)[C@@H](N)CCCCNC(=O
 1.20
 
 >  <pI interval lower bound>  (19) 
-8.67
+8.68
 
 >  <pI interval upper bound>  (19) 
 8.90
@@ -3614,7 +3614,7 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)NC(CC3=CNC
 0.57
 
 >  <pI interval lower bound>  (20) 
-5.81
+5.83
 
 >  <pI interval upper bound>  (20) 
 5.91
@@ -3868,10 +3868,10 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)N[C@@H](CC
 1.37
 
 >  <pI interval lower bound>  (21) 
-9.38
+9.34
 
 >  <pI interval upper bound>  (21) 
-9.52
+9.43
 
 >  <pI interval threshold>  (21) 
 0.20
@@ -4108,10 +4108,10 @@ Shimura et al.
 CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CC3=CNC=N3)C(=O)N[C@@H](CC3=CNC=N3)C(=O)N[C@@H](CC3=CNC=N3)C(=O)N[C@@H](CCCNC(N)=N)C(O)=O)C=C2)C([O-])=O)=[N+](/C)C)=C1
 
 >  <pI mean>  (22) 
-7.56
+7.55
 
 >  <pI std>  (22) 
-1.05
+0.98
 
 >  <pI interval lower bound>  (22) 
 7.21
@@ -4337,10 +4337,10 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)[C@@H](N)CCCCNC(=O
 1.86
 
 >  <pI interval lower bound>  (23) 
-8.51
+8.45
 
 >  <pI interval upper bound>  (23) 
-8.69
+8.59
 
 >  <pI interval threshold>  (23) 
 0.20
@@ -4766,7 +4766,7 @@ CN(C)C1=CC=C2C(OC3=C\C(\C=CC3=C2C2=C(C=C(NC(=O)CSC[C@H](NC(=O)CN)C(=O)N[C@@H](CC
 0.19
 
 >  <pI interval lower bound>  (25) 
-4.57
+4.58
 
 >  <pI interval upper bound>  (25) 
 4.71

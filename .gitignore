@@ -7,3 +7,6 @@ TODO
 pIChemiSt/build
 pIChemiSt/dist
 pIChemiSt/*egg*
+*OUTPUT.*
+temp
+examples.sh
