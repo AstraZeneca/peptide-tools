@@ -29,48 +29,43 @@ class IOException(Exception):
 
 
 def fix_nan(data):
-    # AIF: temporary function to fix NaN in a pI_interval tuple problem
-    data2=data
-    if math.isnan(data['output_pIChemiSt'][1]['pI_interval'][0]):
-        data2['output_pIChemiSt'][1]['pI_interval'] = (None,None)
-    return data2
+    """Temporary function to fix NaN in a pI_interval tuple."""
+    if "output_pIChemiSt" in data:
+        result = data["output_pIChemiSt"][1]
+        if "pI_interval" in result:
+            interval = result["pI_interval"]
+            if math.isnan(interval[0]):
+                interval = (None, None)
+    return data
 
-
-#def replace_nan_in_nested_dict(data, replacement_value=None):
-#   # Use a stack to track dictionaries and their keys
-#   stack = [data]
-#   
-#   while stack:
-#       current = stack.pop()
-#       if isinstance(current, dict):
-#           for key, value in current.items():
-#               if isinstance(value, float) and math.isnan(value):
-#                   current[key] = replacement_value
-#               elif isinstance(value, dict):
-#                   stack.append(value)
-#               elif isinstance(value, list):
-#                   for i in range(len(value)):
-#                       if isinstance(value[i], float) and math.isnan(value[i]):
-#                           value[i] = replacement_value
-#                       elif isinstance(value[i], dict):
-#                           stack.append(value[i])
-
-#   return data
 
 def replace_nan_tuples(data, replacement_value=-10):
     if isinstance(data, dict):
         for key, value in data.items():
-            if isinstance(value, dict) or isinstance(value, list) or isinstance(value, tuple):
+            if (
+                isinstance(value, dict)
+                or isinstance(value, list)
+                or isinstance(value, tuple)
+            ):
                 data[key] = replace_nan_tuples(value, replacement_value)
-            elif isinstance(value, tuple) and all(isinstance(x, float) and math.isnan(x) for x in value):
+            elif isinstance(value, tuple) and all(
+                isinstance(x, float) and math.isnan(x) for x in value
+            ):
                 data[key] = replacement_value
     elif isinstance(data, list):
         for i, item in enumerate(data):
-            if isinstance(item, dict) or isinstance(item, list) or isinstance(item, tuple):
+            if (
+                isinstance(item, dict)
+                or isinstance(item, list)
+                or isinstance(item, tuple)
+            ):
                 data[i] = replace_nan_tuples(item, replacement_value)
-            elif isinstance(item, tuple) and all(isinstance(x, float) and math.isnan(x) for x in item):
+            elif isinstance(item, tuple) and all(
+                isinstance(x, float) and math.isnan(x) for x in item
+            ):
                 data[i] = replacement_value
     return data
+
 
 def generate_input(input_data):
     input_data = input_data.encode("utf-8").decode("unicode_escape")
@@ -203,12 +198,14 @@ def generate_output(mol_supply_json, dict_out, params):
         dict_out = _output_summary_to_dict(params.io.output_filename, mol_supply_json)
         _print_to_console_and_exit(dict_out)
 
+
 def _print_to_console_and_exit(dict_out):
     # Sanitize the dictionary by replacing NaN with None to make a valid JSON
     sanitized_dict = fix_nan(dict_out)
-    #sanitized_dict = replace_nan_in_nested_dict(tmp_dict, replacement_value=None)
+    # sanitized_dict = replace_nan_in_nested_dict(tmp_dict, replacement_value=None)
     print(json.dumps(sanitized_dict, indent=2))
     exit()
+
 
 def _generate_fasta_output(mol_supply_json, dict_out, params):
     ext_coeff_dict = dict_out["output_extn_coeff"]

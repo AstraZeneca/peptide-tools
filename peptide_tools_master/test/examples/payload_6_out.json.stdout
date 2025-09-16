@@ -14,7 +14,7 @@
             "fasta": "MAGAP",
             "e205": 12950,
             "e214": 7432,
-            "e280": 0,
+            "e280": 0.0,
             "mol_name": "none"
         }
     },
@@ -22,34 +22,34 @@
         "1": {
             "mol_name": "none",
             "pI": {
-                "IPC2_peptide": 5,
-                "IPC_peptide": 7,
+                "IPC2_peptide": 5.0,
+                "IPC_peptide": 7.0,
                 "ProMoST": 5.25,
                 "Gauci": 5.25,
                 "Grimsley": 5.5,
-                "Thurlkill": 6,
-                "Lehninger": 7,
-                "Toseland": 6,
+                "Thurlkill": 6.0,
+                "Lehninger": 7.0,
+                "Toseland": 6.0,
                 "pI mean": 5.875,
-                "std": 2.0615528128088303,
-                "err": 0.7288689868556625
+                "std": 2.0616,
+                "err": 0.7289
             },
             "QpH7": {
-                "IPC2_peptide": -0.22101980206722793,
-                "IPC_peptide": -0.0067985967372582445,
-                "ProMoST": -0.7244382528415361,
-                "Gauci": -0.7151115172445417,
-                "Grimsley": -0.3337811489024779,
-                "Thurlkill": -0.20057383486666525,
-                "Lehninger": -0.005093735807939481,
-                "Toseland": -0.04662939735438543,
-                "Q at pH7.4 mean": -0.281680785727754,
-                "std": 0.7772893175334228,
-                "err": 0.2748132736858734
+                "IPC2_peptide": -0.221,
+                "IPC_peptide": -0.0068,
+                "ProMoST": -0.7244,
+                "Gauci": -0.7151,
+                "Grimsley": -0.3338,
+                "Thurlkill": -0.2006,
+                "Lehninger": -0.0051,
+                "Toseland": -0.0466,
+                "Q at pH7.4 mean": -0.2817,
+                "std": 0.7773,
+                "err": 0.2748
             },
             "pI_interval": [
-                3.737499999999999,
-                7.537499999999998
+                3.7375,
+                7.5375
             ],
             "pI_interval_threshold": 0.2,
             "plot_filename": "temp_1.png",

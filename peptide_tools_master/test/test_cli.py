@@ -274,6 +274,21 @@ def test_fasta_stdin_all_capped_input_3():
     assert result == expected
 
 
+def test_smiles_stdin_liabilities_input_1():
+    """Validity of console JSON output for SMI input."""
+    # This molecule is Cotadutide - public drug
+    smiles = "CCCCCCCCCCCCCCCC(=O)N[C@@H](CCC(=O)NCCCC[C@H](NC(=O)[C@H](CC(O)=O)NC(=O)[C@H](CO)NC(=O)[C@@H](NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)[C@@H](NC(=O)CNC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CO)NC(=O)[C@@H](N)CC1=CNC=N1)[C@@H](C)O)[C@@H](C)O)C(=O)N[C@@H](CO)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CC1=CC=C(O)C=C1)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CC(O)=O)C(=O)N[C@@H](CO)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CC(O)=O)C(=O)N[C@@H](CC1=CC=CC=C1)C(=O)N[C@@H](C(C)C)C(=O)N[C@@H](C)C(=O)N[C@@H](CC1=CNC2=C1C=CC=C2)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](C)C(=O)NCC(=O)NCC(O)=O)C(O)=O"  # noqa: E501
+    test_args = cli_base_args + ["--input", smiles]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(test_args))
+    result = json.loads(subprocess_output.stdout)
+    with open(f"{examples_dir}/payload_9_out.json.stdout", "r") as file:
+        expected = json.load(file)
+    assert result == expected
+
+
 def test_empty_input():
     test_args = cli_base_args + ["--input", " "]
     subprocess_output = subprocess.run(

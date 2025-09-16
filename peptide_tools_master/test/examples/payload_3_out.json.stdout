@@ -14,7 +14,7 @@
             "fasta": "AEYVPX",
             "e205": 19980,
             "e214": 12818,
-            "e280": 1490,
+            "e280": 1490.0,
             "mol_name": "none"
         }
     },
@@ -23,33 +23,33 @@
             "mol_name": "none",
             "pI": {
                 "IPC2_peptide": 6.25,
-                "IPC_peptide": 6,
+                "IPC_peptide": 6.0,
                 "ProMoST": 6.375,
                 "Gauci": 6.375,
-                "Grimsley": 6,
-                "Thurlkill": 6,
-                "Lehninger": 6,
-                "Toseland": 6,
+                "Grimsley": 6.0,
+                "Thurlkill": 6.0,
+                "Lehninger": 6.0,
+                "Toseland": 6.0,
                 "pI mean": 6.125,
-                "std": 0.46770717334674267,
-                "err": 0.1653594569415369
+                "std": 0.4677,
+                "err": 0.1654
             },
             "QpH7": {
-                "IPC2_peptide": -0.25729047371722114,
-                "IPC_peptide": -0.24254560686365984,
-                "ProMoST": -0.24251012286561988,
-                "Gauci": -0.2404031856171302,
-                "Grimsley": -0.2417994308596581,
-                "Thurlkill": -0.24397610102306663,
-                "Lehninger": -0.2430415125065732,
-                "Toseland": -0.24654293769338392,
-                "Q at pH7.4 mean": -0.24476367139328908,
-                "std": 0.014194066109404092,
-                "err": 0.0050183601992848945
+                "IPC2_peptide": -0.2573,
+                "IPC_peptide": -0.2425,
+                "ProMoST": -0.2425,
+                "Gauci": -0.2404,
+                "Grimsley": -0.2418,
+                "Thurlkill": -0.244,
+                "Lehninger": -0.243,
+                "Toseland": -0.2465,
+                "Q at pH7.4 mean": -0.2447,
+                "std": 0.0142,
+                "err": 0.005
             },
             "pI_interval": [
-                5.124999999999998,
-                7.212499999999997
+                5.125,
+                7.2125
             ],
             "pI_interval_threshold": 0.2,
             "plot_filename": "temp_1.png",
@@ -66,7 +66,7 @@
                     "type": "acid",
                     "frag": "E_C-term",
                     "count": 1,
-                    "pka": 3.304714285714286
+                    "pka": 3.3047142857142857
                 },
                 "3": {
                     "type": "acid",
