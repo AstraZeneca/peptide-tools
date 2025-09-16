@@ -102,6 +102,7 @@ pichemist -i "NCCC(=O)N[C@@H](Cc1c[nH]cn1)C(=O)O" --method acd -if smiles_stdin
 
 ## Examples of usage (Python API)
 ```python
+import pprint
 from pichemist.io import generate_input
 from pichemist.api import pichemist_from_dict
 
@@ -120,9 +121,35 @@ output = pichemist_from_dict(
     input_dict, args["method"], args["plot_ph_q_curve"], args["print_fragments"]
 )
 
-print(output)
+pp = pprint.PrettyPrinter(depth=4)
+pp.pprint(output)
 >
-{1: {'mol_name': 'C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O', 'pI': {'IPC2_peptide': 8.046875, 'IPC_peptide': 9.8125, 'ProMoST': 8.375, 'Gauci': 8.6875, 'Grimsley': 8.9375, 'Thurlkill': 9.0625, 'Lehninger': 9.859375, 'Toseland': 9.40625, 'pI mean': 9.0234, 'std': 1.7216, 'err': 0.6087}, 'QpH7': {'IPC2_peptide': 0.6315, 'IPC_peptide': 0.9916, 'ProMoST': 0.2617, 'Gauci': 0.5541, 'Grimsley': 0.6645, 'Thurlkill': 0.7975, 'Lehninger': 0.9932, 'Toseland': 0.9516, 'Q at pH7.4 mean': 0.7307, 'std': 0.675, 'err': 0.2386}, 'pI_interval': (8.625, 9.3625), 'pI_interval_threshold': 0.2, 'pKa_set': 'IPC2_peptide'}}
+{1: {'QpH7': {'Gauci': 0.5541,
+              'Grimsley': 0.6645,
+              'IPC2_peptide': 0.6315,
+              'IPC_peptide': 0.9916,
+              'Lehninger': 0.9932,
+              'ProMoST': 0.2617,
+              'Q at pH7.4 mean': 0.7307,
+              'Thurlkill': 0.7975,
+              'Toseland': 0.9516,
+              'err': 0.2386,
+              'std': 0.675},
+     'mol_name': 'C[C@@H](NC(=O)[C@H](CCCCN)NC(=O)[C@](C)(CC(=O)O)NC(=O)[C@H](CCCN)NC(=O)[C@@H](N)Cc1ccccc1)C(=O)O',
+     'pI': {'Gauci': 8.6875,
+            'Grimsley': 8.9375,
+            'IPC2_peptide': 8.046875,
+            'IPC_peptide': 9.8125,
+            'Lehninger': 9.859375,
+            'ProMoST': 8.375,
+            'Thurlkill': 9.0625,
+            'Toseland': 9.40625,
+            'err': 0.6087,
+            'pI mean': 9.0234,
+            'std': 1.7216},
+     'pI_interval': (8.625, 9.3625),
+     'pI_interval_threshold': 0.2,
+     'pKa_set': 'IPC2_peptide'}}
 ```
 
 ## Contributions
