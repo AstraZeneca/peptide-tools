@@ -18,10 +18,17 @@ test:
 	make test_acd
 
 upload_test:
-	twine upload -r testpypi dist/*
+	version=$$(grep -Po "__version__\s*=\s*['\"]\K[^'\"]+" setup.py); \
+	twine upload -r testpypi dist/pichemist-$$version* --verbose
 
 upload:
-	twine upload -r pypi dist/*
+	version=$$(grep -Po "__version__\s*=\s*['\"]\K[^'\"]+" setup.py); \
+	twine upload -r pypi dist/pichemist-$$version* --verbose
 
 coverage:
 	pytest --cov=src test/ -vv --cov-report term-missing
+
+create_git_tag:
+	version=$$(grep -Po "__version__\s*=\s*['\"]\K[^'\"]+" setup.py); \
+	git tag v$$version
+	git push --tags

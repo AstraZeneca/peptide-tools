@@ -8,6 +8,8 @@ __doc__ = (
     ""
 )
 
+__version__ = "2.1.0"
+
 # read the contents of your README file
 from pathlib import Path
 
@@ -17,7 +19,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name="pichemist",
     packages=find_packages(),
-    version="0.2.0",
+    version=__version__,
     description=__doc__,
     long_description=long_description,
     long_description_content_type="text/markdown",
