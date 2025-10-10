@@ -11,7 +11,7 @@ def output_ph_q_curve(ph_q_dict, fig_filename):
     """Generates a pH/Q curve plot and saves it."""
     # Static parameters
     plt.matplotlib.rcParams.update({"font.size": 16})
-    plt.figure(figsize=(8, 6))
+    plt_image = plt.figure(figsize=(8, 6))
     lines = ["-", "--", "-.", ":"]
     linew = [pld["w1"], pld["w1"],
              pld["w2"], pld["w2"],
@@ -48,3 +48,4 @@ def output_ph_q_curve(ph_q_dict, fig_filename):
                ncol=1, shadow=True,
                fontsize=10).get_frame().set_alpha(1)
     plt.savefig(fig_filename)
+    plt.close(plt_image)
