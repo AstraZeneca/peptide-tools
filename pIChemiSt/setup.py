@@ -8,7 +8,7 @@ __doc__ = (
     ""
 )
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 # read the contents of your README file
 from pathlib import Path
