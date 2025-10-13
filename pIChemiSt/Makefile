@@ -30,5 +30,5 @@ coverage:
 
 create_git_tag:
 	version=$$(grep -Po "__version__\s*=\s*['\"]\K[^'\"]+" setup.py); \
-	git tag v$$version
+	git tag pichemist-v$$version
 	git push --tags
