@@ -48,7 +48,7 @@ SNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLL
 GTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERW
 RLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS'
 
-python peptide_tools_master.py --input FPYVAE --print_fragment_pkas --ionizable_nterm false --ionizable_cterm false
+python peptide_tools_master.py --input FPYkAE --print_fragment_pkas --ionizable_nterm false --ionizable_cterm false
 ```
 
 ## Contributions

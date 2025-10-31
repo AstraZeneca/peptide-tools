@@ -1,295 +1,342 @@
-#!/usr/bin/env python
-###
-### Last  update: Andrey Frolov, AstraZeneca, Molndal. 29/01/2021
-### First verion: Andrey Frolov, AstraZeneca, Molndal. 11/02/2016
-###
-import sys, os
 import argparse
-import json
-from copy import copy
 import csv
+import json
+import os
+import textwrap
+import warnings
+from typing import Any
+from typing import Dict
 
-#from json import encoder
-#encoder.FLOAT_REPR = lambda o: format(o, '.2f')
+from Bio import SeqIO
+
+# Global definitions
+known_basic_res = ["K", "R", "H"]
+known_acidic_res = ["D", "E", "C", "Y", "U"]
+known_res = [
+    "G",
+    "A",
+    "S",
+    "P",
+    "V",
+    "T",
+    "C",
+    "I",
+    "L",
+    "N",
+    "D",
+    "Q",
+    "K",
+    "E",
+    "M",
+    "H",
+    "F",
+    "R",
+    "Y",
+    "W",
+    "X",
+    "Z",
+    "B",
+    "U",
+]
+
+aa_table = [
+    ("Ala", "A", "Alanine"),
+    ("Arg", "R", "Arginine"),
+    ("Asn", "N", "Asparagine"),
+    ("Asp", "D", "Aspartic acid"),
+    ("Cys", "C", "Cysteine"),
+    ("Gln", "Q", "Glutamine"),
+    ("Glu", "E", "Glutamic acid"),
+    ("Gly", "G", "Glycine"),
+    ("His", "H", "Histidine"),
+    ("Ile", "I", "Isoleucine"),
+    ("Leu", "L", "Leucine"),
+    ("Lys", "K", "Lysine"),
+    ("Met", "M", "Methionine"),
+    ("Phe", "F", "Phenylalanine"),
+    ("Pro", "P", "Proline"),
+    ("Pyl", "O", "Pyrrolysine"),
+    ("Ser", "S", "Serine"),
+    ("Sec", "U", "Selenocysteine"),
+    ("Thr", "T", "Threonine"),
+    ("Trp", "W", "Tryptophan"),
+    ("Tyr", "Y", "Tyrosine"),
+    ("Val", "V", "Valine"),
+    ("Asx", "B", "Aspartic acid or Asparagine"),
+    ("Glx", "Z", "Glutamic acid or Glutamine"),
+    ("Xaa", "X", "Any amino acid"),
+    ("Xle", "J", "Leucine or Isoleucine"),
+    ("TERM", "", "Termination codon"),
+]
 
 
-######
-###### Some global definitions
-######
-
-known_basic_res=['K','R','H']
-known_acidic_res=['D','E','C','Y','U']
-known_res=['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'Q', 'K', 'E', 'M', 'H', 'F', 'R', 'Y', 'W', 'X', 'Z', 'B', 'U']
-
-#Ala	A	Alanine
-#Arg	R	Arginine
-#Asn	N	Asparagine
-#Asp	D	Aspartic acid
-#Cys	C	Cysteine
-#Gln	Q	Glutamine
-#Glu	E	Glutamic acid
-#Gly	G	Glycine
-#His	H	Histidine
-#Ile	I	Isoleucine
-#Leu	L	Leucine
-#Lys	K	Lysine
-#Met	M	Methionine
-#Phe	F	Phenylalanine
-#Pro	P	Proline
-#Pyl	O	Pyrrolysine
-#Ser	S	Serine
-#Sec	U	Selenocysteine
-#Thr	T	Threonine
-#Trp	W	Tryptophan
-#Tyr	Y	Tyrosine
-#Val	V	Valine
-#Asx	B	Aspartic acid or Asparagine
-#Glx	Z	Glutamic acid or Glutamine
-#Xaa	X	Any amino acid
-#Xle	J	Leucine or Isoleucine
-#TERM		termination codon
-
-#####======================================================================================================================================================
-##### START
-##### Calc Molar Absorption coefficient
-
-# Turns a dictionary into a class 
-class Dict2Class(object): 
-    def __init__(self, my_dict): 
-        for key in my_dict: 
-            setattr(self, key, my_dict[key]) 
+# Turns a dictionary into a class
+class Dict2Class(object):
+    def __init__(self, my_dict):
+        for key in my_dict:
+            setattr(self, key, my_dict[key])
 
 
-def read_fasta_file(inputFile):
+def read_fasta_file(input_file: str) -> Dict[int, Dict[str, Any]]:
+    """
+    Reads a FASTA file and returns a dictionary mapping unique IDs
+    to molecule information.
 
-    filename, ext = os.path.splitext(inputFile)
+    Parameters
+    ----------
+    input_file : str
+        Path to the FASTA file.
 
-    # Initialize file reader
-    if not ext == '.fasta': raise Exception('!Warning: extension of file is not ".fasta". Assuming it is fasta formatted input. Continue. ')
+    Returns
+    -------
+    Dict[int, Dict[str, Any]]
+        Dictionary where each key is a unique molecule ID, and
+        the value is a dictionary containing 'mol_name', 'mol_obj',
+        and 'fasta' sequence.
+    """
+    _, ext = os.path.splitext(input_file)
+    if ext.lower() != ".fasta":
+        warnings.warn(
+            'File extension is not ".fasta". Assuming FASTA format and continuing.',
+            UserWarning,
+        )
 
-    from Bio import SeqIO
-    biosuppl = SeqIO.parse(open(inputFile),'fasta')
+    mol_supply_json: Dict[int, Dict[str, Any]] = {}
+    with open(input_file, "r") as handle:
+        for mol_id, record in enumerate(SeqIO.parse(handle, "fasta"), start=1):
+            mol_supply_json[mol_id] = {
+                "mol_name": record.id,
+                "mol_obj": None,
+                "fasta": str(record.seq),
+            }
 
-    mol_supply_json={}
-    mol_unique_ID = 0
-    for biofasta in biosuppl:
-        mol_unique_ID += 1
-        # unique index, mol title, RDkit mol object, mol fasta
-        mol_supply_json[mol_unique_ID] = {'mol_name':biofasta.id, 'mol_obj':None, 'fasta':str(biofasta.seq)}
-        
     return mol_supply_json
 
 
-def calc_extn_coeff(options={}):
+def calc_extn_coeff(options=None):
+    if options is None:
+        options = {}
 
     args = Dict2Class(options)
 
-
-    # Get options
-    if len(args.seq)!=0:
-        # assume single fasta input
-        mol_unique_ind = 1
-        mol_name='unknown'
-        fasta = args.seq
-        mol_supply_json={}
-        mol_supply_json[mol_unique_ind] = {'mol_name': mol_name, 'mol_obj':None, 'fasta':fasta}
-
-    elif len(args.inputFile)!=0:
-        # Assume filename as input
-        inputFile = args.inputFile
-        mol_supply_json = read_fasta_file(inputFile)
-
-    elif len(args.inputJSON)!=0:
-        # Assume molecule JSON supply as input
+    # Determine molecule input
+    if getattr(args, "seq", ""):
+        # Single fasta input
+        mol_supply_json = {
+            1: {"mol_name": "unknown", "mol_obj": None, "fasta": args.seq}
+        }
+    elif getattr(args, "inputFile", ""):
+        # Input from fasta file
+        mol_supply_json = read_fasta_file(args.inputFile)
+    elif getattr(args, "inputJSON", ""):
+        # Input from JSON string
         mol_supply_json = json.loads(args.inputJSON)
-    elif args.inputDict: # if not an empty dictionary
-        # Assume Dict molecule supply as input
+    elif getattr(args, "inputDict", None):
+        # Input from dictionary
         mol_supply_json = args.inputDict
     else:
-        raise Exception('Error: either fasta, input file *.fasta or JSON should be given. Exit. ')
-        sys.exit(1)
+        raise ValueError(
+            "Error: Provide either seq, inputFile, inputJSON, or inputDict."
+        )
 
-
-
+    # Calculate extinction coefficients
     dict_out = {}
-    #molid_list = []
-    #molid_ind_list = []
-    #molid_ind = 0
-    #for molid,molfasta in suppl:
-    for mol_unique_ind in mol_supply_json.keys():
-        #molid_ind += 1
-        options_single = copy(options)
-        #options_single["seq"] = molfasta
-        #dict_out_single = calc_extn_coeff_single_sequence(options_single)
-        dict_out_single = calc_extn_coeff_single_sequence(mol_supply_json[mol_unique_ind]['fasta'])
-        dict_out_single['mol_name'] = mol_supply_json[mol_unique_ind]['mol_name']
-        dict_out[mol_unique_ind] = dict_out_single
-        #molid_list.append(molid)
-        #molid_ind_list += [molid_ind]
-
-    #dict_out['molid_ind_list'] = molid_ind_list
+    for mol_id, mol_data in mol_supply_json.items():
+        coeffs = calc_extn_coeff_single_sequence(mol_data["fasta"])
+        coeffs["mol_name"] = mol_data.get("mol_name", f"mol_{mol_id}")
+        dict_out[mol_id] = coeffs
 
     return dict_out
 
 
+def calc_extn_coeff_single_sequence(orig_sequence):
+    # Conversion
+    sequence = _convert_sequence_left_handed_aa(orig_sequence)
 
-
-
-
-
-def calc_extn_coeff_single_sequence(sequence):
-
+    # Validation
     for R in sequence:
-        if R not in known_res: 
-            raise Exception("---!Error: residue "+R+" is not known. Please use X if this is a noncaninical residue. Exiting.")
-            sys.exit(1)
- 
+        if R not in known_res:
+            raise Exception(
+                f"Error: Residue {R} is not known. "
+                "Please use X if this is a non-canonical residue."
+            )
 
-    ### Pace, Vajdos, Fee, Grimsley "How to measure and predict the molar absorption coefficient of a protein", Protein Sciecnce 1995, 4, 2411-2423
+    # Residue counts
+    residue_counts = {res: sequence.count(res) for res in known_res}
+    nPepBond = len(sequence) - 1
 
-    nW = sequence.count('W')
-    nF = sequence.count('F')
-    nY = sequence.count('Y')
-    nH = sequence.count('H')
-    nM = sequence.count('M')
-    nR = sequence.count('R')
-    nC = sequence.count('C')
-    nN = sequence.count('N')
-    nQ = sequence.count('Q')
-    nA = sequence.count('A')
-    nD = sequence.count('D')
-    nE = sequence.count('E')
-    nG = sequence.count('G')
-    nI = sequence.count('I')
-    nL = sequence.count('L')
-    nK = sequence.count('K')
-    nP = sequence.count('P')
-    nS = sequence.count('S')
-    nT = sequence.count('T')
-    nV = sequence.count('V')
-    nPepBond = len(sequence) -1
+    # Coefficients dictionaries
+    e205_coeffs = {
+        "W": 20400,
+        "F": 8600,
+        "Y": 6080,
+        "H": 5200,
+        "M": 1830,
+        "R": 1350,
+        "C": 690,
+        "N": 400,
+        "Q": 400,
+    }
+
+    e214_coeffs = {
+        "W": 29050,
+        "F": 5200,
+        "Y": 5375,
+        "H": 5125,
+        "M": 980,
+        "R": 102,
+        "C": 225,
+        "N": 136,
+        "Q": 142,
+        "A": 32,
+        "D": 58,
+        "E": 78,
+        "G": 21,
+        "I": 45,
+        "L": 45,
+        "K": 41,
+        "S": 34,
+        "T": 41,
+        "V": 43,
+    }
+
+    # Special case: Proline for e214
+    nP_rest = sequence[1:].count("P")
+    nP_first = 1 if sequence[0] == "P" else 0
+
+    # Compute sums
+    e205 = (
+        sum(residue_counts.get(res, 0) * coeff for res, coeff in e205_coeffs.items())
+        + 2780 * nPepBond
+    )
+    e214 = (
+        sum(residue_counts.get(res, 0) * coeff for res, coeff in e214_coeffs.items())
+        + 2675 * nP_rest
+        + 30 * nP_first
+        + 923 * nPepBond
+    )
+    e280 = (
+        5500 * residue_counts.get("W", 0)
+        + 1490 * residue_counts.get("Y", 0)
+        + 0.5 * 125 * residue_counts.get("C", 0)
+    )
+
+    return {"fasta": orig_sequence, "e205": e205, "e214": e214, "e280": e280}
 
 
-    e205 =( 20400*nW + 
-    8600*nF +
-    6080*nY +
-    5200*nH +
-    1830*nM +
-    1350*nR +
-    690*nC +
-    400*nN +
-    400*nQ +
-    2780*nPepBond )
-
-
-    e214 =( 29050*nW +
-    5200*nF +
-    5375*nY +
-    5125*nH +
-    980*nM +
-    102*nR +
-    225*nC +
-    136*nN +
-    142*nQ +
-    32*nA +
-    58*nD +
-    78*nE +
-    21*nG +
-    45*nI +
-    45*nL +
-    41*nK +
-    2675*sequence[1:].count('P') + 30*sequence[0].count('P') +
-    34*nS +
-    41*nT +
-    43*nV +
-    923*nPepBond )
-
-    e280 = 5500*nW  +  1490*nY  + 0.5*125*nC 
-
-    return {'fasta':sequence,'e205':e205,'e214':e214,'e280':e280}
-
+def _convert_sequence_left_handed_aa(sequence: str):
+    return sequence.upper()
 
 
 def print_stdout(dict_in):
-    #for molid_ind in dict_in['molid_ind_list']:
-    for molid_ind in dict_in.keys():
-        dict_extn_coeff = dict_in[molid_ind]
-        #print(dict_extn_coeff.keys())
-        molid = dict_extn_coeff['mol_name']
-        print("======================================================================================================================================================")
-        print("--- Molar absorption coefficient at different wavelength")
-        print("mol ID: "+molid)
-        print("Sequence: "+dict_extn_coeff['fasta'])
-        print( "e(205 nm) = "+str(dict_extn_coeff['e205'])+" (M*cm)^-1 ")
-        print( "e(214 nm) = "+str(dict_extn_coeff['e214'])+" (M*cm)^-1 ")
-        print( "e(280 nm) = "+str(dict_extn_coeff['e280'])+" (M*cm)^-1 ")
-        print("")
-        print( "Pace, Vajdos, Fee, Grimsley \"How to measure and predict the molar absorption coefficient of a protein\", Protein Science 1995, 4, 2411-2423")
-        print( "Kuipers, Gruppen, \"Prediction of molar extinction coefficients of proteins and peptides ...\", J. Agric. Food Chem. 2007, 55, 5445")
-        print( "Anthis, Clore, \"Sequence-specific determination of protein and peptide concentrations by absorbance at 215 nm\", Protein Science 2013, 22, 851")
-    return
+    separator = "=" * 120
+    references = [
+        'Pace, Vajdos, Fee, Grimsley, "How to measure and predict the molar absorption coefficient of a protein", Protein Science 1995, 4, 2411-2423',  # noqa
+        'Kuipers, Gruppen, "Prediction of molar extinction coefficients of proteins and peptides ...", J. Agric. Food Chem. 2007, 55, 5445',  # noqa
+        'Anthis, Clore, "Sequence-specific determination of protein and peptide concentrations by absorbance at 215 nm", Protein Science 2013, 22, 851',  # noqa
+    ]
+
+    for molid, dict_extn_coeff in dict_in.items():
+        mol_name = dict_extn_coeff["mol_name"]
+        fasta_seq = dict_extn_coeff["fasta"]
+
+        print(separator)
+        print("--- Molar absorption coefficient at different wavelengths ---")
+        print(f"Mol ID: {mol_name}")
+        print(f"Sequence: {fasta_seq}")
+        print(f"e(205 nm) = {dict_extn_coeff['e205']} (M*cm)^-1")
+        print(f"e(214 nm) = {dict_extn_coeff['e214']} (M*cm)^-1")
+        print(f"e(280 nm) = {dict_extn_coeff['e280']} (M*cm)^-1")
+        print()
+        for ref in references:
+            print(ref)
+        print()  # Add a blank line between entries
 
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # Parse options
-    usage = "extn_coeff_fasta.py is the program for calculation of peptide extinction coefficient  (molar absorption coefficient) based on FASTA sequernce.\n"+\
-    "\n"+\
-    "Usage:          python extn_coeff.py -s GGKGD\n"+\
-    ""
-    parser = argparse.ArgumentParser(description="extn_coeff_fasta.py is the program for calculation of peptide extinction coefficient  (molar absorption coefficient) based on FASTA sequernce.\n Usage:          python extn_coeff.py -s GGKGD")
-    parser.add_argument("-s", action="store", dest="seq", help="peptide sequence", default='')
-    parser.add_argument("-i", dest="inputFile", help="input file with molecule structure. smi or sdf",default='')
-    parser.add_argument("-o", dest="outputFile", help="output file with molecule structure. csv",default='')
-    parser.add_argument("--json",default=False, action='store_true',dest="l_json", help="Print output as JSON")
+    usage_text = textwrap.dedent(
+        """
+        extn_coeff_fasta.py calculates peptide extinction coefficients
+        (molar absorption coefficients) based on a FASTA sequence.
+
+        Usage:
+            python extn_coeff_fasta.py -s GGKGD
+    """
+    )
+
+    parser = argparse.ArgumentParser(
+        description=textwrap.dedent(
+            "extn_coeff_fasta.py calculates peptide extinction coefficients "
+            "(molar absorption coefficients) based on a FASTA sequence."
+        ),
+        usage=usage_text,
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "-s", action="store", dest="seq", help="peptide sequence", default=""
+    )
+    parser.add_argument(
+        "-i",
+        dest="inputFile",
+        help="input file with molecule structure. smi or sdf",
+        default="",
+    )
+    parser.add_argument(
+        "-o",
+        dest="outputFile",
+        help="output file with molecule structure. csv",
+        default="",
+    )
+    parser.add_argument(
+        "--json",
+        default=False,
+        action="store_true",
+        dest="l_json",
+        help="Print output as JSON",
+    )
     args = parser.parse_args()
 
-    #dict_extn_coeff = calc_extn_coeff(args.sequence)
+    # dict_extn_coeff = calc_extn_coeff(args.sequence)
     dict_extn_coeff = calc_extn_coeff(args.__dict__)
 
-    ### ----------------------------------------------------------------------
-    # Output 
-    if args.outputFile == '': # output plain text
+    # Output
+    if args.outputFile == "":  # output plain text
         if args.l_json:
             print(json.dumps(dict_extn_coeff, indent=2))
         else:
             print_stdout(dict_extn_coeff)
 
-    else: # output file
+    else:  # output file
 
-        known_out_file_types = ['.csv']
+        known_out_file_types = [".csv"]
         filename, out_fext = os.path.splitext(args.outputFile)
         if out_fext not in known_out_file_types:
-            raise Exception('Error! Output file extention not in supported file types:'+str(known_file_types))
-            sys.exit(1)
+            raise Exception("Error! Output file extention not in supported file types")
 
-        elif out_fext == '.csv':
-            with open(args.outputFile,'w') as csv_f:
+        elif out_fext == ".csv":
+            with open(args.outputFile, "w") as csv_f:
                 csv_w = csv.writer(csv_f)
-                count=0
+                count = 0
                 for mi in dict_extn_coeff.keys():
-                    count+=1
+                    count += 1
                     if count == 1:
-                        header=['mol_name','fasta','e205','e214','e280']
+                        header = ["mol_name", "fasta", "e205", "e214", "e280"]
                         csv_w.writerow(header)
 
                     row = []
-                    row += [dict_extn_coeff[mi]['mol_name']] 
-                    row += [dict_extn_coeff[mi]['fasta']] 
-                    row += [dict_extn_coeff[mi]['e205']] 
-                    row += [dict_extn_coeff[mi]['e214']] 
-                    row += [dict_extn_coeff[mi]['e280']] 
+                    row += [dict_extn_coeff[mi]["mol_name"]]
+                    row += [dict_extn_coeff[mi]["fasta"]]
+                    row += [dict_extn_coeff[mi]["e205"]]
+                    row += [dict_extn_coeff[mi]["e214"]]
+                    row += [dict_extn_coeff[mi]["e280"]]
                     csv_w.writerow(row)
-                        
-        # print info 
-        dict_file = {'outputFile':args.outputFile,'outputInfo':'Number of molecules processed:'+str(len(dict_extn_coeff.keys()))}
+
+        # print info
+        dict_file = {
+            "outputFile": args.outputFile,
+            "outputInfo": "Number of molecules processed:"
+            + str(len(dict_extn_coeff.keys())),
+        }
         print(json.dumps(dict_file))
-    
-
-
-
-
-
-

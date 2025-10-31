@@ -289,6 +289,20 @@ def test_smiles_stdin_liabilities_input_1():
     assert result == expected
 
 
+def test_fasta_stdin_right_handed_input_4():
+    """Validity of console JSON output for FASTA input."""
+    test_args = cli_base_args + ["--input", "FPYVaE", "--print_fragment_pkas"]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    assert_liabilities_and_pop(result)
+    with open(f"{examples_dir}/payload_10_out.json.stdout", "r") as file:
+        expected = json.load(file)
+    assert result == expected
+
+
 def test_empty_input():
     test_args = cli_base_args + ["--input", " "]
     subprocess_output = subprocess.run(
