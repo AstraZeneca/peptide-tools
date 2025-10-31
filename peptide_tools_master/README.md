@@ -1,7 +1,7 @@
 # Peptide Tools Master
 
 ## Description
-CLI layer for accessing multiple tools with a single command. The tools include pIChemiSt, the prediction of the extinction coefficient, the identification of chemical liabilities, and the calculation of molecular descriptors. The interface accepts different types of inputs including SMILES, SMILES files, SDF, FASTA, FASTA sequences, and FASTA files. Some logic for the recognition of the input type is implemented. This was done to facilitate the integrate the CLI with a front end, removing the need for users to specify their input types.
+CLI layer for accessing multiple tools with a single command. The tools include pIChemiSt, the prediction of the extinction coefficient, the identification of chemical liabilities, and the calculation of molecular descriptors. The interface accepts different types of inputs including SMILES, SMILES files, SDF, FASTA, FASTA sequences (including D amino acids), and FASTA files. Some logic for the recognition of the input type is implemented. This was done to facilitate the integrate the CLI with a front end, removing the need for users to specify their input types.
 
 ## How to set up a temporary environment to run the tool
 - Ensure that you have Python version >=3.8
@@ -48,7 +48,7 @@ SNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLL
 GTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERW
 RLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS'
 
-python peptide_tools_master.py --input FPYkAE --print_fragment_pkas --ionizable_nterm false --ionizable_cterm false
+python peptide_tools_master.py --input FPYKPAE --print_fragment_pkas --ionizable_nterm false --ionizable_cterm false
 ```
 
 ## Contributions
