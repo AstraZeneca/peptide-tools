@@ -4,25 +4,25 @@
         "smarts": "N[CH1]([CH2][CH0](=[OH0])[NH2])C(=[OH0])",
         "fasta_pattern": "N",
         "factors_favoring_stability": "pH 3-6",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
         "comments": "Deamidation rate strongly depends on the i+1 residue: very high risk for NG; high risk for NH, NS, NT, NA; lower risk for bulky and hydrophobic residues (e.g. NI, NV, NL, NW, NP, etc.)",
-        "references": "N. e. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
+        "references": "N. E. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
     },
     {
         "liability": "Deamidation of Gln",
         "smarts": "N[CH1]([CH2][CH2][CH0](=[OH0])[NH2])C(=[OH0])",
         "fasta_pattern": "Q",
         "factors_favoring_stability": "pH 3-6",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
         "comments": "Deamidation rate strongly depends on the i+1 residue: high risk for QG; medium risk for QC; low risk for bulky and acidic residues (e.g. QW, QF, QD, QE, QP, etc.)",
-        "references": "N. e. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
+        "references": "N. E. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
     },
     {
         "liability": "β-isomerization of Asp",
         "smarts": "N[CH1]([CH2][CH0](=[OH0])[OH,O-])C(=[OH0])",
         "fasta_pattern": "D",
         "factors_favoring_stability": "pH 6-8, addition of electrolyte",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility, carboxylate buffers: phosphate, bicarbonate, addition of glycerol, sucrose",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, addition of glycerol, sucrose",
         "comments": "High risk",
         "references": "Geiger and Clarke 1987; Wakankar and Borchardt 2006"
     },
@@ -31,7 +31,7 @@
         "smarts": "N[CH1]([CH2][OH1])C(=[OH0])",
         "fasta_pattern": "S",
         "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility",
         "comments": "-",
         "references": "Cloos and Christgau 2002"
     },
@@ -40,7 +40,7 @@
         "smarts": "N[CH1]([CH3])C(=[OH0])",
         "fasta_pattern": "A",
         "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, solvent accessibility",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility",
         "comments": "-",
         "references": "Cloos and Christgau 2002"
     },
@@ -49,8 +49,8 @@
         "smarts": "N[CH1]([CH2][CH0](=[OH0])[OH,O-])C(=[OH0])",
         "fasta_pattern": "D",
         "factors_favoring_stability": "pH >5",
-        "factors_disfavoring_stability": "Disordered secondary structure & high conformational flexibility, high solvent accessibility",
-        "comments": "Hydrolysis rate of DP motif is 8-10 times higher than the rest.",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility",
+        "comments": "The hydrolysis rate for the DP motif is 8–10 times higher than for the others",
         "references": "Lauer et al. 2016; Vlasak and Ionescu 2011"
     },
     {
@@ -93,8 +93,8 @@
         "liability": "Oxidation (carbonylation) of Lys",
         "smarts": "N[CH1]([CH2][CH2][CH2][CH2][NH2,NH3+])C(=[OH0])",
         "fasta_pattern": "K",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Solvent‑exposed RKPT‑rich motifs, light exposure,  dissolved oxygen, photosensitizers, transition metals and reducing agents that increase their oxidative potential (e.g., ascorbate with Fe/Cu)",
         "comments": "-",
         "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
     },
@@ -102,8 +102,8 @@
         "liability": "Oxidation (carbonylation) of Arg",
         "smarts": "N[CH1]([CH2][CH2][CH2][NH][CH0](=[NH1,NH2+])[NH2])C(=[OH0])",
         "fasta_pattern": "R",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Solvent‑exposed RKPT‑rich motifs, light exposure,  dissolved oxygen, photosensitizers, transition metals and reducing agents that increase their oxidative potential (e.g., ascorbate with Fe/Cu)",
         "comments": "-",
         "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
     },
@@ -111,8 +111,8 @@
         "liability": "Oxidation (carbonylation) of Arg (alternative tautomer)",
         "smarts": "N[CH1]([CH2][CH2][CH2][NH0,NH1+]=[CH0]([NH2])[NH2])C(=[OH0])",
         "fasta_pattern": "R",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Solvent‑exposed RKPT‑rich motifs, light exposure,  dissolved oxygen, photosensitizers, transition metals and reducing agents that increase their oxidative potential (e.g., ascorbate with Fe/Cu)",
         "comments": "-",
         "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
     },
@@ -120,8 +120,8 @@
         "liability": "Oxidation (carbonylation) of Pro",
         "smarts": "N1[CH2][CH2][CH2][CH1]1C(=[OH0])",
         "fasta_pattern": "P",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Solvent‑exposed RKPT‑rich motifs, light exposure,  dissolved oxygen, photosensitizers, transition metals and reducing agents that increase their oxidative potential (e.g., ascorbate with Fe/Cu)",
         "comments": "-",
         "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
     },
@@ -129,8 +129,8 @@
         "liability": "Oxidation (carbonylation) of Thr",
         "smarts": "N[CH1]([CH]([CH3])[OH])C(=[OH0])",
         "fasta_pattern": "T",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Transition metal ions, light, ascorbic acid, proximity to RKPT-enriched regions, solvent exposure",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Solvent‑exposed RKPT‑rich motifs, light exposure,  dissolved oxygen, photosensitizers, transition metals and reducing agents that increase their oxidative potential (e.g., ascorbate with Fe/Cu)",
         "comments": "-",
         "references": "Kryndushkin and Rao 2016; Maisonneuve et al. 2009; Yang et al. 2014"
     },
@@ -138,8 +138,8 @@
         "liability": "Oxidation of Phe",
         "smarts": "N[CH1]([CH2][cH0]1[cH1][cH1][cH1][cH1][cH1]1)C(=[OH0])",
         "fasta_pattern": "F",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Light",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Light exposure, dissolved oxygen, transition metals, photosensitizers, solvent accessibility",
         "comments": "-",
         "references": "Kerwin and Remmele 2007"
     },
@@ -147,8 +147,8 @@
         "liability": "Oxidation of His",
         "smarts": "N[CH1]([CH2][cH0]1[nH0,nH1,nH1+][cH1][nH0,nH1,nH1+][cH1]1)C(=[OH0])",
         "fasta_pattern": "H",
-        "factors_favoring_stability": "pH significantly lower than the apparent pKa of His (ca. 6.0)",
-        "factors_disfavoring_stability": "Transition metal ions, light, oxygen",
+        "factors_favoring_stability": "pH below  pKa of imidazole (ca. 6.0), light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Alkaline pH, transition metals, light exposure, dissolved oxygen, photosensitizers, solvent accessibility",
         "comments": "Low risk",
         "references": "Li, Schöneich, and Borchardt 1995; Sluyterman 1962"
     },
@@ -156,17 +156,17 @@
         "liability": "Oxidation of Trp",
         "smarts": "N[CH1]([CH2][cH0]1[cH1][nH1][cH0]2[cH1][cH1][cH1][cH1][cH0]12)C(=[OH0])",
         "fasta_pattern": "W",
-        "factors_favoring_stability": "Weak pH dependence",
-        "factors_disfavoring_stability": "light, oxygen, transition metal ions",
-        "comments": "Low risk",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Light exposure, dissolved oxygen, photosensitisers, transition metals, solvent accessibility",
+        "comments": "Low risk, weak pH dependence",
         "references": "Li, Schöneich, and Borchardt 1995; Sluyterman 1962"
     },
     {
         "liability": "Oxidation of Tyr",
         "smarts": "N[CH1]([CH2][cH0]1[cH1][cH1][cH1]([OH1,OH0-])[cH1][cH1]1)C(=[OH0])",
         "fasta_pattern": "Y",
-        "factors_favoring_stability": "pH significantly lower than apparent pKa of Tyr (ca. 10.0)",
-        "factors_disfavoring_stability": "Transition metal ions, light, oxygen",
+        "factors_favoring_stability": "pH below pKa of phenol (~10.0), light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Alkaline pH, light exposure, dissolved oxygen, transition metals, photosensitizers, solvent accessibility",
         "comments": "High risk",
         "references": "Li, Schöneich, and Borchardt 1995"
     },
@@ -174,35 +174,35 @@
         "liability": "Oxidation of Cys & thiols",
         "smarts": "C[CH2][SX2H1,S-X1H0]",
         "fasta_pattern": "C",
-        "factors_favoring_stability": "pH significantly lower than apparent pKa of Cys (ca. 8.3)",
-        "factors_disfavoring_stability": "Proximity to other Cys, lower thiol’s pKa, transition metal ions, light, oxygen",
+        "factors_favoring_stability": "pH below pKa of a thiol (~8.3), minimize free thiols, light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Alkaline pH, proximity to other thiols, transition metals, dissolved oxygen, photosensitizers, light exposure, solvent accessibility",
         "comments": "High risk",
         "references": "Li, Schöneich, and Borchardt 1995"
     },
     {
         "liability": "Oxidation of Cys-Cys disulfide bonds",
         "smarts": "C[CH2][SX2][SX2][CH2]C",
-        "fasta_pattern": "C",
-        "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Oxygen",
+        "fasta_pattern": "𝒞",
+        "factors_favoring_stability": "Light protection, oxygen control, antioxidant excipients, metal chelators",
+        "factors_disfavoring_stability": "Alkaline pH, light exposure, accessibility by thiols (e.g., Cys), dissolved oxygen, transition metals, photosensitizers",
         "comments": "High risk",
         "references": "Karimi et al. 2016"
     },
     {
-        "liability": "Oxidation of Met",
+        "liability": "Oxidation of Met & thioethers",
         "smarts": "C[CH2][SX2][CH3]",
         "fasta_pattern": "M",
-        "factors_favoring_stability": "Weak/no pH dependence",
-        "factors_disfavoring_stability": "Oxygen, solvent exposure & degree of hydration, metal ions",
-        "comments": "High risk",
+        "factors_favoring_stability": "Antioxidant excipients (e.g., methionine in excess), metal chelators, light protection, oxygen control",
+        "factors_disfavoring_stability": "Dissolved oxygen, transition metals, light exposure, solvent accessibility",
+        "comments": "High risk, weak/no pH dependence",
         "references": "Chu et al. 2004; Sluyterman 1962; Thakkar et al. 2023"
     },
     {
         "liability": "Cys-Cys disulfide bond scrambling & ß-elimination",
         "smarts": "C[CH2][SX2][SX2][CH2]C",
-        "fasta_pattern": "C",
+        "fasta_pattern": "𝒞",
         "factors_favoring_stability": "-",
-        "factors_disfavoring_stability": "Proximity to and accessibility by thiols (e.g. Cys), alkaline pH",
+        "factors_disfavoring_stability": "Accessibility by  thiols (e.g., Cys), alkaline pH",
         "comments": "High risk",
         "references": "Kolšek, Aponte-Santamaría, and Gräter 2017; Sung et al. 2016"
     }
