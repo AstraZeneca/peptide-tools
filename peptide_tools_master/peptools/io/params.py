@@ -28,6 +28,8 @@ class RuntimeParameters:
 
 
 class ChemicalParameters:
-    def __init__(self, ionizable_cterm, ionizable_nterm):
+    def __init__(self, ionizable_cterm, ionizable_nterm, n_disulfide_bonds, no_free_cys_thiols):
         self.ionizable_cterm = ionizable_cterm
         self.ionizable_nterm = ionizable_nterm
+        self.n_disulfide_bonds = n_disulfide_bonds
+        self.no_free_cys_thiols = no_free_cys_thiols
