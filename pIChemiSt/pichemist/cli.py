@@ -95,6 +95,13 @@ def arg_parser(args):
         default=PKaMethod.PKA_MATCHER.value,
         help="Method for the prediction of the pKa of unknown fragments",
     )
+    parser.add_argument(
+        "--list_of_ph",
+        type=str,
+        dest="str_list_of_ph",
+        default="",
+        help="List of of comma-separated pH values for whihc to calcualte peptide charge states",
+    )
     if not args:
         args = ["-h"]
     return parser.parse_args(args)
@@ -112,6 +119,7 @@ def run_pichemist(args):
         ionizable_nterm=args.ionizable_nterm,
         ionizable_cterm=args.ionizable_cterm,
         generate_fragment_images=args.generate_fragment_images,
+        list_of_ph=args.str_list_of_ph.split(","),
     )
     output_results(
         input_dict,

@@ -96,6 +96,36 @@ def calculate_pI_pH_and_charge_dicts(base_pkas_dict, acid_pkas_dict, net_qs_and_
     return pI_dict, q_dict, pH_q_dict
 
 
+def calculate_charges_for_pH_list(base_pkas_dict, acid_pkas_dict, net_qs_and_frags, list_of_ph):
+    """Calculates the cahrges at given pH values"""
+    pka_sets_names = FastaPKaMatcher().get_pka_sets_names()
+    
+    q_ph_list_dict = dict()
+    for ph_str in list_of_ph:
+        q_dict = dict()
+        ph = round(float(ph_str),3)
+        for pka_set in pka_sets_names:
+
+            # Merge fasta and calculated pkas
+            base_pkas = base_pkas_dict[pka_set]
+            acid_pkas = acid_pkas_dict[pka_set]
+
+            # Calculate charge at given pH vlaues
+            net_qs = get_net_qs_from_qs_and_frags(net_qs_and_frags)
+            constant_q = PKaChargeCalculator().calculate_constant_charge(net_qs)
+
+            q = PKaChargeCalculator().calculate_charge(
+                base_pkas, acid_pkas, pH=ph, constant_q=constant_q
+            )
+            q_dict[pka_set] = q
+            
+        # Generate stats
+        q_dict = generate_stats_on_dict(q_dict, mean_title="Q at pH"+ph_str+" mean")
+        q_ph_list_dict[ph] = q_dict["Q at pH"+ph_str+" mean"]
+
+    return q_ph_list_dict
+
+
 def calculate_isoelectric_interval_and_threshold(pH_q_dict):
     """
     Calculates the isoelectric interval that is

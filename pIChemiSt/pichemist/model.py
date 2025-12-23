@@ -51,6 +51,7 @@ class OutputAttribute(BaseEnum):
     Q_PH7 = "QpH7"
     PI_INTERVAL = "pI_interval"
     PI_INTERVAL_THRESHOLD = "pI_interval_threshold"
+    Q_PH_LIST = "Q_pH_list"
     PLOT_FILENAME = "plot_filename"
     PKA_SET = "pKa_set"
     FRAG_BASE_PKA_FASTA = "frag_base_pkas_fasta"

@@ -4,6 +4,7 @@ from pichemist.core import calculate_isoelectric_interval_and_threshold
 from pichemist.core import calculate_pI_pH_and_charge_dicts
 from pichemist.core import compile_frags_pkas_for_output
 from pichemist.core import merge_matched_and_calculated_pkas
+from pichemist.core import calculate_charges_for_pH_list
 from pichemist.fasta.matcher import FastaPKaMatcher
 from pichemist.model import InputAttribute
 from pichemist.model import MODELS
@@ -117,6 +118,7 @@ def pichemist_from_dict(
     ionizable_nterm=True,
     ionizable_cterm=True,
     generate_fragment_images=False,
+    list_of_ph=[""],
 ):
 
     """Runs the full logic for a given input dictionary."""
@@ -180,7 +182,7 @@ def pichemist_from_dict(
             generate_fragment_images=generate_fragment_images,
         )
 
-        # Calculate the curves
+        # Calculate curves
         pI_dict, q_dict, pH_q_dict = calculate_pI_pH_and_charge_dicts(
             base_pkas_dict, acid_pkas_dict, net_qs_and_frags
         )
@@ -189,6 +191,7 @@ def pichemist_from_dict(
         interval, interval_threshold = calculate_isoelectric_interval_and_threshold(
             pH_q_dict
         )
+
 
         # Output for given molecule
         dict_output[mol_idx] = {
@@ -222,4 +225,17 @@ def pichemist_from_dict(
                     OutputAttribute.FRAG_CONSTANT_QS.value: frag_Qs_calc,
                 }
             )
+
+        # Calculate chardes for pH list
+        if len(list_of_ph[0]) > 0:
+            q_ph_list_dict = calculate_charges_for_pH_list(
+                base_pkas_dict, acid_pkas_dict, net_qs_and_frags, list_of_ph
+            )
+
+            dict_output[mol_idx].update(
+                {
+                    OutputAttribute.Q_PH_LIST.value: q_ph_list_dict,
+                }
+            )
+
     return dict_output

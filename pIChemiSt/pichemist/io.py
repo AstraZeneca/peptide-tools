@@ -168,6 +168,20 @@ def _output_text_to_console(dict_output, method, print_fragments=False):
             )
         )
 
+        if "Q_pH_list" in dict_mol:
+            print("\nList of pH values and the corresponding charges")
+
+            # Extract keys and values
+            header = list(dict_mol["Q_pH_list"].keys())   
+            values = list(dict_mol["Q_pH_list"].values()) 
+
+            # Create format strings dynamically to match the number of columns
+            values_fmt = " ".join(["{:8.2f}"] * len(header))
+
+            print(values_fmt.format(*header))
+            print(values_fmt.format(*values))
+
+
         if print_fragments:
             frag_base_pkas_fasta = dict_mol[OutputAttribute.FRAG_BASE_PKA_FASTA.value]
             frag_acid_pkas_fasta = dict_mol[OutputAttribute.FRAG_ACID_PKA_FASTA.value]
@@ -280,6 +294,14 @@ def _prepare_output_list(input_dict, output_dict):
             "pI interval threshold",
             "%.2f" % output_dict[mi][OutputAttribute.PI_INTERVAL_THRESHOLD.value],
         )
+
+        if "Q_pH_list" in output_dict[mi].keys():
+            for ph,q in output_dict[mi][OutputAttribute.Q_PH_LIST.value].items():
+                mol.SetProp(
+                    "Q_at_pH%.2f" % ph,
+                    "%.2f" % q,
+                )
+
         mol_list.append(mol)
     return mol_list
 
@@ -293,11 +315,12 @@ def _output_csv_to_file(mol_list, output_file):
             props = mol.GetPropsAsDict()
             count += 1
             if count == 1:
-                header = [OutputAttribute.SMILES.value] + list(props.keys())
+                header = ["mol_title"] + list(props.keys()) + [OutputAttribute.SMILES.value]
                 csv_w.writerow(header)
-            row = [Chem.MolToSmiles(mol)]
-            for p in header[1:]:
+            row = [mol.GetProp("_Name")]
+            for p in header[1:-1]:
                 row += [props[p]]
+            row += [Chem.MolToSmiles(mol)]
             csv_w.writerow(row)
 
 
