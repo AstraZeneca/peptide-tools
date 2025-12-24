@@ -4,7 +4,7 @@
         "smarts": "N[CH1]([CH2][CH0](=[OH0])[NH2])C(=[OH0])",
         "fasta_pattern": "N",
         "factors_favoring_stability": "pH 3-6",
-        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate, phosphate, bicarbonate, tris buffers",
         "comments": "Deamidation rate strongly depends on the i+1 residue: very high risk for NG; high risk for NH, NS, NT, NA; lower risk for bulky and hydrophobic residues (e.g. NI, NV, NL, NW, NP, etc.)",
         "references": "N. E. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
     },
@@ -13,7 +13,7 @@
         "smarts": "N[CH1]([CH2][CH2][CH0](=[OH0])[NH2])C(=[OH0])",
         "fasta_pattern": "Q",
         "factors_favoring_stability": "pH 3-6",
-        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, tris",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate, phosphate, bicarbonate, tris buffers",
         "comments": "Deamidation rate strongly depends on the i+1 residue: high risk for QG; medium risk for QC; low risk for bulky and acidic residues (e.g. QW, QF, QD, QE, QP, etc.)",
         "references": "N. E. Robinson et al. 2004; N. E. Robinson and Robinson 2004; Wakankar and Borchardt 2006"
     },
@@ -22,7 +22,7 @@
         "smarts": "N[CH1]([CH2][CH0](=[OH0])[OH,O-])C(=[OH0])",
         "fasta_pattern": "D",
         "factors_favoring_stability": "pH 6-8, addition of electrolyte",
-        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate buffers: phosphate, bicarbonate, addition of glycerol, sucrose",
+        "factors_disfavoring_stability": "Disordered secondary structure, high conformational flexibility and solvent accessibility, carboxylate, phosphate, bicarbonate, tris buffers, addition of glycerol, sucrose",
         "comments": "High risk",
         "references": "Geiger and Clarke 1987; Wakankar and Borchardt 2006"
     },
