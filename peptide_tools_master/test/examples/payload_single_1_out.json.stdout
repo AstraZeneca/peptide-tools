@@ -1,0 +1,59 @@
+{
+    "output_descriptors": {
+        "1": {
+            "mol_name": "tmp_peptools1",
+            "molecular_weight": 724.812,
+            "seq_length": 6,
+            "logp": 0.06,
+            "fasta": "AEYVFP",
+            "smiles": "CC(C)[C@H](NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@@H]1CCCN1C(=O)[C@@H](N)Cc1ccccc1)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(=O)O)C(=O)O"
+        }
+    },
+    "output_extn_coeff": {
+        "1": {
+            "fasta": "AEYVFP",
+            "e205": 28580,
+            "e214": 18018,
+            "e280": 1490.0,
+            "mol_name": "tmp_peptools1"
+        }
+    },
+    "output_pIChemiSt": {
+        "1": {
+            "mol_name": "tmp_peptools1",
+            "pI": {
+                "IPC2_peptide": 3.75,
+                "IPC_peptide": 3.34375,
+                "ProMoST": 4.125,
+                "Gauci": 4.59375,
+                "Grimsley": 3.75,
+                "Thurlkill": 3.96875,
+                "Lehninger": 3.3125,
+                "Toseland": 3.75,
+                "pI mean": 3.8242,
+                "std": 1.1013,
+                "err": 0.3894
+            },
+            "QpH7": {
+                "IPC2_peptide": -1.2371,
+                "IPC_peptide": -1.0081,
+                "ProMoST": -1.7349,
+                "Gauci": -1.4418,
+                "Grimsley": -1.3344,
+                "Thurlkill": -1.2035,
+                "Lehninger": -1.0069,
+                "Toseland": -1.052,
+                "Q at pH7.4 mean": -1.2523,
+                "std": 0.6619,
+                "err": 0.234
+            },
+            "pI_interval": [
+                3.575,
+                4.0625
+            ],
+            "pI_interval_threshold": 0.2,
+            "plot_filename": "temp_1.png",
+            "pKa_set": "IPC2_peptide"
+        }
+    }
+}

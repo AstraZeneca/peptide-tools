@@ -75,6 +75,12 @@ pichemist -i "MNSERSDVTLY" -if fasta_stdin
 # as linear FASTA sequences as their termini will be assumed to be non ionisable.
 pichemist -i "MNSERSDVTLY" -if fasta_stdin --ionizable_nterm false --ionizable_cterm false
 
+# Use FASTA with capped termini, i.e., non-ionisable, for both C- and N-.
+# These can be configured as preferred by removing the corresponding flags.
+# This configuration can also be used as a 'trick' for feeding cyclic peptides
+# as linear FASTA sequences as their termini will be assumed to be non ionisable.
+pichemist -i "MNSERSDVTLY" -if fasta_stdin --ionizable_nterm false --ionizable_cterm false
+
 # Use SDF as input
 pichemist -i test/examples/payload_4.sdf -if sdf
 

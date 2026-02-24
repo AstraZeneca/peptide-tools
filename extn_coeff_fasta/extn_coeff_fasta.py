@@ -154,28 +154,6 @@ def calc_extn_coeff_single_sequence(orig_sequence, args):
     # Convert d Amino Acids
     sequence = _convert_sequence_left_handed_aa(orig_sequence)
 
-### Temporarily do it at the peptide_tools_master level
-#   # Convert Cysteines
-#   if args.num_disulfide_cys_bonds:
-#       num_disulfide_cys_bonds = args.num_disulfide_cys_bonds
-#       num_cys = sequence.count("C")
-#       # We can't have more bonds than Cysteine residues
-#       if num_cys / num_disulfide_cys_bonds < 2:
-#           raise ValueError(
-#               f"Specified {num_disulfide_cys_bonds} `num_disulfide_cys_bonds` "
-#               f"but only {num_cys} Cysteine residues are present."
-#           )
-#       num_c_to_replace = num_disulfide_cys_bonds * 2
-#       replaced_sequence = ""
-#       for c in sequence:
-#           if num_c_to_replace > 0:
-#               if c == "C":
-#                   replaced_sequence += "𝒞"
-#                   num_c_to_replace -= 1
-#                   continue
-#           replaced_sequence += c
-#       sequence = replaced_sequence
-
     # Validation
     for R in sequence:
         if R not in known_res:
@@ -321,9 +299,6 @@ if __name__ == "__main__":
         dest="l_json",
         help="Print output as JSON",
     )
-#    parser.add_argument(
-#        "--num_disulfide_cys_bonds", default=0, dest="num_disulfide_cys_bonds", type=int
-#    )
     args = parser.parse_args()
 
     dict_extn_coeff = calc_extn_coeff(args.__dict__)

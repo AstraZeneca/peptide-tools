@@ -52,13 +52,38 @@ def test_smiles_stdin_input_1_fragments():
     assert result == expected
 
 
-def test_smiles_file_input_1():
+def test_smiles_file_single_input_1():
     """Validity of CSV file output."""
     # Prevalidation
     smiles_file = os.path.join(examples_dir, "payload_1.smi")
-    temporary_result_file = os.path.join(examples_dir, "payload_1_OUTPUT.csv")
-    temporary_plot_file = os.path.join(examples_dir, "payload_1_1.png")
-    temporary_file_list = [temporary_result_file, temporary_plot_file]
+
+    # Validation
+    test_args = cli_base_args + ["--input", smiles_file]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    assert_liabilities_and_pop(result)
+    # print(" ".join(test_args))
+    with open(f"{examples_dir}/payload_single_1_out.json.stdout", "r") as file:
+        expected_content = json.load(file)
+        # print(json.dumps(result, indent=4))
+    assert result == expected_content, "Expected output file content does not match"
+
+
+def test_smiles_file_multi_input_1():
+    """Validity of CSV file output."""
+    # Prevalidation
+    smiles_file = os.path.join(examples_dir, "payload_multi_1.smi")
+    temporary_result_file = os.path.join(examples_dir, "payload_multi_1_OUTPUT.csv")
+    temporary_plot_file_1 = os.path.join(examples_dir, "payload_multi_1_1.png")
+    temporary_plot_file_2 = os.path.join(examples_dir, "payload_multi_1_2.png")
+    temporary_file_list = [
+        temporary_result_file,
+        temporary_plot_file_1,
+        temporary_plot_file_2,
+    ]
     try:
         raise_if_file_exists_list(temporary_file_list)
 
@@ -69,7 +94,7 @@ def test_smiles_file_input_1():
         raise_if_file_not_exists_list(temporary_file_list)
         with open(temporary_result_file, "r") as file:
             temp_content = file.read()
-        with open(f"{examples_dir}/payload_1_out.csv", "r") as file:
+        with open(f"{examples_dir}/payload_multi_1_out.csv", "r") as file:
             expected_content = file.read()
         assert (
             temp_content == expected_content
@@ -81,25 +106,17 @@ def test_smiles_file_input_1():
 def test_fasta_file_input_1():
     """Validity of CSV file output."""
     fasta_file = os.path.join(examples_dir, "payload_2.fasta")
-    temporary_result_file = os.path.join(examples_dir, "payload_2_OUTPUT.csv")
-    temporary_plot_file = os.path.join(examples_dir, "payload_2_1.png")
-    temporary_file_list = [temporary_result_file, temporary_plot_file]
-    try:
-        raise_if_file_exists_list(temporary_file_list)
-        test_args = cli_base_args + ["--input", fasta_file]
-        _ = subprocess.run(stringify_list(test_args), capture_output=True, text=True)
-        # print(" ".join(test_args))
-
-        raise_if_file_not_exists_list(temporary_file_list)
-        with open(temporary_result_file, "r") as file:
-            temp_content = file.read()
-        with open(f"{examples_dir}/payload_2_out.csv", "r") as file:
-            expected_content = file.read()
-        assert (
-            temp_content == expected_content
-        ), "Expected output file content does not match"
-    finally:
-        remove_file_list(temporary_file_list)
+    test_args = cli_base_args + ["--input", fasta_file]
+    subprocess_output = subprocess.run(
+        stringify_list(test_args), capture_output=True, text=True
+    )
+    # print(" ".join(stringify_list(test_args)))
+    result = json.loads(subprocess_output.stdout)
+    assert_liabilities_and_pop(result)
+    with open(f"{examples_dir}/payload_single_2_out.json.stdout", "r") as file:
+        expected_content = json.load(file)
+        # print(json.dumps(result, indent=4))
+    assert result == expected_content, "Expected output file content does not match"
 
 
 def test_smiles_stdin_input_3():
@@ -144,7 +161,7 @@ def test_smiles_stdin_input_multiline_1():
     # TODO: Check deletion of temporary files
 
 
-def test_fasta_stdin_input_1():
+def test_fasta_stdin_single_input_1():
     """Validity of CSV file output for FASTA format."""
     fasta = textwrap.dedent(
         """\
@@ -165,24 +182,25 @@ def test_fasta_stdin_input_1():
     )
     # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
-    assert "outputFile" in result
-    results_filepath = result["outputFile"]
-    raise_if_file_not_exists_list([results_filepath])
-    with open(results_filepath, "r") as file:
-        result = file.read()
-        remove_file_list([results_filepath])
-
-    with open(f"{examples_dir}/payload_5_out.csv", "r") as file:
-        expected = file.read()
-    assert result == expected
+    assert_liabilities_and_pop(result)
+    # print(json.dumps(result, indent=4))
+    with open(f"{examples_dir}/payload_single_6_out.json.stdout", "r") as file:
+        expected_content = json.load(file)
+        # print(json.dumps(result, indent=4))
+    assert result == expected_content, "Expected output file content does not match"
 
 
-def test_sdf_file_input_1():
+def test_sdf_file_multi_input_1():
     """Validity of CSV file output."""
-    sdf_file = os.path.join(examples_dir, "payload_5.sdf")
-    temporary_result_file = os.path.join(examples_dir, "payload_5_OUTPUT.sdf")
-    temporary_plot_file = os.path.join(examples_dir, "payload_5_1.png")
-    temporary_file_list = [temporary_result_file, temporary_plot_file]
+    sdf_file = os.path.join(examples_dir, "payload_multi_5.sdf")
+    temporary_result_file = os.path.join(examples_dir, "payload_multi_5_OUTPUT.sdf")
+    temporary_plot_file_1 = os.path.join(examples_dir, "payload_multi_5_1.png")
+    temporary_plot_file_2 = os.path.join(examples_dir, "payload_multi_5_2.png")
+    temporary_file_list = [
+        temporary_result_file,
+        temporary_plot_file_1,
+        temporary_plot_file_2,
+    ]
     try:
         raise_if_file_exists_list(temporary_file_list)
 
@@ -193,7 +211,7 @@ def test_sdf_file_input_1():
         raise_if_file_not_exists_list(temporary_file_list)
         with open(temporary_result_file, "r") as file:
             temp_content = file.read()
-        with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
+        with open(f"{examples_dir}/payload_multi_5_out.sdf", "r") as file:
             expected_content = file.read()
         assert (
             temp_content == expected_content
@@ -212,16 +230,12 @@ def test_sdf_stdin_input_1():
     )
     # print(" ".join(stringify_list(test_args)))
     result = json.loads(subprocess_output.stdout)
-    assert "outputFile" in result
-    results_filepath = result["outputFile"]
-    raise_if_file_not_exists_list([results_filepath])
-    with open(results_filepath, "r") as file:
-        result = file.read()
-        remove_file_list([results_filepath])
-
-    with open(f"{examples_dir}/payload_5_out.sdf", "r") as file:
-        expected = file.read()
-    assert result == expected
+    assert_liabilities_and_pop(result)
+    # print(json.dumps(result, indent=4))
+    with open(f"{examples_dir}/payload_single_5_out.json.stdout", "r") as file:
+        expected_content = json.load(file)
+        # print(json.dumps(result, indent=4))
+    assert result == expected_content, "Expected output file content does not match"
 
 
 def test_fasta_stdin_input_2():
@@ -284,6 +298,7 @@ def test_smiles_stdin_liabilities_input_1():
     )
     # print(" ".join(test_args))
     result = json.loads(subprocess_output.stdout)
+    # print(json.dumps(result, indent=4))
     with open(f"{examples_dir}/payload_9_out.json.stdout", "r") as file:
         expected = json.load(file)
     assert result == expected
