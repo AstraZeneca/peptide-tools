@@ -69,6 +69,24 @@ def arg_parser(args):
         "If set to 'false' the C-terminus is capped. "
         "If set to 'true' the C-terminus is free amine. ",
     )
+
+    parser.add_argument(
+        "--no_free_cys_thiols",
+        type=str2bool,
+        default=True,
+        dest="no_free_cys_thiols",
+        help="Applies to FASTA input only. "
+        "Treat all Cys side chains as capped or disulfide bridged",
+    )
+
+    parser.add_argument(
+        "--n_disulfide_bonds",
+        dest="n_disulfide_bonds",
+        default="max",
+        help="Applies to FASTA input only. "
+        "Number of disulfide bonds in the molecule",
+    )
+
     if not args:
         args = ["-h"]
     return parser.parse_args()

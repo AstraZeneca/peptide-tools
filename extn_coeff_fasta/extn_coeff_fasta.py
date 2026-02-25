@@ -37,6 +37,7 @@ known_res = [
     "Z",
     "B",
     "U",
+    "𝒞",
 ]
 
 aa_table = [
@@ -142,15 +143,15 @@ def calc_extn_coeff(options=None):
     # Calculate extinction coefficients
     dict_out = {}
     for mol_id, mol_data in mol_supply_json.items():
-        coeffs = calc_extn_coeff_single_sequence(mol_data["fasta"])
+        fasta = mol_data["fasta"]
+        coeffs = calc_extn_coeff_single_sequence(fasta, args)
         coeffs["mol_name"] = mol_data.get("mol_name", f"mol_{mol_id}")
         dict_out[mol_id] = coeffs
-
     return dict_out
 
 
-def calc_extn_coeff_single_sequence(orig_sequence):
-    # Conversion
+def calc_extn_coeff_single_sequence(orig_sequence, args):
+    # Convert d Amino Acids
     sequence = _convert_sequence_left_handed_aa(orig_sequence)
 
     # Validation
@@ -173,6 +174,7 @@ def calc_extn_coeff_single_sequence(orig_sequence):
         "H": 5200,
         "M": 1830,
         "R": 1350,
+        "𝒞": 1100,
         "C": 690,
         "N": 400,
         "Q": 400,
@@ -186,6 +188,7 @@ def calc_extn_coeff_single_sequence(orig_sequence):
         "M": 980,
         "R": 102,
         "C": 225,
+        "𝒞": 225,
         "N": 136,
         "Q": 142,
         "A": 32,
@@ -218,7 +221,7 @@ def calc_extn_coeff_single_sequence(orig_sequence):
     e280 = (
         5500 * residue_counts.get("W", 0)
         + 1490 * residue_counts.get("Y", 0)
-        + 0.5 * 125 * residue_counts.get("C", 0)
+        + 0.5 * 125 * residue_counts.get("𝒞", 0)
     )
 
     return {"fasta": orig_sequence, "e205": e205, "e214": e214, "e280": e280}
@@ -298,7 +301,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # dict_extn_coeff = calc_extn_coeff(args.sequence)
     dict_extn_coeff = calc_extn_coeff(args.__dict__)
 
     # Output

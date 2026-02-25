@@ -118,9 +118,6 @@ def read_file(input_data, params):
             "Extension not supported: " + params.input_file_extension
         )
 
-    # Configure output
-    _configure_output_file(params)
-
     # Read file
     if params.input_file_extension in [InputFileExtension.SDF, InputFileExtension.SMI]:
         mol_supply_json = read_structure_file(input_data)
@@ -128,6 +125,10 @@ def read_file(input_data, params):
         mol_supply_json = read_fasta_file(input_data)
     else:
         raise FileFormatException()
+
+    # Configure output
+    if len(mol_supply_json) > 1:
+        _configure_output_file(params)
 
     # Delete if temporary file
     if params.delete_temp_file:
@@ -143,11 +144,12 @@ def _configure_output_file(params):
     params.output_filename = (
         f"{params.filepath_prefix}{OUTPUT_SUFFIX}{params.output_file_extension}"
     )
+    params.generate_plots = False
 
 
 def configure_runtime_parameters(args, input_file_extension):
     params = RuntimeParameters()
-    params.generate_plot = False
+    params.generate_plots = True
     params.print_fragment_pkas = bool(args.print_fragment_pkas)
     params.generate_fragment_images = bool(args.generate_fragment_images)
     params.calc_extn_coeff = True
@@ -156,7 +158,7 @@ def configure_runtime_parameters(args, input_file_extension):
 
 
 def configure_chemical_parameters(args):
-    return ChemicalParameters(args.ionizable_cterm, args.ionizable_nterm)
+    return ChemicalParameters(args.ionizable_cterm, args.ionizable_nterm, args.n_disulfide_bonds, args.no_free_cys_thiols)
 
 
 def generate_parameter_set(args, io_params):

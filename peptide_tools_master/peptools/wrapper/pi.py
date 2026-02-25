@@ -5,8 +5,10 @@ def calculate_pichemist(mol_supply_json, params):
     dict_out_pIChemiSt = dict()
     if params.run.calc_pIChemiSt:
         plot_filename_prefix = "temp"
-        if params.io.filepath_prefix:
-            plot_filename_prefix = params.io.filepath_prefix
+
+        if len(mol_supply_json) > 1:
+            if params.io.filepath_prefix:
+                plot_filename_prefix = params.io.filepath_prefix
 
         dict_out_pIChemiSt = pichemist_from_dict(
             mol_supply_json,
