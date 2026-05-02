@@ -28,7 +28,7 @@ setup(
     license="Apache 2.0",
     install_requires=["matplotlib", "rdkit", "biopython"],
     setup_requires=["pytest-runner", "flake8"],
-    tests_require=["pytest==7.1.2"],
+    tests_require=["pytest==9.0.3"],
     test_suite="test",
     package_dir={"pichemist": "pichemist"},
     include_package_data=True,
